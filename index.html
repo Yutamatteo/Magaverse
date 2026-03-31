@@ -79,7 +79,9 @@
 <body class="max-w-md mx-auto min-h-screen border-x border-white/5 relative pb-28">
 
     <!-- Header Section -->
-    <header class="p-6 pt-10 text-center sticky top-0 bg-[#050505]/90 backdrop-blur-md z-40 border-b border-white/5">
+ <div class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+    
+    <header class="p-6 pt-10 text-center">
         <div class="flex justify-between items-center w-full mb-6">
             <span class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Magaparty.eventi</span>
             <div class="flex items-center gap-2 text-[--acid-cyan] text-[10px] tracking-widest font-bold uppercase">
@@ -91,16 +93,15 @@
         <p class="text-[10px] uppercase tracking-[0.3em] opacity-50">L'antidoto al pranzo di Pasqua</p>
     </header>
 
-    <!-- Navigation Tabs -->
-    <div class="flex justify-start gap-3 px-6 py-4 overflow-x-auto scroll-hide sticky top-[165px] bg-[#050505]/95 backdrop-blur-md z-40 border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+    <div class="flex justify-start gap-3 px-6 py-4 overflow-x-auto scroll-hide">
         <button onclick="switchTab('info')" id="tab-info" class="pill-tab active-tab"><i class="fa-solid fa-circle-info mr-1"></i> INFO</button>
         <button onclick="switchTab('lineup')" id="tab-lineup" class="pill-tab inactive-tab"><i class="fa-solid fa-compact-disc mr-1"></i> LINE-UP</button>
         <button onclick="switchTab('orari')" id="tab-orari" class="pill-tab inactive-tab"><i class="fa-regular fa-clock mr-1"></i> ORARI</button>
         <button onclick="switchTab('bar')" id="tab-bar" class="pill-tab inactive-tab"><i class="fa-solid fa-martini-glass mr-1"></i> BAR MENU</button>
         <button onclick="switchTab('tickets')" id="tab-tickets" class="pill-tab inactive-tab"><i class="fa-solid fa-ticket mr-1"></i> TICKETS</button>
-        <button onclick="switchTab('ai')" id="tab-ai" class="pill-tab inactive-tab"><i class="fa-solid fa-notes-medical mr-1"></i> AI CLINIC</button>
+        <button onclick="switchTab('social')" id="tab-social" class="pill-tab inactive-tab"><i class="fa-solid fa-hashtag mr-1"></i> SOCIAL</button> 
     </div>
-
+</div>
     <main class="px-6 pt-6">
         
         <!-- INFO TAB -->
@@ -369,17 +370,36 @@
         </div>
 
         <!-- AI CLINIC TAB -->
-        <div id="content-ai" class="hidden space-y-6 animate-fade-in">
+        <div id="content-social" class="hidden space-y-6 animate-fade-in">
             <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-[--acid-cyan]">TRIAGE AI</h2>
-                <p class="text-[10px] opacity-50 uppercase mt-2">Diagnosi istantanea post-Pasqua</p>
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Social</h2>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Unisciti alla community</p>
             </div>
-            <div class="space-y-4">
-                <textarea id="aiInput" placeholder="Ho mangiato 3 chili di lasagna, 2 casatielli e sono bloccato sul divano..." class="w-full h-28 bg-white/5 border border-white/10 rounded-xl p-4 text-xs outline-none focus:border-[--acid-cyan] focus:bg-white/10 transition-all resize-none"></textarea>
-                <button onclick="getDiagnosis()" id="diagnosisBtn" class="w-full py-4 bg-[--acid-cyan] text-black font-black brutalist text-sm rounded-xl animate-pulse-cyan hover:scale-[0.98] transition-transform">GENERA REFERTO MEDICO ✨</button>
-            </div>
-            <div id="aiResponse" class="hidden glass-card p-5 border-l-4 border-l-[--acid-cyan] mt-6">
-                <p class="text-[12px] leading-relaxed italic" id="aiText"></p>
+
+            <div class="space-y-3">
+                <a href="https://www.instagram.com/_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-magenta] bg-[--acid-magenta]/5 flex justify-between items-center hover:bg-[--acid-magenta]/10 hover:scale-[1.02] transition-all block cursor-pointer">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Instagram</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-[--acid-magenta] mt-1">Foto & Ufficialità</p>
+                    </div>
+                    <span class="text-3xl text-[--acid-magenta]"><i class="fa-brands fa-instagram"></i></span>
+                </a>
+
+                <a href="https://tiktok.com/@_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-white bg-white/5 flex justify-between items-center hover:bg-white/10 hover:scale-[1.02] transition-all block cursor-pointer">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">TikTok</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-gray-300 mt-1">Video & Trend</p>
+                    </div>
+                    <span class="text-3xl text-white"><i class="fa-brands fa-tiktok"></i></span>
+                </a>
+
+                <a href="https://t.me/MAGAPART" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-blue] bg-[--acid-blue]/5 flex justify-between items-center hover:bg-[--acid-blue]/10 hover:scale-[1.02] transition-all block cursor-pointer">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Telegram</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-[--acid-blue] mt-1">Info & Aggiornamenti</p>
+                    </div>
+                    <span class="text-3xl text-[--acid-blue]"><i class="fa-brands fa-telegram"></i></span>
+                </a>
             </div>
         </div>
 
@@ -435,7 +455,7 @@
     <script>
         // Gestione Tab Navigazione
         function switchTab(tabId) {
-            const tabs = ['info', 'lineup', 'orari', 'bar', 'tickets', 'ai'];
+            const tabs = ['info', 'lineup', 'orari', 'bar', 'tickets', 'social'];
             tabs.forEach(id => {
                 const content = document.getElementById(`content-${id}`); // Aggiunti i backticks
                 const tab = document.getElementById(`tab-${id}`); // Aggiunti i backticks
@@ -539,7 +559,7 @@
         }
 
         // AI Diagnosis
-        const apiKey = "AIzaSyAB0duQAsQO4u6BdzHtrtXuwk4nBbr91-4"; // ATTENZIONE: Qui serve una chiave API di Google Gemini! CAPITO MATTEOPIO?? Gratis con https://aistudio.google.com/ ma fare attenzione ai limiti di domande e ad avere carta di credito scollegata su Google Cloud
+        const apiKey = ""; // ATTENZIONE: Qui serve una chiave API di Google Gemini, da inserire tra i i doppi apici! CAPITO MATTEOPIO?? Gratis con https://aistudio.google.com/ ma fare attenzione ai limiti di domande e ad avere carta di credito scollegata su Google Cloud
         
         async function getDiagnosis() {
             const inputEl = document.getElementById('aiInput');
