@@ -1,1256 +1,584 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>DIGESTIVO | 5 Aprile | Magaparty</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Digestivo | 5 Aprile | Magaparty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;700&display=swap');
 
-<style>
-:root {
-  --green: #39ff14;
-  --pink: #ff007f;
-  --bg: #060606;
-  --surface: #111;
-  --surface2: #1a1a1a;
-  --border: rgba(255,255,255,0.08);
-  --text: #f0f0f0;
-  --muted: #666;
-}
+        :root {
+            --acid-cyan: #00ffcc;
+            --acid-magenta: #ff00cc;
+            --acid-purple: #9900ff;
+            --acid-green: #39ff14;
+            --acid-blue: #00d4ff;   /* Colore Attivamente */
+            --acid-yellow: #f3ff00; /* Colore Next */
+        }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505;
+            color: #fff;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        .brutalist { font-family: 'Archivo Black', sans-serif; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Mono', monospace;
-  overflow-x: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+        }
 
-/* NOISE */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.035;
-  pointer-events: none;
-  z-index: 0;
-}
+        .neon-border-cyan { border: 1px solid var(--acid-cyan); box-shadow: 0 0 15px rgba(0, 255, 204, 0.15); }
+        .neon-border-magenta { border: 1px solid var(--acid-magenta); box-shadow: 0 0 15px rgba(255, 0, 204, 0.15); }
+        .neon-border-green { border: 1px solid var(--acid-green); box-shadow: 0 0 15px rgba(57, 255, 20, 0.15); }
+        .neon-border-blue { border: 1px solid var(--acid-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.15); }
+        .neon-border-yellow { border: 1px solid var(--acid-yellow); box-shadow: 0 0 15px rgba(243, 255, 0, 0.15); }
 
-/* TYPOGRAPHY */
-.display {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.04em;
-  line-height: 0.9;
-}
+        .pill-tab {
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            letter-spacing: 0.1em;
+        }
 
-/* GLITCH */
-.glitch {
-  position: relative;
-  display: inline-block;
-  color: white;
-}
-.glitch::before {
-  content: attr(data-text);
-  position: absolute;
-  left: 2px;
-  top: 0;
-  color: var(--pink);
-  clip-path: inset(0 0 100% 0);
-  animation: gl1 6s infinite steps(1);
-}
-.glitch::after {
-  content: attr(data-text);
-  position: absolute;
-  left: -2px;
-  top: 0;
-  color: var(--green);
-  clip-path: inset(0 0 100% 0);
-  animation: gl2 6s infinite steps(1);
-}
-@keyframes gl1 {
-  0%   { clip-path: inset(0 0 100% 0); transform: none; }
-  80%  { clip-path: inset(0 0 100% 0); transform: none; }
-  82%  { clip-path: inset(20% 0 65% 0); transform: translateX(-2px); }
-  84%  { clip-path: inset(55% 0 25% 0); transform: translateX(2px); }
-  86%  { clip-path: inset(10% 0 80% 0); transform: translateX(-1px); }
-  88%  { clip-path: inset(75% 0 5% 0);  transform: translateX(1px); }
-  90%  { clip-path: inset(0 0 100% 0); transform: none; }
-  100% { clip-path: inset(0 0 100% 0); transform: none; }
-}
-@keyframes gl2 {
-  0%   { clip-path: inset(0 0 100% 0); transform: none; }
-  81%  { clip-path: inset(0 0 100% 0); transform: none; }
-  83%  { clip-path: inset(60% 0 15% 0); transform: translateX(2px); }
-  85%  { clip-path: inset(5% 0 85% 0);  transform: translateX(-2px); }
-  87%  { clip-path: inset(45% 0 40% 0); transform: translateX(1px); }
-  89%  { clip-path: inset(80% 0 5% 0);  transform: translateX(-1px); }
-  91%  { clip-path: inset(0 0 100% 0); transform: none; }
-  100% { clip-path: inset(0 0 100% 0); transform: none; }
-}
+        .active-tab { background: var(--acid-cyan); color: #000; box-shadow: 0 0 12px rgba(0,255,204,0.4); }
+        .inactive-tab { background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid rgba(255,255,255,0.05); }
 
-/* LAYOUT */
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 20px;
-  position: relative;
-  z-index: 1;
-}
+        .scroll-hide::-webkit-scrollbar { display: none; }
+        
+        @keyframes pulse-cyan {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 204, 0.5); }
+        }
+        .animate-pulse-cyan { animation: pulse-cyan 2s infinite; }
 
-/* HEADER */
-.topbar {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
-  background: rgba(0,0,0,0.9);
-  border-bottom: 1px solid var(--border);
-}
-.topbar-label {
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.live-dot {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--green);
-}
-.live-dot::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: blink 1.2s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* STICKY NAV */
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgba(6,6,6,0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-inner {
-  display: flex;
-  justify-content: space-around;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 0 8px;
-}
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 10px;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 8px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  transition: color 0.2s;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-.nav-item svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.nav-item:hover, .nav-item.active { color: var(--green); }
-
-/* HERO */
-.hero {
-  padding: 48px 20px 32px;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-  max-width: 480px;
-  margin: 0 auto;
-}
-.hero-emoji {
-  font-size: 36px;
-  display: block;
-  margin-bottom: 16px;
-}
-.hero-title {
-  font-size: clamp(72px, 22vw, 100px);
-  color: white;
-  display: block;
-}
-.hero-sub {
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-top: 12px;
-}
-
-/* METER */
-.meter-card {
-  margin: 24px 20px 0;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
-  background: var(--surface);
-  border: 1px solid rgba(57,255,20,0.15);
-  border-radius: 12px;
-  padding: 16px 20px;
-  position: relative;
-  z-index: 1;
-}
-.meter-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--green);
-  margin-bottom: 10px;
-}
-.meter-track {
-  width: 100%;
-  height: 3px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.meter-fill {
-  height: 100%;
-  width: 90%;
-  background: linear-gradient(90deg, var(--pink), var(--green));
-  border-radius: 2px;
-  animation: pulse-width 2s ease-in-out infinite alternate;
-}
-@keyframes pulse-width { from{opacity:.7} to{opacity:1} }
-.meter-verdict {
-  font-size: 11px;
-  color: white;
-  font-weight: 500;
-  margin-top: 10px;
-}
-
-/* SECTION */
-.section {
-  padding: 52px 20px 0;
-  max-width: 480px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-  scroll-margin-top: 64px;
-}
-.section-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-.section-head svg { width: 18px; height: 18px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.section-head h2 {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.08em;
-  color: white;
-}
-
-/* PARTNER CARDS */
-.partner-grid {
-  display: grid;
-  grid-columns: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-.partner-card {
-  border-radius: 10px;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.15s, border-color 0.15s;
-}
-.partner-card:hover { transform: translateY(-2px); }
-.partner-card .partner-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.12em;
-}
-.partner-card svg { width: 18px; height: 18px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-/* DJ CARDS */
-.dj-card {
-  border-radius: 16px;
-  padding: 28px 24px;
-  margin-bottom: 16px;
-  position: relative;
-  overflow: hidden;
-  background: #0a0a0a;
-}
-.dj-card .bg-word {
-  position: absolute;
-  right: -8px;
-  bottom: -12px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 90px;
-  line-height: 0.85;
-  letter-spacing: -2px;
-  pointer-events: none;
-  user-select: none;
-  opacity: 0.06;
-}
-.dj-phase-badge {
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-.dj-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 36px;
-  letter-spacing: 0.05em;
-  color: white;
-  margin-bottom: 14px;
-  line-height: 1;
-}
-.tag-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 16px;
-}
-.tag {
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: 1px solid;
-}
-.dj-bio {
-  font-size: 12px;
-  line-height: 1.7;
-  color: #999;
-  font-style: italic;
-}
-
-/* TIMELINE */
-.timeline {
-  position: relative;
-  padding-left: 24px;
-}
-.timeline::before {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 8px;
-  bottom: 0;
-  width: 1px;
-  background: var(--border);
-}
-.timeline-item {
-  position: relative;
-  margin-bottom: 32px;
-}
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -20px;
-  top: 6px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-.timeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-.timeline-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 0.08em;
-}
-.timeline-time {
-  font-size: 10px;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-.timeline-body {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-}
-.zone-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 4px 9px;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-.zone-pill svg { width: 10px; height: 10px; fill: none; stroke-width: 2; stroke-linecap: round; }
-.timeline-text {
-  font-size: 12px;
-  color: #aaa;
-  line-height: 1.7;
-}
-.timeline-text strong { color: white; font-style: normal; font-weight: 500; }
-
-/* ATTIVITÀ */
-.activity-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-top: 12px;
-}
-.activity-chip {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 10px;
-  color: #aaa;
-  letter-spacing: 0.05em;
-}
-.activity-chip span {
-  display: block;
-  font-size: 18px;
-  margin-bottom: 4px;
-}
-
-/* TICKET */
-.ticket-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.ticket-row {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: border-color 0.2s;
-}
-.ticket-row:hover { border-color: rgba(255,255,255,0.2); }
-.ticket-row.featured {
-  border-color: rgba(57,255,20,0.25);
-  background: rgba(57,255,20,0.03);
-}
-.ticket-row.dimmed { opacity: 0.45; }
-.ticket-label { font-size: 13px; color: white; font-weight: 400; }
-.ticket-bonus {
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--green);
-  margin-top: 4px;
-}
-.ticket-price {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.05em;
-}
-.ticket-note {
-  margin-top: 16px;
-  padding: 16px;
-  background: var(--surface);
-  border-left: 3px solid var(--border);
-  border-radius: 0 8px 8px 0;
-  font-size: 11px;
-  color: #888;
-  line-height: 1.7;
-}
-.ticket-note strong { color: white; font-weight: 500; }
-
-/* INFO */
-.info-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-}
-.info-main {
-  padding: 20px;
-}
-.info-venue {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.06em;
-  color: white;
-}
-.info-address {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 6px;
-  line-height: 1.6;
-}
-.info-phones {
-  padding: 16px 20px;
-  border-top: 1px solid var(--border);
-  background: rgba(0,0,0,0.3);
-}
-.phones-label {
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--green);
-  margin-bottom: 10px;
-}
-.phones-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-.phone-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 12px;
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  color: white;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s;
-  cursor: pointer;
-}
-.phone-btn svg { width: 14px; height: 14px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.phone-btn:hover { background: var(--green); color: black; }
-
-/* COUNTDOWN */
-.countdown-card {
-  margin: 32px 20px 0;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 1;
-}
-.countdown-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-.count-block {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 8px;
-  text-align: center;
-}
-.count-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 32px;
-  color: white;
-  letter-spacing: 0.04em;
-  line-height: 1;
-}
-.count-label {
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-/* SHARE / SOCIAL */
-.share-row {
-  display: flex;
-  gap: 8px;
-  margin-top: 20px;
-}
-.share-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
-  font-family: 'DM Mono', monospace;
-}
-.share-btn svg { width: 14px; height: 14px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.share-btn:hover { color: white; border-color: rgba(255,255,255,0.25); }
-
-/* MODAL */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  width: 100%;
-  max-width: 400px;
-  background: var(--surface);
-  border: 1px solid rgba(57,255,20,0.2);
-  border-radius: 16px;
-  padding: 28px 24px;
-  animation: slide-up 0.25s ease;
-}
-@keyframes slide-up { from{transform:translateY(24px);opacity:0} to{transform:none;opacity:1} }
-.modal-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-.modal-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 24px;
-  letter-spacing: 0.06em;
-  color: white;
-}
-.modal-close {
-  width: 32px; height: 32px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  color: var(--muted);
-  transition: color 0.2s;
-}
-.modal-close:hover { color: white; }
-.modal-close svg { width: 16px; height: 16px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.modal-hint {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--muted);
-  text-align: center;
-  margin-bottom: 16px;
-}
-.modal-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-.modal-opt {
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px;
-  color: #aaa;
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.modal-opt:hover { border-color: rgba(255,255,255,0.2); color: white; }
-.modal-opt.selected-pink { border-color: var(--pink); background: rgba(255,0,127,0.08); color: white; }
-.modal-opt.selected-green { border-color: var(--green); background: rgba(57,255,20,0.08); color: white; }
-.modal-opt.full { grid-column: 1 / -1; }
-.modal-opt small { display: block; font-size: 9px; opacity: 0.7; margin-top: 4px; text-transform: none; font-weight: 300; letter-spacing: 0; }
-.modal-cta {
-  width: 100%;
-  padding: 16px;
-  background: var(--green);
-  border: none;
-  border-radius: 10px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  letter-spacing: 0.1em;
-  color: black;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: opacity 0.2s, transform 0.1s;
-}
-.modal-cta:disabled { opacity: 0.25; cursor: not-allowed; }
-.modal-cta:not(:disabled):active { transform: scale(0.98); }
-.modal-cta svg { width: 20px; height: 20px; }
-
-/* BOTTOM BAR */
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  padding: 16px 20px;
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
-  background: linear-gradient(to top, rgba(6,6,6,1) 60%, transparent);
-  display: flex;
-  justify-content: center;
-}
-.main-cta {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  max-width: 440px;
-  padding: 18px;
-  background: var(--green);
-  border: none;
-  border-radius: 14px;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.12em;
-  color: black;
-  cursor: pointer;
-  box-shadow: 0 0 40px rgba(57,255,20,0.2);
-  transition: box-shadow 0.2s, transform 0.1s;
-}
-.main-cta:hover { box-shadow: 0 0 60px rgba(57,255,20,0.35); }
-.main-cta:active { transform: scale(0.99); }
-.main-cta svg { width: 22px; height: 22px; }
-
-/* SPACER */
-.pb-bottom { padding-bottom: 100px; }
-
-/* MAP LINK */
-.map-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  color: var(--green);
-  text-decoration: none;
-  margin-top: 12px;
-  padding: 10px 12px;
-  background: rgba(57,255,20,0.05);
-  border: 1px solid rgba(57,255,20,0.12);
-  border-radius: 8px;
-  transition: background 0.2s;
-}
-.map-link:hover { background: rgba(57,255,20,0.1); }
-.map-link svg { width: 14px; height: 14px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-
-/* DIVIDER */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 52px 20px 0;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* PULSE RING */
-.pulse-ring {
-  display: inline-block;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 0 0 rgba(57,255,20,0.5);
-  animation: ring 2s ease-out infinite;
-}
-@keyframes ring {
-  0% { box-shadow: 0 0 0 0 rgba(57,255,20,0.5); }
-  70% { box-shadow: 0 0 0 10px rgba(57,255,20,0); }
-  100% { box-shadow: 0 0 0 0 rgba(57,255,20,0); }
-}
-</style>
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* Modal Animation */
+        .modal-enter { animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes modalSlideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
 </head>
-<body>
+<body class="max-w-md mx-auto min-h-screen border-x border-white/5 relative pb-28">
 
-<!-- TOPBAR -->
-<header class="topbar">
-  <span class="topbar-label">Magaparty Presenta</span>
-  <span class="live-dot">Dom 5 Apr 2025</span>
-</header>
-
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#lineup" class="nav-item">
-      <svg viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-      Line Up
-    </a>
-    <a href="#fasi" class="nav-item">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      Orari
-    </a>
-    <a href="#ticket" class="nav-item">
-      <svg viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/></svg>
-      Ticket
-    </a>
-    <a href="#info" class="nav-item">
-      <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Info
-    </a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <span class="hero-emoji">🐇🥕</span>
-  <div class="display">
-    <span class="glitch hero-title" data-text="DIGESTIVO">DIGESTIVO</span>
-  </div>
-  <p class="hero-sub">L'antidoto al pranzo di Pasqua</p>
-</section>
-
-<!-- METER -->
-<div class="meter-card">
-  <div class="meter-label">Livello saturazione da Casatiello</div>
-  <div class="meter-track">
-    <div class="meter-fill"></div>
-  </div>
-  <div class="meter-verdict">Diagnosi: c'è bisogno di ballare.</div>
-</div>
-
-<div class="countdown-card">
-  <div class="countdown-grid">
-    <div class="count-block">
-      <div class="count-number" id="cd-days">--</div>
-      <div class="count-label">Giorni</div>
-    </div>
-    <div class="count-block">
-      <div class="count-number" id="cd-hours">--</div>
-      <div class="count-label">Ore</div>
-    </div>
-    <div class="count-block">
-      <div class="count-number" id="cd-min">--</div>
-      <div class="count-label">Min</div>
-    </div>
-    <div class="count-block">
-      <div class="count-number" id="cd-sec">--</div>
-      <div class="count-label">Sec</div>
-    </div>
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<section class="section">
-  <div class="section-head">
-    <svg viewBox="0 0 24 24" style="stroke:#666">
-      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-      <circle cx="9" cy="7" r="4"/>
-      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-    </svg>
-    <h2>Liste Civiche</h2>
-  </div>
-  <p style="font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:14px;">Candidate al Forum dei Giovani</p>
-  
-  <div class="partner-grid">
-    <div class="partner-card" style="background:rgba(255,0,127,0.04);border:1px solid rgba(255,0,127,0.25);" onclick="selectPR('Next')">
-      <svg viewBox="0 0 24 24" style="stroke:#ff007f;width:18px;height:18px;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      <span class="partner-name display" style="color:#ff007f;text-shadow:0 0 20px rgba(255,0,127,0.4)">NEXT</span>
-    </div>
-
-    <div class="partner-card" style="background:rgba(57,255,20,0.04);border:1px solid rgba(57,255,20,0.25);" onclick="selectPR('Attivamente')">
-      <svg viewBox="0 0 24 24" style="stroke:#39ff14;width:18px;height:18px;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-      <span class="partner-name display" style="color:#39ff14;text-shadow:0 0 20px rgba(57,255,20,0.4)">ATTIVAMENTE</span>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<section id="lineup" class="section">
-  <div class="section-head">
-    <svg viewBox="0 0 24 24" style="stroke:#39ff14">
-      <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-    </svg>
-    <h2>Line Up</h2>
-  </div>
-
-  <div class="dj-card" style="border:2px solid rgba(255,0,127,0.35);box-shadow:0 0 40px rgba(255,0,127,0.06)">
-    <div class="bg-word" style="color:#ff007f">WARM<br>UP</div>
-    <div class="dj-phase-badge" style="background:rgba(255,0,127,0.12);color:#ff007f;border:1px solid rgba(255,0,127,0.3)">
-      Fase 1 · Tramonto
-    </div>
-    <div class="dj-name">Federica Natella</div>
-    <div class="tag-row">
-      <span class="tag" style="color:#ff007f;border-color:rgba(255,0,127,0.3);background:rgba(255,0,127,0.07)">Latin House</span>
-      <span class="tag" style="color:#ff007f;border-color:rgba(255,0,127,0.3);background:rgba(255,0,127,0.07)">Tech House</span>
-      <span class="tag" style="color:#ff007f;border-color:rgba(255,0,127,0.3);background:rgba(255,0,127,0.07)">Afro House</span>
-    </div>
-    <p class="dj-bio">Il primo step del trattamento. Ritmi caldi e groove tribali perfetti per accompagnare il tramonto e iniziare a sciogliere i muscoli dopo l'abbuffata.</p>
-  </div>
-
-  <div class="dj-card" style="border:2px solid rgba(57,255,20,0.35);box-shadow:0 0 40px rgba(57,255,20,0.06)">
-    <div class="bg-word" style="color:#39ff14">CLUB<br>BING</div>
-    <div class="dj-phase-badge" style="background:rgba(57,255,20,0.08);color:#39ff14;border:1px solid rgba(57,255,20,0.25)">
-      Fase 2 · Inside Party
-    </div>
-    <div class="dj-name">Adolfo Citro</div>
-    <div class="tag-row">
-      <span class="tag" style="color:#39ff14;border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.07)">Reggaeton</span>
-      <span class="tag" style="color:#39ff14;border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.07)">Dance</span>
-      <span class="tag" style="color:#39ff14;border-color:rgba(57,255,20,0.3);background:rgba(57,255,20,0.07)">Hard Techno</span>
-    </div>
-    <p class="dj-bio">L'esperto nella lettura del dancefloor. Ti prende per mano partendo dalle hit Reggaeton e Dance, per poi alzare drasticamente i BPM e sganciare vere bombe Techno stile Luca Agnelli.</p>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<section id="fasi" class="section">
-  <div class="section-head">
-    <svg viewBox="0 0 24 24" style="stroke:#ff007f">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-    </svg>
-    <h2>Orari</h2>
-  </div>
-
-  <div class="timeline">
-    <div class="timeline-item" style="--dot-color:#ff007f">
-      <div style="position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:#ff007f;box-shadow:0 0 10px #ff007f"></div>
-      <div class="timeline-header">
-        <div class="timeline-title" style="color:#ff007f">1. Ammorbimento</div>
-        <div class="timeline-time" style="background:rgba(255,0,127,0.1);color:#ff007f">19:00 - 21:00</div>
-      </div>
-      <div class="timeline-body">
-        <div class="zone-pill" style="background:rgba(255,0,127,0.1);color:#ff007f">
-          <svg viewBox="0 0 24 24" style="stroke:#ff007f">
-            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
-          </svg>
-          Area Garden
+    <!-- Header Section -->
+    <header class="p-6 pt-10 text-center sticky top-0 bg-[#050505]/90 backdrop-blur-md z-40 border-b border-white/5">
+        <div class="flex justify-between items-center w-full mb-6">
+            <span class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Magaparty.eventi</span>
+            <div class="flex items-center gap-2 text-[--acid-cyan] text-[10px] tracking-widest font-bold uppercase">
+                <span class="w-2 h-2 rounded-full bg-[--acid-cyan] animate-pulse"></span> 5 Apr 2026
+            </div>
         </div>
-        <p class="timeline-text">Si inizia leggeri all'aperto con <strong>Federica Natella</strong> in consolle.</p>
-        <div class="activity-grid">
-          <div class="activity-chip"><span>🏓</span> Beer Pong</div>
-          <div class="activity-chip"><span>⚽</span> Calcio Balilla</div>
-          <div class="activity-chip"><span>🥃</span> Cicchetti 1vs1</div>
+        <div class="text-4xl mb-2">🐇🥕</div>
+        <h1 class="brutalist text-5xl tracking-tighter mb-2 glitch-text">DIGESTIVO<span class="text-[--acid-cyan]">®</span></h1>
+        <p class="text-[10px] uppercase tracking-[0.3em] opacity-50">L'antidoto al pranzo di Pasqua</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="flex justify-start gap-3 px-6 py-4 overflow-x-auto scroll-hide sticky top-[165px] bg-[#050505]/95 backdrop-blur-md z-40 border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+        <button onclick="switchTab('info')" id="tab-info" class="pill-tab active-tab"><i class="fa-solid fa-circle-info mr-1"></i> INFO</button>
+        <button onclick="switchTab('lineup')" id="tab-lineup" class="pill-tab inactive-tab"><i class="fa-solid fa-compact-disc mr-1"></i> LINE-UP</button>
+        <button onclick="switchTab('orari')" id="tab-orari" class="pill-tab inactive-tab"><i class="fa-regular fa-clock mr-1"></i> ORARI</button>
+        <button onclick="switchTab('bar')" id="tab-bar" class="pill-tab inactive-tab"><i class="fa-solid fa-martini-glass mr-1"></i> BAR MENU</button>
+        <button onclick="switchTab('tickets')" id="tab-tickets" class="pill-tab inactive-tab"><i class="fa-solid fa-ticket mr-1"></i> TICKETS</button>
+        <button onclick="switchTab('ai')" id="tab-ai" class="pill-tab inactive-tab"><i class="fa-solid fa-notes-medical mr-1"></i> AI CLINIC</button>
+    </div>
+
+    <main class="px-6 pt-6">
+        
+        <!-- INFO TAB -->
+        <div id="content-info" class="space-y-8 animate-fade-in">
+            
+            <!-- Countdown -->
+            <div class="glass-card p-6 neon-border-cyan text-center">
+                <h3 class="brutalist text-xl mb-4 text-[--acid-cyan]">INIZIO TERAPIA</h3>
+                <div class="grid grid-cols-4 gap-2 border-t border-white/5 pt-4">
+                    <div><span class="block text-2xl font-bold brutalist" id="cd">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="ch">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cm">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                    <div class="text-[--acid-cyan]"><span class="block text-2xl font-bold brutalist" id="cs">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                </div>
+            </div>
+
+            <!-- Casatiello Meter -->
+            <div class="glass-card p-5 border border-white/10">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-[9px] uppercase tracking-[0.15em] text-[--acid-magenta] font-bold">Livello Saturazione da Casatiello</span>
+                    <i class="fa-solid fa-chart-simple text-[--acid-magenta]"></i>
+                </div>
+                <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-3">
+                    <div class="h-full bg-gradient-to-r from-[--acid-magenta] to-[--acid-cyan] w-[92%] animate-pulse"></div>
+                </div>
+                <p class="text-[11px] italic opacity-80">Diagnosi clinica: <strong class="text-white not-italic">c'è bisogno urgente di ballare.</strong></p>
+            </div>
+
+            <!-- Partner -->
+            <div>
+                <h4 class="text-[10px] tracking-[0.15em] uppercase text-gray-500 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-handshake"></i> Liste Civiche Partner
+                </h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-yellow]/40 cursor-pointer hover:bg-[--acid-yellow]/10 transition-colors">
+                        <h5 class="brutalist text-[--acid-yellow] text-lg tracking-widest">NEXT</h5>
+                    </div>
+                    <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-blue]/40 cursor-pointer hover:bg-[--acid-blue]/10 transition-colors">
+                        <h5 class="brutalist text-[--acid-blue] text-lg tracking-widest">ATTIVAMENTE</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="glass-card overflow-hidden">
+                <div class="p-5">
+                    <h3 class="brutalist text-2xl mb-1">MAGA HOUSE</h3>
+                    <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Via Maiori 1<br>Pontecagnano Faiano (SA) 84098</p>
+                    <a href="https://maps.google.com/?q=Via+Maiori+1,+Pontecagnano+Faiano+SA" target="_blank" class="inline-flex items-center gap-2 bg-[--acid-cyan]/10 border border-[--acid-cyan]/30 text-[--acid-cyan] px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold hover:bg-[--acid-cyan]/20 transition-colors">
+                        <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                    </a>
+                </div>
+                <div class="bg-black/50 p-4 border-t border-white/5">
+                    <p class="text-[9px] uppercase tracking-[0.15em] text-[--acid-cyan] mb-3 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[--acid-cyan] animate-pulse"></span> Infoline</p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:+393454237269" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
+                        <a href="tel:+393914700024" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Buttons -->
+            <div class="flex gap-2 pb-6">
+                <button onclick="shareEvent()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                    <i class="fa-solid fa-share-nodes"></i> Condividi
+                </button>
+                <button onclick="addToCalendar()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                    <i class="fa-regular fa-calendar-plus"></i> Calendario
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="timeline-item">
-      <div style="position:absolute;left:-20px;top:6px;width:10px;height:10px;border-radius:50%;background:#39ff14;box-shadow:0 0 10px #39ff14"></div>
-      <div class="timeline-header">
-        <div class="timeline-title" style="color:#39ff14">2. Smaltimento</div>
-        <div class="timeline-time" style="background:#39ff14;color:black">21:00 - 02:00</div>
-      </div>
-      <div class="timeline-body" style="border-color:rgba(57,255,20,0.2);background:rgba(57,255,20,0.02)">
-        <div class="zone-pill" style="background:rgba(57,255,20,0.1);color:#39ff14">
-          <svg viewBox="0 0 24 24" style="stroke:#39ff14">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-          </svg>
-          All'Interno
+        <!-- LINE-UP TAB -->
+        <div id="content-lineup" class="hidden space-y-6 animate-fade-in">
+            <div class="text-center mb-6">
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Line Up</h2>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">I dottori del party</p>
+            </div>
+
+            <!-- DJ 1 -->
+            <div class="glass-card p-6 relative overflow-hidden neon-border-magenta group">
+                <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-magenta] group-hover:scale-110 transition-transform">1</div>
+                <div class="relative z-10">
+                    <span class="inline-block px-3 py-1 bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[--acid-magenta] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 1 · Tramonto</span>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Warm Up</p>
+                    <h4 class="brutalist text-3xl mb-3">FEDERICA NATELLA</h4>
+                    <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">House</span>
+                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Tech-House</span>
+                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Afro-House</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-magenta]/50 pl-3">Il primo step del trattamento. Ritmi caldi e groove tribali perfetti per accompagnare il tramonto e iniziare a sciogliere i muscoli dopo l'abbuffata.</p>
+                </div>
+            </div>
+
+            <!-- DJ 2 -->
+            <div class="glass-card p-6 relative overflow-hidden neon-border-green group">
+                <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-green] group-hover:scale-110 transition-transform">2</div>
+                <div class="relative z-10">
+                    <span class="inline-block px-3 py-1 bg-[--acid-green]/10 border border-[--acid-green]/30 text-[--acid-green] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 2 · Inside Party</span>
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Clubbing</p>
+                    <h4 class="brutalist text-3xl mb-3">ADOLFO CITRO</h4>
+                    <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Reggaeton</span>
+                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Dance</span>
+                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Hard Techno</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-green]/50 pl-3">L'esperto nella lettura del dancefloor. Ti prende per mano partendo dalle hit Reggaeton e Dance, per poi alzare drasticamente i BPM e sganciare vere bombe Techno.</p>
+                </div>
+            </div>
         </div>
-        <p class="timeline-text"><strong>Ore 21:00 esatte.</strong> Ci si sposta dentro. Si spengono le luci, partono i laser e sale in cattedra <strong>Adolfo Citro</strong>. Niente più chiacchiere: si balla forte fino a chiusura.</p>
-      </div>
+
+        <!-- ORARI TAB -->
+        <div id="content-orari" class="hidden space-y-6 animate-fade-in">
+             <div class="text-center mb-6">
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Timeline</h2>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Svolgimento della terapia</p>
+            </div>
+
+            <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
+                
+                <!-- Fase 1 -->
+                <div class="relative">
+                    <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-magenta] shadow-[0_0_10px_#ff00cc] mt-1"></div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="brutalist text-xl text-[--acid-magenta]">1. AMMORBIDIMENTO</h3>
+                        <span class="bg-[--acid-magenta]/20 text-[--acid-magenta] text-[10px] px-2 py-1 rounded font-bold">19:00 - 21:00</span>
+                    </div>
+                    <div class="glass-card p-4 border-[--acid-magenta]/20">
+                        <div class="inline-flex items-center gap-2 bg-[--acid-magenta]/10 text-[--acid-magenta] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
+                            <i class="fa-solid fa-tree"></i> Area Garden
+                        </div>
+                        <p class="text-[12px] text-gray-300 leading-relaxed mb-4">Si inizia leggeri all'aperto con <strong class="text-white">Federica Natella</strong> in consolle.</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                <span class="block text-xl mb-1">🏓</span>
+                                <span class="text-[9px] text-gray-400 uppercase">Beer Pong</span>
+                            </div>
+                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                <span class="block text-xl mb-1">⚽</span>
+                                <span class="text-[9px] text-gray-400 uppercase">Calcetto</span>
+                            </div>
+                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                <span class="block text-xl mb-1">🥃</span>
+                                <span class="text-[9px] text-gray-400 uppercase">Cicchetti</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fase 2 -->
+                <div class="relative">
+                    <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-green] shadow-[0_0_10px_#39ff14] mt-1"></div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="brutalist text-xl text-[--acid-green]">2. SMALTIMENTO</h3>
+                        <span class="bg-[--acid-green] text-black text-[10px] px-2 py-1 rounded font-bold">21:00 - 02:00</span>
+                    </div>
+                    <div class="glass-card p-4 border-[--acid-green]/30 bg-[--acid-green]/5">
+                        <div class="inline-flex items-center gap-2 bg-[--acid-green]/10 text-[--acid-green] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
+                            <i class="fa-solid fa-house"></i> All'Interno
+                        </div>
+                        <p class="text-[12px] text-gray-300 leading-relaxed"><strong>Ore 21:00 esatte.</strong> Ci si sposta tutti dentro. Si spengono le luci, partono i laser e sale in cattedra <strong class="text-white">Adolfo Citro</strong>. Niente più chiacchiere: si balla forte fino a chiusura.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BAR MENU TAB -->
+        <div id="content-bar" class="hidden space-y-6 animate-fade-in">
+            <div class="text-center mb-6">
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Bar Menu</h2>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">La farmacia del party</p>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Spritz -->
+                <div class="glass-card overflow-hidden">
+                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
+                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-cyan]">Spritz & Classici</h3>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Aperol Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Campari Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Limoncello Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Hugo</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Americano / Negroni Sbagliato</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Negroni</span><span class="brutalist text-[--acid-cyan] text-lg">7€</span></div>
+                    </div>
+                </div>
+
+                <!-- Long Drink -->
+                <div class="glass-card overflow-hidden">
+                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
+                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-magenta]">Long Drink</h3>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin / Vodka Tonic (o Lemon)</span><span class="brutalist text-[--acid-magenta] text-lg">5€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Vodka Redbull / Rum Cola</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Paloma / Capiroska</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tequila Sunrise</span><span class="brutalist text-[--acid-magenta] text-lg">7€</span></div>
+                    </div>
+                </div>
+
+                <!-- Special -->
+                <div class="glass-card overflow-hidden border-[--acid-green]/30">
+                    <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20">
+                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Special & Hard</h3>
+                    </div>
+                    <div class="divide-y divide-white/5">
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Jagerbomb / Tris Vodka Redbull</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Midori / Disaronno / Whisky Sour</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Long Island</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Invisibile (4 Bianchi) / Green Park</span><span class="brutalist text-[--acid-green] text-lg">8€</span></div>
+                    </div>
+                </div>
+                
+                <!-- Birre -->
+                <div class="glass-card p-4">
+                    <h3 class="text-[11px] uppercase tracking-widest font-bold text-gray-400 mb-3 border-b border-white/10 pb-2">Birre</h3>
+                    <div class="flex justify-between items-center mb-2"><span class="text-xs">Heineken / Becks</span><span class="font-mono text-sm">3€</span></div>
+                    <div class="flex justify-between items-center"><span class="text-xs">Tennet's</span><span class="font-mono text-sm">4€</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TICKETS TAB -->
+        <div id="content-tickets" class="hidden space-y-6 animate-fade-in">
+            <div class="text-center mb-6">
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Tickets</h2>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Modalità di accesso</p>
+            </div>
+
+            <div class="space-y-3">
+                <!-- Fascia 1 -->
+                <div class="glass-card p-5 border-l-4 border-l-[--acid-green] bg-[--acid-green]/5 flex justify-between items-center hover:bg-[--acid-green]/10 transition-colors">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Arrivo 19:00 - 21:00</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-[--acid-green] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
+                    </div>
+                    <span class="brutalist text-3xl text-[--acid-green]">10€</span>
+                </div>
+
+                <!-- Fascia 2 -->
+                <div class="glass-card p-5 border-l-4 border-l-[--acid-cyan] flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Arrivo dopo le 21:00</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-[--acid-cyan] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
+                    </div>
+                    <span class="brutalist text-3xl text-[--acid-cyan]">15€</span>
+                </div>
+
+                <!-- Fascia 3 -->
+                <div class="glass-card p-5 border-l-4 border-l-gray-600 opacity-60 flex justify-between items-center">
+                    <div>
+                        <h4 class="font-bold text-sm text-gray-300">Arrivo dopo le 23:00</h4>
+                        <p class="text-[10px] uppercase tracking-wider text-gray-500 mt-1">Nessun drink incluso</p>
+                    </div>
+                    <span class="brutalist text-3xl text-gray-400">15€</span>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 border border-[--acid-magenta]/30 bg-black/50">
+                <p class="text-[11px] leading-relaxed text-gray-300 text-center">Rivolgiti ai <strong>capilista</strong> delle liste partner <strong class="text-[--acid-yellow]">NEXT</strong> o <strong class="text-[--acid-blue]">ATTIVAMENTE</strong> per l'accesso agevolato, oppure clicca il bottone in basso per metterti in lista.</p>
+            </div>
+        </div>
+
+        <!-- AI CLINIC TAB -->
+        <div id="content-ai" class="hidden space-y-6 animate-fade-in">
+            <div class="text-center mb-6">
+                <h2 class="brutalist text-3xl tracking-tighter uppercase text-[--acid-cyan]">TRIAGE AI</h2>
+                <p class="text-[10px] opacity-50 uppercase mt-2">Diagnosi istantanea post-Pasqua</p>
+            </div>
+            <div class="space-y-4">
+                <textarea id="aiInput" placeholder="Ho mangiato 3 chili di lasagna, 2 casatielli e sono bloccato sul divano..." class="w-full h-28 bg-white/5 border border-white/10 rounded-xl p-4 text-xs outline-none focus:border-[--acid-cyan] focus:bg-white/10 transition-all resize-none"></textarea>
+                <button onclick="getDiagnosis()" id="diagnosisBtn" class="w-full py-4 bg-[--acid-cyan] text-black font-black brutalist text-sm rounded-xl animate-pulse-cyan hover:scale-[0.98] transition-transform">GENERA REFERTO MEDICO ✨</button>
+            </div>
+            <div id="aiResponse" class="hidden glass-card p-5 border-l-4 border-l-[--acid-cyan] mt-6">
+                <p class="text-[12px] leading-relaxed italic" id="aiText"></p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Fixed CTA -->
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-50">
+        <button onclick="openModal()" class="w-full bg-[--acid-cyan] text-black font-black py-4 rounded-xl brutalist text-lg tracking-widest shadow-[0_0_20px_rgba(0,255,204,0.3)] hover:scale-[0.98] transition-transform flex justify-center items-center gap-2">
+            <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
+        </button>
     </div>
-  </div>
-</section>
 
-<div class="divider"></div>
+    <!-- MODAL LISTA -->
+    <div id="listModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+        <div class="glass-card w-full max-w-sm p-6 neon-border-cyan bg-[#0a0a0a] relative modal-enter">
+            <!-- Header Modal -->
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="brutalist text-2xl text-white">LISTA INGRESSO</h3>
+                <button onclick="closeModal()" class="w-8 h-8 flex justify-center items-center rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-<section id="ticket" class="section">
-  <div class="section-head">
-    <svg viewBox="0 0 24 24" style="stroke:white">
-      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
-    </svg>
-    <h2>Ticket</h2>
-  </div>
+            <!-- Opzione 1: Form -->
+            <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-5 text-center">
+                <p class="text-[10px] text-[--acid-cyan] font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-bolt"></i> Metodo Veloce</p>
+                <p class="text-[11px] text-gray-400 mb-4">Compila il form per salvare il posto e riceverai conferma via messaggio.</p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_iQS6JncZ0r5pofZQkfQQXQ-zCSme6dRCvfYXPPd-fC4luQ/viewform?usp=dialog" target="_blank" class="block w-full py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-gray-200 transition-colors">
+                    <i class="fa-brands fa-google mr-1"></i> Compila Google Form
+                </a>
+            </div>
 
-  <div class="ticket-list">
-    <div class="ticket-row featured">
-      <div>
-        <div class="ticket-label">Arrivo 19:00 - 21:00</div>
-        <div class="ticket-bonus">🍹 Drink Omaggio Incluso</div>
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="text-center relative my-6">
+                <hr class="border-white/10">
+                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-widest text-gray-500">Oppure contatta i PR</span>
+            </div>
 
-        <div class="ticket-price display" style="color:#39ff14">10€</div>
-  </div>
-
-  <div class="ticket-row featured">
-    <div>
-      <div class="ticket-label">Arrivo dopo le 21:00</div>
-      <div class="ticket-bonus">🍹 Drink Omaggio Incluso</div>
-    </div>
-    <div class="ticket-price display" style="color:#39ff14">15€</div>
-  </div>
-
-  <div class="ticket-row dimmed">
-    <div>
-      <div class="ticket-label">Arrivo dopo le 23:00</div>
-      <div class="ticket-bonus" style="color:#555">Nessun drink incluso</div>
-    </div>
-    <div class="ticket-price display" style="color:#555">15€</div>
-  </div>
-  
-  <p class="ticket-note">
-    Rivolgiti ai <strong>capilista</strong> delle liste <strong style="color:#ff007f">NEXT</strong> o <strong style="color:#39ff14">ATTIVAMENTE</strong> per l'accesso agevolato, oppure clicca il bottone in basso per registrarti direttamente in lista!
-  </p>
-</section>
-
-<div class="divider"></div>
-
-<section id="info" class="section pb-bottom">
-  <div class="section-head">
-    <svg viewBox="0 0 24 24" style="stroke:#39ff14">
-      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-      <circle cx="12" cy="10" r="3"/>
-    </svg>
-    <h2>Location</h2>
-  </div>
-
-  <div class="info-card">
-    <div class="info-main">
-      <div class="info-venue display">MAGA HOUSE</div>
-      <div class="info-address">Via Maiori 1<br>Pontecagnano Faiano (SA) 84098</div>
-      <a class="map-link" href="https://maps.google.com/?q=Via+Maiori+1,+Pontecagnano+Faiano+SA" target="_blank">
-        <svg viewBox="0 0 24 24" style="stroke:#39ff14">
-           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-           <circle cx="12" cy="10" r="3"/>
-        </svg>
-        Apri in Google Maps
-      </a>
+            <!-- Opzione 2: WhatsApp -->
+            <div class="space-y-3">
+                <button onclick="wa('Lista NEXT')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-yellow] text-[--acid-yellow] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-yellow] hover:text-black transition-all">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> LISTA NEXT
+                </button>
+                <button onclick="wa('Lista ATTIVAMENTE')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-blue] text-[--acid-blue] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-blue] hover:text-black transition-all">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> LISTA ATTIVAMENTE
+                </button>
+                <button onclick="wa('Informazioni Generali')" class="w-full flex items-center justify-center gap-2 py-3 bg-white/5 text-gray-300 rounded-lg text-[10px] uppercase tracking-widest hover:bg-white/10 transition-colors mt-2">
+                    Infoline Magaparty
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div class="info-phones">
-      <div class="phones-label">
-        <span class="pulse-ring" style="display:inline-block;margin-right:6px"></span>
-        Infoline · Tap per chiamare
-      </div>
-      <div class="phones-grid">
-        <a href="tel:+393454237269" class="phone-btn">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          345 423 7269
-        </a>
-        <a href="tel:+393914700024" class="phone-btn">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          391 470 0024
-        </a>
-      </div>
-    </div>
-  </div>
+    <script>
+        // Gestione Tab Navigazione
+        function switchTab(tabId) {
+            const tabs = ['info', 'lineup', 'orari', 'bar', 'tickets', 'ai'];
+            tabs.forEach(id => {
+                const content = document.getElementById(content-${id});
+                const tab = document.getElementById(tab-${id});
+                if(content) content.classList.add('hidden');
+                if(tab) {
+                    tab.classList.remove('active-tab');
+                    tab.classList.add('inactive-tab');
+                }
+            });
+            const activeContent = document.getElementById(content-${tabId});
+            const activeTab = document.getElementById(tab-${tabId});
+            if(activeContent) activeContent.classList.remove('hidden');
+            if(activeTab) {
+                activeTab.classList.add('active-tab');
+                activeTab.classList.remove('inactive-tab');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-  <div class="share-row">
-    <button class="share-btn" onclick="shareEvent()">
-      <svg viewBox="0 0 24 24">
-        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-      </svg>
-      Condividi
-    </button>
-    <button class="share-btn" onclick="addToCalendar()">
-      <svg viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-      </svg>
-      Calendario
-    </button>
-  </div>
-</section>
+        // Gestione Countdown
+        function updateCountdown() {
+            const target = new Date('2026-04-05T19:00:00');
+            const now = new Date();
+            const diff = target - now;
+            
+            if (diff <= 0) {
+                ['cd','ch','cm','cs'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.innerText = '00';
+                });
+                return;
+            }
 
-<div class="modal-overlay" id="modal" onclick="closeModalOnBg(event)">
-  <div class="modal">
-    <div class="modal-top">
-      <div class="modal-title display">Mettiti in Lista</div>
-      <button class="modal-close" onclick="closeModal()">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <p class="modal-hint">Con quale gruppo prenoti?</p>
-    <div class="modal-options">
-      <button class="modal-opt" id="opt-attivamente" onclick="selectPR('Attivamente')">ATTIVAMENTE</button>
-      <button class="modal-opt" id="opt-next" onclick="selectPR('Next')">NEXT</button>
-      <button class="modal-opt full" id="opt-base" onclick="selectPR('Magaparty Base')">
-        NESSUNO DEI DUE
-        <small>Prenotazione base Magaparty</small>
-      </button>
-    </div>
-    <button class="modal-cta" id="modal-cta" onclick="goWhatsApp()" disabled>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1"/>
-      </svg>
-      CONFERMA SU WHATSAPP
-    </button>
-  </div>
-</div>
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const m = Math.floor((diff / (1000 * 60)) % 60);
+            const s = Math.floor((diff / 1000) % 60);
 
-<div class="bottom-bar">
-  <button class="main-cta" onclick="openModal()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21z"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1"/>
-    </svg>
-    METTITI IN LISTA
-  </button>
-</div>
+            const dEl = document.getElementById('cd');
+            const hEl = document.getElementById('ch');
+            const mEl = document.getElementById('cm');
+            const sEl = document.getElementById('cs');
 
-<script>
-// --- COUNTDOWN ---
-const EVENT = new Date('2026-04-05T19:00:00');
-function updateCountdown() {
-  const now = new Date();
-  const diff = EVENT - now;
-  if (diff <= 0) {
-    ['cd-days','cd-hours','cd-min','cd-sec'].forEach(id => document.getElementById(id).textContent = '00');
-    return;
-  }
-  const d = Math.floor(diff / 86400000);
-  const h = Math.floor((diff % 86400000) / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  const s = Math.floor((diff % 60000) / 1000);
+            if(dEl) dEl.innerText = d.toString().padStart(2, '0');
+            if(hEl) hEl.innerText = h.toString().padStart(2, '0');
+            if(mEl) mEl.innerText = m.toString().padStart(2, '0');
+            if(sEl) sEl.innerText = s.toString().padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
-  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
-  document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
-  document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
-}
-updateCountdown();
-setInterval(updateCountdown, 1000);
+        // Funzioni Modal Lista
+        const modal = document.getElementById('listModal');
+        function openModal() {
+            if(modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        function closeModal() {
+            if(modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        }
+        
+        if(modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        }
 
-// --- MODAL ---
-let selectedPR = "";
-function openModal() {
-  document.getElementById('modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+        // WhatsApp Link Generator
+        function wa(lista) {
+            const msg = encodeURIComponent(Ciao! 🐇 Vorrei registrarmi per DIGESTIVO (Pasqua 5 Aprile 2026).\nRichiesta per: ${lista});
+            window.open(https://wa.me/393454237269?text=${msg}, '_blank');
+        }
 
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+        // Funzioni di Condivisione
+        function shareEvent() {
+            if (navigator.share) {
+                navigator.share({ 
+                    title: 'DIGESTIVO – 5 Aprile | Magaparty', 
+                    text: "L'antidoto al pranzo di Pasqua 🐇🥕", 
+                    url: window.location.href 
+                }).catch(()=>{});
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('Link copiato negli appunti! 🐇');
+                });
+            }
+        }
 
-function closeModalOnBg(e) {
-  if (e.target === document.getElementById('modal')) closeModal();
-}
+        function addToCalendar() {
+            const t = encodeURIComponent('DIGESTIVO – Magaparty');
+            const l = encodeURIComponent('Via Maiori 1, Pontecagnano Faiano SA');
+            const det = encodeURIComponent("L'antidoto al pranzo di Pasqua. Feat. Federica Natella & Adolfo Citro.");
+            window.open(https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=20260405T190000/20260406T020000&location=${l}&details=${det}, '_blank');
+        }
 
-function selectPR(val) {
-  selectedPR = val;
-  ['opt-attivamente','opt-next','opt-base'].forEach(id => {
-    const el = document.getElementById(id);
-    el.classList.remove('selected-pink','selected-green');
-  });
+        // AI Diagnosis
+        const apiKey = ""; 
+        
+        async function getDiagnosis() {
+            const inputEl = document.getElementById('aiInput');
+            const input = inputEl ? inputEl.value : "";
+            if (!input) return;
 
-  if (val === 'Attivamente') document.getElementById('opt-attivamente').classList.add('selected-green');
-  else if (val === 'Next') document.getElementById('opt-next').classList.add('selected-pink');
-  else document.getElementById('opt-base').classList.add('selected-green');
-  
-  document.getElementById('modal-cta').disabled = false;
+            const btn = document.getElementById('diagnosisBtn');
+            const resDiv = document.getElementById('aiResponse');
+            const resText = document.getElementById('aiText');
 
-  // se chiamato dal click su partner, apri modal
-  if (!document.getElementById('modal').classList.contains('open')) openModal();
-}
+            if(btn) {
+                btn.disabled = true;
+                btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> ANALISI CLINICA...";
+            }
+            if(resDiv) resDiv.classList.remove('hidden');
+            if(resText) resText.innerText = "Consultando il primario Federica Natella...";
 
-function goWhatsApp() {
-  if (!selectedPR) return;
-  const phone = '393454237269';
-  const msg = encodeURIComponent(`Ciao! 🐰 Vorrei mettermi in lista per l'evento DIGESTIVO del 5 Aprile.\n\nInfo Lista: ${selectedPR}`);
-  window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
-  closeModal();
-}
-
-// --- SHARE ---
-function shareEvent() {
-  if (navigator.share) {
-    navigator.share({
-      title: 'DIGESTIVO - 5 Aprile | Magaparty',
-      text: 'L\'antidoto al pranzo di Pasqua 🐰🥕 Vieni a ballare il 5 Aprile alla Maga House!'
-    });
-  }
-}
-      url: window.location.href
-    }).catch(() => {});
-  } else {
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('Link copiato! Condividilo con gli amici 🐰');
-    });
-  }
-}
-
-function addToCalendar() {
-  const start = '20260405T190000';
-  const end = '20260406T020000';
-  const title = encodeURIComponent('DIGESTIVO – Magaparty');
-  const loc = encodeURIComponent('Via Maiori 1, Pontecagnano Faiano SA');
-  const details = encodeURIComponent('L\'antidoto al pranzo di Pasqua. Feat. Federica Natella & Adolfo Citro.');
-  
-  window.open(`https://calendar.google.com/calendar/r/eventedit?text=${title}&dates=${start}/${end}&location=${loc}&details=${details}`, '_blank');
-}
-
-// --- ACTIVE NAV ---
-const sections = ['lineup', 'fasi', 'ticket', 'info'];
-const navItems = document.querySelectorAll('.nav-item');
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      navItems.forEach(n => n.classList.remove('active'));
-      const target = document.querySelector(`.nav-item[href="#${e.target.id}"]`);
-      if (target) {
-        target.classList.add('active');
-      }
-    }
-  });
-}, { threshold: 0.5 });
-
-sections.forEach(id => {
-  const el = document.getElementById(id);
-  if (el) observer.observe(el);
-});
-</script>
+            try {
+                if(!apiKey) throw new Error("API Key mancante");
+                
+                const response = await fetch(https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: input }] }],
+                        systemInstruction: { parts: [{ text: "Sei il primario della clinica 'Digestivo'. L'utente descrive il suo stato post-abbuffata pasquale (incluso casatiello). Rispondi con una diagnosi medica ironica, cinica e spassosa. Consiglia di venire al party 'Digestivo' a Maga House, prescrivi un drink dal bar (es. Jagerbomb, Tris di Vodka) come cura. Max 2-3 righe." }] }
+                    })
+                });
+                const data = await response.json();
+                if(resText) resText.innerText = data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                if(resText) resText.innerText = "Diagnosi: saturazione totale da carboidrati. La clinica è bloccata. Prescrizione: due Jagerbomb appena arrivi al party.";
+            } finally {
+                if(btn) {
+                    btn.disabled = false;
+                    btn.innerText = "GENERA REFERTO MEDICO ✨";
+                }
+            }
+        }
+    </script>
 </body>
 </html>
