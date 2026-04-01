@@ -74,27 +74,12 @@
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-
-        /* Nuova classe per il logo immagine */
-        .logo-image {
-            max-width: 150px;
-            height: auto;
-            margin: 0 auto 10px;
-            display: block;
-            border-radius: 10px;
-            filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.2));
-            animation: pulse-logo 3s infinite alternate;
-        }
-        
-        @keyframes pulse-logo {
-            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.2)); }
-            100% { transform: scale(1.02); filter: drop-shadow(0 0 25px rgba(0, 255, 204, 0.5)); }
-        }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen border-x border-white/5 relative pb-28">
 
-    <div class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+    <!-- Header Section -->
+ <div class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
     
     <header class="p-6 pt-10 text-center">
         <div class="flex justify-between items-center w-full mb-6">
@@ -103,7 +88,8 @@
                 <span class="w-2 h-2 rounded-full bg-[--acid-cyan] animate-pulse"></span> 5 Apr 2026
             </div>
         </div>
-        <img src="logo_digestivo.png" alt="DIGESTIVO®" class="logo-image">
+        <div class="text-4xl mb-2">🐇🥕</div>
+        <h1 class="brutalist text-5xl tracking-tighter mb-2 glitch-text">DIGESTIVO<span class="text-[--acid-cyan]">®</span></h1>
         <p class="text-[10px] uppercase tracking-[0.3em] opacity-50">L'antidoto al pranzo di Pasqua</p>
     </header>
 
@@ -118,8 +104,10 @@
 </div>
     <main class="px-6 pt-6">
         
+        <!-- INFO TAB -->
         <div id="content-info" class="space-y-8 animate-fade-in">
             
+            <!-- Countdown -->
             <div class="glass-card p-6 neon-border-cyan text-center">
                 <h3 class="brutalist text-xl mb-4 text-[--acid-cyan]">INIZIO TERAPIA</h3>
                 <div class="grid grid-cols-4 gap-2 border-t border-white/5 pt-4">
@@ -130,6 +118,7 @@
                 </div>
             </div>
 
+            <!-- Casatiello Meter -->
             <div class="glass-card p-5 border border-white/10">
                 <div class="flex justify-between items-end mb-3">
                     <span class="text-[9px] uppercase tracking-[0.15em] text-[--acid-magenta] font-bold">Livello Saturazione da Casatiello</span>
@@ -141,6 +130,7 @@
                 <p class="text-[11px] italic opacity-80">Diagnosi clinica: <strong class="text-white not-italic">C'è bisogno urgente di ballare!</strong></p>
             </div>
 
+            <!-- Partner -->
             <div>
                 <h4 class="text-[10px] tracking-[0.15em] uppercase text-gray-500 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-handshake"></i> Liste Civiche Partner
@@ -155,6 +145,7 @@
                 </div>
             </div>
 
+            <!-- Location -->
             <div class="glass-card overflow-hidden">
                 <div class="p-5">
                     <h3 class="brutalist text-2xl mb-1">MAGA HOUSE</h3>
@@ -172,6 +163,7 @@
                 </div>
             </div>
 
+            <!-- Share Buttons -->
             <div class="flex gap-2 pb-6">
                 <button onclick="shareEvent()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
                     <i class="fa-solid fa-share-nodes"></i> Condividi
@@ -182,12 +174,14 @@
             </div>
         </div>
 
+        <!-- LINE-UP TAB -->
         <div id="content-lineup" class="hidden space-y-6 animate-fade-in">
             <div class="text-center mb-6">
                 <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Line Up</h2>
                 <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">I dottori del party</p>
             </div>
 
+            <!-- DJ 1 -->
             <div class="glass-card p-6 relative overflow-hidden neon-border-magenta group">
                 <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-magenta] group-hover:scale-110 transition-transform">1</div>
                 <div class="relative z-10">
@@ -203,6 +197,7 @@
                 </div>
             </div>
 
+            <!-- DJ 2 -->
             <div class="glass-card p-6 relative overflow-hidden neon-border-green group">
                 <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-green] group-hover:scale-110 transition-transform">2</div>
                 <div class="relative z-10">
@@ -219,6 +214,7 @@
             </div>
         </div>
 
+        <!-- ORARI TAB -->
         <div id="content-orari" class="hidden space-y-6 animate-fade-in">
              <div class="text-center mb-6">
                 <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Timeline</h2>
@@ -227,6 +223,7 @@
 
             <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
                 
+                <!-- Fase 1 -->
                 <div class="relative">
                     <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-magenta] shadow-[0_0_10px_#ff00cc] mt-1"></div>
                     <div class="flex justify-between items-start mb-2">
@@ -255,6 +252,7 @@
                     </div>
                 </div>
 
+                <!-- Fase 2 -->
                 <div class="relative">
                     <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-green] shadow-[0_0_10px_#39ff14] mt-1"></div>
                     <div class="flex justify-between items-start mb-2">
@@ -272,6 +270,7 @@
             </div>
         </div>
 
+        <!-- BAR MENU TAB -->
         <div id="content-bar" class="hidden space-y-6 animate-fade-in">
             <div class="text-center mb-6">
                 <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Bar Menu</h2>
@@ -279,6 +278,7 @@
             </div>
 
             <div class="space-y-4">
+                <!-- Shots -->
                 <div class="glass-card overflow-hidden border-[--acid-green]/30">
                     <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20"> 
                         <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-cyan]">Shots & Bombs</h3>
@@ -292,6 +292,7 @@
                         <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Fireball</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
                     </div>
          </div>
+                <!-- Spritz -->
                 <div class="glass-card overflow-hidden border-[--acid-cyan]/30">
                     <div class="bg-[--acid-cyan]/10 px-4 py-3 border-b border-[--acid-cyan]/20">
                         <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Spritz & Classici</h3>
@@ -306,6 +307,7 @@
                     </div>
                 </div>
 
+                <!-- Long Drink -->
                 <div class="glass-card overflow-hidden">
                     <div class="bg-white/5 px-4 py-3 border-b border-white/10">
                         <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-magenta]">Long Drink</h3>
@@ -318,6 +320,7 @@
                     </div>
                 </div>
 
+                <!-- Special -->
                 <div class="glass-card overflow-hidden border-[--acid-green]/30">
                     <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20">
                         <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Special & Hard</h3>
@@ -330,6 +333,7 @@
                     </div>
                 </div>
                 
+                <!-- Birre -->
                 <div class="glass-card overflow-hidden border-[--acid-yellow]/30">
                     <div class="bg-[--acid-yellow]/10 px-4 py-3 border-b border-[--acid-yellow]/20">
                         <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-yellow]">Birre</h3>
@@ -348,7 +352,8 @@
 </div>     
 </div>
 
-        <div id="content-tickets" class="hidden space-y-6 animate-fade-in">
+        <!-- TICKETS TAB -->
+<div id="content-tickets" class="hidden space-y-6 animate-fade-in">
             <div class="text-center mb-6">
                 <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Tickets</h2>
                 <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Modalità di accesso</p>
@@ -413,14 +418,17 @@
 
     </main>
 
+    <!-- Fixed CTA -->
     <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-50">
         <button onclick="openModal()" class="w-full bg-[--acid-cyan] text-black font-black py-4 rounded-xl brutalist text-lg tracking-widest shadow-[0_0_20px_rgba(0,255,204,0.3)] hover:scale-[0.98] transition-transform flex justify-center items-center gap-2">
             <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
         </button>
     </div>
 
+    <!-- MODAL LISTA -->
     <div id="listModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
         <div class="glass-card w-full max-w-sm p-6 neon-border-cyan bg-[#0a0a0a] relative modal-enter">
+            <!-- Header Modal -->
             <div class="flex justify-between items-center mb-6">
                 <h3 class="brutalist text-2xl text-white">LISTA INGRESSO</h3>
                 <button onclick="closeModal()" class="w-8 h-8 flex justify-center items-center rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
@@ -428,6 +436,7 @@
                 </button>
             </div>
 
+            <!-- Opzione 1: Form -->
             <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-5 text-center">
                 <p class="text-[10px] text-[--acid-cyan] font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-bolt"></i> Metodo Veloce</p>
                 <p class="text-[11px] text-gray-400 mb-4">Compila il form per salvare il posto e riceverai conferma via messaggio.</p>
@@ -441,6 +450,7 @@
                 <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-widest text-gray-500">Oppure contatta i PR</span>
             </div>
 
+            <!-- Opzione 2: WhatsApp -->
             <div class="space-y-3">
                 <button onclick="wa('Lista NEXT')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-yellow] text-[--acid-yellow] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-yellow] hover:text-black transition-all">
                     <i class="fa-brands fa-whatsapp text-lg"></i> LISTA NEXT
@@ -559,6 +569,48 @@
             const l = encodeURIComponent('Via Maiori 1, Pontecagnano Faiano SA');
             const det = encodeURIComponent("L'antidoto al pranzo di Pasqua. Feat. Federica Natella & Adolfo Citro.");
             window.open(`https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=20260405T190000/20260406T020000&location=${l}&details=${det}`, '_blank');
+        }
+
+        // AI Diagnosis
+        const apiKey = ""; // ATTENZIONE: Qui serve una chiave API di Google Gemini, da inserire tra i i doppi apici! CAPITO MATTEOPIO?? Gratis con https://aistudio.google.com/ ma fare attenzione ai limiti di domande e ad avere carta di credito scollegata su Google Cloud
+        
+        async function getDiagnosis() {
+            const inputEl = document.getElementById('aiInput');
+            const input = inputEl ? inputEl.value : "";
+            if (!input) return;
+
+            const btn = document.getElementById('diagnosisBtn');
+            const resDiv = document.getElementById('aiResponse');
+            const resText = document.getElementById('aiText');
+
+            if(btn) {
+                btn.disabled = true;
+                btn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> ANALISI CLINICA...";
+            }
+            if(resDiv) resDiv.classList.remove('hidden');
+            if(resText) resText.innerText = "Consultando il primario Federica Natella...";
+
+            try {
+                if(!apiKey || apiKey === "IL_TUO_CODICE_API_QUI") throw new Error("API Key mancante");
+                
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: input }] }],
+                        systemInstruction: { parts: [{ text: "Sei il primario della clinica 'Digestivo'. Rispondi con una diagnosi medica ironica e cinica post-abbuffata pasquale. Consiglia di venire al party a Maga House. Max 2-3 righe." }] }
+                    })
+                });
+                const data = await response.json();
+                if(resText) resText.innerText = data.candidates[0].content.parts[0].text;
+            } catch (error) {
+                if(resText) resText.innerText = "Diagnosi: saturazione totale da carboidrati. Prescrizione: due Jagerbomb appena arrivi al party.";
+            } finally {
+                if(btn) {
+                    btn.disabled = false;
+                    btn.innerText = "GENERA REFERTO MEDICO ✨";
+                }
+            }
         }
     </script>
 </body>
