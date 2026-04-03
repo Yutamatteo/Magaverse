@@ -4,19 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DIGESTIVO® - L'antidoto al pranzo di Pasqua | Magaparty</title>
+    <meta name="description" content="L'antidoto al pranzo di Pasqua. 5 Aprile 2026 – Maga House, Pontecagnano Faiano (SA). Feat. Federica Natella & Adolfo Citro.">
+    <meta property="og:title" content="DIGESTIVO® – 5 Aprile 2026 | Magaparty">
+    <meta property="og:description" content="L'antidoto al pranzo di Pasqua 🐇🥕 Maga House, Pontecagnano Faiano (SA).">
+    <meta property="og:image" content="logo_digestivo.png">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="logo_maga.png">
+    <meta name="twitter:title" content="DIGESTIVO® – 5 Aprile 2026 | Magaparty">
+    <meta name="twitter:description" content="L'antidoto al pranzo di Pasqua 🐇🥕">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;700&display=swap');
-
         :root {
             --acid-cyan: #00ffcc;
             --acid-magenta: #ff00cc;
             --acid-purple: #9900ff;
             --acid-green: #39ff14;
-            --acid-blue: #00d4ff;   /* Colore Attivamente */
-            --acid-yellow: #f3ff00; /* Colore Next */
+            --acid-blue: #00d4ff;
+            --acid-yellow: #f3ff00;
+            --acid-orange: #ff6a00;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Space Grotesk', sans-serif;
@@ -24,6 +37,20 @@
             color: #fff;
             -webkit-tap-highlight-color: transparent;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Sfondo ambientale desktop */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 40% at 10% 50%, rgba(0,255,204,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 50% at 90% 20%, rgba(255,0,204,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 80% 80%, rgba(57,255,20,0.03) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .brutalist { font-family: 'Archivo Black', sans-serif; }
@@ -42,6 +69,7 @@
         .neon-border-blue { border: 1px solid var(--acid-blue); box-shadow: 0 0 15px rgba(0, 212, 255, 0.15); }
         .neon-border-yellow { border: 1px solid var(--acid-yellow); box-shadow: 0 0 15px rgba(243, 255, 0, 0.15); }
 
+        /* ── PILL TABS (mobile) ── */
         .pill-tab {
             padding: 10px 18px;
             border-radius: 999px;
@@ -51,515 +79,874 @@
             white-space: nowrap;
             letter-spacing: 0.1em;
         }
-
+        .pill-tab:active { transform: scale(0.95); }
         .active-tab { background: var(--acid-cyan); color: #000; box-shadow: 0 0 12px rgba(0,255,204,0.4); }
         .inactive-tab { background: rgba(255, 255, 255, 0.05); color: #888; border: 1px solid rgba(255,255,255,0.05); }
 
+        /* ── SIDEBAR NAV (desktop) ── */
+        .sidebar-nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 11px 16px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            text-align: left;
+            background: transparent;
+            color: #666;
+        }
+        .sidebar-nav-btn:hover { background: rgba(255,255,255,0.05); color: #aaa; }
+        .sidebar-nav-btn.active {
+            background: rgba(0,255,204,0.08);
+            color: var(--acid-cyan);
+            border: 1px solid rgba(0,255,204,0.2);
+            box-shadow: 0 0 12px rgba(0,255,204,0.08);
+        }
+        .sidebar-nav-btn .nav-icon { width: 18px; text-align: center; font-size: 13px; }
+
         .scroll-hide::-webkit-scrollbar { display: none; }
-        
+
         @keyframes pulse-cyan {
             0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 204, 0.2); }
             50% { box-shadow: 0 0 25px rgba(0, 255, 204, 0.5); }
         }
         .animate-pulse-cyan { animation: pulse-cyan 2s infinite; }
 
-        .glitch-text {
-            position: relative;
-            display: inline-block;
-        }
-        
-        /* Modal Animation */
+        .glitch-text { position: relative; display: inline-block; }
+
         .modal-enter { animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes modalSlideUp {
-            from { transform: translateY(100%); opacity: 0; }
+            from { transform: translateY(40px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Nuova classe per il logo immagine */
         .logo-image {
-            max-width: 150px;
+            max-width: 120px;
             height: auto;
-            margin: 0 auto 10px;
+            margin: 0 auto 8px;
             display: block;
             border-radius: 10px;
             filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.2));
             animation: pulse-logo 3s infinite alternate;
         }
-        
+
         @keyframes pulse-logo {
             0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(0, 255, 204, 0.2)); }
             100% { transform: scale(1.02); filter: drop-shadow(0 0 25px rgba(0, 255, 204, 0.5)); }
         }
+
+        /* ── LAYOUT ── */
+
+        /* MOBILE: colonna singola, stile originale */
+        .app-shell {
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-column {
+            display: block;
+            width: 100%;
+        }
+
+        .mobile-header-wrapper {
+            display: block;
+        }
+        .desktop-sidebar {
+            display: none;
+        }
+        .mobile-sticky-tabs {
+            display: block;
+        }
+
+        .content-area {
+            padding: 24px 24px 112px;
+        }
+
+        /* Su mobile, replica il contenitore centrato di index */
+        @media (max-width: 1023px) {
+            body {
+                max-width: 28rem; /* max-w-md */
+                margin-left: auto;
+                margin-right: auto;
+                border-left: 1px solid rgba(255,255,255,0.05);
+                border-right: 1px solid rgba(255,255,255,0.05);
+                padding-bottom: 7rem; /* pb-28 */
+            }
+            /* Spaziatura uniforme tra card su mobile (identica a index space-y-6) */
+            .desktop-2col > * + *,
+            .desktop-3col > * + * {
+                margin-top: 1.5rem;
+            }
+        }
+
+        /* DESKTOP: sidebar + contenuto */
+        @media (min-width: 1024px) {
+            body { overflow-x: hidden; }
+
+            .mobile-header-wrapper { display: none; }
+            .mobile-sticky-tabs { display: none; }
+
+            .app-shell {
+                display: flex;
+                min-height: 100vh;
+                max-width: 1280px;
+                margin: 0 auto;
+                padding: 0 24px;
+                gap: 0;
+                align-items: stretch;
+            }
+
+            .desktop-sidebar {
+                display: flex;
+                flex-direction: column;
+                width: 260px;
+                min-width: 260px;
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                overflow-y: auto;
+                padding: 40px 20px 40px 0;
+                border-right: 1px solid rgba(255,255,255,0.05);
+                gap: 0;
+            }
+
+            .sidebar-logo-section {
+                text-align: center;
+                margin-bottom: 32px;
+                padding-bottom: 24px;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+
+            .sidebar-logo-section .logo-image {
+                max-width: 100px;
+            }
+
+            .sidebar-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                flex: 1;
+            }
+
+            .sidebar-cta {
+                margin-top: auto;
+                padding-top: 24px;
+                border-top: 1px solid rgba(255,255,255,0.05);
+            }
+
+            /* Colonna contenuto principale */
+            .content-column {
+                flex: 1;
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .content-area {
+                flex: 1;
+                min-width: 0;
+                padding: 40px 40px 40px 40px;
+                overflow-y: auto;
+            }
+
+            /* su desktop alcune sezioni vanno a 2 colonne */
+            .desktop-2col {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+
+            .desktop-3col {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 16px;
+                align-items: start;
+            }
+
+            /* Bar menu: card si allungano uguali per riga */
+            #content-bar .desktop-3col {
+                align-items: stretch;
+            }
+
+            .desktop-full { grid-column: 1 / -1; }
+
+            /* Annulla space-y quando il grid è attivo */
+            .desktop-2col > * + *,
+            .desktop-3col > * + * {
+                margin-top: 0;
+            }
+
+            /* countdown più grande su desktop */
+            #cd, #ch, #cm, #cs { font-size: 3rem !important; }
+
+            /* bottom CTA non fixed su desktop */
+            .bottom-cta-mobile { display: none !important; }
+        }
+
+        @media (min-width: 1280px) {
+            .app-shell { max-width: 1400px; }
+            .desktop-sidebar { width: 280px; min-width: 280px; }
+        }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen border-x border-white/5 relative pb-28">
+<body>
 
-    <div class="sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
-    
-    <header class="p-6 pt-10 text-center">
-        <div class="flex justify-between items-center w-full mb-6">
-            <span class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Magaparty.eventi</span>
-            <div class="flex items-center gap-2 text-[--acid-cyan] text-[10px] tracking-widest font-bold uppercase">
-                <span class="w-2 h-2 rounded-full bg-[--acid-cyan] animate-pulse"></span> 5 Apr 2026
+<div class="app-shell">
+
+    <!-- ══════════════ SIDEBAR DESKTOP ══════════════ -->
+    <aside class="desktop-sidebar">
+        <div class="sidebar-logo-section">
+            <div class="sidebar-meta">
+                <span class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Magaparty.eventi</span>
+                <div class="flex items-center gap-2 text-[--acid-cyan] text-[10px] tracking-widest font-bold uppercase">
+                    <span class="w-2 h-2 rounded-full bg-[--acid-cyan] animate-pulse"></span> 5 Apr
+                </div>
             </div>
+            <img src="logo_digestivo.png" alt="DIGESTIVO®" class="logo-image">
+            <p class="text-[9px] uppercase tracking-[0.25em] opacity-40 mt-1">L'antidoto al pranzo di Pasqua</p>
         </div>
-        <img src="logo_digestivo.png" alt="DIGESTIVO®" class="logo-image">
-        <p class="text-[10px] uppercase tracking-[0.3em] opacity-50">L'antidoto al pranzo di Pasqua</p>
-    </header>
 
-    <div class="flex justify-start gap-3 px-6 py-4 overflow-x-auto scroll-hide">
-        <button onclick="switchTab('info')" id="tab-info" class="pill-tab active-tab"><i class="fa-solid fa-circle-info mr-1"></i> INFO</button>
-        <button onclick="switchTab('lineup')" id="tab-lineup" class="pill-tab inactive-tab"><i class="fa-solid fa-compact-disc mr-1"></i> LINE-UP</button>
-        <button onclick="switchTab('orari')" id="tab-orari" class="pill-tab inactive-tab"><i class="fa-regular fa-clock mr-1"></i> ORARI</button>
-        <button onclick="switchTab('bar')" id="tab-bar" class="pill-tab inactive-tab"><i class="fa-solid fa-martini-glass mr-1"></i> BAR MENU</button>
-        <button onclick="switchTab('tickets')" id="tab-tickets" class="pill-tab inactive-tab"><i class="fa-solid fa-ticket mr-1"></i> TICKETS</button>
-        <button onclick="switchTab('social')" id="tab-social" class="pill-tab inactive-tab"><i class="fa-solid fa-hashtag mr-1"></i> SOCIAL</button> 
-    </div>
-</div>
-    <main class="px-6 pt-6">
-        
-        <div id="content-info" class="space-y-8 animate-fade-in">
-            
-            <div class="glass-card p-6 neon-border-cyan text-center">
-                <h3 class="brutalist text-xl mb-4 text-[--acid-cyan]">INIZIO TERAPIA</h3>
-                <div class="grid grid-cols-4 gap-2 border-t border-white/5 pt-4">
-                    <div><span class="block text-2xl font-bold brutalist" id="cd">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
-                    <div><span class="block text-2xl font-bold brutalist" id="ch">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
-                    <div><span class="block text-2xl font-bold brutalist" id="cm">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
-                    <div class="text-[--acid-cyan]"><span class="block text-2xl font-bold brutalist" id="cs">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
-                </div>
-            </div>
+        <nav class="sidebar-nav">
+            <button onclick="switchTab('info')" id="stab-info" class="sidebar-nav-btn active">
+                <span class="nav-icon"><i class="fa-solid fa-circle-info"></i></span> INFO
+            </button>
+            <button onclick="switchTab('lineup')" id="stab-lineup" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-solid fa-compact-disc"></i></span> LINE-UP
+            </button>
+            <button onclick="switchTab('orari')" id="stab-orari" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-regular fa-clock"></i></span> ORARI
+            </button>
+            <button onclick="switchTab('bar')" id="stab-bar" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-solid fa-martini-glass"></i></span> BAR MENU
+            </button>
+            <button onclick="switchTab('upload')" id="stab-upload" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-solid fa-microscope"></i></span> LABORATORIO
+            </button>
+            <button onclick="switchTab('tickets')" id="stab-tickets" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-solid fa-ticket"></i></span> TICKETS
+            </button>
+            <button onclick="switchTab('social')" id="stab-social" class="sidebar-nav-btn">
+                <span class="nav-icon"><i class="fa-solid fa-hashtag"></i></span> SOCIAL
+            </button>
+        </nav>
 
-            <div class="glass-card p-5 border border-white/10">
-                <div class="flex justify-between items-end mb-3">
-                    <span class="text-[9px] uppercase tracking-[0.15em] text-[--acid-magenta] font-bold">Livello Saturazione da Casatiello</span>
-                    <i class="fa-solid fa-chart-simple text-[--acid-magenta]"></i>
-                </div>
-                <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-3">
-                    <div class="h-full bg-gradient-to-r from-[--acid-magenta] to-[--acid-cyan] w-[92%] animate-pulse"></div>
-                </div>
-                <p class="text-[11px] italic opacity-80">Diagnosi clinica: <strong class="text-white not-italic">C'è bisogno urgente di ballare!</strong></p>
-            </div>
-
-            <div>
-                <h4 class="text-[10px] tracking-[0.15em] uppercase text-gray-500 mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-handshake"></i> Liste Civiche Partner
-                </h4>
-                <div class="grid grid-cols-2 gap-3">
-                    <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-yellow]/40 cursor-pointer hover:bg-[--acid-yellow]/10 transition-colors">
-                        <h5 class="brutalist text-[--acid-yellow] text-lg tracking-widest">NEXT</h5>
-                    </div>
-                    <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-blue]/40 cursor-pointer hover:bg-[--acid-blue]/10 transition-colors">
-                        <h5 class="brutalist text-[--acid-blue] text-lg tracking-widest">ATTIVAMENTE</h5>
-                    </div>
-                </div>
-            </div>
-
-            <div class="glass-card overflow-hidden">
-                <div class="p-5">
-                    <h3 class="brutalist text-2xl mb-1">MAGA HOUSE</h3>
-                    <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Via Maiori 1<br>Pontecagnano Faiano (SA) 84098</p>
-                    <a href="https://maps.google.com/?q=Via+Maiori+1,+Pontecagnano+Faiano+SA" target="_blank" class="inline-flex items-center gap-2 bg-[--acid-cyan]/10 border border-[--acid-cyan]/30 text-[--acid-cyan] px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold hover:bg-[--acid-cyan]/20 transition-colors">
-                        <i class="fa-solid fa-location-dot"></i> Apri Mappa
-                    </a>
-                </div>
-                <div class="bg-black/50 p-4 border-t border-white/5">
-                    <p class="text-[9px] uppercase tracking-[0.15em] text-[--acid-cyan] mb-3 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[--acid-cyan] animate-pulse"></span> Infoline</p>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a href="tel:+393454237269" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
-                        <a href="tel:+393914700024" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex gap-2 pb-6">
-                <button onclick="shareEvent()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+        <div class="sidebar-cta">
+            <button onclick="openModal()" class="w-full bg-[--acid-cyan] text-black font-black py-3 rounded-xl brutalist text-xs tracking-widest shadow-[0_0_20px_rgba(0,255,204,0.25)] hover:scale-[0.98] transition-transform flex justify-center items-center gap-2 mb-3">
+                <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
+            </button>
+            <div class="flex gap-2">
+                <button onclick="shareEvent()" class="flex-1 glass-card py-2 text-[9px] uppercase tracking-widest font-bold flex justify-center items-center gap-1 hover:bg-white/10 transition-colors">
                     <i class="fa-solid fa-share-nodes"></i> Condividi
                 </button>
-                <button onclick="addToCalendar()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                <button onclick="addToCalendar()" class="flex-1 glass-card py-2 text-[9px] uppercase tracking-widest font-bold flex justify-center items-center gap-1 hover:bg-white/10 transition-colors">
                     <i class="fa-regular fa-calendar-plus"></i> Calendario
                 </button>
             </div>
         </div>
+    </aside>
 
-        <div id="content-lineup" class="hidden space-y-6 animate-fade-in">
-            <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Line Up</h2>
-                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">I dottori del party</p>
-            </div>
+    <!-- ══════════════ COLONNA CONTENUTO ══════════════ -->
+    <div class="content-column">
 
-            <div class="glass-card p-6 relative overflow-hidden neon-border-magenta group">
-                <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-magenta] group-hover:scale-110 transition-transform">1</div>
-                <div class="relative z-10">
-                    <span class="inline-block px-3 py-1 bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[--acid-magenta] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 1 · Tramonto</span>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Warm Up</p>
-                    <h4 class="brutalist text-3xl mb-3">FEDERICA NATELLA</h4>
-                    <div class="flex flex-wrap items-center gap-1.5 mb-4">
-                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">House</span>
-                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Tech-House</span>
-                        <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Afro-House</span>
+        <!-- HEADER MOBILE -->
+        <div class="mobile-header-wrapper">
+            <header class="p-6 pt-10 text-center">
+                <div class="flex justify-between items-center w-full mb-6">
+                    <span class="text-[9px] uppercase tracking-[0.2em] text-gray-500">Magaparty.eventi</span>
+                    <div class="flex items-center gap-2 text-[--acid-cyan] text-[10px] tracking-widest font-bold uppercase">
+                        <span class="w-2 h-2 rounded-full bg-[--acid-cyan] animate-pulse"></span> 5 Apr 2026
                     </div>
-                    <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-magenta]/50 pl-3">Il primo step del trattamento. Ritmi caldi e groove tribali perfetti per accompagnare il tramonto e iniziare a sciogliere i muscoli dopo l'abbuffata.</p>
                 </div>
-            </div>
+                <img src="logo_digestivo.png" alt="DIGESTIVO®" class="logo-image" style="max-width:150px;">
+                <p class="text-[10px] uppercase tracking-[0.3em] opacity-50">L'antidoto al pranzo di Pasqua</p>
+            </header>
+        </div>
 
-            <div class="glass-card p-6 relative overflow-hidden neon-border-green group">
-                <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-green] group-hover:scale-110 transition-transform">2</div>
-                <div class="relative z-10">
-                    <span class="inline-block px-3 py-1 bg-[--acid-green]/10 border border-[--acid-green]/30 text-[--acid-green] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 2 · Inside Party</span>
-                    <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Clubbing</p>
-                    <h4 class="brutalist text-3xl mb-3">ADOLFO CITRO</h4>
-                    <div class="flex flex-wrap items-center gap-1.5 mb-4">
-                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Reggaeton</span>
-                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Dance</span>
-                        <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Hard Techno</span>
-                    </div>
-                    <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-green]/50 pl-3">L'esperto nella lettura del dancefloor. Ti prende per mano partendo dalle hit Reggaeton e Dance, per poi alzare drasticamente i BPM e sganciare vere bombe Techno.</p>
-                </div>
+        <!-- TAB BAR MOBILE (sticky) -->
+        <div class="mobile-sticky-tabs sticky top-0 z-40 bg-[#050505]/95 backdrop-blur-md border-b border-white/5 shadow-[0_10px_20px_rgba(0,0,0,0.5)]">
+            <div class="flex justify-start gap-3 px-6 py-3 overflow-x-auto scroll-hide" style="padding-right:24px;">
+                <button onclick="switchTab('info')" id="tab-info" class="pill-tab active-tab"><i class="fa-solid fa-circle-info mr-1"></i> INFO</button>
+                <button onclick="switchTab('lineup')" id="tab-lineup" class="pill-tab inactive-tab"><i class="fa-solid fa-compact-disc mr-1"></i> LINE-UP</button>
+                <button onclick="switchTab('orari')" id="tab-orari" class="pill-tab inactive-tab"><i class="fa-regular fa-clock mr-1"></i> ORARI</button>
+                <button onclick="switchTab('bar')" id="tab-bar" class="pill-tab inactive-tab"><i class="fa-solid fa-martini-glass mr-1"></i> BAR MENU</button>
+                <button onclick="switchTab('upload')" id="tab-upload" class="pill-tab inactive-tab"><i class="fa-solid fa-microscope mr-1"></i> LABORATORIO</button>
+                <button onclick="switchTab('tickets')" id="tab-tickets" class="pill-tab inactive-tab"><i class="fa-solid fa-ticket mr-1"></i> TICKETS</button>
+                <button onclick="switchTab('social')" id="tab-social" class="pill-tab inactive-tab"><i class="fa-solid fa-hashtag mr-1"></i> SOCIAL</button>
             </div>
         </div>
 
-        <div id="content-orari" class="hidden space-y-6 animate-fade-in">
-             <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Timeline</h2>
-                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Svolgimento della terapia</p>
+        <!-- MAIN CONTENT -->
+        <main class="content-area">
+
+            <!-- ═══ INFO ═══ -->
+            <div id="content-info" class="animate-fade-in">
+                <div class="desktop-2col">
+
+                    <!-- Countdown -->
+                    <div class="glass-card p-6 neon-border-cyan text-center desktop-full">
+                        <h3 class="brutalist text-xl mb-4 text-[--acid-cyan]">INIZIO TERAPIA</h3>
+                        <div class="grid grid-cols-4 gap-2 border-t border-white/5 pt-4">
+                            <div><span class="block text-2xl font-bold brutalist" id="cd">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                            <div><span class="block text-2xl font-bold brutalist" id="ch">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                            <div><span class="block text-2xl font-bold brutalist" id="cm">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                            <div class="text-[--acid-cyan]"><span class="block text-2xl font-bold brutalist" id="cs">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Saturazione -->
+                    <div class="glass-card p-5 border border-white/10">
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-[9px] uppercase tracking-[0.15em] text-[--acid-magenta] font-bold">Livello Saturazione da Casatiello</span>
+                            <i class="fa-solid fa-chart-simple text-[--acid-magenta]"></i>
+                        </div>
+                        <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-3">
+                            <div class="h-full bg-gradient-to-r from-[--acid-magenta] to-[--acid-cyan] w-[92%] animate-pulse"></div>
+                        </div>
+                        <p class="text-[11px] italic opacity-80">Diagnosi clinica: <strong class="text-white not-italic">C'è bisogno urgente di ballare!</strong></p>
+                    </div>
+
+                    <!-- Liste Partner -->
+                    <div>
+                        <h4 class="text-[10px] tracking-[0.15em] uppercase text-gray-500 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-handshake"></i> Liste Civiche Partner
+                        </h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-yellow]/40 cursor-pointer hover:bg-[--acid-yellow]/10 active:scale-[0.97] transition-all">
+                                <h5 class="brutalist text-[--acid-yellow] text-sm tracking-wide">NEXT</h5>
+                            </div>
+                            <div onclick="openModal()" class="glass-card p-4 text-center border-[--acid-blue]/40 cursor-pointer hover:bg-[--acid-blue]/10 active:scale-[0.97] transition-all">
+                                <h5 class="brutalist text-[--acid-blue] text-sm tracking-wide">ATTIVAMENTE</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Maga House -->
+                    <div class="glass-card overflow-hidden">
+                        <div class="p-5">
+                            <h3 class="brutalist text-2xl mb-1">MAGA HOUSE</h3>
+                            <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Via Maiori 1<br>Pontecagnano Faiano (SA) 84098</p>
+                            <a href="https://maps.google.com/?q=Via+Maiori+1,+Pontecagnano+Faiano+SA" target="_blank" class="inline-flex items-center gap-2 bg-[--acid-cyan]/10 border border-[--acid-cyan]/30 text-[--acid-cyan] px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold hover:bg-[--acid-cyan]/20 transition-colors">
+                                <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                            </a>
+                        </div>
+                        <div class="bg-black/50 p-4 border-t border-white/5">
+                            <p class="text-[9px] uppercase tracking-[0.15em] text-[--acid-cyan] mb-3 flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[--acid-cyan] animate-pulse"></span> Infoline</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <a href="tel:+393454237269" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
+                                <a href="tel:+393914700024" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 hover:text-[--acid-cyan] transition-all"><i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Condividi / Calendario (solo mobile, su desktop sono nella sidebar) -->
+                    <div class="flex gap-2 pb-2 desktop-full lg:hidden">
+                        <button onclick="shareEvent()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                            <i class="fa-solid fa-share-nodes"></i> Condividi
+                        </button>
+                        <button onclick="addToCalendar()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                            <i class="fa-regular fa-calendar-plus"></i> Calendario
+                        </button>
+                    </div>
+
+                </div>
             </div>
 
-            <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
-                
-                <div class="relative">
-                    <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-magenta] shadow-[0_0_10px_#ff00cc] mt-1"></div>
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="brutalist text-xl text-[--acid-magenta]">1. AMMORBIDIMENTO</h3>
-                        <span class="bg-[--acid-magenta]/20 text-[--acid-magenta] text-[10px] px-2 py-1 rounded font-bold">19:00 - 21:00</span>
-                    </div>
-                    <div class="glass-card p-4 border-[--acid-magenta]/20">
-                        <div class="inline-flex items-center gap-2 bg-[--acid-magenta]/10 text-[--acid-magenta] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
-                            <i class="fa-solid fa-tree"></i> Area Garden
+            <!-- ═══ LINE-UP ═══ -->
+            <div id="content-lineup" class="hidden animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Line Up</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">I dottori del party</p>
+                </div>
+                <div class="desktop-2col">
+                    <div class="glass-card p-6 relative overflow-hidden neon-border-magenta group">
+                        <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-magenta] group-hover:scale-110 transition-transform">1</div>
+                        <div class="relative z-10">
+                            <span class="inline-block px-3 py-1 bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[--acid-magenta] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 1 · Tramonto</span>
+                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Warm Up</p>
+                            <h4 class="brutalist text-3xl mb-3">FEDERICA NATELLA</h4>
+                            <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                                <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">House</span>
+                                <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Tech-House</span>
+                                <span class="px-2 py-1 rounded bg-[--acid-magenta]/10 border border-[--acid-magenta]/30 text-[9px] font-bold text-[--acid-magenta] uppercase">Afro-House</span>
+                            </div>
+                            <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-magenta]/50 pl-3">Il primo step del trattamento. Ritmi caldi e groove tribali perfetti per accompagnare il tramonto e iniziare a sciogliere i muscoli dopo l'abbuffata di rito.</p>
                         </div>
-                        <p class="text-[12px] text-gray-300 leading-relaxed mb-4">Si inizia leggeri all'aperto con <strong class="text-white">Federica Natella</strong> in console.</p>
-                        <div class="grid grid-cols-3 gap-2">
-                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
-                                <span class="block text-xl mb-1">🏓</span>
-                                <span class="text-[9px] text-gray-400 uppercase">Beer Pong</span>
+                    </div>
+                    <div class="glass-card p-6 relative overflow-hidden neon-border-green group">
+                        <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist text-[--acid-green] group-hover:scale-110 transition-transform">2</div>
+                        <div class="relative z-10">
+                            <span class="inline-block px-3 py-1 bg-[--acid-green]/10 border border-[--acid-green]/30 text-[--acid-green] text-[9px] font-bold uppercase tracking-widest rounded mb-3">Fase 2 · Inside Party</span>
+                            <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Clubbing</p>
+                            <h4 class="brutalist text-3xl mb-3">ADOLFO CITRO</h4>
+                            <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                                <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Reggaeton</span>
+                                <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Dance</span>
+                                <span class="px-2 py-1 rounded bg-[--acid-green]/10 border border-[--acid-green]/30 text-[9px] font-bold text-[--acid-green] uppercase">Hard Techno</span>
                             </div>
-                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
-                                <span class="block text-xl mb-1">⚽</span>
-                                <span class="text-[9px] text-gray-400 uppercase">Calcetto</span>
+                            <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 border-[--acid-green]/50 pl-3">L'esperto nella lettura del dancefloor. Ti prende per mano partendo dalle hit Reggaeton e Dance, per poi alzare drasticamente i BPM e sganciare vere bombe Techno.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ ORARI ═══ -->
+            <div id="content-orari" class="hidden animate-fade-in">
+                 <div class="text-center mb-6">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Timeline</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Svolgimento della terapia</p>
+                </div>
+
+                <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
+                    
+                    <div class="relative">
+                        <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-magenta] shadow-[0_0_10px_#ff00cc] mt-1"></div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="brutalist text-xl text-[--acid-magenta]">1. AMMORBIDIMENTO</h3>
+                            <span class="bg-[--acid-magenta] text-black text-[10px] px-2 py-1 rounded font-bold">19:00 - 21:00</span>
+                        </div>
+                        <div class="glass-card p-4 border-[--acid-magenta]/20 bg-[--acid-magenta]/5">
+                            <div class="inline-flex items-center gap-2 bg-[--acid-magenta]/10 text-[--acid-magenta] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
+                                <i class="fa-solid fa-tree"></i> Area Garden
                             </div>
-                            <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
-                                <span class="block text-xl mb-1">🥃</span>
-                                <span class="text-[9px] text-gray-400 uppercase">Cicchetti 1vs1</span>
+                            <p class="text-[12px] text-gray-300 leading-relaxed mb-4">Si inizia leggeri all'aperto con <strong class="text-white">Federica Natella</strong> in console.</p>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                    <span class="block text-xl mb-1">🏓</span>
+                                    <span class="text-[9px] text-gray-400 uppercase">Beer Pong</span>
+                                </div>
+                                <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                    <span class="block text-xl mb-1">⚽</span>
+                                    <span class="text-[9px] text-gray-400 uppercase">Calcetto</span>
+                                </div>
+                                <div class="bg-black/40 border border-white/5 rounded-lg p-2 text-center">
+                                    <span class="block text-xl mb-1">🥃</span>
+                                    <span class="text-[9px] text-gray-400 uppercase">Cicchetti 1vs1</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-green] shadow-[0_0_10px_#39ff14] mt-1"></div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="brutalist text-xl text-[--acid-green]">2. SMALTIMENTO</h3>
+                            <span class="bg-[--acid-green] text-black text-[10px] px-2 py-1 rounded font-bold">21:00 - 02:00</span>
+                        </div>
+                        <div class="glass-card p-4 border-[--acid-green]/20 bg-[--acid-green]/5">
+                            <div class="inline-flex items-center gap-2 bg-[--acid-green]/10 text-[--acid-green] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
+                                <i class="fa-solid fa-house"></i> All'Interno
+                            </div>
+                            <p class="text-[12px] text-gray-300 leading-relaxed"><strong>Ore 21:00 esatte.</strong> Ci si sposta tutti dentro. Si spengono le luci, partono i laser e sale in cattedra <strong class="text-white">Adolfo Citro</strong>. Niente più chiacchiere: si balla forte fino a chiusura.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ═══ BAR MENU ═══ -->
+            <div id="content-bar" class="hidden animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Bar Menu</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">La farmacia del party</p>
+                </div>
+                <div class="desktop-3col">
+                    <div class="glass-card overflow-hidden border-[--acid-cyan]/30">
+                        <div class="bg-[--acid-cyan]/10 px-4 py-3 border-b border-[--acid-cyan]/20">
+                            <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-cyan]">Shots & Bombs</h3>
+                        </div>
+                        <div class="divide-y divide-white/5">
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Sambuca</span><span class="brutalist text-[--acid-cyan] text-lg">1€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Amaro del Capo</span><span class="brutalist text-[--acid-cyan] text-lg">2€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Jägermeister</span><span class="brutalist text-[--acid-cyan] text-lg">2€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Assenzio</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tequila</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Fireball</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-card overflow-hidden border-[--acid-cyan]/30">
+                        <div class="bg-[--acid-cyan]/10 px-4 py-3 border-b border-[--acid-cyan]/20">
+                            <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Spritz & Classici</h3>
+                        </div>
+                        <div class="divide-y divide-white/5">
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Aperol Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Campari Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Limoncello Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Hugo</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Americano / Negroni Sbagliato</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Negroni</span><span class="brutalist text-[--acid-cyan] text-lg">7€</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-card overflow-hidden">
+                        <div class="bg-white/5 px-4 py-3 border-b border-white/10">
+                            <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-magenta]">Long Drink</h3>
+                        </div>
+                        <div class="divide-y divide-white/5">
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin / Vodka Tonic (o Lemon)</span><span class="brutalist text-[--acid-magenta] text-lg">5€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Vodka Redbull / Rum Cola</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Paloma / Capiroska</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tequila Sunrise</span><span class="brutalist text-[--acid-magenta] text-lg">7€</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-card overflow-hidden border-[--acid-green]/30">
+                        <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20">
+                            <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Special & Hard</h3>
+                        </div>
+                        <div class="divide-y divide-white/5">
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Jagerbomb / Tris Vodka Redbull</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Midori / Disaronno / Whisky Sour</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Long Island</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Invisibile (4 Bianchi) / Green Park</span><span class="brutalist text-[--acid-green] text-lg">8€</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-card overflow-hidden border-[--acid-yellow]/30">
+                        <div class="bg-[--acid-yellow]/10 px-4 py-3 border-b border-[--acid-yellow]/20">
+                            <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-yellow]">Birre</h3>
+                        </div>
+                        <div class="divide-y divide-white/5">
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Heineken / Becks</span><span class="brutalist text-[--acid-yellow] text-lg">3€</span></div>
+                            <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tennet's</span><span class="brutalist text-[--acid-yellow] text-lg">4€</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ LABORATORIO ═══ -->
+            <div id="content-upload" class="hidden animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Laboratorio</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Archiviazione reperti multimediali</p>
+                </div>
+                <div class="desktop-2col">
+                    <div id="dropZone" class="glass-card p-6 border-2 border-dashed border-[--acid-cyan]/30 bg-[--acid-cyan]/5 text-center cursor-pointer transition-all duration-300 desktop-full"
+                         onclick="document.getElementById('fileInput').click()"
+                         ondragover="handleDragOver(event)"
+                         ondragleave="handleDragLeave(event)"
+                         ondrop="handleDrop(event)">
+                        <div class="w-16 h-16 bg-[--acid-cyan]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[--acid-cyan]/20">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-[--acid-cyan] animate-bounce"></i>
+                        </div>
+                        <h3 class="brutalist text-xl mb-2 text-white">DEPOSITO PROVE</h3>
+                        <p class="text-[11px] text-gray-400 mb-2 leading-relaxed">
+                            Sei sopravvissuto alla terapia?<br>
+                            Carica qui foto e video del tuo processo di guarigione.<br>
+                            I file verranno archiviati nel database ufficiale di <strong>Magaparty®</strong>.
+                        </p>
+                        <p class="text-[10px] text-[--acid-cyan]/60 mb-5">Trascina i file qui oppure clicca per selezionare</p>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden" onchange="handleFiles(this.files)">
+                        <div class="inline-flex items-center gap-2 bg-[--acid-cyan] text-black font-black px-6 py-3 rounded-xl brutalist text-sm tracking-widest shadow-[0_0_15px_rgba(0,255,204,0.3)] pointer-events-none">
+                            <i class="fa-solid fa-folder-open"></i> SELEZIONA FILE
+                        </div>
+                    </div>
+                    <div id="uploadQueue" class="space-y-3 hidden desktop-full">
+                        <h4 class="text-[10px] uppercase tracking-[0.15em] text-gray-500 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> Coda di trasmissione
+                        </h4>
+                        <div id="queueList" class="space-y-2"></div>
+                        <button id="uploadAllBtn" onclick="uploadAll()" class="w-full py-3 bg-[--acid-cyan] text-black font-black rounded-xl brutalist text-sm tracking-widest shadow-[0_0_15px_rgba(0,255,204,0.3)] hover:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-bolt"></i> AVVIA TRASMISSIONE
+                        </button>
+                    </div>
+                    <div id="uploadResults" class="space-y-3 hidden desktop-full">
+                        <h4 class="text-[10px] uppercase tracking-[0.15em] text-gray-500 flex items-center gap-2">
+                            <i class="fa-solid fa-check-double"></i> Reperti archiviati
+                        </h4>
+                        <div id="resultsList" class="space-y-2"></div>
+                    </div>
+                    <div class="glass-card p-4 border border-white/10 desktop-full">
+                        <div class="flex items-start gap-3">
+                            <div class="text-[--acid-cyan] mt-1"><i class="fa-solid fa-circle-exclamation"></i></div>
+                            <div>
+                                <h4 class="text-[10px] uppercase font-bold tracking-widest text-white mb-1">Protocollo di archiviazione</h4>
+                                <ul class="text-[9px] text-gray-500 space-y-1 list-disc ml-3">
+                                    <li>I reperti migliori verranno pubblicati sui canali ufficiali.</li>
+                                    <li>Si consiglia il caricamento in alta risoluzione.</li>
+                                    <li>Formati accettati: .MOV, .MP4, .JPG, .PNG.</li>
+                                    <li>Dimensione massima per file: 100MB.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="relative">
-                    <div class="absolute -left-[27px] w-4 h-4 rounded-full bg-[--acid-green] shadow-[0_0_10px_#39ff14] mt-1"></div>
-                    <div class="flex justify-between items-start mb-2">
-                        <h3 class="brutalist text-xl text-[--acid-green]">2. SMALTIMENTO</h3>
-                        <span class="bg-[--acid-green] text-black text-[10px] px-2 py-1 rounded font-bold">21:00 - 02:00</span>
-                    </div>
-                    <div class="glass-card p-4 border-[--acid-green]/30 bg-[--acid-green]/5">
-                        <div class="inline-flex items-center gap-2 bg-[--acid-green]/10 text-[--acid-green] px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3">
-                            <i class="fa-solid fa-house"></i> All'Interno
+            <!-- ═══ TICKETS ═══ -->
+            <div id="content-tickets" class="hidden animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Tickets</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Modalità di accesso</p>
+                </div>
+                <div class="desktop-3col">
+                    <div class="glass-card p-5 border-l-4 border-l-[--acid-green] bg-[--acid-green]/5 flex justify-between items-center hover:bg-[--acid-green]/10 transition-colors">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Arrivo 19:00 - 21:00</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-[--acid-green] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
                         </div>
-                        <p class="text-[12px] text-gray-300 leading-relaxed"><strong>Ore 21:00 esatte.</strong> Ci si sposta tutti dentro. Si spengono le luci, partono i laser e sale in cattedra <strong class="text-white">Adolfo Citro</strong>. Niente più chiacchiere: si balla forte fino a chiusura.</p>
+                        <span class="brutalist text-3xl text-[--acid-green]">10€</span>
+                    </div>
+                    <div class="glass-card p-5 border-l-4 border-l-[--acid-cyan] flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Arrivo dopo le 21:00</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-[--acid-cyan] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
+                        </div>
+                        <span class="brutalist text-3xl text-[--acid-cyan]">15€</span>
+                    </div>
+                    <div class="glass-card p-5 border-l-4 border-l-[--acid-magenta] bg-[--acid-magenta]/5 flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Arrivo dopo le 23:00</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-[--acid-magenta] mt-1"><i class="fa-solid fa-ban mr-1"></i> Nessun drink incluso</p>
+                        </div>
+                        <span class="brutalist text-3xl text-[--acid-magenta]">15€</span>
                     </div>
                 </div>
-
             </div>
+
+            <!-- ═══ SOCIAL ═══ -->
+            <div id="content-social" class="hidden animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Social</h2>
+                    <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Unisciti alla community</p>
+                </div>
+                <div class="desktop-3col">
+                    <a href="https://www.instagram.com/_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-magenta] bg-[--acid-magenta]/5 flex justify-between items-center hover:bg-[--acid-magenta]/10 hover:scale-[1.02] transition-all cursor-pointer">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Instagram</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-[--acid-magenta] mt-1">Foto & Aggiornamenti</p>
+                        </div>
+                        <span class="text-3xl text-[--acid-magenta]"><i class="fa-brands fa-instagram"></i></span>
+                    </a>
+                    <a href="https://tiktok.com/@_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-white bg-white/5 flex justify-between items-center hover:bg-white/10 hover:scale-[1.02] transition-all cursor-pointer">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">TikTok</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-gray-300 mt-1">Video & Trend</p>
+                        </div>
+                        <span class="text-3xl text-white"><i class="fa-brands fa-tiktok"></i></span>
+                    </a>
+                    <a href="https://t.me/MAGAPART" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-blue] bg-[--acid-blue]/5 flex justify-between items-center hover:bg-[--acid-blue]/10 hover:scale-[1.02] transition-all cursor-pointer">
+                        <div>
+                            <h4 class="font-bold text-sm text-white">Telegram</h4>
+                            <p class="text-[10px] uppercase tracking-wider text-[--acid-blue] mt-1">Info & Photo Dump</p>
+                        </div>
+                        <span class="text-3xl text-[--acid-blue]"><i class="fa-brands fa-telegram"></i></span>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- CTA BOTTOM (solo mobile) -->
+        <div class="bottom-cta-mobile fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-50 lg:hidden">
+            <button onclick="openModal()" class="w-full bg-[--acid-cyan] text-black font-black py-4 rounded-xl brutalist text-lg tracking-widest shadow-[0_0_20px_rgba(0,255,204,0.3)] hover:scale-[0.98] transition-transform flex justify-center items-center gap-2">
+                <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
+            </button>
         </div>
 
-        <div id="content-bar" class="hidden space-y-6 animate-fade-in">
-            <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Bar Menu</h2>
-                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">La farmacia del party</p>
-            </div>
+    </div><!-- fine colonna contenuto -->
+</div><!-- fine app-shell -->
 
-            <div class="space-y-4">
-                <div class="glass-card overflow-hidden border-[--acid-green]/30">
-                    <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20"> 
-                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-cyan]">Shots & Bombs</h3>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Sambuca</span><span class="brutalist text-[--acid-cyan] text-lg">1€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Amaro del Capo</span><span class="brutalist text-[--acid-cyan] text-lg">2€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Jägermeister</span><span class="brutalist text-[--acid-cyan] text-lg">2€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Assenzio</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tequila</span><span class="brutalist text-[--acid-cyan] text-lg">3€</div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Fireball</span><span class="brutalist text-[--acid-cyan] text-lg">3€</span></div>
-                    </div>
-         </div>
-                <div class="glass-card overflow-hidden border-[--acid-cyan]/30">
-                    <div class="bg-[--acid-cyan]/10 px-4 py-3 border-b border-[--acid-cyan]/20">
-                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Spritz & Classici</h3>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Aperol Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Campari Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Limoncello Spritz</span><span class="brutalist text-[--acid-cyan] text-lg">5€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Hugo</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Americano / Negroni Sbagliato</span><span class="brutalist text-[--acid-cyan] text-lg">6€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Negroni</span><span class="brutalist text-[--acid-cyan] text-lg">7€</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-card overflow-hidden">
-                    <div class="bg-white/5 px-4 py-3 border-b border-white/10">
-                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-magenta]">Long Drink</h3>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin / Vodka Tonic (o Lemon)</span><span class="brutalist text-[--acid-magenta] text-lg">5€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Vodka Redbull / Rum Cola</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Paloma / Capiroska</span><span class="brutalist text-[--acid-magenta] text-lg">6€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Tequila Sunrise</span><span class="brutalist text-[--acid-magenta] text-lg">7€</span></div>
-                    </div>
-                </div>
-
-                <div class="glass-card overflow-hidden border-[--acid-green]/30">
-                    <div class="bg-[--acid-green]/10 px-4 py-3 border-b border-[--acid-green]/20">
-                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-green]">Special & Hard</h3>
-                    </div>
-                    <div class="divide-y divide-white/5">
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Jagerbomb / Tris Vodka Redbull</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Midori / Disaronno / Whisky Sour</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Long Island</span><span class="brutalist text-[--acid-green] text-lg">7€</span></div>
-                        <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Invisibile (4 Bianchi) / Green Park</span><span class="brutalist text-[--acid-green] text-lg">8€</span></div>
-                    </div>
-                </div>
-                
-                <div class="glass-card overflow-hidden border-[--acid-yellow]/30">
-                    <div class="bg-[--acid-yellow]/10 px-4 py-3 border-b border-[--acid-yellow]/20">
-                        <h3 class="text-[11px] uppercase tracking-widest font-bold text-[--acid-yellow]">Birre</h3>
-                </div>
-                <div class="divide-y divide-white/5">
-                    <div class="flex justify-between items-center px-4 py-3">
-                        <span class="text-xs">Heineken / Becks</span>
-                        <span class="brutalist text-[--acid-yellow] text-lg">3€</span>
-                    </div>
-                    <div class="flex justify-between items-center px-4 py-3">
-                        <span class="text-xs">Tennet's</span>
-                        <span class="brutalist text-[--acid-yellow] text-lg">4€</span>
-                    </div>
-                </div>
+<!-- ══════════════ MODAL LISTA INGRESSO ══════════════ -->
+<div id="listModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+    <div class="glass-card w-full max-w-sm p-6 neon-border-cyan bg-[#0a0a0a] relative modal-enter">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="brutalist text-2xl text-white">LISTA INGRESSO</h3>
+            <button onclick="closeModal()" class="w-8 h-8 flex justify-center items-center rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
-</div>     
+        <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-5 text-center">
+            <p class="text-[10px] text-[--acid-cyan] font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-bolt"></i> Metodo Veloce</p>
+            <p class="text-[11px] text-gray-400 mb-4">Compila il form per salvare il posto e riceverai conferma via messaggio.</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_iQS6JncZ0r5pofZQkfQQXQ-zCSme6dRCvfYXPPd-fC4luQ/viewform?usp=dialog" target="_blank" class="block w-full py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-gray-200 transition-colors">
+                <i class="fa-brands fa-google mr-1"></i> Compila Google Form
+            </a>
+        </div>
+        <div class="text-center relative my-6">
+            <hr class="border-white/10">
+            <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-widest text-gray-500">Oppure contatta i PR</span>
+        </div>
+        <div class="space-y-3">
+            <button onclick="wa('Lista NEXT')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-yellow] text-[--acid-yellow] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-yellow] hover:text-black transition-all">
+                <i class="fa-brands fa-whatsapp text-lg"></i> LISTA NEXT
+            </button>
+            <button onclick="wa('Lista ATTIVAMENTE')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-blue] text-[--acid-blue] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-blue] hover:text-black transition-all">
+                <i class="fa-brands fa-whatsapp text-lg"></i> LISTA ATTIVAMENTE
+            </button>
+            <button onclick="wa('Informazioni Generali')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[#ff6a00] text-[#ff6a00] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[#ff6a00] hover:text-black transition-all mt-2" style="box-shadow: 0 0 12px rgba(255,106,0,0.2);">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Infoline Magaparty
+            </button>
+        </div>
+    </div>
 </div>
 
-        <div id="content-tickets" class="hidden space-y-6 animate-fade-in">
-            <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Tickets</h2>
-                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Modalità di accesso</p>
-            </div>
+<script>
+    // ── TAB NAVIGATION ──────────────────────────────────────────
+    const tabs = ['info', 'lineup', 'orari', 'bar', 'upload', 'tickets', 'social'];
 
-            <div class="space-y-3">
-                <div class="glass-card p-5 border-l-4 border-l-[--acid-green] bg-[--acid-green]/5 flex justify-between items-center hover:bg-[--acid-green]/10 transition-colors">
-                    <div>
-                        <h4 class="font-bold text-sm text-white">Arrivo 19:00 - 21:00</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-[--acid-green] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
-                    </div>
-                    <span class="brutalist text-3xl text-[--acid-green]">10€</span>
+    function switchTab(tabId) {
+        tabs.forEach(id => {
+            const content = document.getElementById(`content-${id}`);
+            const mobileTab = document.getElementById(`tab-${id}`);
+            const desktopTab = document.getElementById(`stab-${id}`);
+            if (content) content.classList.add('hidden');
+            if (mobileTab) { mobileTab.classList.remove('active-tab'); mobileTab.classList.add('inactive-tab'); }
+            if (desktopTab) desktopTab.classList.remove('active');
+        });
+        const activeContent = document.getElementById(`content-${tabId}`);
+        const activeMobileTab = document.getElementById(`tab-${tabId}`);
+        const activeDesktopTab = document.getElementById(`stab-${tabId}`);
+        if (activeContent) activeContent.classList.remove('hidden');
+        if (activeMobileTab) { activeMobileTab.classList.add('active-tab'); activeMobileTab.classList.remove('inactive-tab'); }
+        if (activeDesktopTab) activeDesktopTab.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── COUNTDOWN ───────────────────────────────────────────────
+    function updateCountdown() {
+        const target = new Date('2026-04-05T19:00:00+02:00');
+        const diff = target - new Date();
+        if (diff <= 0) { ['cd','ch','cm','cs'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = '00'; }); return; }
+        const pad = n => n.toString().padStart(2, '0');
+        const d = document.getElementById('cd'); if(d) d.innerText = pad(Math.floor(diff / 86400000));
+        const h = document.getElementById('ch'); if(h) h.innerText = pad(Math.floor(diff / 3600000) % 24);
+        const m = document.getElementById('cm'); if(m) m.innerText = pad(Math.floor(diff / 60000) % 60);
+        const s = document.getElementById('cs'); if(s) s.innerText = pad(Math.floor(diff / 1000) % 60);
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // ── MODAL ────────────────────────────────────────────────────
+    const modal = document.getElementById('listModal');
+    function openModal() { if(modal) { modal.classList.remove('hidden'); modal.classList.add('flex'); document.body.style.overflow = 'hidden'; } }
+    function closeModal() { if(modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; } }
+    if(modal) modal.addEventListener('click', e => { if(e.target === modal) closeModal(); });
+
+    // ── WHATSAPP ─────────────────────────────────────────────────
+    function wa(lista) {
+        const msg = encodeURIComponent(`Ciao! 🐇 Vorrei registrarmi per DIGESTIVO (Pasqua 5 Aprile 2026).\nRichiesta per: ${lista}`);
+        window.open(`https://wa.me/393454237269?text=${msg}`, '_blank');
+    }
+
+    // ── CONDIVISIONE ─────────────────────────────────────────────
+    function shareEvent() {
+        if (navigator.share) {
+            navigator.share({ title: 'DIGESTIVO – 5 Aprile | Magaparty', text: "L'antidoto al pranzo di Pasqua 🐇🥕", url: window.location.href }).catch(()=>{});
+        } else {
+            navigator.clipboard.writeText(window.location.href).then(() => alert('Link copiato negli appunti! 🐇'));
+        }
+    }
+    function addToCalendar() {
+        const t = encodeURIComponent('DIGESTIVO – Magaparty');
+        const l = encodeURIComponent('Via Maiori 1, Pontecagnano Faiano SA');
+        const det = encodeURIComponent("L'antidoto al pranzo di Pasqua. Feat. Federica Natella & Adolfo Citro.");
+        window.open(`https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=20260405T190000/20260406T020000&location=${l}&details=${det}`, '_blank');
+    }
+
+    // ── CLOUDINARY UPLOAD ────────────────────────────────────────
+    const CLOUD_NAME = 'dlp3zgrhv';
+    const UPLOAD_PRESET = 'ml_digestivo';
+    let filesToUpload = [];
+
+    function handleDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('border-[--acid-cyan]', 'bg-[--acid-cyan]/10'); }
+    function handleDragLeave(e) { document.getElementById('dropZone').classList.remove('border-[--acid-cyan]', 'bg-[--acid-cyan]/10'); }
+    function handleDrop(e) { e.preventDefault(); handleDragLeave(e); handleFiles(e.dataTransfer.files); }
+
+    function handleFiles(files) {
+        const allowed = ['image/jpeg','image/png','image/gif','image/webp','video/mp4','video/quicktime','video/x-msvideo'];
+        const maxSize = 100 * 1024 * 1024;
+        const newFiles = Array.from(files).filter(f => {
+            if (!allowed.includes(f.type)) { showToast(`❌ Formato non supportato: ${f.name}`); return false; }
+            if (f.size > maxSize) { showToast(`❌ File troppo grande (max 100MB): ${f.name}`); return false; }
+            return true;
+        });
+        if (!newFiles.length) return;
+        filesToUpload = [...filesToUpload, ...newFiles];
+        renderQueue();
+    }
+
+    function renderQueue() {
+        const queue = document.getElementById('uploadQueue');
+        const list = document.getElementById('queueList');
+        if (!filesToUpload.length) { queue.classList.add('hidden'); return; }
+        queue.classList.remove('hidden');
+        list.innerHTML = filesToUpload.map((f, i) => `
+            <div id="qitem-${i}" class="glass-card px-4 py-3 flex items-center gap-3 border border-white/10">
+                <i class="fa-solid ${f.type.startsWith('video') ? 'fa-film text-[--acid-magenta]' : 'fa-image text-[--acid-cyan]'} text-sm"></i>
+                <div class="flex-1 min-w-0">
+                    <p class="text-[11px] text-white truncate">${f.name}</p>
+                    <p class="text-[9px] text-gray-500">${(f.size/1024/1024).toFixed(1)} MB</p>
                 </div>
+                <div id="qstatus-${i}" class="text-[10px] text-gray-500 shrink-0">In attesa</div>
+            </div>
+        `).join('');
+    }
 
-                <div class="glass-card p-5 border-l-4 border-l-[--acid-cyan] flex justify-between items-center">
-                    <div>
-                        <h4 class="font-bold text-sm text-white">Arrivo dopo le 21:00</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-[--acid-cyan] mt-1"><i class="fa-solid fa-martini-glass"></i> Drink Omaggio Incluso</p>
-                    </div>
-                    <span class="brutalist text-3xl text-[--acid-cyan]">15€</span>
+    async function uploadAll() {
+        const btn = document.getElementById('uploadAllBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> TRASMISSIONE IN CORSO...';
+        const results = [];
+        for (let i = 0; i < filesToUpload.length; i++) {
+            const f = filesToUpload[i];
+            const statusEl = document.getElementById(`qstatus-${i}`);
+            const itemEl = document.getElementById(`qitem-${i}`);
+            if (statusEl) statusEl.innerHTML = '<span class="text-[--acid-cyan] animate-pulse">↑ Upload...</span>';
+            try {
+                const fd = new FormData();
+                fd.append('file', f);
+                fd.append('upload_preset', UPLOAD_PRESET);
+                fd.append('folder', 'digestivo');
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.secure_url) {
+                    if (statusEl) statusEl.innerHTML = '<span class="text-[--acid-green]">✓ OK</span>';
+                    if (itemEl) itemEl.classList.add('border-[--acid-green]/30', 'bg-[--acid-green]/5');
+                    results.push({ name: f.name, type: f.type });
+                } else { throw new Error(); }
+            } catch {
+                if (statusEl) statusEl.innerHTML = '<span class="text-red-400">✗ Errore</span>';
+                if (itemEl) itemEl.classList.add('border-red-500/30');
+            }
+        }
+        if (results.length) {
+            const resList = document.getElementById('resultsList');
+            document.getElementById('uploadResults').classList.remove('hidden');
+            resList.innerHTML = results.map(r => `
+                <div class="glass-card px-4 py-3 flex items-center gap-3 border border-[--acid-green]/20 bg-[--acid-green]/5">
+                    <i class="fa-solid ${r.type.startsWith('video') ? 'fa-film text-[--acid-magenta]' : 'fa-image text-[--acid-cyan]'} text-sm"></i>
+                    <p class="text-[11px] text-white truncate flex-1">${r.name}</p>
+                    <span class="text-[--acid-green] text-xs font-bold">✓ Archiviato</span>
                 </div>
-
-                <div class="glass-card p-5 border-l-4 border-l-[--acid-magenta] bg-[--acid-magenta]/5 flex justify-between items-center">
-                    <div>
-                        <h4 class="font-bold text-sm text-white glitch-text">Arrivo dopo le 23:00</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-[--acid-magenta] mt-1"><i class="fa-solid fa-ban mr-1"></i> Nessun drink incluso</p>
-                    </div>
-                    <span class="brutalist text-3xl text-[--acid-magenta]">15€</span>
-                </div>
-            </div> </div> <div id="content-social" class="hidden space-y-6 animate-fade-in">
-            <div class="text-center mb-6">
-                <h2 class="brutalist text-3xl tracking-tighter uppercase text-white">Social</h2>
-                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Unisciti alla community</p>
-            </div>
-
-            <div class="space-y-3">
-                <a href="https://www.instagram.com/_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-magenta] bg-[--acid-magenta]/5 flex justify-between items-center hover:bg-[--acid-magenta]/10 hover:scale-[1.02] transition-all block cursor-pointer">
-                    <div>
-                        <h4 class="font-bold text-sm text-white">Instagram</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-[--acid-magenta] mt-1">Foto & Aggiornamenti</p>
-                    </div>
-                    <span class="text-3xl text-[--acid-magenta]"><i class="fa-brands fa-instagram"></i></span>
-                </a>
-
-                <a href="https://tiktok.com/@_magaparty" target="_blank" class="glass-card p-5 border-l-4 border-l-white bg-white/5 flex justify-between items-center hover:bg-white/10 hover:scale-[1.02] transition-all block cursor-pointer">
-                    <div>
-                        <h4 class="font-bold text-sm text-white">TikTok</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-gray-300 mt-1">Video & Trend</p>
-                    </div>
-                    <span class="text-3xl text-white"><i class="fa-brands fa-tiktok"></i></span>
-                </a>
-
-                <a href="https://t.me/MAGAPART" target="_blank" class="glass-card p-5 border-l-4 border-l-[--acid-blue] bg-[--acid-blue]/5 flex justify-between items-center hover:bg-[--acid-blue]/10 hover:scale-[1.02] transition-all block cursor-pointer">
-                    <div>
-                        <h4 class="font-bold text-sm text-white">Telegram</h4>
-                        <p class="text-[10px] uppercase tracking-wider text-[--acid-blue] mt-1">Info & Photo Dump</p>
-                    </div>
-                    <span class="text-3xl text-[--acid-blue]"><i class="fa-brands fa-telegram"></i></span>
-                </a>
-            </div>
-        </div>
-
-    </main>
-
-    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto p-4 bg-gradient-to-t from-black via-black/90 to-transparent z-50">
-        <button onclick="openModal()" class="w-full bg-[--acid-cyan] text-black font-black py-4 rounded-xl brutalist text-lg tracking-widest shadow-[0_0_20px_rgba(0,255,204,0.3)] hover:scale-[0.98] transition-transform flex justify-center items-center gap-2">
-            <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
-        </button>
-    </div>
-
-    <div id="listModal" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
-        <div class="glass-card w-full max-w-sm p-6 neon-border-cyan bg-[#0a0a0a] relative modal-enter">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="brutalist text-2xl text-white">LISTA INGRESSO</h3>
-                <button onclick="closeModal()" class="w-8 h-8 flex justify-center items-center rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <div class="bg-white/5 border border-white/10 rounded-xl p-5 mb-5 text-center">
-                <p class="text-[10px] text-[--acid-cyan] font-bold uppercase tracking-widest mb-2"><i class="fa-solid fa-bolt"></i> Metodo Veloce</p>
-                <p class="text-[11px] text-gray-400 mb-4">Compila il form per salvare il posto e riceverai conferma via messaggio.</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSc_iQS6JncZ0r5pofZQkfQQXQ-zCSme6dRCvfYXPPd-fC4luQ/viewform?usp=dialog" target="_blank" class="block w-full py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-gray-200 transition-colors">
-                    <i class="fa-brands fa-google mr-1"></i> Compila Google Form
-                </a>
-            </div>
-
-            <div class="text-center relative my-6">
-                <hr class="border-white/10">
-                <span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-3 text-[9px] uppercase tracking-widest text-gray-500">Oppure contatta i PR</span>
-            </div>
-
-            <div class="space-y-3">
-                <button onclick="wa('Lista NEXT')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-yellow] text-[--acid-yellow] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-yellow] hover:text-black transition-all">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> LISTA NEXT
-                </button>
-                <button onclick="wa('Lista ATTIVAMENTE')" class="w-full flex items-center justify-center gap-2 py-3 bg-transparent border border-[--acid-blue] text-[--acid-blue] rounded-lg font-bold text-xs uppercase tracking-widest hover:bg-[--acid-blue] hover:text-black transition-all">
-                    <i class="fa-brands fa-whatsapp text-lg"></i> LISTA ATTIVAMENTE
-                </button>
-                <button onclick="wa('Informazioni Generali')" class="w-full flex items-center justify-center gap-2 py-3 bg-white/5 text-gray-300 rounded-lg text-[10px] uppercase tracking-widest hover:bg-white/10 transition-colors mt-2">
-                    Infoline Magaparty
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Gestione Tab Navigazione
-        function switchTab(tabId) {
-            const tabs = ['info', 'lineup', 'orari', 'bar', 'tickets', 'social'];
-            tabs.forEach(id => {
-                const content = document.getElementById(`content-${id}`); // Aggiunti i backticks
-                const tab = document.getElementById(`tab-${id}`); // Aggiunti i backticks
-                if(content) content.classList.add('hidden');
-                if(tab) {
-                    tab.classList.remove('active-tab');
-                    tab.classList.add('inactive-tab');
-                }
-            });
-            const activeContent = document.getElementById(`content-${tabId}`); // Aggiunti i backticks
-            const activeTab = document.getElementById(`tab-${tabId}`); // Aggiunti i backticks
-            if(activeContent) activeContent.classList.remove('hidden');
-            if(activeTab) {
-                activeTab.classList.add('active-tab');
-                activeTab.classList.remove('inactive-tab');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            `).join('');
+            showToast(`🐇 ${results.length} file archiviati con successo!`);
         }
+        filesToUpload = [];
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-bolt"></i> AVVIA TRASMISSIONE';
+        document.getElementById('uploadQueue').classList.add('hidden');
+        document.getElementById('queueList').innerHTML = '';
+    }
 
-        // Gestione Countdown
-        function updateCountdown() {
-            const target = new Date('2026-04-05T19:00:00');
-            const now = new Date();
-            const diff = target - now;
-            
-            if (diff <= 0) {
-                ['cd','ch','cm','cs'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) el.innerText = '00';
-                });
-                return;
-            }
-
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const m = Math.floor((diff / (1000 * 60)) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-
-            const dEl = document.getElementById('cd');
-            const hEl = document.getElementById('ch');
-            const mEl = document.getElementById('cm');
-            const sEl = document.getElementById('cs');
-
-            if(dEl) dEl.innerText = d.toString().padStart(2, '0');
-            if(hEl) hEl.innerText = h.toString().padStart(2, '0');
-            if(mEl) mEl.innerText = m.toString().padStart(2, '0');
-            if(sEl) sEl.innerText = s.toString().padStart(2, '0');
-        }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Funzioni Modal Lista
-        const modal = document.getElementById('listModal');
-        function openModal() {
-            if(modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-        function closeModal() {
-            if(modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.body.style.overflow = '';
-            }
-        }
-        
-        if(modal) {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-        }
-
-        // WhatsApp Link Generator
-        function wa(lista) {
-            const msg = encodeURIComponent(`Ciao! 🐇 Vorrei registrarmi per DIGESTIVO (Pasqua 5 Aprile 2026).\nRichiesta per: ${lista}`);
-            window.open(`https://wa.me/393454237269?text=${msg}`, '_blank');
-        }
-
-        // Funzioni di Condivisione
-        function shareEvent() {
-            if (navigator.share) {
-                navigator.share({ 
-                    title: 'DIGESTIVO – 5 Aprile | Magaparty', 
-                    text: "L'antidoto al pranzo di Pasqua 🐇🥕", 
-                    url: window.location.href 
-                }).catch(()=>{});
-            } else {
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert('Link copiato negli appunti! 🐇');
-                });
-            }
-        }
-
-        function addToCalendar() {
-            const t = encodeURIComponent('DIGESTIVO – Magaparty');
-            const l = encodeURIComponent('Via Maiori 1, Pontecagnano Faiano SA');
-            const det = encodeURIComponent("L'antidoto al pranzo di Pasqua. Feat. Federica Natella & Adolfo Citro.");
-            window.open(`https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=20260405T190000/20260406T020000&location=${l}&details=${det}`, '_blank');
-        }
-    </script>
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'fixed bottom-32 left-1/2 -translate-x-1/2 z-[200] bg-[#111] border border-white/10 text-white text-[11px] px-4 py-2 rounded-full shadow-lg whitespace-nowrap';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3500);
+    }
+</script>
 </body>
 </html>
