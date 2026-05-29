@@ -38,15 +38,11 @@ servizio, note).
     │   └── assets/
     │       ├── styles.css
     │       └── app.js       ← i18n IT/EN + form WhatsApp
-    └── magaparty/           ← MAGA Republic (sito originale)
-        ├── index.html
-        ├── lineup.html
-        ├── orari.html
-        ├── menu-day.html
-        ├── menu-night.html
-        ├── galleria.html
-        ├── tickets.html
-        ├── social.html
+    └── magaparty/           ← MAGA Republic (single-page + 2 sotto-pagine)
+        ├── index.html       ← INFO + LINE-UP + ORARI + TICKETS + SOCIAL (consolidato)
+        ├── bar.html         ← Menu bar con tab Aperitivo / Serata
+        ├── galleria.html    ← Upload foto evento
+        ├── logo_maga.jpg    ← 👉 AGGIUNGI QUI IL LOGO (vedi sezione Personalizzazioni)
         └── assets/
 ```
 
@@ -131,6 +127,17 @@ riferimenti in `site/oceanbeach/index.html` (sezione "GALLERY").
 ### 5. Indirizzo email (placeholder)
 Cerca `info@nellooceanbeach.it` nei file `.html` e sostituiscilo.
 
+### 6. 🌟 Logo Magaparty
+Trascina il tuo file logo nominato esattamente **`logo_maga.jpg`** dentro la
+cartella **`site/magaparty/`**. Apparirà automaticamente al posto del
+placeholder tratteggiato in alto a sinistra. Dimensioni consigliate:
+quadrate, almeno 400×400 px.
+
+### 7. Apertura sotto-siti dall'hub Magaverse
+I link dall'hub principale ai sotto-siti (`Nello Ocean Beach`, `Magaparty`)
+si aprono in **una nuova scheda del browser**. Per cambiare comportamento,
+rimuovi `target="_blank"` dai link in `site/index.html`.
+
 ---
 
 ## 🛠 Stack tecnico
@@ -158,8 +165,11 @@ Cerca `info@nellooceanbeach.it` nei file `.html` e sostituiscilo.
 | `magaverse.it/oceanbeach/` | `site/oceanbeach/index.html` |
 | `magaverse.it/oceanbeach/booking.html` | `site/oceanbeach/booking.html` |
 | `magaverse.it/oceanbeach/booking` *(senza estensione)* | `site/oceanbeach/booking.html` (via `.htaccess`) |
-| `magaverse.it/magaparty/` | `site/magaparty/index.html` |
-| `magaverse.it/magaparty/lineup.html` | `site/magaparty/lineup.html` |
+| `magaverse.it/magaparty/` | `site/magaparty/index.html` (single-page con sezioni) |
+| `magaverse.it/magaparty/bar.html` | `site/magaparty/bar.html` (menu Day/Night) |
+| `magaverse.it/magaparty/galleria.html` | `site/magaparty/galleria.html` (upload foto) |
+| `magaverse.it/magaparty/#lineup` | scroll alla sezione LINE-UP in `index.html` |
+| `magaverse.it/magaparty/#tickets` | scroll alla sezione TICKETS in `index.html` |
 
 ---
 

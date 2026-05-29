@@ -10,14 +10,13 @@
     // Nav config — la pagina attiva è letta da document.body.dataset.page
     // ─────────────────────────────────────────────────────────
     const NAV = [
-        { id: 'info',       href: 'index.html',      icon: 'fa-circle-info',  label: 'INFO',       mobileIcon: 'fa-sun' },
-        { id: 'lineup',     href: 'lineup.html',     icon: 'fa-compact-disc', label: 'LINE-UP' },
-        { id: 'orari',      href: 'orari.html',      icon: 'fa-regular fa-clock', label: 'ORARI' },
-        { id: 'menu-day',   href: 'menu-day.html',   icon: 'fa-sun',          label: 'MENU 16–18' },
-        { id: 'menu-night', href: 'menu-night.html', icon: 'fa-moon',         label: 'MENU 18–00' },
-        { id: 'galleria',   href: 'galleria.html',   icon: 'fa-camera',       label: 'GALLERIA' },
-        { id: 'tickets',    href: 'tickets.html',    icon: 'fa-ticket',       label: 'TICKETS' },
-        { id: 'social',     href: 'social.html',     icon: 'fa-hashtag',      label: 'SOCIAL' }
+        { id: 'info',       href: 'index.html#info',     icon: 'fa-circle-info',  label: 'INFO',       mobileIcon: 'fa-sun' },
+        { id: 'lineup',     href: 'index.html#lineup',   icon: 'fa-compact-disc', label: 'LINE-UP' },
+        { id: 'orari',      href: 'index.html#orari',    icon: 'fa-regular fa-clock', label: 'ORARI' },
+        { id: 'bar',        href: 'bar.html',            icon: 'fa-martini-glass', label: 'BAR' },
+        { id: 'galleria',   href: 'galleria.html',       icon: 'fa-camera',       label: 'GALLERIA' },
+        { id: 'tickets',    href: 'index.html#tickets',  icon: 'fa-ticket',       label: 'TICKETS' },
+        { id: 'social',     href: 'index.html#social',   icon: 'fa-hashtag',      label: 'SOCIAL' }
     ];
 
     function currentPage() {
@@ -25,9 +24,9 @@
     }
 
     function logoMarkup(extraStyle) {
-        // Tenta di caricare logo_maga.jpg; fallback a tile testuale
+        // Tenta di caricare logo_maga.jpg; fallback elegante a placeholder
         return `<img src="logo_maga.jpg" alt="MAGA REPUBLIC" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
-                     onerror="this.outerHTML='<div class=\\'logo-fallback\\'>MAGA</div>'">`;
+                     onerror="this.outerHTML='<div class=\\'logo-placeholder\\'><i class=\\'fa-solid fa-image\\'></i><span>logo_maga.jpg</span></div>'">`;
     }
 
     // ─────────────────────────────────────────────────────────
