@@ -47,14 +47,14 @@ export default function Home() {
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
-                to="/booking"
+                to="/oceanbeach/booking"
                 data-testid="hero-cta-primary"
                 className="inline-flex items-center gap-2 rounded-full bg-white text-foreground px-6 py-3.5 font-medium shadow-lg hover:-translate-y-0.5 transition-all"
               >
                 {t.home.ctaPrimary} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/services"
+                to="/oceanbeach/services"
                 data-testid="hero-cta-secondary"
                 className="inline-flex items-center gap-2 rounded-full bg-white/10 hover:bg-white/15 text-white px-6 py-3.5 font-medium backdrop-blur border border-white/25"
               >
@@ -104,7 +104,7 @@ export default function Home() {
               {t.home.aboutText}
             </p>
             <Link
-              to="/about"
+              to="/oceanbeach/about"
               data-testid="home-about-cta"
               className="mt-7 inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
             >
@@ -125,7 +125,7 @@ export default function Home() {
               </h2>
             </div>
             <Link
-              to="/services"
+              to="/oceanbeach/services"
               data-testid="home-services-cta"
               className="inline-flex items-center gap-2 text-primary font-medium self-start lg:self-end"
             >
@@ -213,7 +213,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
-                to="/booking"
+                to="/oceanbeach/booking"
                 data-testid="home-final-cta-booking"
                 className="inline-flex items-center gap-2 rounded-full bg-white text-foreground px-6 py-3.5 font-medium hover:-translate-y-0.5 transition-all"
               >

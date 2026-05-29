@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MAGA REPUBLIC – Sunset Party | Magaparty</title>
+    <meta name="description" content="Un tramonto dedicato alla musica. 2 Giugno 2026 – Nello Ocean Beach, Magazzeno Salerno. 3 DJ. Dalle 16:00 a mezzanotte.">
+    <meta property="og:title" content="MAGA REPUBLIC – 2 Giugno 2026 | Magaparty">
+    <meta property="og:description" content="Un tramonto dedicato alla musica. Nello Ocean Beach, Magazzeno Salerno.">
+    <meta property="og:image" content="logo_maga.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="logo_maga.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-page="info">
+<main id="page-main">
+
+    <div class="animate-fade-in" data-testid="page-info">
+        <div class="desktop-2col">
+
+            <!-- Countdown -->
+            <div class="glass-card p-6 text-center desktop-full neon-border-orange">
+                <h3 class="brutalist text-xl mb-4" style="color:var(--sunset-orange)">AL TRAMONTO MANCANO</h3>
+                <div class="grid grid-cols-4 gap-2 border-t pt-4" style="border-color:rgba(255,248,231,0.05)">
+                    <div><span class="block text-2xl font-bold brutalist" id="cd" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="ch" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cm" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cs" style="color:var(--sunset-orange)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="glass-card overflow-hidden">
+                <div class="p-5">
+                    <h3 class="brutalist text-xl mb-1 sunset-title">NELLO OCEAN BEACH</h3>
+                    <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Magazzeno, Salerno</p>
+                    <a href="https://maps.google.com/?q=Nello+Ocean+Beach+Salerno" target="_blank" data-testid="map-link"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                       style="background:rgba(42,191,176,0.1); border:1px solid rgba(255,213,79,0.1); color:var(--sunset-coral)">
+                        <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                    </a>
+                </div>
+                <div class="p-4 border-t" style="background:rgba(0,0,0,0.4); border-color:rgba(255,248,231,0.05)">
+                    <p class="text-[9px] uppercase tracking-[0.15em] mb-3 flex items-center gap-2" style="color:var(--sunset-teal)">
+                        <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:var(--sunset-teal)"></span> Infoline
+                    </p>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:+393454237269" data-testid="phone-1" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                            <i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
+                        <a href="tel:+393914700024" data-testid="phone-2" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                            <i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vibe card -->
+            <div class="glass-card p-5" style="border:1px solid rgba(255,213,79,0.2); background:rgba(255,213,79,0.04)">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-gold)">Energia Sunset</span>
+                    <i class="fa-solid fa-sun" style="color:var(--sunset-gold)"></i>
+                </div>
+                <div class="h-2 w-full rounded-full overflow-hidden mb-3" style="background:rgba(255,255,255,0.1)">
+                    <div class="h-full w-[88%] animate-pulse rounded-full"
+                         style="background:linear-gradient(90deg, var(--sunset-teal), var(--sunset-orange), var(--sunset-gold))"></div>
+                </div>
+                <p class="text-[11px] italic opacity-80">Previsione: <strong class="not-italic" style="color:var(--sunset-cream)">Tramonto da brividi, serata da leggenda.</strong></p>
+            </div>
+
+            <!-- Parcheggio -->
+            <div class="glass-card p-5" style="border:1px solid rgba(255,107,26,0.2); background:rgba(255,107,26,0.04)">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-orange)"><i class="fa-solid fa-car mr-1"></i> Parcheggio</span>
+                    <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(255,107,26,0.15); color:var(--sunset-orange)">Gratuito</span>
+                </div>
+                <p class="text-[11px] text-gray-300 leading-relaxed">Parcheggio <strong class="text-white">custodito gratuito</strong> disponibile per l&apos;evento. Ingresso lato <strong class="text-white">Salerno</strong> sulla SS18.</p>
+            </div>
+
+            <!-- Navetta -->
+            <div class="glass-card p-5" style="border:1px solid rgba(42,191,176,0.2); background:rgba(42,191,176,0.04)">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-teal)"><i class="fa-solid fa-bus mr-1"></i> Navetta</span>
+                    <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(42,191,176,0.15); color:var(--sunset-teal)">Dedicata</span>
+                </div>
+                <p class="text-[11px] text-gray-300 leading-relaxed mb-3">Servizio navetta dedicato per l'evento. Per info, orari e prenotazione posti chiedi in DM.</p>
+                <button data-testid="navetta-wa" onclick="MAGA.wa('Navetta – Info e prenotazione posti')" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all"
+                        style="background:rgba(42,191,176,0.15); border:1px solid rgba(42,191,176,0.3); color:var(--sunset-teal)">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Chiedi in DM
+                </button>
+            </div>
+
+            <!-- Condividi mobile -->
+            <div class="flex gap-2 pb-2 desktop-full lg:hidden">
+                <button data-testid="share-mobile" onclick="MAGA.share()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                    <i class="fa-solid fa-share-nodes"></i> Condividi
+                </button>
+                <button data-testid="calendar-mobile" onclick="MAGA.addToCalendar()" class="flex-1 glass-card p-3 text-[10px] uppercase tracking-widest font-bold flex justify-center items-center gap-2 hover:bg-white/10 transition-colors">
+                    <i class="fa-regular fa-calendar-plus"></i> Calendario
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@ export default function Footer() {
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-14 grid grid-cols-1 md:grid-cols-12 gap-10">
         <div className="md:col-span-5">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/oceanbeach" className="flex items-center gap-2">
             <span className="w-9 h-9 rounded-full bg-primary text-primary-foreground inline-flex items-center justify-center">
               <Waves className="w-4 h-4" />
             </span>
@@ -33,11 +33,12 @@ export default function Footer() {
             {t.footer.pages}
           </h4>
           <ul className="space-y-2 text-muted-foreground">
-            <li><Link data-testid="footer-link-home" to="/" className="hover:text-primary">{t.nav.home}</Link></li>
-            <li><Link data-testid="footer-link-about" to="/about" className="hover:text-primary">{t.nav.about}</Link></li>
-            <li><Link data-testid="footer-link-services" to="/services" className="hover:text-primary">{t.nav.services}</Link></li>
-            <li><Link data-testid="footer-link-pricing" to="/pricing" className="hover:text-primary">{t.nav.pricing}</Link></li>
-            <li><Link data-testid="footer-link-booking" to="/booking" className="hover:text-primary">{t.nav.booking}</Link></li>
+            <li><Link data-testid="footer-link-home" to="/oceanbeach" className="hover:text-primary">{t.nav.home}</Link></li>
+            <li><Link data-testid="footer-link-about" to="/oceanbeach/about" className="hover:text-primary">{t.nav.about}</Link></li>
+            <li><Link data-testid="footer-link-services" to="/oceanbeach/services" className="hover:text-primary">{t.nav.services}</Link></li>
+            <li><Link data-testid="footer-link-pricing" to="/oceanbeach/pricing" className="hover:text-primary">{t.nav.pricing}</Link></li>
+            <li><Link data-testid="footer-link-booking" to="/oceanbeach/booking" className="hover:text-primary">{t.nav.booking}</Link></li>
+            <li><Link data-testid="footer-link-magaverse" to="/" className="hover:text-primary opacity-70">↗ Magaverse</Link></li>
           </ul>
         </div>
 

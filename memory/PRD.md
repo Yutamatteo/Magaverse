@@ -43,3 +43,29 @@ Sistema prenotazione → apre WhatsApp Business con messaggio precompilato. List
 ## Testing
 - Backend: 6/6 pytest passing
 - Frontend: Playwright e2e tutti i flussi (lang toggle, nav, booking, mappa, sticky CTA)
+
+---
+
+## Magaverse Integration (Dec 2025 — update)
+Riorganizzato il progetto come hub multi-brand sotto un unico repo/dominio:
+
+### Struttura URL
+- `/` → **Magaverse Hub** (tema galaxy, dark, gradient sunset)
+- `/oceanbeach/*` → **Nello Ocean Beach** (sito React, navbar con back-link "← MAGAVERSE")
+- `/magaparty/*` → **Magaparty** (sito statico, integrato come public assets, design originale preservato)
+
+### File chiave aggiunti/modificati
+- `/app/frontend/src/pages/MagaverseHub.jsx` — hub galassia con card Nello/Magaparty + 3 placeholder coming soon
+- `/app/frontend/src/App.js` — rotte ristrutturate (root + /oceanbeach + 404)
+- `/app/frontend/src/index.css` — fonts Syne/Space Grotesk + animazioni galaxy
+- `/app/frontend/public/magaparty/` — sito Magaparty statico (8 HTML + assets) servito direttamente
+- `/app/frontend/src/components/Navbar.jsx` — link aggiornati a `/oceanbeach/*` + back-link Magaverse
+- `/app/frontend/src/components/Footer.jsx` — link aggiornati + link Magaverse
+- `/app/frontend/public/index.html` — meta SEO Magaverse
+
+### Vantaggi della struttura
+- Un solo repo GitHub, un solo dominio, zero conflitti file
+- Magaparty mantiene il suo design originale (HTML statico)
+- Nello mantiene il suo brand React con navbar dedicata
+- Magaverse fa da "portale" che unifica
+- Espandibile facilmente: nuove cartelle in `/public/` o nuove rotte React

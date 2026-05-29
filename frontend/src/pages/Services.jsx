@@ -49,7 +49,7 @@ export default function Services() {
 
         <div className="mt-16 text-center">
           <Link
-            to="/booking"
+            to="/oceanbeach/booking"
             data-testid="services-cta"
             className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3.5 font-medium hover:-translate-y-0.5 transition-all"
           >

@@ -57,7 +57,7 @@ export default function Pricing() {
             </p>
           </div>
           <Link
-            to="/booking"
+            to="/oceanbeach/booking"
             data-testid="pricing-cta"
             className="inline-flex items-center gap-2 rounded-full bg-white text-foreground px-6 py-3.5 font-medium hover:-translate-y-0.5 transition-all"
           >

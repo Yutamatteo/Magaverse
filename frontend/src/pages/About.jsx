@@ -61,7 +61,7 @@ export default function About() {
           </h2>
           <p className="mt-6 text-muted-foreground text-base sm:text-lg leading-relaxed">{t.about.storyText}</p>
           <Link
-            to="/booking"
+            to="/oceanbeach/booking"
             data-testid="about-cta"
             className="mt-10 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3.5 font-medium hover:-translate-y-0.5 transition-all"
           >

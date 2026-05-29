@@ -6,12 +6,12 @@ import { useLang } from "../contexts/LanguageContext";
 import { quickWhatsappUrl } from "../lib/whatsapp";
 
 const links = (t) => [
-  { to: "/", label: t.nav.home, key: "home" },
-  { to: "/about", label: t.nav.about, key: "about" },
-  { to: "/services", label: t.nav.services, key: "services" },
-  { to: "/pricing", label: t.nav.pricing, key: "pricing" },
-  { to: "/booking", label: t.nav.booking, key: "booking" },
-  { to: "/contact", label: t.nav.contact, key: "contact" },
+  { to: "/oceanbeach", label: t.nav.home, key: "home" },
+  { to: "/oceanbeach/about", label: t.nav.about, key: "about" },
+  { to: "/oceanbeach/services", label: t.nav.services, key: "services" },
+  { to: "/oceanbeach/pricing", label: t.nav.pricing, key: "pricing" },
+  { to: "/oceanbeach/booking", label: t.nav.booking, key: "booking" },
+  { to: "/oceanbeach/contact", label: t.nav.contact, key: "contact" },
 ];
 
 export default function Navbar() {
@@ -40,7 +40,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-5 sm:px-8 h-16 sm:h-20 flex items-center justify-between">
         <Link
-          to="/"
+          to="/oceanbeach"
           data-testid="logo-link"
           className="flex items-center gap-2 group"
         >
@@ -52,12 +52,20 @@ export default function Navbar() {
           </span>
         </Link>
 
+        <Link
+          to="/"
+          data-testid="back-to-magaverse"
+          className="hidden md:inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-primary transition-colors ml-2"
+        >
+          ← Magaverse
+        </Link>
+
         <nav className="hidden lg:flex items-center gap-1">
           {links(t).map((l) => (
             <NavLink
               key={l.key}
               to={l.to}
-              end={l.to === "/"}
+              end={l.to === "/oceanbeach"}
               data-testid={`nav-${l.key}`}
               className={({ isActive }) =>
                 `px-3 py-2 rounded-full text-sm transition-colors ${
@@ -106,7 +114,7 @@ export default function Navbar() {
               <NavLink
                 key={l.key}
                 to={l.to}
-                end={l.to === "/"}
+                end={l.to === "/oceanbeach"}
                 data-testid={`mobile-nav-${l.key}`}
                 className={({ isActive }) =>
                   `px-3 py-3 rounded-xl text-base ${
