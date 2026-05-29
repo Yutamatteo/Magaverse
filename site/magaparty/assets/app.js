@@ -348,6 +348,74 @@
             updateCountdown();
             setInterval(updateCountdown, 1000);
         }
+
+        // Active section tracking (solo su index.html con sezioni anchor)
+        setupActiveSectionTracking();
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // ACTIVE SECTION TRACKING — aggiorna sidebar in base allo scroll
+    // ─────────────────────────────────────────────────────────
+    function setupActiveSectionTracking() {
+        const sections = document.querySelectorAll('main #info, main #lineup, main #orari, main #tickets, main #social');
+        if (sections.length === 0) return; // pagine separate (bar.html / galleria.html) non hanno sezioni
+
+        function setActive(id) {
+            document.querySelectorAll('[data-testid^="sidebar-nav-"], [data-testid^="tab-"]').forEach(el => {
+                const testid = el.getAttribute('data-testid');
+                const navId = testid.replace('sidebar-nav-', '').replace('tab-', '');
+                if (navId === id) {
+                    el.classList.add('active');
+                    if (el.classList.contains('pill-tab')) {
+                        el.classList.remove('inactive-tab');
+                        el.classList.add('active-tab');
+                    }
+                } else {
+                    el.classList.remove('active');
+                    if (el.classList.contains('pill-tab')) {
+                        el.classList.add('inactive-tab');
+                        el.classList.remove('active-tab');
+                    }
+                }
+            });
+        }
+
+        // IntersectionObserver: traccia la sezione attualmente visibile
+        const observer = new IntersectionObserver(entries => {
+            // Trova l'intersezione con il maggior ratio
+            let best = null;
+            entries.forEach(e => {
+                if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
+                    best = e;
+                }
+            });
+            if (best) setActive(best.target.id);
+        }, {
+            rootMargin: '-30% 0px -50% 0px', // sezione attiva quando è circa al centro
+            threshold: [0, 0.25, 0.5, 0.75, 1]
+        });
+
+        sections.forEach(s => observer.observe(s));
+
+        // Stato iniziale dal hash o info di default
+        const initialHash = window.location.hash.replace('#', '');
+        if (initialHash && document.getElementById(initialHash)) {
+            setActive(initialHash);
+            setTimeout(() => document.getElementById(initialHash).scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        } else {
+            setActive('info');
+        }
+
+        // Aggiornamento istantaneo al click su un link sidebar/tab
+        document.querySelectorAll('[data-testid^="sidebar-nav-"], [data-testid^="tab-"]').forEach(el => {
+            el.addEventListener('click', () => {
+                const testid = el.getAttribute('data-testid');
+                const navId = testid.replace('sidebar-nav-', '').replace('tab-', '');
+                if (document.getElementById(navId)) {
+                    setActive(navId);
+                }
+            });
+        });
     }
 
     // Espone API globale
