@@ -1,0 +1,155 @@
+{
+  "theme": "Light",
+  "archetype": "Organic & Earthy",
+  "domain": "Beach Club & Tourism",
+  "mood": "Warm, Mediterranean modern, inviting, elegant yet accessible. Reflects the recently painted beige, brown, and white structure.",
+  "typography": {
+    "headings": "Playfair Display, serif",
+    "body": "Outfit, sans-serif",
+    "rules": "DO NOT use Inter, Roboto, or Space Grotesk. Headings must be evocative and elegant. Body text should be clean and readable with generous line height."
+  },
+  "colors": {
+    "background": "#FAF7F2",
+    "surface": "#FFFFFF",
+    "surface_secondary": "#F4EDE4",
+    "primary": "#8B5A2B",
+    "primary_hover": "#6B4220",
+    "secondary": "#D2B48C",
+    "accent": "#D97736",
+    "text_primary": "#3E2723",
+    "text_secondary": "#6D4C41",
+    "border": "#E8DCCB"
+  },
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing. Use Tailwind scales p-8, p-12, p-16. Containers with borders must have internal padding. Avoid symmetrical center-aligned monotony.",
+    "hero_section": "Immersive and asymmetric. Use a large beach image with a maximum 30%-40% warm overlay (bg-black/30 or gradient) so the image remains clear. Bold serif typography aligned left.",
+    "services_grid": "Bento 'Tetris' grid (grid-cols-1 md:grid-cols-8 lg:grid-cols-12) with varying spans. Mix text cards with image cards."
+  },
+  "pages_structure": [
+    {
+      "name": "Home",
+      "path": "/",
+      "sections": [
+        "Immersive Hero with CTA",
+        "About Us Teaser (Warm welcome)",
+        "Bento Services (Canoes, Bar, Relax)",
+        "Testimonials or Photo Gallery",
+        "Footer"
+      ]
+    },
+    {
+      "name": "Chi Siamo",
+      "path": "/about",
+      "sections": [
+        "Story of Nello Ocean Beach",
+        "Values (Family friendly, vibrant for youth, relaxing for couples)",
+        "Gallery"
+      ]
+    },
+    {
+      "name": "Servizi",
+      "path": "/services",
+      "sections": [
+        "Canoes & Water Sports",
+        "Beach Bar & Food",
+        "Showers, Toilets & Cabins",
+        "Wifi & Amenities"
+      ]
+    },
+    {
+      "name": "Listino Prezzi",
+      "path": "/pricing",
+      "sections": [
+        "Umbrellas & Sunbeds (Placeholder prices)",
+        "Canoes Rental (Placeholder prices)"
+      ]
+    },
+    {
+      "name": "Prenota Online",
+      "path": "/book",
+      "sections": [
+        "Booking form: Select Date, Guests, Service, Umbrella Row",
+        "CTA -> Opens WhatsApp deep link with prefilled text"
+      ]
+    },
+    {
+      "name": "Contatti",
+      "path": "/contact",
+      "sections": [
+        "Address: Via Mar Ionio, 22, 84098 Magazzeno SA",
+        "Map",
+        "Opening Hours",
+        "Direct Contact Info"
+      ]
+    }
+  ],
+  "copywriting_guidance": {
+    "hero": {
+      "it": {
+        "title": "La tua oasi di relax sulla costa del Tirreno.",
+        "subtitle": "Al Nello Ocean Beach celebriamo l'estate. Ombrelloni eleganti, un bar accogliente, e l'atmosfera perfetta per famiglie e coppie a Magazzeno.",
+        "cta": "Prenota su WhatsApp"
+      },
+      "en": {
+        "title": "Your relaxing oasis on the Tyrrhenian coast.",
+        "subtitle": "At Nello Ocean Beach we celebrate summer. Elegant umbrellas, a cozy beach bar, and the perfect atmosphere for families and couples in Magazzeno.",
+        "cta": "Book on WhatsApp"
+      }
+    },
+    "services_teaser": {
+      "it": "Dal noleggio canoe per i più avventurosi, alle docce calde e al nostro bar sulla spiaggia per rinfrescare le tue giornate di sole.",
+      "en": "From canoe rentals for the adventurous, to hot showers and our beach bar to refresh your sunny days."
+    }
+  },
+  "components": {
+    "buttons": "Pill-shaped (rounded-full). Warm brown primary color. Must include subtle hover scaling (-translate-y-1) and drop shadow.",
+    "cards": "Subtle border (border-border), no hard shadow. Flat surfaces rather than heavy glassmorphism. Tactile and clean.",
+    "booking_form": "React form that compiles state and opens 'https://wa.me/NUMBER?text=URL_ENCODED_STRING'.",
+    "language_selector": "Always visible top-right toggle (IT/EN).",
+    "sticky_cta": "Mobile-only fixed bottom button 'Prenota su WhatsApp' (z-50). Desktop: elegant floating or header button."
+  },
+  "micro_interactions": {
+    "hover_states": "Hovering buttons changes text and background color. Hovering feature cards creates a slight lift.",
+    "images": "Slow zoom/pan on hover within overflow-hidden containers to give a premium feel."
+  },
+  "testing": {
+    "requirements": "CRITICAL: All interactive elements (buttons, nav links, form inputs) MUST include a data-testid attribute in kebab-case."
+  },
+  "media": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1723380775952-28ea1a7a330a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHxpdGFsaWFuJTIwYmVhY2glMjB1bWJyZWxsYXMlMjBBbWFsZml8ZW58MHx8fHwxNzgwMDY2MTMwfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Nello Ocean Beach view with umbrellas",
+      "usage": "Main hero section background or right-aligned immersive image."
+    },
+    "services_canoes": {
+      "url": "https://images.unsplash.com/photo-1617083001984-9bced23d3086?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxjYW5vZSUyMGtheWFrJTIwYmVhY2h8ZW58MHx8fHwxNzgwMDY2MTMwfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Red canoe on the white sand beach",
+      "usage": "Services page or bento grid for canoe rental."
+    },
+    "services_bar": {
+      "url": "https://images.pexels.com/photos/30344044/pexels-photo-30344044.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Relaxing beach bar at sunset",
+      "usage": "Services page or bento grid for beach bar."
+    },
+    "about_gallery_1": {
+      "url": "https://images.unsplash.com/photo-1534250617995-d16425086b91?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxpdGFsaWFuJTIwYmVhY2glMjB1bWJyZWxsYXMlMjBBbWFsZml8ZW58MHx8fHwxNzgwMDY2MTMwfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Top down view of blue and white umbrellas on an Italian beach",
+      "usage": "About us or gallery grid."
+    },
+    "about_gallery_2": {
+      "url": "https://images.pexels.com/photos/13738205/pexels-photo-13738205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "alt": "Vibrant beach scene with umbrellas and bar",
+      "usage": "Gallery or about us background."
+    }
+  },
+  "instructions_to_main_agent": [
+    "Initialize Tailwind config to use 'Playfair Display' and 'Outfit' fonts via Google Fonts import in index.css.",
+    "Implement a language context or simple state to switch IT/EN text globally.",
+    "Build the home page using raw HTML/Tailwind for the bento grids. Embrace asymmetry.",
+    "Create a WhatsApp deep link generator for the Booking form based on the state (e.g., https://wa.me/390000000000?text=Ciao%20vorrei%20prenotare...).",
+    "Add 'data-testid' attributes to all form inputs, select options, and buttons. This is mandatory.",
+    "Set the sticky mobile CTA on all pages.",
+    "Write SEO optimized texts utilizing the guidance. Replace placeholder text with rich, context-aware descriptions.",
+    "Files should be created as .js or .jsx, not .tsx"
+  ]
+}
