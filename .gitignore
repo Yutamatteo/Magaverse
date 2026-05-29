@@ -13,3 +13,9 @@
 
 # Build outputs (non servono per il sito statico)
 /app/frontend/build/
+.env
+.env.*
+credentials.json
+*.pem
+*.key
+.credentials
