@@ -19,7 +19,7 @@ const i18n = {
 
         // Home
         "home.kicker": "Stabilimento balneare · Magazzeno, Salerno",
-        "home.title": "La tua oasi di relax\nsulla costa del Tirreno.",
+        "home.title": "La tua oasi di relax.\n",
         "home.sub": "Al Nello Ocean Beach celebriamo l'estate. Ombrelloni eleganti, bar accogliente, canoe pronte all'avventura — l'atmosfera perfetta per famiglie, giovani e coppie.",
         "home.cta1": "Prenota su WhatsApp",
         "home.cta2": "Scopri i servizi",
@@ -61,7 +61,7 @@ const i18n = {
         // About
         "about.kicker": "Chi siamo",
         "about.title": "Nello Ocean Beach,\nil tuo pezzo di Mediterraneo.",
-        "about.intro": "Siamo uno stabilimento balneare familiare lungo la costa di Magazzeno, a pochi chilometri da Salerno. Tra le scogliere del Tirreno e la vivacità della Campania, offriamo una giornata di mare semplice, curata e autentica.",
+        "about.intro": "Siamo uno stabilimento balneare familiare lungo la costa di Magazzeno, a pochi chilometri da Salerno. Tra le scogliere e la vivacità della Campania, offriamo una giornata di mare semplice, curata e autentica.",
         "about.fam.t": "Famiglie",
         "about.fam.d": "Spazi sicuri, file di ombrelloni in piano e personale sempre disponibile per le piccole esigenze.",
         "about.young.t": "Giovani",
@@ -151,11 +151,11 @@ const i18n = {
         "contact.cta.sub": "È il modo più rapido per ricevere una risposta in giornata.",
 
         // Footer
-        "footer.tag": "Lido balneare sulla costa del Tirreno.",
+        "footer.tag": "Lido balneare.",
         "footer.pages": "Pagine",
         "footer.contact": "Contatti",
         "footer.rights": "Tutti i diritti riservati.",
-        "footer.crafted": "Sito realizzato con cura sulla costa del Tirreno.",
+        "footer.crafted": "Sito realizzato con cura.",
         "sticky.wa": "Prenota WhatsApp"
     },
     en: {
