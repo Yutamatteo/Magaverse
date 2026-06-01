@@ -100,7 +100,7 @@
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-orange)">Premium</h3>
                 </div>
                 <div class="divide-y" style="border-color:rgba(255,248,231,0.05)">
-                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin Tonic [Tanqueray]/span><span class="brutalist text-lg" style="color:var(--sunset-orange)">€7</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin Tonic [Tanqueray]</span><span class="brutalist text-lg" style="color:var(--sunset-orange)">€7</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Gin Tonic [Hendrick's]</span><span class="brutalist text-lg" style="color:var(--sunset-orange)">€8</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Vodka Tonic [Grey Goose]</span><span class="brutalist text-lg" style="color:var(--sunset-orange)">€8</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Vodka Lemon [Grey Goose]</span><span class="brutalist text-lg" style="color:var(--sunset-orange)">€8</span></div>
@@ -149,7 +149,8 @@
                 <div class="bg-white/5 px-4 py-3 border-b border-white/10">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-coral)">Analcolici</h3>
                 </div>
-                <div class="divide-y" style="border-color:rgba(255,248,231,0.05)">
+                <!-- DAY prezzi -->
+                <div id="analcolici-day" class="divide-y" style="border-color:rgba(255,248,231,0.05)">
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Coca-Cola</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Coca-Cola Zero</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Fanta</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
@@ -162,6 +163,21 @@
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Chinotto</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Crodino</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
                     <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Bitter</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
+                </div>
+                <!-- NIGHT prezzi (+0,50€ tranne Acqua) -->
+                <div id="analcolici-night" class="divide-y" style="display:none; border-color:rgba(255,248,231,0.05)">
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Coca-Cola</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Coca-Cola Zero</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Fanta</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Sprite</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Cedrata</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Estathé Pesca/Limone</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Redbull</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€4</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Acqua Liscia/Frizzante</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€1</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Succo di Frutta</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€2,50</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Chinotto</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Crodino</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
+                    <div class="flex justify-between items-center px-4 py-3"><span class="text-xs">Bitter</span><span class="brutalist text-lg" style="color:var(--sunset-coral)">€3</span></div>
                 </div>
             </div>
 
@@ -200,16 +216,22 @@
                 b.classList.remove('inactive-tab');
                 b.classList.add('active-tab');
                 var tab = b.dataset.tab;
+                var analcDay = document.getElementById('analcolici-day');
+                var analcNight = document.getElementById('analcolici-night');
                 if (tab === 'day') {
                     sub.textContent = 'Aperitivo · dalle 16:00 alle 18:00';
                     sub.style.color = 'var(--sunset-coral)';
                     noticeDay.style.display = 'block';
                     noticeNight.style.display = 'none';
+                    analcDay.style.display = 'block';
+                    analcNight.style.display = 'none';
                 } else {
                     sub.textContent = 'Serata · dalle 18:00 a mezzanotte';
                     sub.style.color = 'var(--sunset-gold)';
                     noticeDay.style.display = 'none';
                     noticeNight.style.display = 'block';
+                    analcDay.style.display = 'none';
+                    analcNight.style.display = 'block';
                 }
             });
         });
