@@ -3,28 +3,40 @@
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body {
+html {
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+}
+body {
     margin: 0; padding: 0;
     background-color: #050510;
     color: #F4F4F8;
     font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+    width: 100%;
+    max-width: 100vw;
 }
-body { min-height: 100vh; position: relative; }
 
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
 /* --------- Cosmic background --------- */
 .cosmic-bg {
-    position: fixed; inset: 0;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
     pointer-events: none;
     overflow: hidden;
     z-index: 0;
+    width: 100%;
+    height: 100%;
 }
 .stars {
-    position: absolute; inset: -50%;
+    position: absolute;
+    top: -50%; left: -50%; right: -50%; bottom: -50%;
+    width: 200%; height: 200%;
     background-image:
         radial-gradient(1px 1px at 20% 30%, #fff, transparent),
         radial-gradient(1px 1px at 75% 80%, #fff, transparent),
@@ -78,6 +90,8 @@ img { display: block; max-width: 100%; }
     padding: 20px 20px;
     display: flex; justify-content: space-between; align-items: center;
     max-width: 1400px; margin: 0 auto;
+    box-sizing: border-box;
+    width: 100%;
 }
 @media (min-width: 640px) {
     .hub-header { padding: 24px 40px; }
@@ -125,6 +139,8 @@ img { display: block; max-width: 100%; }
     position: relative; z-index: 5;
     max-width: 1400px; margin: 0 auto;
     padding: 0 20px;
+    box-sizing: border-box;
+    width: 100%;
 }
 @media (min-width: 640px) { .hub-main { padding: 0 40px; } }
 
@@ -186,6 +202,7 @@ img { display: block; max-width: 100%; }
     gap: 16px;
     padding-bottom: 80px;
     align-items: stretch;
+    width: 100%;
 }
 
 /* Mobile: tutte le card full width con aspect-ratio */
@@ -201,6 +218,8 @@ img { display: block; max-width: 100%; }
     transition: border-color 0.3s, transform 0.3s;
     display: block;
     min-height: 220px;
+    width: 100%;
+    box-sizing: border-box;
 }
 .card:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-4px); }
 
@@ -231,7 +250,7 @@ img { display: block; max-width: 100%; }
     .card-soon   { grid-column: span 4; min-height: 260px; }
 }
 
-.card-bg { position: absolute; inset: 0; }
+.card-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
 .card-bg img {
     width: 100%; height: 100%; object-fit: cover;
     transform: scale(1.05);
@@ -241,7 +260,7 @@ img { display: block; max-width: 100%; }
 .card:hover .card-bg img { transform: scale(1.1); }
 
 .card-overlay {
-    position: absolute; inset: 0;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(180deg, transparent 0%, rgba(139,90,43,0.35) 60%, rgba(5,5,16,0.9) 100%);
 }
 .card-overlay.light {
