@@ -48,7 +48,7 @@
                 <div class="sidebar-meta">
                     <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
                     <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
-                        <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 2 Giu
+                        <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 8 Luglio 2026
                     </div>
                 </div>
                 ${logoMarkup()}
@@ -86,7 +86,7 @@
                 <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:24px">
                     <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
                     <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
-                        <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 2 Giu 2026
+                        <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 8 Luglio 2026
                     </div>
                 </div>
                 ${logoMarkup('max-width:150px')}
