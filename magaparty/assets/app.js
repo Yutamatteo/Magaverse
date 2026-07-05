@@ -144,7 +144,7 @@
                 <div style="border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;margin-bottom:20px;text-align:center;background:rgba(255,255,255,0.03)">
                     <p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;margin:0 0 8px;color:var(--sunset-orange)"><i class="fa-solid fa-bolt"></i> Metodo Veloce</p>
                     <p style="font-size:11px;color:#9ca3af;margin:0 0 16px">Compila il form per salvare il posto. Riceverai conferma via messaggio.</p>
-                    <a data-testid="modal-google-form" href="https://docs.google.com/forms/d/1fRTPOhj_Pdncv2yql9a86qWowh2NdOVZSb-bNPIaTcA/viewform" target="_blank"
+                    <a data-testid="modal-google-form" href="https://forms.gle/wucbmT1SKuhXpRbH8" target="_blank"
                        style="display:block;width:100%;padding:12px;background:#fff;color:#000;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.2em;border-radius:14px;text-decoration:none">
                         <i class="fa-brands fa-google" style="margin-right:4px"></i> Compila Google Form
                     </a>
