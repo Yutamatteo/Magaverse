@@ -12,115 +12,116 @@
 <link rel="stylesheet" href="../assets/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  body { align-items: flex-start; }
-  .mc-wrap { max-width: 640px; padding-top: 12px; }
+  body { align-items: flex-start; }
+  .mc-wrap { max-width: 640px; padding-top: 12px; }
 </style>
 </head>
 <body>
 <div class="mc-wrap">
-  <div class="mc-eyebrow"><span class="dot"></span>Area riservata</div>
-  <h1 class="mc-title brutalist">MAGACARD · STAFF</h1>
+  <div class="mc-eyebrow"><span class="dot"></span>Area riservata</div>
+  <h1 class="mc-title brutalist">MAGACARD · STAFF</h1>
 
-  <div class="glass-card" id="login-box">
-    <label for="staff-email">Email staff</label>
-    <input type="email" id="staff-email" autocomplete="username">
-    <label for="staff-pass">Password</label>
-    <input type="password" id="staff-pass" autocomplete="current-password">
-    <button class="btn-primary" id="btn-login">Accedi</button>
-    <div class="mc-msg" id="login-msg"></div>
-  </div>
+  <div class="glass-card" id="login-box">
+    <label for="staff-email">Email staff</label>
+    <input type="email" id="staff-email" autocomplete="username">
+    <label for="staff-pass">Password</label>
+    <input type="password" id="staff-pass" autocomplete="current-password">
+    <button class="btn-primary" id="btn-login">Accedi</button>
+    <div class="mc-msg" id="login-msg"></div>
+  </div>
 
-  <div class="glass-card hidden" id="panel">
-    <div class="mc-topbar">
-      <span id="staff-name" style="color:var(--mc-muted); font-size:13px; position:relative; z-index:1;"></span>
-      <button class="btn-ghost" id="btn-logout" style="margin:0;">Esci</button>
-    </div>
-    <input class="mc-search" type="text" id="search" placeholder="Cerca per nome, cognome o telefono...">
-    <div id="lista" style="margin-top:16px; position:relative; z-index:1;"></div>
-  </div>
+  <div class="glass-card hidden" id="panel">
+    <div class="mc-topbar">
+      <span id="staff-name" style="color:var(--mc-muted); font-size:13px; position:relative; z-index:1;"></span>
+      <button class="btn-ghost" id="btn-logout" style="margin:0;">Esci</button>
+    </div>
+    <input class="mc-search" type="text" id="search" placeholder="Cerca per nome, cognome o telefono...">
+    <div id="lista" style="margin-top:16px; position:relative; z-index:1;"></div>
+  </div>
 </div>
 
 <script>
-  // Sostituisci con i valori del tuo progetto Supabase
-  const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const loginBox = document.getElementById('login-box');
-  const panel = document.getElementById('panel');
-  const loginMsg = document.getElementById('login-msg');
-  let richieste = [];
+  // Sostituisci con i valori del tuo progetto Supabase
+  const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  document.getElementById('btn-login').addEventListener('click', async () => {
-    const email = document.getElementById('staff-email').value.trim();
-    const password = document.getElementById('staff-pass').value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      loginMsg.textContent = 'Accesso non riuscito: ' + error.message;
-      return;
-    }
-    loginMsg.textContent = '';
-    document.getElementById('staff-name').textContent = data.user.email;
-    loginBox.classList.add('hidden');
-    panel.classList.remove('hidden');
-    caricaRichieste();
-  });
+  const loginBox = document.getElementById('login-box');
+  const panel = document.getElementById('panel');
+  const loginMsg = document.getElementById('login-msg');
+  let richieste = [];
 
-  document.getElementById('btn-logout').addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    panel.classList.add('hidden');
-    loginBox.classList.remove('hidden');
-  });
+  document.getElementById('btn-login').addEventListener('click', async () => {
+    const email = document.getElementById('staff-email').value.trim();
+    const password = document.getElementById('staff-pass').value;
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginMsg.textContent = 'Accesso non riuscito: ' + error.message;
+      return;
+    }
+    loginMsg.textContent = '';
+    document.getElementById('staff-name').textContent = data.user.email;
+    loginBox.classList.add('hidden');
+    panel.classList.remove('hidden');
+    caricaRichieste();
+  });
 
-  async function caricaRichieste() {
-    const { data, error } = await supabase
-      .from('magacard_richieste')
-      .select('id, nome, cognome, telefono, email, stato, card_code')
-      .order('created_at', { ascending: false });
-    if (error) {
-      document.getElementById('lista').innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
-      return;
-    }
-    richieste = data;
-    disegnaLista(richieste);
-  }
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    await supabase.auth.signOut();
+    panel.classList.add('hidden');
+    loginBox.classList.remove('hidden');
+  });
 
-  function disegnaLista(items) {
-    const lista = document.getElementById('lista');
-    const pendenti = items.filter(r => r.stato === 'richiesta');
-    if (pendenti.length === 0) {
-      lista.innerHTML = '<div class="mc-empty">Nessuna richiesta in attesa.</div>';
-      return;
-    }
-    lista.innerHTML = pendenti.map(r => `
-      <div class="mc-row" data-id="${r.id}">
-        <div class="info">
-          <b>${r.nome} ${r.cognome}</b>
-          <span>${r.telefono} · ${r.email}</span>
-        </div>
-        <button class="btn-confirm" onclick="confermaPagamento('${r.id}')">Conferma pagamento</button>
-      </div>
-    `).join('');
-  }
+  async function caricaRichieste() {
+    const { data, error } = await supabase
+      .from('magacard_richieste')
+      .select('id, nome, cognome, telefono, email, stato, card_code')
+      .order('created_at', { ascending: false });
+    if (error) {
+      document.getElementById('lista').innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    richieste = data;
+    disegnaLista(richieste);
+  }
 
-  document.getElementById('search').addEventListener('input', (e) => {
-    const q = e.target.value.toLowerCase();
-    const filtrate = richieste.filter(r =>
-      `${r.nome} ${r.cognome} ${r.telefono}`.toLowerCase().includes(q)
-    );
-    disegnaLista(filtrate);
-  });
+  function disegnaLista(items) {
+    const lista = document.getElementById('lista');
+    const pendenti = items.filter(r => r.stato === 'richiesta');
+    if (pendenti.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna richiesta in attesa.</div>';
+      return;
+    }
+    lista.innerHTML = pendenti.map(r => `
+      <div class="mc-row" data-id="${r.id}">
+        <div class="info">
+          <b>${r.nome} ${r.cognome}</b>
+          <span>${r.telefono} · ${r.email}</span>
+        </div>
+        <button class="btn-confirm" onclick="confermaPagamento('${r.id}')">Conferma pagamento</button>
+      </div>
+    `).join('');
+  }
 
-  window.confermaPagamento = async (id) => {
-    const { error } = await supabase
-      .from('magacard_richieste')
-      .update({ stato: 'attiva' })
-      .eq('id', id);
-    if (error) {
-      alert('Errore nella conferma: ' + error.message);
-      return;
-    }
-    caricaRichieste();
-  };
+  document.getElementById('search').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtrate = richieste.filter(r =>
+      `${r.nome} ${r.cognome} ${r.telefono}`.toLowerCase().includes(q)
+    );
+    disegnaLista(filtrate);
+  });
+
+  window.confermaPagamento = async (id) => {
+    const { error } = await supabase
+      .from('magacard_richieste')
+      .update({ stato: 'attiva' })
+      .eq('id', id);
+    if (error) {
+      alert('Errore nella conferma: ' + error.message);
+      return;
+    }
+    caricaRichieste();
+  };
 </script>
 </body>
 </html>
