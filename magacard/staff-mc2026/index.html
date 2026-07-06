@@ -44,7 +44,7 @@
   // Sostituisci con i valori del tuo progetto Supabase
   const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const loginBox = document.getElementById('login-box');
   const panel = document.getElementById('panel');
@@ -54,7 +54,7 @@
   document.getElementById('btn-login').addEventListener('click', async () => {
     const email = document.getElementById('staff-email').value.trim();
     const password = document.getElementById('staff-pass').value;
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) {
       loginMsg.textContent = 'Accesso non riuscito: ' + error.message;
       return;
@@ -67,13 +67,13 @@
   });
 
   document.getElementById('btn-logout').addEventListener('click', async () => {
-    await supabase.auth.signOut();
+    await sb.auth.signOut();
     panel.classList.add('hidden');
     loginBox.classList.remove('hidden');
   });
 
   async function caricaRichieste() {
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('magacard_richieste')
       .select('id, nome, cognome, telefono, email, stato, card_code')
       .order('created_at', { ascending: false });
@@ -112,7 +112,7 @@
   });
 
   window.confermaPagamento = async (id) => {
-    const { error } = await supabase
+    const { error } = await sb
       .from('magacard_richieste')
       .update({ stato: 'attiva' })
       .eq('id', id);
