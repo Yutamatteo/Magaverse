@@ -58,7 +58,7 @@
 
             <nav class="sidebar-nav">${items}</nav>
 
-            <a href="https://www.magaverse.it/" class="maga-back-link" style="margin:16px 0 4px;">&#8592; Magaverse</a>
+            <a href="/" class="maga-back-link" style="margin:16px 0 4px;">&#8592; Magaverse</a>
 
             <div class="sidebar-cta">
                 <button data-testid="sidebar-cta-lista" onclick="MAGA.openModal()" style="width:100%;color:var(--night-surface);font-weight:900;padding:12px;border-radius:var(--radius-pill);font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:0.2em;border:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:12px;background:var(--sunset-orange);box-shadow:0 0 20px rgba(154,216,47,0.35)">
