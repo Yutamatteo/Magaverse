@@ -93,7 +93,7 @@
                 ${logoMarkup('max-width:150px')}
                 <p class="brutalist sunset-title" style="font-size:22px;letter-spacing:0.2em;margin-top:8px">JUNGLE NIGHT</p>
                 <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.5;margin-top:4px">Una notte nella giungla</p>
-                <a href="/oceanbeach/" class="maga-back-link" style="justify-content:center;margin-top:12px;">&#8592; Nello Ocean Beach</a>
+                <a href="/" class="maga-back-link" style="justify-content:center;margin-top:12px;">&#8592; Nello Ocean Beach</a>
             </header>
         </div>`;
     }
