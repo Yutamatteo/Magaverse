@@ -21,7 +21,7 @@
   // Sostituisci con i valori del tuo progetto Supabase
   const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const app = document.getElementById('app');
   const params = new URLSearchParams(window.location.search);
@@ -33,7 +33,7 @@
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await sb
       .from('magacard_pubblica')
       .select('nome, cognome, card_code, punti_totali, timbri, stato')
       .eq('card_code', code)
