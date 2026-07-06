@@ -44,8 +44,7 @@
   // Sostituisci con i valori del tuo progetto Supabase
   const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const loginBox = document.getElementById('login-box');
   const panel = document.getElementById('panel');
   const loginMsg = document.getElementById('login-msg');
