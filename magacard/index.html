@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MagaCard | Magaverse</title>
+<meta name="description" content="Richiedi la tua MagaCard: la tessera per le serate Magaparty. Punti, timbri e vantaggi ad ogni evento.">
+<link rel="icon" type="image/jpeg" href="../assets/img/logo_maga.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div class="mc-wrap">
+  <div class="mc-eyebrow"><span class="dot"></span>Magaparty · Membership</div>
+  <h1 class="mc-title brutalist">MAGACARD</h1>
+  <p class="mc-sub" id="subtitle">La tua tessera per le serate Magaparty. Un modulo, un pagamento in cassa, e sei dentro.</p>
+  <div class="glass-card" id="content">Caricamento...</div>
+</div>
+
+<script type="module">
+// ===================== CONFIGURAZIONE =====================
+// Sostituisci questi due valori con quelli del tuo progetto Supabase
+// (Project Settings > API)
+const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+// ============================================================
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const content = document.getElementById("content");
+
+function renderSent(nome) {
+  content.innerHTML = `
+    <div style="text-align:center; position:relative; z-index:1;">
+      <span class="badge pending">Richiesta inviata</span>
+      <h2 style="margin:0 0 10px; font-size:19px;">Grazie, ${nome}!</h2>
+      <p style="color:var(--mc-muted); font-size:13.5px; line-height:1.6; margin:0;">
+        La tua richiesta è registrata. Vai in cassa a una serata Magaparty, di' nome e cognome
+        e paga la quota: lo staff attiverà la card sul momento e riceverai il link della tua
+        MagaCard digitale con QR.
+      </p>
+    </div>
+  `;
+}
+
+function renderForm() {
+  content.innerHTML = `
+    <form id="signupForm">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" required autocomplete="given-name">
+      <label for="cognome">Cognome</label>
+      <input type="text" id="cognome" required autocomplete="family-name">
+      <label for="telefono">Telefono</label>
+      <input type="tel" id="telefono" required autocomplete="tel">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="email">
+      <div class="mc-check">
+        <input type="checkbox" id="consenso" required>
+        <label for="consenso">Acconsento al trattamento dei miei dati (nome, telefono, email) per la gestione della tessera MagaCard, secondo la normativa privacy.</label>
+      </div>
+      <button type="submit" class="btn-primary" id="submitBtn">Richiedi la MagaCard</button>
+      <div class="error" id="formError"></div>
+    </form>
+  `;
+
+  document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("submitBtn");
+    const errBox = document.getElementById("formError");
+    const consenso = document.getElementById("consenso").checked;
+
+    if (!consenso) {
+      errBox.textContent = "Devi accettare il trattamento dei dati per continuare.";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Invio in corso...";
+    errBox.textContent = "";
+
+    const nome = document.getElementById("nome").value.trim();
+    const payload = {
+      nome,
+      cognome: document.getElementById("cognome").value.trim(),
+      telefono: document.getElementById("telefono").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      consenso_privacy: true,
+    };
+
+    const { error } = await supabase.from("magacard_richieste").insert(payload);
+
+    if (error) {
+      errBox.textContent = "Errore durante l'invio. Riprova tra poco.";
+      btn.disabled = false;
+      btn.textContent = "Richiedi la MagaCard";
+      return;
+    }
+
+    renderSent(nome);
+  });
+}
+
+renderForm();
+</script>
+</body>
+</html>
