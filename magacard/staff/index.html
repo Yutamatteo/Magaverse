@@ -94,7 +94,10 @@
         <span id="staff-name" style="color:var(--mc-muted); font-size:13px;"></span>
         <span class="role-badge" id="role-badge" style="margin-left:8px;"></span>
       </span>
-      <button class="btn-ghost" id="btn-logout" style="margin:0;">Esci</button>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-ghost hidden" id="btn-cambia-postazione" style="margin:0;">Cambia postazione</button>
+        <button class="btn-ghost" id="btn-logout" style="margin:0;">Esci</button>
+      </div>
     </div>
 
     <!-- Tabs, visibili solo per admin/superadmin -->
@@ -217,9 +220,23 @@
       modePicker.classList.add('hidden');
       panel.classList.remove('hidden');
       tabs.classList.remove('hidden');
+      document.getElementById('btn-cambia-postazione').classList.remove('hidden');
       if (ruolo === 'superadmin') document.getElementById('sezione-livelli').classList.remove('hidden');
       avviaScanner();
     });
+  });
+
+  document.getElementById('btn-cambia-postazione').addEventListener('click', async () => {
+    await fermaScanner();
+    panel.classList.add('hidden');
+    tabs.classList.add('hidden');
+    vistaGestione.classList.add('hidden');
+    vistaScanner.classList.remove('hidden');
+    document.getElementById('tab-scanner').classList.add('active');
+    document.getElementById('tab-gestione').classList.remove('active');
+    resultArea.classList.add('hidden');
+    scanArea.classList.remove('hidden');
+    modePicker.classList.remove('hidden');
   });
 
   document.getElementById('btn-logout').addEventListener('click', async () => {
