@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>MagaCard — accesso staff</title>
+<link rel="icon" type="image/jpeg" href="../../assets/img/logo_maga.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  body { align-items: flex-start; }
+  .mc-wrap { max-width: 480px; padding-top: 12px; }
+  #qr-reader { border-radius: 16px; overflow: hidden; border: 1px solid var(--mc-border); margin-top: 4px; }
+
+  .role-badge {
+    display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px;
+    font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+  }
+  .role-badge.ingresso { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
+  .role-badge.bar { background: var(--mc-gold-soft); color: var(--mc-gold); }
+  .role-badge.admin, .role-badge.superadmin { background: var(--mc-violet-soft); color: var(--mc-violet); }
+
+  .result-card {
+    background: var(--mc-row); border: 1px solid var(--mc-border-soft); border-radius:16px;
+    padding:20px; margin-top:16px; text-align:center;
+  }
+  .result-card .nome { font-size:17px; font-weight:700; margin-bottom:6px; }
+  .result-card .esito { font-size:14px; color: var(--mc-muted); }
+  .result-card .esito.ok { color: var(--mc-cyan); }
+  .result-card .esito.errore { color: #FF7A93; }
+
+  .points-picker { display:flex; gap:8px; margin: 16px 0 4px; flex-wrap:wrap; }
+  .points-picker button { width:auto; flex:1; min-width:64px; padding:12px 6px; margin:0;
+    background: rgba(255,255,255,0.04); border:1px solid var(--mc-border); color: var(--mc-text); }
+  .points-picker button.selected { border-color: var(--mc-gold); color: var(--mc-gold); }
+
+  /* Tabs (solo admin/superadmin) */
+  .tabs { display:flex; gap:8px; margin-bottom: 18px; position:relative; z-index:1; }
+  .tab-btn {
+    width:auto; margin:0; flex:1; padding:11px 10px;
+    background: rgba(255,255,255,0.04); border:1px solid var(--mc-border); color: var(--mc-muted);
+    font-size: 12px;
+  }
+  .tab-btn.active { border-color: var(--mc-magenta); color: var(--mc-text); background: var(--mc-magenta-soft); }
+
+  .sezione { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--mc-border-soft); position: relative; z-index: 1; }
+  .sezione h2 { font-size: 14px; margin: 0 0 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mc-muted); }
+  .inline-form { display: flex; gap: 8px; align-items: flex-end; }
+  .inline-form > div { flex: 1; }
+  .inline-form label { margin-top: 0; }
+  .inline-form button { width: auto; margin-top: 0; padding: 13px 18px; }
+  .livello-row { display:flex; gap:10px; align-items:center; margin-bottom:10px; }
+  .livello-row span { width: 70px; color: var(--mc-muted); font-size: 13px; }
+  .livello-row input { width: 90px; }
+  .livello-row button { width: auto; margin: 0; padding: 10px 14px; }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="mc-wrap">
+  <div class="mc-eyebrow"><span class="dot"></span>Area riservata</div>
+  <h1 class="mc-title brutalist">MAGACARD · STAFF</h1>
+
+  <!-- LOGIN -->
+  <div class="glass-card" id="login-box">
+    <label for="staff-email">Email staff</label>
+    <input type="email" id="staff-email" autocomplete="username">
+    <label for="staff-pass">Password</label>
+    <input type="password" id="staff-pass" autocomplete="current-password">
+    <button class="btn-primary" id="btn-login">Accedi</button>
+    <div class="mc-msg" id="login-msg"></div>
+  </div>
+
+  <!-- SCELTA POSTAZIONE (solo admin/superadmin, dentro la scheda Scanner) -->
+  <div class="glass-card hidden" id="mode-picker">
+    <h1 class="mc-title">Scegli postazione</h1>
+    <p class="mc-sub">Quale postazione stai coprendo ora?</p>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-primary" data-mode="ingresso" style="margin-top:0;">Ingresso</button>
+      <button class="btn-primary" data-mode="bar" style="margin-top:0;">Bar</button>
+    </div>
+  </div>
+
+  <!-- PANNELLO PRINCIPALE -->
+  <div class="glass-card hidden" id="panel">
+    <div class="mc-topbar">
+      <span>
+        <span id="staff-name" style="color:var(--mc-muted); font-size:13px;"></span>
+        <span class="role-badge" id="role-badge" style="margin-left:8px;"></span>
+      </span>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-ghost hidden" id="btn-cambia-postazione" style="margin:0;">Cambia postazione</button>
+        <button class="btn-ghost" id="btn-logout" style="margin:0;">Esci</button>
+      </div>
+    </div>
+
+    <!-- Tabs, visibili solo per admin/superadmin -->
+    <div class="tabs hidden" id="tabs">
+      <button class="tab-btn active" id="tab-scanner">Scanner</button>
+      <button class="tab-btn" id="tab-gestione">Gestione</button>
+    </div>
+
+    <!-- VISTA SCANNER -->
+    <div id="vista-scanner">
+      <div id="scan-area">
+        <p class="mc-sub" style="margin-bottom:8px;">Inquadra il QR della MagaCard.</p>
+        <div id="qr-reader"></div>
+      </div>
+      <div id="result-area" class="hidden"></div>
+    </div>
+
+    <!-- VISTA GESTIONE (solo admin/superadmin) -->
+    <div id="vista-gestione" class="hidden">
+      <input class="mc-search" type="text" id="search" placeholder="Cerca per nome, cognome o telefono...">
+      <div id="lista" style="margin-top:16px;"></div>
+
+      <div class="sezione">
+        <h2>Assegna timbro manuale</h2>
+        <div class="inline-form">
+          <div><label for="codice-timbro">Codice card</label><input type="text" id="codice-timbro" placeholder="Es. A1B2C3D4E5"></div>
+          <button class="btn-confirm" id="btn-timbro">+1 timbro</button>
+        </div>
+        <div class="mc-msg" id="timbro-msg"></div>
+      </div>
+
+      <div class="sezione">
+        <h2>Aggiungi punti manuale</h2>
+        <div class="inline-form">
+          <div><label for="codice-punti">Codice card</label><input type="text" id="codice-punti" placeholder="Es. A1B2C3D4E5"></div>
+          <div style="flex:0 0 90px;"><label for="valore-punti">Punti</label><input type="text" id="valore-punti" placeholder="10"></div>
+          <button class="btn-confirm" id="btn-punti">Aggiungi</button>
+        </div>
+        <div class="mc-msg" id="punti-msg"></div>
+      </div>
+
+      <div class="sezione">
+        <h2>Riscatta premio</h2>
+        <div class="inline-form">
+          <div><label for="codice-premio">Codice premio</label><input type="text" id="codice-premio" placeholder="Codice premio"></div>
+          <button class="btn-confirm" id="btn-premio">Segna riscattato</button>
+        </div>
+        <div class="mc-msg" id="premio-msg"></div>
+      </div>
+
+      <div class="sezione hidden" id="sezione-livelli">
+        <h2>Gestione livelli (solo superadmin)</h2>
+        <div id="lista-livelli"></div>
+        <div class="mc-msg" id="livelli-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let ruolo = null;          // ruolo reale dell'account: bar | ingresso | admin | superadmin
+  let modalitaScanner = null; // per admin/superadmin: 'bar' o 'ingresso' scelta al volo
+  let richieste = [];
+  let html5QrCode = null;
+  let scansioneAttiva = false;
+
+  const loginBox = document.getElementById('login-box');
+  const modePicker = document.getElementById('mode-picker');
+  const panel = document.getElementById('panel');
+  const loginMsg = document.getElementById('login-msg');
+  const roleBadge = document.getElementById('role-badge');
+  const tabs = document.getElementById('tabs');
+  const scanArea = document.getElementById('scan-area');
+  const resultArea = document.getElementById('result-area');
+  const vistaScanner = document.getElementById('vista-scanner');
+  const vistaGestione = document.getElementById('vista-gestione');
+
+  // ============================== LOGIN ==============================
+  document.getElementById('btn-login').addEventListener('click', async () => {
+    const email = document.getElementById('staff-email').value.trim();
+    const password = document.getElementById('staff-pass').value;
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      loginMsg.textContent = 'Accesso non riuscito: ' + error.message;
+      return;
+    }
+
+    ruolo = data.user.user_metadata?.ruolo;
+    const ruoliValidi = ['bar', 'ingresso', 'admin', 'superadmin'];
+    if (!ruoliValidi.includes(ruolo)) {
+      loginMsg.textContent = "Questo account non ha un ruolo assegnato. Contatta l'amministratore.";
+      await sb.auth.signOut();
+      return;
+    }
+
+    loginMsg.textContent = '';
+    document.getElementById('staff-name').textContent = data.user.email;
+    roleBadge.textContent = ruolo;
+    roleBadge.className = 'role-badge ' + ruolo;
+    loginBox.classList.add('hidden');
+
+    if (ruolo === 'bar' || ruolo === 'ingresso') {
+      // Account dedicato a una sola postazione: dritto allo scanner, niente scelta, niente tab.
+      modalitaScanner = ruolo;
+      panel.classList.remove('hidden');
+      avviaScanner();
+    } else {
+      // admin / superadmin: mostra la scelta postazione prima dello scanner
+      modePicker.classList.remove('hidden');
+    }
+  });
+
+  document.querySelectorAll('#mode-picker button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modalitaScanner = btn.dataset.mode;
+      modePicker.classList.add('hidden');
+      panel.classList.remove('hidden');
+      tabs.classList.remove('hidden');
+      document.getElementById('btn-cambia-postazione').classList.remove('hidden');
+      if (ruolo === 'superadmin') document.getElementById('sezione-livelli').classList.remove('hidden');
+      avviaScanner();
+    });
+  });
+
+  document.getElementById('btn-cambia-postazione').addEventListener('click', async () => {
+    await fermaScanner();
+    panel.classList.add('hidden');
+    tabs.classList.add('hidden');
+    vistaGestione.classList.add('hidden');
+    vistaScanner.classList.remove('hidden');
+    document.getElementById('tab-scanner').classList.add('active');
+    document.getElementById('tab-gestione').classList.remove('active');
+    resultArea.classList.add('hidden');
+    scanArea.classList.remove('hidden');
+    modePicker.classList.remove('hidden');
+  });
+
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    await fermaScanner();
+    await sb.auth.signOut();
+    panel.classList.add('hidden');
+    modePicker.classList.add('hidden');
+    loginBox.classList.remove('hidden');
+    document.getElementById('staff-email').value = '';
+    document.getElementById('staff-pass').value = '';
+  });
+
+  // ============================== TABS (solo admin/superadmin) ==============================
+  document.getElementById('tab-scanner').addEventListener('click', () => {
+    document.getElementById('tab-scanner').classList.add('active');
+    document.getElementById('tab-gestione').classList.remove('active');
+    vistaScanner.classList.remove('hidden');
+    vistaGestione.classList.add('hidden');
+    if (!scansioneAttiva) avviaScanner();
+  });
+
+  document.getElementById('tab-gestione').addEventListener('click', async () => {
+    document.getElementById('tab-gestione').classList.add('active');
+    document.getElementById('tab-scanner').classList.remove('active');
+    vistaScanner.classList.add('hidden');
+    vistaGestione.classList.remove('hidden');
+    await fermaScanner();
+    caricaRichieste();
+  });
+
+  // ============================== SCANNER ==============================
+  function avviaScanner() {
+    scanArea.classList.remove('hidden');
+    resultArea.classList.add('hidden');
+    html5QrCode = new Html5Qrcode('qr-reader');
+    scansioneAttiva = true;
+    html5QrCode.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: 240 },
+      onScanSuccess,
+      () => {} // errori di lettura frame-by-frame, si ignorano
+    ).catch(err => {
+      resultArea.classList.remove('hidden');
+      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Impossibile accedere alla fotocamera: ${err}</div></div>`;
+    });
+  }
+
+  async function fermaScanner() {
+    if (html5QrCode && scansioneAttiva) {
+      try { await html5QrCode.stop(); } catch (e) {}
+      scansioneAttiva = false;
+    }
+  }
+
+  async function onScanSuccess(decodedText) {
+    if (!scansioneAttiva) return;
+    scansioneAttiva = false;
+    await html5QrCode.pause(true);
+    scanArea.classList.add('hidden');
+
+    if (modalitaScanner === 'ingresso') {
+      await gestisciIngresso(decodedText);
+    } else {
+      await gestisciBar(decodedText);
+    }
+  }
+
+  async function gestisciIngresso(cardCode) {
+    resultArea.classList.remove('hidden');
+    resultArea.innerHTML = `<div class="result-card"><div class="esito">Verifica in corso...</div></div>`;
+
+    const { data, error } = await sb.rpc('aggiungi_timbro', { p_card_code: cardCode });
+    const esito = data?.[0]?.esito;
+
+    let html = '';
+    if (error || !esito) {
+      html = `<div class="esito errore">Errore di connessione, riprova.</div>`;
+    } else if (esito === 'card_non_trovata') {
+      html = `<div class="esito errore">Card non trovata o non ancora attiva.</div>`;
+    } else if (esito === 'gia_timbrato_oggi') {
+      html = `<div class="esito errore">Timbro già assegnato oggi per questa card.</div>`;
+    } else {
+      const { timbri, livello } = data[0];
+      html = `<div class="esito ok">Timbro assegnato ✓</div>
+              <p style="margin-top:8px; font-size:14px;">Timbri: <b>${timbri}</b> · Livello: <b>${livello}</b></p>`;
+      if (timbri === 0) {
+        html += `<p style="margin-top:10px; color: var(--mc-gold); font-size:13.5px;">🎉 Livello raggiunto! Il premio è già visibile sulla card del cliente.</p>`;
+      }
+    }
+
+    resultArea.innerHTML = `<div class="result-card">${html}</div>
+      <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+    document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+  }
+
+  async function gestisciBar(cardCode) {
+    resultArea.classList.remove('hidden');
+    resultArea.innerHTML = `<div class="result-card"><div class="esito">Ricerca card...</div></div>`;
+
+    const { data, error } = await sb.rpc('cerca_card', { p_card_code: cardCode });
+    const risultato = data?.[0];
+
+    if (error || !risultato || risultato.stato !== 'attiva') {
+      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Card non trovata o non ancora attiva.</div></div>
+        <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+      document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+      return;
+    }
+
+    resultArea.innerHTML = `
+      <div class="result-card">
+        <div class="nome">${risultato.nome} ${risultato.cognome}</div>
+        <p class="esito">Punti attuali: <b>${risultato.punti_totali}</b></p>
+        <div class="points-picker" id="points-picker">
+          <button data-val="10">+10</button>
+          <button data-val="20">+20</button>
+          <button data-val="50">+50</button>
+        </div>
+        <label for="punti-custom">Oppure valore personalizzato</label>
+        <input type="text" id="punti-custom" placeholder="Es. 15">
+        <button class="btn-primary" id="btn-conferma-punti">Conferma</button>
+      </div>
+    `;
+
+    let selezionati = null;
+    document.querySelectorAll('#points-picker button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#points-picker button').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selezionati = parseInt(btn.dataset.val, 10);
+        document.getElementById('punti-custom').value = '';
+      });
+    });
+
+    document.getElementById('btn-conferma-punti').addEventListener('click', async () => {
+      const custom = document.getElementById('punti-custom').value.trim();
+      const punti = custom ? parseInt(custom, 10) : selezionati;
+      if (!punti || punti <= 0) {
+        alert('Scegli o inserisci un numero di punti valido.');
+        return;
+      }
+      await confermaPunti(cardCode, punti);
+    });
+  }
+
+  async function confermaPunti(cardCode, punti) {
+    resultArea.innerHTML = `<div class="result-card"><div class="esito">Assegnazione in corso...</div></div>`;
+    const { data, error } = await sb.rpc('aggiungi_punti', { p_card_code: cardCode, p_punti: punti });
+    const esito = data?.[0]?.esito;
+
+    let html = '';
+    if (error || !esito) {
+      html = `<div class="esito errore">Errore di connessione, riprova.</div>`;
+    } else if (esito === 'card_non_trovata') {
+      html = `<div class="esito errore">Card non trovata o non ancora attiva.</div>`;
+    } else if (esito === 'valore_non_valido') {
+      html = `<div class="esito errore">Valore punti non valido.</div>`;
+    } else {
+      html = `<div class="esito ok">+${punti} punti assegnati ✓</div>
+              <p style="margin-top:8px; font-size:14px;">Totale punti: <b>${data[0].punti_totali}</b></p>`;
+    }
+
+    resultArea.innerHTML = `<div class="result-card">${html}</div>
+      <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+    document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+  }
+
+  async function prossimaScan() {
+    resultArea.classList.add('hidden');
+    scanArea.classList.remove('hidden');
+    scansioneAttiva = true;
+    await html5QrCode.resume();
+  }
+
+  // ============================== GESTIONE (admin/superadmin) ==============================
+  async function caricaRichieste() {
+    const { data, error } = await sb
+      .from('magacard_richieste')
+      .select('id, nome, cognome, telefono, email, stato, card_code')
+      .order('created_at', { ascending: false });
+    if (error) {
+      document.getElementById('lista').innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    richieste = data;
+    disegnaLista(richieste);
+    if (ruolo === 'superadmin') caricaLivelli();
+  }
+
+  function disegnaLista(items) {
+    const lista = document.getElementById('lista');
+    const pendenti = items.filter(r => r.stato === 'richiesta');
+    if (pendenti.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna richiesta in attesa.</div>';
+      return;
+    }
+    lista.innerHTML = pendenti.map(r => `
+      <div class="mc-row" data-id="${r.id}">
+        <div class="info">
+          <b>${r.nome} ${r.cognome}</b>
+          <span>${r.telefono} · ${r.email}</span>
+        </div>
+        <button class="btn-confirm" onclick="confermaPagamento('${r.id}')">Conferma pagamento</button>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('search').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtrate = richieste.filter(r =>
+      `${r.nome} ${r.cognome} ${r.telefono}`.toLowerCase().includes(q)
+    );
+    disegnaLista(filtrate);
+  });
+
+  window.confermaPagamento = async (id) => {
+    const { error } = await sb
+      .from('magacard_richieste')
+      .update({ stato: 'attiva' })
+      .eq('id', id);
+    if (error) {
+      alert('Errore nella conferma: ' + error.message);
+      return;
+    }
+    caricaRichieste();
+  };
+
+  document.getElementById('btn-timbro').addEventListener('click', async () => {
+    const codice = document.getElementById('codice-timbro').value.trim().toUpperCase();
+    const msg = document.getElementById('timbro-msg');
+    if (!codice) { msg.textContent = 'Inserisci un codice card.'; return; }
+    const { data, error } = await sb.rpc('aggiungi_timbro', { p_card_code: codice });
+    const esito = data?.[0]?.esito;
+    if (error || !esito) { msg.textContent = 'Errore di connessione.'; return; }
+    if (esito === 'card_non_trovata') msg.textContent = 'Card non trovata o non attiva.';
+    else if (esito === 'gia_timbrato_oggi') msg.textContent = 'Timbro già assegnato oggi.';
+    else if (esito === 'non_autorizzato') msg.textContent = 'Non autorizzato.';
+    else msg.textContent = `Timbro assegnato ✓ (timbri: ${data[0].timbri}, livello: ${data[0].livello})`;
+  });
+
+  document.getElementById('btn-punti').addEventListener('click', async () => {
+    const codice = document.getElementById('codice-punti').value.trim().toUpperCase();
+    const punti = parseInt(document.getElementById('valore-punti').value.trim(), 10);
+    const msg = document.getElementById('punti-msg');
+    if (!codice || !punti) { msg.textContent = 'Inserisci codice card e punti.'; return; }
+    const { data, error } = await sb.rpc('aggiungi_punti', { p_card_code: codice, p_punti: punti });
+    const esito = data?.[0]?.esito;
+    if (error || !esito) { msg.textContent = 'Errore di connessione.'; return; }
+    if (esito === 'card_non_trovata') msg.textContent = 'Card non trovata o non attiva.';
+    else if (esito === 'valore_non_valido') msg.textContent = 'Valore punti non valido.';
+    else if (esito === 'non_autorizzato') msg.textContent = 'Non autorizzato.';
+    else msg.textContent = `Punti aggiunti ✓ (totale: ${data[0].punti_totali})`;
+  });
+
+  document.getElementById('btn-premio').addEventListener('click', async () => {
+    const codice = document.getElementById('codice-premio').value.trim().toUpperCase();
+    const msg = document.getElementById('premio-msg');
+    if (!codice) { msg.textContent = 'Inserisci un codice premio.'; return; }
+    const { data, error } = await sb
+      .from('magacard_premi')
+      .update({ stato: 'riscattato', riscattato_il: new Date().toISOString() })
+      .eq('codice_premio', codice)
+      .eq('stato', 'da_riscattare')
+      .select();
+    if (error) { msg.textContent = 'Errore: ' + error.message; return; }
+    if (!data || data.length === 0) msg.textContent = 'Codice non trovato o già riscattato.';
+    else msg.textContent = 'Premio riscattato ✓';
+  });
+
+  async function caricaLivelli() {
+    const { data, error } = await sb.from('magacard_livelli').select('*').order('livello');
+    const lista = document.getElementById('lista-livelli');
+    if (error) { lista.innerHTML = `<div class="mc-empty">Errore: ${error.message}</div>`; return; }
+    lista.innerHTML = data.map(l => `
+      <div class="livello-row">
+        <span>Livello ${l.livello}</span>
+        <input type="text" value="${l.timbri_richiesti}" id="livello-${l.livello}">
+        <button class="btn-ghost" onclick="salvaLivello(${l.livello})">Salva</button>
+      </div>
+    `).join('');
+  }
+
+  window.salvaLivello = async (livello) => {
+    const valore = parseInt(document.getElementById(`livello-${livello}`).value.trim(), 10);
+    const msg = document.getElementById('livelli-msg');
+    if (!valore || valore <= 0) { msg.textContent = 'Valore non valido.'; return; }
+    const { error } = await sb.from('magacard_livelli').update({ timbri_richiesti: valore }).eq('livello', livello);
+    if (error) { msg.textContent = 'Errore: ' + error.message; return; }
+    msg.textContent = `Livello ${livello} aggiornato ✓`;
+  };
+</script>
+</body>
+</html>
