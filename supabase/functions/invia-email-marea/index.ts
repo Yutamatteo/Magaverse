@@ -15,7 +15,7 @@
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET")!;
-const FROM_EMAIL = "Magaparty <marea@magaverse.it>"; // dominio verificato su Resend
+const FROM_EMAIL = "Magaparty <noreply@magaverse.it>"; // dominio verificato su Resend
 
 const OPZIONE_LABEL: Record<string, string> = {
   promo: "🔥 Promo Magaparty — 10€ (Lettino + Drink)",
