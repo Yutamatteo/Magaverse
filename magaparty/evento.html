@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JUNGLE NIGHT · Dettagli evento | Magaparty</title>
+    <meta name="description" content="La spiaggia si trasforma in giungla. 8 Luglio 2026 – Nello Ocean Beach, Magazzeno Salerno. 2 DJ. Dalle 19:00 alle 2:00.">
+    <meta property="og:title" content="JUNGLE NIGHT – 8 Luglio 2026 | Magaparty">
+    <meta property="og:description" content="La spiaggia si trasforma in giungla. Nello Ocean Beach, Magazzeno Salerno.">
+    <meta property="og:image" content="logo_maga.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="logo_maga.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        
+        /* Single-page sections styling */
+        .section-anchor { padding-top: 24px; scroll-margin-top: 80px; }
+        .section-divider {
+            margin: 56px 0 32px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(198,232,107,0.25), transparent);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--sunset-gold);
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body data-page="info">
+<main id="page-main">
+
+<!-- ═══════════════════════ INFO ═══════════════════════ -->
+<section id="info" class="section-anchor animate-fade-in" data-testid="page-info">
+    <div class="desktop-2col" style="row-gap:12px">
+        <!-- Card dinamica: Countdown ingresso / Countdown fascia / Festa in corso / Dopo evento -->
+        <div id="dynamic-card" class="glass-card p-6 text-center desktop-full neon-border-orange">
+            <!-- Stato 1: Countdown (riutilizzato per le due fasi pre-evento) -->
+            <div id="state-countdown">
+                <h3 id="countdown-label" class="brutalist text-xl mb-4" style="color:var(--sunset-orange)">ALLA GIUNGLA MANCANO</h3>
+                <div class="grid grid-cols-4 gap-2 border-t pt-4" style="border-color:rgba(240,255,232,0.05)">
+                    <div><span class="block text-2xl font-bold brutalist" id="cd" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="ch" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cm" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cs" style="color:var(--sunset-orange)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                </div>
+            </div>
+            <!-- Stato 2: Festa in corso (dalle 21:00 a fine serata) -->
+            <div id="state-live" style="display:none">
+                <div class="flex items-center justify-center gap-2 mb-3">
+                    <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--sunset-orange)"></span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold" style="color:var(--sunset-orange)">Live ora</span>
+                </div>
+                <p class="text-3xl mb-2">&#127796;</p>
+                <h3 class="brutalist text-2xl mb-1" style="color:var(--sunset-gold)">FESTA IN CORSO</h3>
+                <p class="text-[11px] text-gray-400 tracking-wider">La giungla è accesa. Vieni a ballare.</p>
+            </div>
+            <!-- Stato 3: Dopo evento -->
+            <div id="state-after" style="display:none">
+                <p class="text-3xl mb-3">&#127749;</p>
+                <h3 class="brutalist text-xl mb-2" style="color:var(--sunset-gold)">Che serata.</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Grazie a tutti per aver fatto parte di questa notte.<br>Ci vediamo alla prossima.</p>
+                <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                   style="background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.3); color:var(--sunset-coral)">
+                    <i class="fa-brands fa-instagram"></i> Segui per le foto
+                </a>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="glass-card overflow-hidden">
+            <div class="p-5">
+                <h3 class="brutalist text-xl mb-1 sunset-title">NELLO OCEAN BEACH</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Magazzeno, Salerno</p>
+                <a href="https://maps.google.com/?q=Nello+Ocean+Beach+Salerno" target="_blank" rel="noopener" data-testid="map-link"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                   style="background:rgba(224,25,53,0.1); border:1px solid rgba(198,232,107,0.1); color:var(--sunset-coral)">
+                    <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                </a>
+            </div>
+            <div class="p-4 border-t" style="background:rgba(0,0,0,0.4); border-color:rgba(240,255,232,0.05)">
+                <p class="text-[9px] uppercase tracking-[0.15em] mb-3 flex items-center gap-2" style="color:var(--sunset-teal)">
+                    <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:var(--sunset-teal)"></span> Infoline
+                </p>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="tel:+393454237269" data-testid="phone-1" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
+                    <a href="tel:+393914700024" data-testid="phone-2" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vibe + Navetta (colonna destra, raggruppate) -->
+        <div class="flex flex-col gap-3">
+            <!-- Vibe -->
+            <div class="glass-card p-5" style="border:1px solid rgba(198,232,107,0.2); background:rgba(198,232,107,0.04)">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-gold)">Energia Sunset</span>
+                    <i class="fa-solid fa-sun" style="color:var(--sunset-gold)"></i>
+                </div>
+                <div class="h-2 w-full rounded-full overflow-hidden mb-3" style="background:rgba(255,255,255,0.1)">
+                    <div class="h-full w-[88%] animate-pulse rounded-full"
+                         style="background:linear-gradient(90deg, var(--sunset-teal), var(--sunset-orange), var(--sunset-gold))"></div>
+                </div>
+                <p class="text-[11px] italic opacity-80">Previsione: <strong class="not-italic" style="color:var(--sunset-cream)">Foglie, neon e bassi che ruggiscono fino a notte fonda.</strong></p>
+            </div>
+
+            <!-- Navetta -->
+            <div class="glass-card p-5" style="border:1px solid rgba(224,25,53,0.2); background:rgba(224,25,53,0.04)">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-teal)"><i class="fa-solid fa-bus mr-1"></i> Navetta</span>
+                    <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(224,25,53,0.15); color:var(--sunset-teal)">Dedicata</span>
+                </div>
+                <p class="text-[11px] text-gray-300 leading-relaxed mb-3">Servizio navetta dedicato per l'evento. Per info, orari e prenotazione posti chiedi in DM.</p>
+                <button data-testid="navetta-wa" onclick="MAGA.wa('Navetta – Info e prenotazione posti')" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all"
+                        style="background:rgba(224,25,53,0.15); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Chiedi in DM
+                </button>
+            </div>
+        </div>
+
+        <!-- Parcheggio -->
+        <div class="glass-card p-5" style="border:1px solid rgba(154,216,47,0.2); background:rgba(154,216,47,0.04)">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-orange)"><i class="fa-solid fa-car mr-1"></i> Parcheggio</span>
+                <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(154,216,47,0.15); color:var(--sunset-orange)">Gratuito</span>
+            </div>
+            <p class="text-[11px] text-gray-300 leading-relaxed">Parcheggio <strong class="text-white">custodito gratuito</strong> disponibile per l&apos;evento. Ingresso lato <strong class="text-white">Salerno</strong> sulla SS18.</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ LINEUP ═══════════════════════ -->
+<section id="lineup" class="section-anchor animate-fade-in" data-testid="page-lineup">
+    <div class="text-center mb-8">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Line Up</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">2 DJ · DJ set dalle 21:00</p>
+    </div>
+    <div class="desktop-2col" style="gap:24px; align-items:start">
+        <!-- DJ 1 -->
+        <div class="glass-card p-6 relative overflow-hidden group neon-border-amber">
+            <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist group-hover:scale-110 transition-transform" style="color:var(--sunset-amber)">1</div>
+            <div class="relative z-10">
+                <span class="inline-block px-3 py-1 rounded text-[9px] font-bold uppercase tracking-widest mb-3" style="background:rgba(123,198,45,0.12); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">In console</span>
+                <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Nella giungla</p>
+                <h4 class="brutalist text-3xl mb-3 text-white">H8DAPREP</h4>
+                <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Urban Amapiano</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Afrobeat</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Trap</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Dembow</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Baile Funk</span>
+                </div>
+                <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 pl-3" style="border-color:rgba(123,198,45,0.4)">H8DAPREP miscela urban culture e sonorità globali in un set esplosivo: amapiano, afrobeat, trap, dembow e baile funk si fondono in un viaggio intenso, energico e super coinvolgente.</p>
+            </div>
+        </div>
+        <!-- DJ 2 -->
+        <div class="glass-card p-6 relative overflow-hidden group neon-border-teal">
+            <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist group-hover:scale-110 transition-transform" style="color:var(--sunset-teal)">2</div>
+            <div class="relative z-10">
+                <span class="inline-block px-3 py-1 rounded text-[9px] font-bold uppercase tracking-widest mb-3" style="background:rgba(224,25,53,0.12); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">In console</span>
+                <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Nella giungla</p>
+                <h4 class="brutalist text-3xl mb-3 text-white">ADOLFO CITRO</h4>
+                <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(224,25,53,0.1); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">TECH-HOUSE</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(224,25,53,0.1); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">ELETTRONICA UNDERGROUND</span>
+                </div>
+                <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 pl-3" style="border-color:rgba(224,25,53,0.4)">Con groove ipnotici e atmosfere elettroniche profonde, Adolfo Citro accompagna il party quando la giungla si accende di rosso. Un set tech-house underground pensato per chi vuole perdersi nella musica fino a notte fonda.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ ORARI ═══════════════════════ -->
+<section id="orari" class="section-anchor animate-fade-in" data-testid="page-orari">
+    <div class="text-center mb-6">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 19:00 alle 2:00</p>
+    </div>
+    <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-coral); box-shadow:0 0 10px rgba(255,71,87,0.5)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-coral)">1. APERTURA · FREE ENTRY</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-coral)">19:00</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(255,71,87,0.4); background:rgba(154,216,47,0.05)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(198,232,107,0.1); color:var(--sunset-coral)"><i class="fa-solid fa-umbrella-beach"></i> Beach Club</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">La giungla si apre: ingresso gratuito e lettino omaggio per <strong class="text-white">scaldare l'atmosfera.</strong></p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-orange); box-shadow:0 0 10px rgba(154,216,47,0.6)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-orange)">2. DJ SET · TARIFFA NOTTE</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-orange)">21:00</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(154,216,47,0.2); background:rgba(154,216,47,0.05)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(154,216,47,0.1); color:var(--sunset-orange)"><i class="fa-solid fa-music"></i> DJ Set</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">Il momento clou. Parte il DJ set e <strong class="text-white">il party entra nel vivo</strong> tra drink, lettino omaggio e sound irresistibili.</p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-gold); box-shadow:0 0 10px rgba(198,232,107,0.6)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-gold)">3. NOTTE FONDA</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-gold)">2:00</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(198,232,107,0.2); background:rgba(198,232,107,0.05)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(198,232,107,0.1); color:var(--sunset-gold)"><i class="fa-solid fa-moon"></i> Night</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">La giungla resta accesa fino a tarda notte: luci verdi e rosse, bassi che ruggiscono. <strong class="text-white">Dancefloor open till nobody's standing still.</strong></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ TICKETS ═══════════════════════ -->
+<section id="tickets" class="section-anchor animate-fade-in" data-testid="page-tickets">
+    <div class="text-center mb-8">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Lettino omaggio sempre incluso</p>
+    </div>
+    <div class="space-y-4">
+        <div class="glass-card p-5 border-l-4" style="border-left-color:var(--sunset-coral); background:rgba(224,25,53,0.05)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(198,232,107,0.1); color:var(--sunset-coral)">19:00 – 21:00</span>
+                    <h4 class="brutalist text-xl text-white">FREE ENTRY</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)"><i class="fa-solid fa-umbrella-beach mr-1"></i> Lettino omaggio incluso</p>
+                </div>
+                <span class="brutalist text-4xl" style="color:var(--sunset-coral)">€0</span>
+            </div>
+            <button data-testid="ticket-free" onclick="MAGA.openModal()" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all" style="background:rgba(154,216,47,0.05); border:1px solid rgba(255,71,87,0.4); color:var(--sunset-coral)"><i class="fa-solid fa-list-check mr-1"></i> Mettiti in lista</button>
+        </div>
+        <div class="glass-card p-5 border-l-4" style="border-left-color:var(--sunset-orange)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(154,216,47,0.15); color:var(--sunset-orange)">Dalle 21:00</span>
+                    <h4 class="brutalist text-xl text-white">NIGHT TARIFF</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)"><i class="fa-solid fa-martini-glass mr-1"></i> Drink e lettino omaggio inclusi</p>
+                </div>
+                <div class="text-right">
+                    <span class="brutalist text-4xl" style="color:var(--sunset-orange)">€10</span>
+                </div>
+            </div>
+            <button data-testid="ticket-night" onclick="MAGA.openModal()" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all" style="background:rgba(154,216,47,0.15); border:1px solid rgba(154,216,47,0.3); color:var(--sunset-orange)"><i class="fa-solid fa-list-check mr-1"></i> Mettiti in lista</button>
+        </div>
+        <div class="glass-card p-4 border border-white/10 text-center">
+            <p class="text-[11px] text-gray-400">Prezzi <strong style="color:var(--sunset-orange)">in lista</strong> validi solo prenotando su <strong style="color:var(--sunset-orange)">@_magaparty</strong>. Fuori lista tariffe più alte alla cassa.</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ SOCIAL ═══════════════════════ -->
+<section id="social" class="section-anchor animate-fade-in" data-testid="page-social">
+    <div class="text-center mb-8">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Social</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Unisciti alla community</p>
+    </div>
+    <div class="desktop-3col">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" data-testid="social-instagram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-coral); background:rgba(255,71,87,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Instagram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)">Foto &amp; Aggiornamenti</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></span>
+        </a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" data-testid="social-tiktok"
+           class="glass-card p-5 border-l-4 border-l-white bg-white/5 flex justify-between items-center hover:bg-white/10 hover:scale-[1.02] transition-all cursor-pointer">
+            <div>
+                <h4 class="font-bold text-sm text-white">TikTok</h4>
+                <p class="text-[10px] uppercase tracking-wider text-gray-300 mt-1">Video &amp; Trend</p>
+            </div>
+            <span class="text-3xl text-white"><i class="fa-brands fa-tiktok"></i></span>
+        </a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" data-testid="social-telegram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-teal); background:rgba(224,25,53,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Telegram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-teal)">Info &amp; Photo Dump</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-teal)"><i class="fa-brands fa-telegram"></i></span>
+        </a>
+    </div>
+</section>
+
+</main>
+<script src="assets/app.js"></script>
+</body>
+</html>

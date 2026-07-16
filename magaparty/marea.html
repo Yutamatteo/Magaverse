@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MAREA · Happy Hour la Domenica | Magaparty</title>
+<meta name="description" content="MAREA — La Domenica di Magaparty @ Nello Ocean Beach. Dalle 17:00 a mezzanotte. Evento a numero chiuso, ingresso gratuito ma lista obbligatoria.">
+<meta property="og:title" content="MAREA · Happy Hour la Domenica | Magaparty">
+<meta property="og:description" content="Nello Ocean Beach, dalle 17:00 a mezzanotte. Evento a numero chiuso: mettiti in lista.">
+<meta property="og:image" content="logo_maga.jpg">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<link rel="icon" type="image/png" href="logo_maga.jpg">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+    body { max-width: none !important; border: none !important; padding-bottom: 0 !important; }
+    .m-wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+    .m-top { display:flex; align-items:center; justify-content:space-between; padding:20px 20px 0; max-width:720px; margin:0 auto; }
+    .section-label {
+        display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+        color: var(--sunset-gold); opacity: 0.7; margin-bottom: 10px;
+    }
+    .m-divider { margin: 44px 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(198,232,107,0.25), transparent); }
+    .urgency-banner {
+        background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.35);
+        border-radius: 16px; padding: 16px 18px; text-align:center;
+    }
+    .activity-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; }
+    @media (min-width:640px) { .activity-grid { grid-template-columns: repeat(3,1fr); } }
+    .activity-chip {
+        background: var(--night-surface); border:1px solid var(--night-border); border-radius:14px;
+        padding:14px 10px; text-align:center; font-size:11px; line-height:1.3;
+    }
+    .activity-chip .em { font-size:22px; display:block; margin-bottom:6px; }
+    .dj-slot { border-left:3px solid var(--sunset-orange); padding-left:14px; margin-bottom:18px; }
+    .dj-slot .time { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:var(--sunset-gold); }
+    .price-card { border-radius:18px; padding:18px; border:1px solid var(--night-border); background:var(--night-surface); }
+    .price-card.featured { border-color: var(--sunset-orange); background: rgba(154,216,47,0.06); }
+    .form-field label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:#8A7B6E; margin-bottom:6px; }
+    .form-field input, .form-field textarea, .form-field select {
+        width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--night-border); border-radius:12px;
+        padding:12px 14px; color:#ECE3D8; font-family:inherit; font-size:13px; outline:none;
+    }
+    .form-field input:focus, .form-field select:focus { border-color:var(--sunset-orange); }
+    .opt-choice {
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+        border:1px solid var(--night-border); border-radius:14px; padding:14px 16px; cursor:pointer; transition:all .15s;
+    }
+    .opt-choice.selected { border-color:var(--sunset-orange); background:rgba(154,216,47,0.07); }
+    .opt-choice input { accent-color: var(--sunset-orange); width:16px; height:16px; }
+</style>
+</head>
+<body data-page="marea">
+
+<div class="m-top">
+    <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
+    <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
+</div>
+
+<div class="m-wrap">
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="animate-fade-in text-center" style="padding-top:20px">
+    <span class="section-label">La Domenica di Magaparty</span>
+    <h1 class="brutalist text-4xl md:text-5xl tracking-tighter uppercase sunset-title mb-2">MAREA</h1>
+    <p class="text-[13px] text-gray-300 mb-1">Happy Hour @ Nello Ocean Beach</p>
+    <p class="text-[12px] tracking-wider mb-6" style="color:var(--sunset-gold)">Dalle 17:00 a Mezzanotte</p>
+
+    <div class="urgency-banner mb-3">
+        <p class="brutalist text-sm" style="color:var(--sunset-coral)">EVENTO A NUMERO CHIUSO</p>
+        <p class="text-[11px] text-gray-300 mt-1 leading-relaxed">
+            NO FORM, NO INGRESSO. L'ingresso è <strong class="text-white">GRATUITO</strong>, ma lo spazio in
+            spiaggia è limitato. Che tu voglia la Promo Lettino o solo entrare per fare serata,
+            <strong class="text-white">DEVI essere in lista.</strong>
+        </p>
+    </div>
+    <p class="text-[11px] text-gray-400 mb-6">Compila il form per bloccare il tuo QR d'accesso prima del Sold Out.</p>
+
+    <a href="#form" class="inline-flex items-center gap-2 px-7 py-3 rounded-full text-[12px] uppercase tracking-widest font-bold"
+       style="color:var(--night-surface); background:var(--sunset-orange); box-shadow:0 0 20px rgba(154,216,47,0.35)">
+        Mettiti in lista <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</section>
+
+<div class="m-divider"></div>
+
+<!-- ═══════════════════ VIBE & ATTIVITÀ ═══════════════════ -->
+<section class="animate-fade-in">
+    <div class="text-center mb-6">
+        <span class="section-label">Sezione 1</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
+        <p class="text-[11px] text-gray-400 mt-2">NON SOLO MUSICA. Dalle 17:00 attiviamo la Social Arena sulla sabbia.<br>Si beve, si fa macello e si gioca.</p>
+    </div>
+    <div class="activity-grid">
+        <div class="activity-chip"><span class="em">🍻</span>Beer Pong<br><span class="text-gray-500">(sfide a ignoranza)</span></div>
+        <div class="activity-chip"><span class="em">⚽️</span>Calcio Balilla</div>
+        <div class="activity-chip"><span class="em">🏓</span>Racchettoni</div>
+        <div class="activity-chip"><span class="em">🏐</span>"7 si schiaccia"<br><span class="text-gray-500">(pallavolo ignorante)</span></div>
+        <div class="activity-chip"><span class="em">🃏</span>Tavoli da Carte<br><span class="text-gray-500">per i più chill</span></div>
+    </div>
+</section>
+
+<div class="m-divider"></div>
+
+<!-- ═══════════════════ LINE UP ═══════════════════ -->
+<section class="animate-fade-in">
+    <div class="text-center mb-6">
+        <span class="section-label">Sezione 2</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il viaggio musicale</h2>
+        <p class="text-[11px] text-gray-400 mt-2">3 DJ, 7 ore di set, un imbuto di energia che finisce malissimo.</p>
+    </div>
+    <div>
+        <div class="dj-slot">
+            <p class="time">17:00 – 18:00</p>
+            <h3 class="brutalist text-lg text-white">Il Presidente</h3>
+            <p class="text-[12px] text-gray-400 leading-relaxed">Warm-up atipico. Si parte morbidi con Amapiano, Funk Brasiliano e Trap. Il momento perfetto per il primo giro al bar.</p>
+        </div>
+        <div class="dj-slot">
+            <p class="time">18:00 – 20:00</p>
+            <h3 class="brutalist text-lg text-white">Adolfo Citro</h3>
+            <p class="text-[12px] text-gray-400 leading-relaxed">Il ponte di fuoco. Si alzano i BPM, House e groove in cassa dritta per l'orario tramonto.</p>
+        </div>
+        <div class="dj-slot">
+            <p class="time">20:00 – 22:00</p>
+            <h3 class="brutalist text-lg text-white">Omen</h3>
+            <p class="text-[12px] text-gray-400 leading-relaxed">La maratona trendy. Tech House solida per la prima serata. Il prime-time del delirio.</p>
+        </div>
+        <div class="dj-slot" style="border-left-color:var(--sunset-coral)">
+            <p class="time" style="color:var(--sunset-coral)">22:00 – 00:00</p>
+            <h3 class="brutalist text-lg text-white">B2B — Adolfo x Omen x Il Presidente</h3>
+            <p class="text-[12px] text-gray-400 leading-relaxed">Tutti in console. <strong class="text-white">Attenzione:</strong> alto rischio di martellate Hard Techno a fine serata per colpa di quel pazzo di Adolfo. Non dite che non vi avevamo avvisati.</p>
+        </div>
+    </div>
+</section>
+
+<div class="m-divider"></div>
+
+<!-- ═══════════════════ BAR & GALLERIA ═══════════════════ -->
+<section class="animate-fade-in">
+    <div class="text-center mb-6">
+        <span class="section-label">Sempre disponibili</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Bar & Galleria</h2>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+        <a href="bar.html" data-testid="link-bar" class="glass-card p-5" style="border:1px solid rgba(154,216,47,0.2)">
+            <span class="text-2xl block mb-2" style="color:var(--sunset-gold)"><i class="fa-solid fa-martini-glass"></i></span>
+            <h3 class="brutalist text-base text-white">Bar</h3>
+            <p class="text-[10px] text-gray-400 leading-relaxed mt-1">Il menu drink e aperitivo.</p>
+        </a>
+        <a href="galleria.html" data-testid="link-galleria" class="glass-card p-5" style="border:1px solid rgba(224,25,53,0.2)">
+            <span class="text-2xl block mb-2" style="color:var(--sunset-teal)"><i class="fa-solid fa-camera"></i></span>
+            <h3 class="brutalist text-base text-white">Galleria</h3>
+            <p class="text-[10px] text-gray-400 leading-relaxed mt-1">Foto e video delle serate.</p>
+        </a>
+    </div>
+</section>
+
+<div class="m-divider"></div>
+
+<!-- ═══════════════════ PREZZI ═══════════════════ -->
+<section class="animate-fade-in">
+    <div class="text-center mb-6">
+        <span class="section-label">Sezione 3</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">I prezzi & la lista</h2>
+    </div>
+    <div class="space-y-3">
+        <div class="price-card featured">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[9px] uppercase tracking-widest font-bold mb-1" style="color:var(--sunset-orange)">🔥 Promo Magaparty</p>
+                    <h4 class="brutalist text-lg text-white">Lettino + Drink</h4>
+                    <p class="text-[11px] text-gray-400 mt-1">Salta la fila al bar e vai dritto in postazione.</p>
+                </div>
+                <span class="brutalist text-3xl" style="color:var(--sunset-orange)">10€</span>
+            </div>
+        </div>
+        <div class="price-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[9px] uppercase tracking-widest font-bold mb-1" style="color:var(--sunset-gold)">☀️ Solo Lettino</p>
+                </div>
+                <span class="brutalist text-3xl" style="color:var(--sunset-gold)">6€</span>
+            </div>
+        </div>
+        <div class="price-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-[9px] uppercase tracking-widest font-bold mb-1" style="color:var(--sunset-teal)">🎟️ Ingresso Base</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Lista obbligatoria per entrare.</p>
+                </div>
+                <span class="brutalist text-3xl" style="color:var(--sunset-teal)">Gratis</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="m-divider"></div>
+
+<!-- ═══════════════════ FORM ═══════════════════ -->
+<section id="form" class="animate-fade-in">
+    <div class="text-center mb-6">
+        <span class="section-label">Ultimo step</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
+        <p class="text-[11px] text-gray-400 mt-2">Form veloce, 30 secondi. Il QR arriva via email.</p>
+    </div>
+
+    <div id="formCard" class="glass-card neon-border-orange p-6">
+        <form id="mareaForm" class="space-y-4">
+            <div class="form-field">
+                <label for="nome">Nome e Cognome (capogruppo) *</label>
+                <input type="text" id="nome" required placeholder="Es. Mario Rossi">
+            </div>
+            <div class="form-field">
+                <label for="telefono">Numero di Cellulare *</label>
+                <input type="tel" id="telefono" required placeholder="Es. 333 1234567">
+            </div>
+            <div class="form-field">
+                <label for="instagram">Instagram (opzionale)</label>
+                <input type="text" id="instagram" placeholder="Il tuo @username - così ti tagghiamo nelle storie">
+            </div>
+            <div class="form-field">
+                <label for="composizione">Composizione del gruppo *</label>
+                <input type="text" id="composizione" required placeholder="Es. 2 Uomini, 3 Donne">
+            </div>
+            <div class="form-field">
+                <label for="email">Email *</label>
+                <input type="email" id="email" required placeholder="La tua email — qui arriva il QR">
+            </div>
+
+            <div class="form-field">
+                <label style="margin-bottom:10px">Cosa vuoi bloccare? *</label>
+                <div class="space-y-2">
+                    <label class="opt-choice selected" data-opt="promo">
+                        <span class="text-[12px] text-white">🔥 Promo Magaparty <span style="color:var(--sunset-orange)">10€</span> — Lettino + Drink, salta fila</span>
+                        <input type="radio" name="opzione" value="promo" checked>
+                    </label>
+                    <label class="opt-choice" data-opt="lettino">
+                        <span class="text-[12px] text-white">☀️ Solo Lettino <span style="color:var(--sunset-gold)">6€</span></span>
+                        <input type="radio" name="opzione" value="lettino">
+                    </label>
+                    <label class="opt-choice" data-opt="base">
+                        <span class="text-[12px] text-white">🎟️ Solo Ingresso Base <span style="color:var(--sunset-teal)">Gratis</span> — lista obbligatoria</span>
+                        <input type="radio" name="opzione" value="base">
+                    </label>
+                </div>
+            </div>
+
+            <label class="flex items-start gap-2 text-[10px] text-gray-400 pt-1">
+                <input type="checkbox" id="privacy" required style="margin-top:2px;accent-color:var(--sunset-orange)">
+                Acconsento al trattamento dei dati per la gestione della prenotazione. *
+            </label>
+
+            <button type="submit" id="submitBtn"
+                class="w-full py-4 rounded-full text-[12px] uppercase tracking-widest font-bold transition-all"
+                style="color:var(--night-surface); background:var(--sunset-orange); box-shadow:0 0 20px rgba(154,216,47,0.35)">
+                <i class="fa-solid fa-list-check"></i> Mettiti in lista / Blocca la promo
+            </button>
+            <p id="formError" class="text-[11px] text-center" style="color:var(--sunset-coral); display:none"></p>
+        </form>
+    </div>
+
+    <!-- Thank you / QR view -->
+    <div id="successCard" class="glass-card neon-border-orange p-6 text-center" style="display:none">
+        <p class="text-3xl mb-2">💣</p>
+        <h3 class="brutalist text-xl mb-2" style="color:var(--sunset-gold)">ACCESSO CONFERMATO!</h3>
+        <p class="text-[12px] text-gray-300 leading-relaxed mb-5">
+            Senza questo QR, la sicurezza non ti farà accedere all'area evento.<br>
+            Mostralo in cassa all'Ocean Beach per ritirare i braccialetti/drink e saltare la fila.<br>
+            Ci vediamo domenica dalle 17:00.
+        </p>
+        <div id="qr" style="display:flex;justify-content:center;margin-bottom:14px"></div>
+        <p class="text-[10px] text-gray-500">Ti abbiamo inviato lo stesso QR anche via email, come backup.</p>
+    </div>
+</section>
+
+</div>
+
+<script>
+    // Sostituisci con i valori del tuo progetto Supabase
+    const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Prossima domenica (se oggi è domenica, resta oggi)
+    function prossimaDomenica() {
+        const d = new Date();
+        const day = d.getDay(); // 0 = domenica
+        const diff = day === 0 ? 0 : 7 - day;
+        d.setDate(d.getDate() + diff);
+        return d.toISOString().slice(0, 10);
+    }
+
+    // Selezione opzione prezzo
+    document.querySelectorAll('.opt-choice').forEach(el => {
+        el.addEventListener('click', () => {
+            document.querySelectorAll('.opt-choice').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            el.querySelector('input').checked = true;
+        });
+    });
+
+    const form = document.getElementById('mareaForm');
+    const errEl = document.getElementById('formError');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errEl.style.display = 'none';
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Invio in corso...';
+
+        const payload = {
+            data_evento: prossimaDomenica(),
+            nome_capogruppo: document.getElementById('nome').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            instagram: document.getElementById('instagram').value.trim() || null,
+            composizione: document.getElementById('composizione').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            opzione: form.querySelector('input[name="opzione"]:checked').value,
+            consenso_privacy: document.getElementById('privacy').checked
+        };
+
+        const { data, error } = await sb
+            .from('marea_prenotazioni')
+            .insert(payload)
+            .select('qr_token, nome_capogruppo')
+            .single();
+
+        if (error) {
+            errEl.textContent = "Qualcosa è andato storto. Riprova o scrivici su Instagram.";
+            errEl.style.display = 'block';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-list-check"></i> Mettiti in lista / Blocca la promo';
+            return;
+        }
+
+        document.getElementById('formCard').style.display = 'none';
+        const successCard = document.getElementById('successCard');
+        successCard.style.display = 'block';
+        new QRCode(document.getElementById('qr'), {
+            text: data.qr_token,
+            width: 200,
+            height: 200,
+            colorDark: '#12301A',
+            colorLight: '#ffffff'
+        });
+        successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+</script>
+</body>
+</html>
