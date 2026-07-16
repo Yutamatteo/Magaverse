@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magaparty · Eventi a Magazzeno (Salerno)</title>
+    <meta name="description" content="Magaparty — gli eventi firmati Maga a Magazzeno, Salerno: Battigia il mercoledì, Marea la domenica, Drink Another Night in estate. Nello Ocean Beach.">
+    <meta property="og:title" content="Magaparty · Eventi a Magazzeno">
+    <meta property="og:description" content="Battigia, Marea, Drink Another Night: gli eventi firmati Maga a Nello Ocean Beach, Magazzeno.">
+    <meta property="og:image" content="assets/img/logo-teal.png">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        /* ═══ Palette Magaparty core — teal/ciano ispirata al logo ═══ */
+        :root {
+            --sunset-orange:  #14A6C7;
+            --sunset-amber:   #0F8CA8;
+            --sunset-gold:    #7FE3EF;
+            --sunset-teal:    #0B6478;
+            --sunset-teal2:   #084A5A;
+            --sunset-coral:   #22C3E6;
+            --sunset-cream:   #EAFBFF;
+            --sunset-deep:    #052832;
+
+            --night-bg:      #0A0A0A;
+            --night-surface: #141414;
+            --night-border:  #262626;
+            --night-border-soft: rgba(255,255,255,0.08);
+        }
+
+        body { max-width: none !important; border: none !important; padding-bottom: 0 !important; }
+        .h-wrap { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; }
+        .h-top { display:flex; align-items:center; justify-content:space-between; padding:20px 20px 0; max-width:900px; margin:0 auto; }
+        .section-anchor { padding-top: 24px; }
+        .section-label {
+            display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px;
+        }
+        .home-hero-logo {
+            width: 96px; height: 96px; border-radius: 24px; object-fit: cover;
+            margin: 0 auto 20px; display: block; box-shadow: 0 0 40px rgba(154,216,47,0.25);
+        }
+        .h-divider { margin:48px 0 32px; height:1px; background:linear-gradient(90deg, transparent, rgba(198,232,107,0.25), transparent); }
+
+        .format-card {
+            display: flex; flex-direction: column; gap: 10px; padding: 24px;
+            transition: transform .2s ease, border-color .2s ease; position: relative; overflow:hidden;
+        }
+        .format-card:hover { transform: translateY(-3px); }
+        .format-card .arrow { transition: transform .2s ease; }
+        .format-card:hover .arrow { transform: translateX(4px); }
+        .wip-badge {
+            position:absolute; top:14px; right:14px; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
+            font-weight:700; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,0.08); color:#8A7B6E;
+        }
+        .format-day {
+            display:inline-flex; align-items:center; gap:6px; font-size:9px; text-transform:uppercase; letter-spacing:0.15em;
+            font-weight:700; padding:5px 10px; border-radius:999px; width:fit-content;
+        }
+    </style>
+</head>
+<body data-page="home">
+
+<div class="h-top">
+    <a href="https://www.magaverse.it/" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280;text-decoration:none">Magaverse</a>
+    <div style="display:flex;gap:14px">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+</div>
+
+<div class="h-wrap">
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="home" class="section-anchor animate-fade-in text-center" style="padding-bottom:8px">
+    <img src="assets/img/logo-teal.png" alt="Magaparty" class="home-hero-logo" style="width:150px; height:auto; border-radius:0; object-fit:contain; background:transparent; box-shadow:none">
+
+    <span class="section-label">Magaparty · Eventi</span>
+    <h1 class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">L'universo delle nostre feste</h1>
+    <p class="text-[12px] text-gray-400 leading-relaxed" style="max-width:520px;margin:0 auto 24px">
+        Magaparty porta la notte (e il tramonto) a Magazzeno: tre format, un solo posto —
+        Nello Ocean Beach. Scegli la tua serata.
+    </p>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ I 3 FORMAT ═══════════════════════ -->
+<section class="section-anchor animate-fade-in">
+    <div class="text-center mb-8">
+        <span class="section-label">I nostri format</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Scegli la tua serata</h2>
+    </div>
+    <div class="desktop-3col">
+
+        <!-- BATTIGIA -->
+        <div class="glass-card format-card" style="border:1px solid rgba(198,232,107,0.2)">
+            <span class="wip-badge">Work in progress</span>
+            <span class="format-day" style="background:rgba(198,232,107,0.1); color:var(--sunset-gold)">
+                <i class="fa-regular fa-clock"></i> Tutti i mercoledì
+            </span>
+            <h3 class="brutalist text-xl text-white mt-1">Battigia</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+                Il mercoledì sera di Magaparty, in riva al mare. Dettagli in arrivo a breve.
+            </p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#8A7B6E">
+                <i class="fa-solid fa-hourglass-half"></i> Presto online
+            </span>
+        </div>
+
+        <!-- MAREA -->
+        <a href="marea.html" data-testid="link-marea" class="glass-card format-card neon-border-orange">
+            <span class="format-day" style="background:rgba(154,216,47,0.15); color:var(--sunset-orange)">
+                <i class="fa-regular fa-clock"></i> Tutte le domeniche
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Marea</h3>
+                <span class="arrow text-lg" style="color:var(--sunset-orange)">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+                Happy Hour dalle 17:00 a mezzanotte. 3 DJ, beach games e la Promo Lettino + Drink.
+                Numero chiuso, lista obbligatoria.
+            </p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:var(--sunset-orange)">
+                <i class="fa-solid fa-list-check"></i> Mettiti in lista
+            </span>
+        </a>
+
+        <!-- DRINK ANOTHER NIGHT -->
+        <div class="glass-card format-card" style="border:1px solid rgba(224,25,53,0.2)">
+            <span class="wip-badge">Work in progress</span>
+            <span class="format-day" style="background:rgba(224,25,53,0.1); color:var(--sunset-teal)">
+                <i class="fa-regular fa-clock"></i> Ven 31 Lug · Ven 7 Ago
+            </span>
+            <h3 class="brutalist text-xl text-white mt-1">Drink Another Night</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">
+                Due venerdì speciali dell'estate. Dettagli in arrivo a breve.
+            </p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#8A7B6E">
+                <i class="fa-solid fa-hourglass-half"></i> Presto online
+            </span>
+        </div>
+
+    </div>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ BAR & GALLERIA ═══════════════════════ -->
+<section class="section-anchor animate-fade-in">
+    <div class="text-center mb-8">
+        <span class="section-label">Sempre disponibili</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Bar & Galleria</h2>
+    </div>
+    <div class="desktop-2col">
+        <a href="bar.html" data-testid="link-bar" class="glass-card format-card" style="border:1px solid rgba(154,216,47,0.2)">
+            <div class="flex items-center justify-between">
+                <span class="text-2xl" style="color:var(--sunset-gold)"><i class="fa-solid fa-martini-glass"></i></span>
+                <span class="arrow text-lg" style="color:var(--sunset-gold)">→</span>
+            </div>
+            <h3 class="brutalist text-lg text-white">Bar</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Il menu drink e aperitivo di Magaparty.</p>
+        </a>
+        <a href="galleria.html" data-testid="link-galleria" class="glass-card format-card" style="border:1px solid rgba(224,25,53,0.2)">
+            <div class="flex items-center justify-between">
+                <span class="text-2xl" style="color:var(--sunset-teal)"><i class="fa-solid fa-camera"></i></span>
+                <span class="arrow text-lg" style="color:var(--sunset-teal)">→</span>
+            </div>
+            <h3 class="brutalist text-lg text-white">Galleria</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Carica e rivivi le foto e i video delle serate.</p>
+        </a>
+    </div>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ CHI SIAMO TEASER ═══════════════════════ -->
+<section class="section-anchor animate-fade-in text-center">
+    <span class="section-label">Dal 2024</span>
+    <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title mb-4">La nostra storia</h2>
+    <p class="text-[11px] text-gray-400 mb-6" style="max-width:460px;margin:0 auto 24px">
+        Dai pool party del 2024 a Halloween in Villa, Capodanno, Carnevale e i Beach Party: scopri come è nata Magaparty
+        e come contattarci.
+    </p>
+    <a href="chi-siamo.html" data-testid="link-chi-siamo"
+       class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] uppercase tracking-widest font-bold transition-all"
+       style="color:var(--night-surface); background:var(--sunset-gold); box-shadow:0 0 20px rgba(198,232,107,0.3)">
+        Chi siamo <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ SOCIAL TEASER ═══════════════════════ -->
+<section class="section-anchor animate-fade-in text-center">
+    <span class="section-label">Resta connesso</span>
+    <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title mb-4">Segui Magaparty</h2>
+    <p class="text-[11px] text-gray-400 mb-6" style="max-width:420px;margin:0 auto 24px">
+        Anteprime, aggiornamenti e liste ingresso: tutto passa prima dai nostri social.
+    </p>
+    <div class="desktop-3col" style="max-width:640px;margin:0 auto">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" data-testid="home-instagram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-coral); background:rgba(34,195,230,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Instagram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)">Foto &amp; Aggiornamenti</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></span>
+        </a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" data-testid="home-tiktok"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-gold); background:rgba(127,227,239,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">TikTok</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-gold)">Video &amp; Trend</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></span>
+        </a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" data-testid="home-telegram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-orange); background:rgba(20,166,199,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Telegram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)">Info &amp; Photo Dump</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></span>
+        </a>
+    </div>
+</section>
+
+</div>
+</body>
+</html>
