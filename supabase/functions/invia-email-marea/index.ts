@@ -39,29 +39,29 @@ Deno.serve(async (req: Request) => {
     return new Response("missing fields", { status: 400 });
   }
 
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=${encodeURIComponent(row.qr_token)}`;
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&color=241009&bgcolor=ffffff&data=${encodeURIComponent(row.qr_token)}`;
   const dataLabel = formatDataEvento(row.data_evento);
   const opzioneLabel = OPZIONE_LABEL[row.opzione] || row.opzione;
 
   const html = `
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#0A1F0E;color:#F0FFE8;padding:32px 24px;border-radius:20px">
-    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#9AD82F;margin:0 0 6px">La Domenica di Magaparty</p>
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#170905;color:#F0E4D8;padding:32px 24px;border-radius:20px">
+    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#F6DFC4;margin:0 0 6px">La Domenica di Magaparty</p>
     <h1 style="font-size:26px;margin:0 0 4px;color:#fff">MAREA · Happy Hour</h1>
-    <p style="font-size:13px;color:#C6E86B;margin:0 0 24px">Nello Ocean Beach · ${dataLabel} · dalle 17:00</p>
+    <p style="font-size:13px;color:#E2540E;margin:0 0 24px">Nello Ocean Beach · ${dataLabel} · dalle 17:00</p>
 
     <p style="font-size:14px;line-height:1.5;margin:0 0 20px">
       Ciao <strong>${row.nome_capogruppo}</strong>, la tua richiesta è confermata.
       Mostra questo QR in cassa: senza, la sicurezza non potrà farti accedere all'area evento.
     </p>
 
-    <div style="background:#12301A;border:1px solid #1C4022;border-radius:16px;padding:20px;text-align:center">
+    <div style="background:#241009;border:1px solid #3B1A0D;border-radius:16px;padding:20px;text-align:center">
       <img src="${qrImageUrl}" width="220" height="220" alt="QR ingresso" style="display:block;margin:0 auto 16px;border-radius:8px" />
-      <p style="font-size:11px;color:#8A7B6E;margin:0 0 4px;text-transform:uppercase;letter-spacing:1px">Prenotazione</p>
+      <p style="font-size:11px;color:#B89A85;margin:0 0 4px;text-transform:uppercase;letter-spacing:1px">Prenotazione</p>
       <p style="font-size:15px;color:#fff;font-weight:bold;margin:0 0 12px">${opzioneLabel}</p>
-      <p style="font-size:11px;color:#8A7B6E;margin:0">Invitato da: ${row.chi_ti_ha_invitato}</p>
+      <p style="font-size:11px;color:#B89A85;margin:0">Invitato da: ${row.chi_ti_ha_invitato}</p>
     </div>
 
-    <p style="font-size:11px;color:#8A7B6E;line-height:1.6;margin:20px 0 0">
+    <p style="font-size:11px;color:#B89A85;line-height:1.6;margin:20px 0 0">
       Questo QR è valido una sola volta ed è legato a questa prenotazione: non condividerlo,
       chi arriva per primo con il QR valido entra. Ci vediamo domenica dalle 17:00 su
       Nello Ocean Beach, Magazzeno.
