@@ -677,7 +677,13 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
         btn.disabled = true;
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Invio in corso...';
 
+        // Genera il QR token nel browser: evita di dover rileggere la riga
+        // dal database subito dopo l'insert (lettura non consentita al
+        // pubblico per privacy — solo lo staff autenticato può leggere).
+        const qrToken = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random()).replace(/-/g, '');
+
         const payload = {
+            qr_token: qrToken,
             data_evento: prossimaDomenica(),
             nome_capogruppo: document.getElementById('nome').value.trim(),
             telefono: document.getElementById('telefono').value.trim(),
@@ -692,11 +698,9 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
             consenso_privacy: document.getElementById('privacy').checked
         };
 
-        const { data, error } = await sb
+        const { error } = await sb
             .from('marea_prenotazioni')
-            .insert(payload)
-            .select('qr_token, nome_capogruppo')
-            .single();
+            .insert(payload);
 
         if (error) {
             errEl.textContent = "Qualcosa è andato storto. Riprova o scrivici su Instagram.";
@@ -710,7 +714,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
         const successCard = document.getElementById('successCard');
         successCard.style.display = 'block';
         new QRCode(document.getElementById('qr'), {
-            text: data.qr_token,
+            text: qrToken,
             width: 200,
             height: 200,
             colorDark: '#241009',
