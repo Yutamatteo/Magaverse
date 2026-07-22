@@ -661,6 +661,24 @@
     const optChecked = document.querySelector('#battigiaForm input[name="opzione"]:checked');
     syncNumeroPersoneVisibility(optChecked ? optChecked.value : 'base');
 
+    // Deep-link per le storie Instagram: es. battigia.html?prenota=tavolo
+    // pre-seleziona "Tavolo" e scrolla dritto al form, zero attriti da IG.
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('prenota') === 'tavolo') {
+            const tavoloChoice = document.querySelector('.opt-choice[data-opt="tavolo"]');
+            if (tavoloChoice) {
+                document.querySelectorAll('.opt-choice').forEach(o => o.classList.remove('selected'));
+                tavoloChoice.classList.add('selected');
+                tavoloChoice.querySelector('input').checked = true;
+                syncNumeroPersoneVisibility('tavolo');
+            }
+            window.addEventListener('load', () => {
+                document.getElementById('form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        }
+    })();
+
     document.getElementById('sesso').addEventListener('change', (e) => {
         const wrap = document.getElementById('sessoAltroWrap');
         wrap.style.display = e.target.value === 'altro' ? 'block' : 'none';
