@@ -14,6 +14,8 @@
         { id: 'info',      href: '#info',      icon: 'fa-circle-info',   label: 'INFO',       mobileIcon: 'fa-sun' },
         { id: 'programma', href: '#programma',  icon: 'fa-compact-disc', label: 'PROGRAMMA' },
         { id: 'prezzi',    href: '#prezzi',     icon: 'fa-ticket',       label: 'PREZZI' },
+        { id: 'bar',       href: '#bar',        icon: 'fa-martini-glass', label: 'BAR' },
+        { id: 'galleria',  href: '#galleria',   icon: 'fa-camera',      label: 'GALLERIA' },
         { id: 'form',      href: '#form',       icon: 'fa-list-check',   label: 'PRENOTA' }
     ];
 
@@ -193,7 +195,7 @@
     // ACTIVE SECTION TRACKING
     // ─────────────────────────────────────────────────────────
     function setupActiveSectionTracking() {
-        const sections = document.querySelectorAll('main #info, main #programma, main #prezzi, main #form');
+        const sections = document.querySelectorAll('main #info, main #programma, main #prezzi, main #bar, main #galleria, main #form');
         if (sections.length === 0) return;
 
         function setActive(id) {
@@ -244,6 +246,103 @@
     }
 
     // ─────────────────────────────────────────────────────────
+    // CLOUDINARY UPLOAD (galleria) — stesso account usato finora dal brand
+    // ─────────────────────────────────────────────────────────
+    const CLOUD_NAME = 'dthvzhohr';
+    const UPLOAD_PRESET = 'ml_JungleNight'; // preset esistente su Cloudinary — rinominalo lì se vuoi un nome più generico
+    let filesToUpload = [];
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        const z = document.getElementById('dropZone');
+        if (z) z.style.borderColor = 'var(--sunset-orange)';
+    }
+    function handleDragLeave() {
+        const z = document.getElementById('dropZone');
+        if (z) z.style.borderColor = 'rgba(194,102,14,0.3)';
+    }
+    function handleDrop(e) {
+        e.preventDefault();
+        handleDragLeave();
+        handleFiles(e.dataTransfer.files);
+    }
+    function handleFiles(files) {
+        const allowed = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/quicktime', 'video/x-msvideo'];
+        const maxSize = 100 * 1024 * 1024;
+        const newFiles = Array.from(files).filter(f => {
+            if (!allowed.includes(f.type)) { showToast(`Formato non supportato: ${f.name}`); return false; }
+            if (f.size > maxSize) { showToast(`File troppo grande (max 100MB): ${f.name}`); return false; }
+            return true;
+        });
+        if (!newFiles.length) return;
+        filesToUpload = [...filesToUpload, ...newFiles];
+        renderQueue();
+    }
+    function renderQueue() {
+        const queue = document.getElementById('uploadQueue');
+        const list = document.getElementById('queueList');
+        if (!queue || !list) return;
+        if (!filesToUpload.length) { queue.style.display = 'none'; return; }
+        queue.style.display = '';
+        list.innerHTML = filesToUpload.map((f, i) => `
+            <div id="qitem-${i}" class="glass-card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,0.1)">
+                <i class="fa-solid ${f.type.startsWith('video') ? 'fa-film' : 'fa-image'}" style="font-size:14px;color:var(--sunset-orange)"></i>
+                <div style="flex:1;min-width:0">
+                    <p style="font-size:11px;color:#fff;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</p>
+                    <p style="font-size:9px;color:#6b7280;margin:0">${(f.size / 1024 / 1024).toFixed(1)} MB</p>
+                </div>
+                <div id="qstatus-${i}" style="font-size:10px;color:#6b7280;flex-shrink:0">In attesa</div>
+            </div>
+        `).join('');
+    }
+    async function uploadAll() {
+        const btn = document.getElementById('uploadAllBtn');
+        if (!btn) return;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CARICAMENTO IN CORSO...';
+        const results = [];
+        for (let i = 0; i < filesToUpload.length; i++) {
+            const f = filesToUpload[i];
+            const statusEl = document.getElementById(`qstatus-${i}`);
+            if (statusEl) statusEl.innerHTML = '<span style="color:var(--sunset-orange)" class="animate-pulse">↑ Upload...</span>';
+            try {
+                const fd = new FormData();
+                fd.append('file', f);
+                fd.append('upload_preset', UPLOAD_PRESET);
+                fd.append('folder', 'magaparty');
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`, { method: 'POST', body: fd });
+                const data = await res.json();
+                if (data.secure_url) {
+                    if (statusEl) statusEl.innerHTML = '<span style="color:var(--sunset-gold)">✓ OK</span>';
+                    results.push({ name: f.name, type: f.type });
+                } else { throw new Error(); }
+            } catch (_) {
+                if (statusEl) statusEl.innerHTML = '<span style="color:#f87171">✗ Errore</span>';
+            }
+        }
+        if (results.length) {
+            const resList = document.getElementById('resultsList');
+            const ur = document.getElementById('uploadResults');
+            if (ur) ur.style.display = '';
+            if (resList) resList.innerHTML = results.map(r => `
+                <div class="glass-card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(194,102,14,0.2);background:rgba(194,102,14,0.05)">
+                    <i class="fa-solid ${r.type.startsWith('video') ? 'fa-film' : 'fa-image'}" style="font-size:14px;color:var(--sunset-orange)"></i>
+                    <p style="font-size:11px;color:#fff;flex:1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</p>
+                    <span style="font-size:12px;font-weight:700;color:var(--sunset-gold)">✓ Caricato</span>
+                </div>
+            `).join('');
+            showToast(`${results.length} file caricati con successo!`);
+        }
+        filesToUpload = [];
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-bolt"></i> AVVIA CARICAMENTO';
+        const uq = document.getElementById('uploadQueue');
+        const ql = document.getElementById('queueList');
+        if (uq) uq.style.display = 'none';
+        if (ql) ql.innerHTML = '';
+    }
+
+    // ─────────────────────────────────────────────────────────
     // BOOT
     // ─────────────────────────────────────────────────────────
     function boot() {
@@ -276,7 +375,8 @@
     }
 
     window.ULTIMAONDA = {
-        goToForm, share, addToCalendar, showToast
+        goToForm, share, addToCalendar, showToast,
+        handleDragOver, handleDragLeave, handleDrop, handleFiles, uploadAll
     };
 
     if (document.readyState === 'loading') {
