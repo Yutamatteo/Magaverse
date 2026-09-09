@@ -219,10 +219,18 @@
     roleBadge.className = 'role-badge ' + ruolo;
     loginBox.classList.add('hidden');
 
-    if (ruolo === 'bar' || ruolo === 'ingresso') {
-      // Account dedicato a una sola postazione: dritto allo scanner, niente scelta, niente tab.
+    if (ruolo === 'bar') {
+      // Account dedicato al bar: dritto allo scanner, niente scelta, niente tab.
       modalitaScanner = ruolo;
       panel.classList.remove('hidden');
+      avviaScanner();
+    } else if (ruolo === 'ingresso') {
+      // Account dedicato all'ingresso: dritto allo scanner, ma con accesso alla scheda Prenotazioni.
+      modalitaScanner = ruolo;
+      panel.classList.remove('hidden');
+      tabs.classList.remove('hidden');
+      document.getElementById('tab-gestione').classList.add('hidden');
+      document.getElementById('tab-prenotazioni').classList.remove('hidden');
       avviaScanner();
     } else {
       // admin / superadmin: mostra la scelta postazione prima dello scanner
@@ -239,6 +247,8 @@
       document.getElementById('btn-cambia-postazione').classList.remove('hidden');
       if (ruolo === 'superadmin') {
         document.getElementById('sezione-livelli').classList.remove('hidden');
+      }
+      if (ruolo === 'superadmin' || ruolo === 'admin') {
         document.getElementById('tab-prenotazioni').classList.remove('hidden');
       }
       avviaScanner();
