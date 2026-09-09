@@ -58,7 +58,7 @@
             <a href="index.html" class="maga-back-link" style="margin:16px 0 4px;">&#8592; Magaparty</a>
 
             <div class="sidebar-cta">
-                <button data-testid="sidebar-cta-lista" onclick="fbq('track', 'Lead'); ULTIMAONDA.goToForm()" style="width:100%;color:var(--night-bg);font-weight:900;padding:12px;border-radius:var(--radius-pill);font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:0.2em;border:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:12px;background:var(--sunset-orange);box-shadow:0 0 20px rgba(194,102,14,0.35)">
+                <button data-testid="sidebar-cta-lista" onclick="ULTIMAONDA.goToForm()" style="width:100%;color:var(--night-bg);font-weight:900;padding:12px;border-radius:var(--radius-pill);font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:0.2em;border:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:12px;background:var(--sunset-orange);box-shadow:0 0 20px rgba(194,102,14,0.35)">
                     <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
                 </button>
                 <div style="display:flex;gap:8px">
@@ -119,7 +119,7 @@
     function buildBottomCta() {
         return `
         <div class="bottom-cta-mobile" style="position:fixed;bottom:0;left:0;right:0;padding:16px;z-index:50;background:linear-gradient(to top, var(--night-bg), rgba(20,10,5,0.9), transparent)">
-            <button data-testid="bottom-cta-lista" onclick="fbq('track', 'Lead'); ULTIMAONDA.goToForm()" style="width:100%;color:var(--night-bg);font-weight:900;padding:16px;border-radius:var(--radius-pill);font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:0.2em;border:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;background:var(--sunset-orange);box-shadow:0 0 20px rgba(194,102,14,0.35)">
+            <button data-testid="bottom-cta-lista" onclick="ULTIMAONDA.goToForm()" style="width:100%;color:var(--night-bg);font-weight:900;padding:16px;border-radius:var(--radius-pill);font-family:'Archivo Black',sans-serif;font-size:18px;letter-spacing:0.2em;border:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;background:var(--sunset-orange);box-shadow:0 0 20px rgba(194,102,14,0.35)">
                 <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
             </button>
         </div>`;
