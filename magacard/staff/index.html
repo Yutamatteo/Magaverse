@@ -336,7 +336,34 @@
       return;
     }
 
-    // 2) Non è un QR Marea (o non trovato): prova come MagaCard (timbro)
+    // 2) Non è un QR Marea (o non trovato): prova come QR d'ingresso Ultima Onda
+    const ultimaOnda = await sb.rpc('valida_ingresso_ultima_onda', { p_qr_token: codice });
+    const uoEsito = ultimaOnda.data?.[0]?.esito;
+
+    if (!ultimaOnda.error && uoEsito && uoEsito !== 'non_trovato') {
+      let html = '';
+      if (uoEsito === 'ok') {
+        const r = ultimaOnda.data[0];
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito ok">✓ Accesso Ultima Onda consentito</div>
+                <p style="margin-top:8px; font-size:14px;">🌅 Ingresso + drink omaggio</p>
+                ${r.interesse_sup ? '<p style="margin-top:6px; font-size:13px;">🏄 Interessato al SUP — passalo ai ragazzi di Adventure Lab &amp; Next</p>' : ''}`;
+      } else if (uoEsito === 'gia_usato') {
+        const r = ultimaOnda.data[0];
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito errore">⚠️ QR Ultima Onda già utilizzato — accesso già avvenuto.</div>`;
+      } else if (uoEsito === 'annullata') {
+        html = `<div class="esito errore">Prenotazione Ultima Onda annullata.</div>`;
+      } else if (uoEsito === 'non_autorizzato') {
+        html = `<div class="esito errore">Il tuo account non può scansionare ingressi Ultima Onda.</div>`;
+      }
+      resultArea.innerHTML = `<div class="result-card">${html}</div>
+        <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+      document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+      return;
+    }
+
+    // 3) Non è né un QR Marea né Ultima Onda (o non trovato): prova come MagaCard (timbro)
     const { data, error } = await sb.rpc('aggiungi_timbro', { p_card_code: codice });
     const esito = data?.[0]?.esito;
 
@@ -344,7 +371,7 @@
     if (error || !esito) {
       html = `<div class="esito errore">Errore di connessione, riprova.</div>`;
     } else if (esito === 'card_non_trovata') {
-      html = `<div class="esito errore">Codice non riconosciuto (né Marea né MagaCard).</div>`;
+      html = `<div class="esito errore">Codice non riconosciuto (né Marea, né Ultima Onda, né MagaCard).</div>`;
     } else if (esito === 'gia_timbrato_oggi') {
       html = `<div class="esito errore">Timbro già assegnato oggi per questa card.</div>`;
     } else {
