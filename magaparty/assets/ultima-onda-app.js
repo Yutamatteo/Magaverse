@@ -178,7 +178,7 @@
         const fmt = d => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         const t = encodeURIComponent('ULTIMA ONDA – Magaparty');
         const l = encodeURIComponent('Nello Ocean Beach, Via Mar Ionio 22, Magazzeno, Salerno');
-        const det = encodeURIComponent("L'ultimo format dell'estate. SUP School alle 15:00, start alle 18:00, Indieficio alle 19:30, DJ Set Adolfo Citro alle 21:30.");
+        const det = encodeURIComponent("L'ultimo format dell'estate. SUP School alle 08:00, start alle 18:00, Indieficio alle 19:30, DJ Set Adolfo Citro alle 21:30.");
         window.open(`https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=${fmt(EVENT_START)}/${fmt(EVENT_END)}&location=${l}&details=${det}`, '_blank');
     }
     function showToast(msg) {
