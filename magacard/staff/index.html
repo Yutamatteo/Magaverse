@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../assets/styles.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   body { align-items: flex-start; }
   .mc-wrap { max-width: 480px; padding-top: 12px; }
@@ -104,6 +105,7 @@
     <div class="tabs hidden" id="tabs">
       <button class="tab-btn active" id="tab-scanner">Scanner</button>
       <button class="tab-btn" id="tab-gestione">Gestione</button>
+      <button class="tab-btn hidden" id="tab-prenotazioni">Prenotazioni</button>
     </div>
 
     <!-- VISTA SCANNER -->
@@ -154,6 +156,16 @@
         <div class="mc-msg" id="livelli-msg"></div>
       </div>
     </div>
+
+    <!-- VISTA PRENOTAZIONI ULTIMA ONDA (solo superadmin) -->
+    <div id="vista-prenotazioni" class="hidden">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input class="mc-search" type="text" id="search-prenotazioni" placeholder="Cerca per nome, telefono o email..." style="flex:1; margin-bottom:0;">
+        <button class="btn-ghost" id="btn-esporta-excel" style="width:auto; margin:0; padding:12px 16px; white-space:nowrap;">Esporta Excel</button>
+      </div>
+      <p class="mc-sub" id="prenotazioni-count" style="margin:12px 0 0;"></p>
+      <div id="lista-prenotazioni" style="margin-top:12px;"></div>
+    </div>
   </div>
 </div>
 
@@ -180,6 +192,8 @@
   const resultArea = document.getElementById('result-area');
   const vistaScanner = document.getElementById('vista-scanner');
   const vistaGestione = document.getElementById('vista-gestione');
+  const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
+  let prenotazioniUltimaOnda = [];
 
   // ============================== LOGIN ==============================
   document.getElementById('btn-login').addEventListener('click', async () => {
@@ -223,7 +237,10 @@
       panel.classList.remove('hidden');
       tabs.classList.remove('hidden');
       document.getElementById('btn-cambia-postazione').classList.remove('hidden');
-      if (ruolo === 'superadmin') document.getElementById('sezione-livelli').classList.remove('hidden');
+      if (ruolo === 'superadmin') {
+        document.getElementById('sezione-livelli').classList.remove('hidden');
+        document.getElementById('tab-prenotazioni').classList.remove('hidden');
+      }
       avviaScanner();
     });
   });
@@ -233,9 +250,11 @@
     panel.classList.add('hidden');
     tabs.classList.add('hidden');
     vistaGestione.classList.add('hidden');
+    vistaPrenotazioni.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
     document.getElementById('tab-gestione').classList.remove('active');
+    document.getElementById('tab-prenotazioni').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
     modePicker.classList.remove('hidden');
@@ -255,18 +274,33 @@
   document.getElementById('tab-scanner').addEventListener('click', () => {
     document.getElementById('tab-scanner').classList.add('active');
     document.getElementById('tab-gestione').classList.remove('active');
+    document.getElementById('tab-prenotazioni').classList.remove('active');
     vistaScanner.classList.remove('hidden');
     vistaGestione.classList.add('hidden');
+    vistaPrenotazioni.classList.add('hidden');
     if (!scansioneAttiva) avviaScanner();
   });
 
   document.getElementById('tab-gestione').addEventListener('click', async () => {
     document.getElementById('tab-gestione').classList.add('active');
     document.getElementById('tab-scanner').classList.remove('active');
+    document.getElementById('tab-prenotazioni').classList.remove('active');
     vistaScanner.classList.add('hidden');
     vistaGestione.classList.remove('hidden');
+    vistaPrenotazioni.classList.add('hidden');
     await fermaScanner();
     caricaRichieste();
+  });
+
+  document.getElementById('tab-prenotazioni').addEventListener('click', async () => {
+    document.getElementById('tab-prenotazioni').classList.add('active');
+    document.getElementById('tab-scanner').classList.remove('active');
+    document.getElementById('tab-gestione').classList.remove('active');
+    vistaScanner.classList.add('hidden');
+    vistaGestione.classList.add('hidden');
+    vistaPrenotazioni.classList.remove('hidden');
+    await fermaScanner();
+    caricaPrenotazioni();
   });
 
   // ============================== SCANNER ==============================
@@ -583,6 +617,104 @@
     if (error) { msg.textContent = 'Errore: ' + error.message; return; }
     msg.textContent = `Livello ${livello} aggiornato ✓`;
   };
+
+  // ============================== PRENOTAZIONI ULTIMA ONDA (solo superadmin) ==============================
+  const SESSO_LABEL_PREN = { uomo: 'Uomo', donna: 'Donna', altro: 'Altro' };
+
+  function sessoLabelPren(r) {
+    if (r.sesso === 'altro' && r.sesso_altro) return `Altro (${r.sesso_altro})`;
+    return SESSO_LABEL_PREN[r.sesso] || r.sesso || '—';
+  }
+
+  function statoLabelPren(r) {
+    if (r.stato === 'usato') return '✓ Ingresso effettuato';
+    if (r.stato === 'annullata') return 'Annullata';
+    return 'In attesa';
+  }
+
+  function scelteLabelPren(r) {
+    const parti = [
+      sessoLabelPren(r),
+      `Invitato da: ${r.chi_ti_ha_invitato}`,
+      r.instagram ? `IG: ${r.instagram}` : null,
+      r.interesse_sup ? '🏄 Interesse SUP' : null,
+      statoLabelPren(r),
+    ];
+    return parti.filter(Boolean).join(' · ');
+  }
+
+  async function caricaPrenotazioni() {
+    const lista = document.getElementById('lista-prenotazioni');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data, error } = await sb
+      .from('ultima_onda_prenotazioni')
+      .select('nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, interesse_sup, stato, data_evento, created_at')
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    prenotazioniUltimaOnda = data;
+    disegnaPrenotazioni(prenotazioniUltimaOnda);
+  }
+
+  function disegnaPrenotazioni(items) {
+    const lista = document.getElementById('lista-prenotazioni');
+    document.getElementById('prenotazioni-count').textContent =
+      `${items.length} prenotazion${items.length === 1 ? 'e' : 'i'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna prenotazione trovata.</div>';
+      return;
+    }
+    lista.innerHTML = items.map(r => `
+      <div class="mc-row">
+        <div class="info">
+          <b>${r.nome_capogruppo}</b>
+          <span>${r.telefono} · ${r.email}</span>
+          <span>${scelteLabelPren(r)}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('search-prenotazioni').addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+    const filtrate = prenotazioniUltimaOnda.filter(r =>
+      `${r.nome_capogruppo} ${r.telefono} ${r.email}`.toLowerCase().includes(q)
+    );
+    disegnaPrenotazioni(filtrate);
+  });
+
+  document.getElementById('btn-esporta-excel').addEventListener('click', () => {
+    const q = document.getElementById('search-prenotazioni').value.toLowerCase();
+    const items = q
+      ? prenotazioniUltimaOnda.filter(r => `${r.nome_capogruppo} ${r.telefono} ${r.email}`.toLowerCase().includes(q))
+      : prenotazioniUltimaOnda;
+    if (items.length === 0) {
+      alert('Nessuna prenotazione da esportare.');
+      return;
+    }
+    const righe = items.map(r => ({
+      'Nome e Cognome': r.nome_capogruppo,
+      'Cellulare': r.telefono,
+      'Email': r.email,
+      'Instagram': r.instagram || '',
+      'Sesso': sessoLabelPren(r),
+      'Chi ti ha invitato': r.chi_ti_ha_invitato,
+      'Interesse SUP': r.interesse_sup ? 'Sì' : 'No',
+      'Stato ingresso': statoLabelPren(r),
+      'Data evento': r.data_evento,
+      'Data prenotazione': new Date(r.created_at).toLocaleString('it-IT'),
+    }));
+    const ws = XLSX.utils.json_to_sheet(righe);
+    ws['!cols'] = [
+      { wch: 24 }, { wch: 14 }, { wch: 26 }, { wch: 18 }, { wch: 12 },
+      { wch: 20 }, { wch: 13 }, { wch: 20 }, { wch: 12 }, { wch: 18 },
+    ];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Prenotazioni');
+    XLSX.writeFile(wb, `ultima-onda-prenotazioni-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  });
 </script>
 </body>
 </html>
