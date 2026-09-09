@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ULTIMA ONDA · 13 Settembre | Magaparty</title>
+    <meta name="description" content="ULTIMA ONDA — l'ultimo format dell'estate di Magaparty @ Nello Ocean Beach, domenica 13 settembre. SUP School, showcase Indieficio, DJ Set Adolfo Citro. Ingresso 10€, drink omaggio se sei in lista.">
+    <meta property="og:title" content="ULTIMA ONDA · 13 Settembre | Magaparty">
+    <meta property="og:description" content="Nello Ocean Beach, dalle 18:00. SUP School, Indieficio, DJ Set Adolfo Citro. Mettiti in lista: ingresso 10€ con drink omaggio.">
+    <meta property="og:image" content="assets/img/ultima-onda-locandina.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/jpeg" href="assets/img/ultima-onda-locandina.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* ═══ Palette ULTIMA ONDA — presa dalle locandine (tramonto caldo su Ocean Beach: ambra bruciata + crema) ═══ */
+        :root {
+            --sunset-orange:  #C2660E;  /* ambra bruciata — CTA primario */
+            --sunset-amber:   #A8540A;
+            --sunset-gold:    #F5E6C8;  /* crema — testi in evidenza, countdown */
+            --sunset-teal:    #7A3B12;  /* bruno rossiccio — badge secondari */
+            --sunset-teal2:   #4A230A;
+            --sunset-coral:   #E08A3C;  /* urgenza / alert */
+            --sunset-cream:   #FBF1DE;
+            --sunset-deep:    #2B1206;
+
+            --night-bg:      #140A05;
+            --night-surface: #201209;
+            --night-border:  #3A2210;
+            --night-border-soft: rgba(255, 210, 150, 0.08);
+        }
+
+        .section-anchor { padding-top: 24px; scroll-margin-top: 80px; }
+        .section-divider { margin: 56px 0 32px; height: 1px; background: linear-gradient(90deg, transparent, rgba(245,230,200,0.2), transparent); }
+        .section-label { display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px; }
+
+        .urgency-banner { background: rgba(224,138,60,0.1); border: 1px solid rgba(224,138,60,0.4); border-radius: 16px; padding: 16px 18px; text-align:center; }
+        .form-field label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:#C9A878; margin-bottom:6px; }
+        .form-field input, .form-field textarea, .form-field select {
+            width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--night-border); border-radius:12px;
+            padding:12px 14px; color:#F2E7D6; font-family:inherit; font-size:13px; outline:none;
+        }
+        .form-field input:focus { border-color:var(--sunset-orange); }
+        .opt-choice { display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid var(--night-border); border-radius:14px; padding:14px 16px; cursor:pointer; transition:all .15s; }
+        .opt-choice.selected { border-color:var(--sunset-orange); background:rgba(194,102,14,0.09); }
+        .opt-choice input { accent-color: var(--sunset-orange); width:16px; height:16px; }
+        .sup-toggle { display:flex; align-items:flex-start; gap:10px; border:1px solid var(--night-border); border-radius:14px; padding:14px 16px; cursor:pointer; }
+        .sup-toggle input { accent-color: var(--sunset-orange); width:16px; height:16px; margin-top:2px; }
+        .timeline-dot { width:16px; height:16px; border-radius:9999px; margin-top:4px; }
+    </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1205712864989093');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+</head>
+<body data-page="info">
+<main id="page-main">
+
+<!-- ══════════════════════ INFO ══════════════════════ -->
+<section id="info" class="section-anchor animate-fade-in" data-testid="page-info">
+    <div class="desktop-2col" style="row-gap:12px">
+        <!-- Card dinamica: Countdown / Live / Concluso -->
+        <div id="dynamic-card" class="glass-card p-6 text-center desktop-full neon-border-orange">
+            <div id="state-countdown">
+                <h3 id="countdown-label" class="brutalist text-xl mb-4" style="color:var(--sunset-orange)">ALL'ULTIMA ONDA MANCANO</h3>
+                <div class="grid grid-cols-4 gap-2 border-t pt-4" style="border-color:var(--night-border-soft)">
+                    <div><span class="block text-2xl font-bold brutalist" id="cd" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="ch" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cm" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cs" style="color:var(--sunset-orange)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                </div>
+            </div>
+            <div id="state-live" style="display:none">
+                <div class="flex items-center justify-center gap-2 mb-3">
+                    <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--sunset-orange)"></span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold" style="color:var(--sunset-orange)">Live ora</span>
+                </div>
+                <p class="text-3xl mb-2">&#127754;</p>
+                <h3 class="brutalist text-2xl mb-1" style="color:var(--sunset-gold)">ULTIMA ONDA È IN CORSO</h3>
+                <p class="text-[11px] text-gray-400 tracking-wider">Vieni con il tuo QR, ti aspettiamo in spiaggia.</p>
+            </div>
+            <div id="state-ended" style="display:none">
+                <p class="text-3xl mb-2">🌊</p>
+                <h3 class="brutalist text-2xl mb-1" style="color:var(--sunset-gold)">L'ULTIMA ONDA SI È CONCLUSA</h3>
+                <p class="text-[11px] text-gray-400 tracking-wider">Grazie per un'estate incredibile. Ci si rivede alla prossima stagione — intanto seguici su Instagram.</p>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="glass-card overflow-hidden">
+            <div class="p-5">
+                <h3 class="brutalist text-xl mb-1 sunset-title">NELLO OCEAN BEACH</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Via Mar Ionio, 22 · Magazzeno, Salerno</p>
+                <a href="https://maps.google.com/?q=Nello+Ocean+Beach+Salerno" target="_blank" rel="noopener" data-testid="map-link"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                   style="background:rgba(122,59,18,0.18); border:1px solid var(--night-border); color:var(--sunset-coral)">
+                    <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                </a>
+            </div>
+            <div class="p-4 border-t" style="background:rgba(0,0,0,0.3); border-color:var(--night-border-soft)">
+                <p class="text-[9px] uppercase tracking-[0.15em] mb-3 flex items-center gap-2" style="color:var(--sunset-gold)">
+                    <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:var(--sunset-gold)"></span> Quando
+                </p>
+                <p class="text-[12px] text-gray-300">Domenica <strong class="text-white">13 settembre</strong>, dalle <strong class="text-white">18:00</strong>.</p>
+            </div>
+        </div>
+
+        <!-- Numero limitato -->
+        <div class="urgency-banner">
+            <p class="brutalist text-sm" style="color:var(--sunset-coral)">L'ULTIMO FORMAT DELL'ESTATE</p>
+            <p class="text-[11px] text-gray-300 mt-2 leading-relaxed">
+                Ingresso <strong class="text-white">10€</strong>. Se sei <strong class="text-white">in lista</strong>, il drink è
+                <strong class="text-white">omaggio</strong>. Se non sei in lista, l'ingresso resta 10€ ma
+                <strong class="text-white">senza drink incluso</strong> — quindi conviene prenotare.
+            </p>
+            <button onclick="ULTIMAONDA.goToForm()" class="inline-flex items-center gap-2 mt-4 px-5 py-2 rounded-full text-[10px] uppercase tracking-widest font-bold"
+                style="color:var(--night-bg); background:var(--sunset-orange)">
+                Mettiti in lista <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════ PROGRAMMA ══════════════════════ -->
+<section id="programma" class="section-anchor animate-fade-in" data-testid="page-programma">
+    <div class="text-center mb-6">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il programma</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 15:00 al tramonto, e oltre</p>
+    </div>
+
+    <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-coral); box-shadow:0 0 10px rgba(224,138,60,0.5)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-coral)">SUP SCHOOL</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-coral)">15:00</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(224,138,60,0.25); background:rgba(224,138,60,0.06)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(224,138,60,0.12); color:var(--sunset-coral)"><i class="fa-solid fa-person-swimming"></i> Con Adventure Lab &amp; Next</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">Lezione di SUP o semplice noleggio, prima che inizi la festa. <strong class="text-white">Si prenota a parte</strong> — chiedi info nel form qui sotto o scrivici su Instagram.</p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-gold); box-shadow:0 0 10px rgba(245,230,200,0.5)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-gold)">START</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-gold)">18:00</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(245,230,200,0.25); background:rgba(245,230,200,0.05)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(245,230,200,0.1); color:var(--sunset-gold)"><i class="fa-solid fa-martini-glass"></i> Apertura</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">Si apre in spiaggia, tramonto e drink alla mano. <strong class="text-white">Si mangia</strong>: dolce e salato per tutta la serata.</p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-orange); box-shadow:0 0 10px rgba(194,102,14,0.6)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:var(--sunset-orange)">INDIEFICIO</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:var(--sunset-orange)">19:30</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(194,102,14,0.25); background:rgba(194,102,14,0.06)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(194,102,14,0.12); color:var(--sunset-orange)"><i class="fa-solid fa-music"></i> Showcase</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">Il live showcase di Indieficio, in riva al mare. <strong class="text-white">Il momento indie</strong> della serata, tra un drink e l'altro.</p>
+            </div>
+        </div>
+        <div class="relative">
+            <div class="absolute -left-[27px] w-4 h-4 rounded-full mt-1" style="background:var(--sunset-teal); box-shadow:0 0 10px rgba(122,59,18,0.6)"></div>
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="brutalist text-xl" style="color:#D08A4A">DJ SET · ADOLFO CITRO</h3>
+                <span class="text-black text-[10px] px-2 py-1 rounded font-bold" style="background:#D08A4A">21:30</span>
+            </div>
+            <div class="glass-card p-4" style="border-color:rgba(122,59,18,0.3); background:rgba(122,59,18,0.08)">
+                <div class="inline-flex items-center gap-2 px-2 py-1 rounded text-[9px] uppercase tracking-widest font-bold mb-3" style="background:rgba(122,59,18,0.2); color:#D08A4A"><i class="fa-solid fa-headphones"></i> Chiusura in musica</div>
+                <p class="text-[12px] text-gray-300 leading-relaxed">Adolfo Citro chiude l'estate in console. <strong class="text-white">L'ultima onda</strong>, prima che finisca davvero.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card overflow-hidden mt-8" style="border-color:rgba(245,230,200,0.15)">
+        <img src="assets/img/ultima-onda-programma.jpg" alt="Mappa e programma Ultima Onda" style="width:100%;display:block" loading="lazy">
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════ PREZZI ══════════════════════ -->
+<section id="prezzi" class="section-anchor animate-fade-in" data-testid="page-prezzi">
+    <div class="text-center mb-8">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Lista consigliata · posti limitati</p>
+    </div>
+    <div class="space-y-4">
+        <div class="glass-card p-5 border-l-4" style="border-left-color:var(--sunset-orange); background:rgba(194,102,14,0.06)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(194,102,14,0.15); color:var(--sunset-orange)">🌅 Se sei in lista</span>
+                    <h4 class="brutalist text-xl text-white">INGRESSO + DRINK OMAGGIO</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)"><i class="fa-solid fa-martini-glass mr-1"></i> Drink incluso nel prezzo</p>
+                </div>
+                <span class="brutalist text-4xl" style="color:var(--sunset-orange)">€10</span>
+            </div>
+            <button data-testid="ticket-lista" onclick="ULTIMAONDA.goToForm()" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all" style="background:rgba(194,102,14,0.14); border:1px solid rgba(194,102,14,0.4); color:var(--sunset-orange)"><i class="fa-solid fa-list-check mr-1"></i> Mettiti in lista</button>
+        </div>
+        <div class="glass-card p-5 border-l-4 opacity-80" style="border-left-color:var(--sunset-teal); background:rgba(122,59,18,0.05)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(122,59,18,0.18); color:#D08A4A">🎟️ Se non sei in lista</span>
+                    <h4 class="brutalist text-xl text-white">SOLO INGRESSO</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:#D08A4A"><i class="fa-solid fa-ban mr-1"></i> Niente drink omaggio</p>
+                </div>
+                <span class="brutalist text-4xl" style="color:#D08A4A">€10</span>
+            </div>
+            <p class="text-[10px] text-gray-400 text-center">Stesso prezzo, un drink in meno. <strong style="color:var(--sunset-gold)">Conviene prenotare.</strong></p>
+        </div>
+        <div class="glass-card p-4 border border-white/10 text-center">
+            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-utensils mr-1" style="color:var(--sunset-coral)"></i> Si mangia: <strong style="color:var(--sunset-gold)">dolce e salato</strong> per tutta la serata.</p>
+        </div>
+        <div class="glass-card p-4 border border-white/10 text-center">
+            <p class="text-[11px] text-gray-400"><i class="fa-solid fa-person-swimming mr-1" style="color:var(--sunset-coral)"></i> Vuoi anche il <strong style="color:var(--sunset-gold)">SUP</strong>? Lezione o solo noleggio con Adventure Lab &amp; Next dalle 15:00 — <strong style="color:var(--sunset-gold)">chiedilo nel form qui sotto</strong>.</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ══════════════════════ FORM PRENOTAZIONE ══════════════════════ -->
+<section id="form" class="section-anchor animate-fade-in" data-testid="page-form">
+    <div class="text-center mb-8">
+        <span class="section-label">Ultimo step</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Form veloce · il QR arriva via email</p>
+    </div>
+
+    <div id="formCard" class="glass-card neon-border-orange p-6">
+        <form id="ultimaOndaForm" class="space-y-4">
+            <div class="form-field">
+                <label for="nome">Nome e Cognome *</label>
+                <input type="text" id="nome" required placeholder="Es. Mario Rossi">
+            </div>
+            <div class="form-field">
+                <label for="telefono">Numero di Cellulare *</label>
+                <input type="tel" id="telefono" required placeholder="Es. 333 1234567">
+            </div>
+            <div class="form-field">
+                <label for="instagram">Instagram (opzionale)</label>
+                <input type="text" id="instagram" placeholder="Il tuo @username - così ti tagghiamo nelle storie">
+            </div>
+            <div class="form-field">
+                <label for="chiTiHaInvitato">Chi ti ha invitato *</label>
+                <input type="text" id="chiTiHaInvitato" required placeholder="Nome - Nessuno - Social [Quale] - Sito Web">
+            </div>
+            <div class="form-field">
+                <label for="sesso">Sesso *</label>
+                <select id="sesso" required>
+                    <option value="" disabled selected>Seleziona...</option>
+                    <option value="uomo">Uomo</option>
+                    <option value="donna">Donna</option>
+                    <option value="altro">Altro</option>
+                </select>
+            </div>
+            <div class="form-field" id="sessoAltroWrap" style="display:none">
+                <label for="sessoAltro">Specifica</label>
+                <input type="text" id="sessoAltro" placeholder="Specifica">
+            </div>
+            <div class="form-field">
+                <label for="email">Email *</label>
+                <input type="email" id="email" required placeholder="La tua email — qui arriva il QR">
+            </div>
+
+            <label class="sup-toggle">
+                <input type="checkbox" id="interesseSup">
+                <span class="text-[12px] text-white">🏄 Vorrei info per una lezione o il noleggio SUP (dalle 15:00, con Adventure Lab &amp; Next) — mi ricontattano loro.</span>
+            </label>
+
+            <label class="flex items-start gap-2 text-[10px] text-gray-400 pt-1">
+                <input type="checkbox" id="privacy" required style="margin-top:2px;accent-color:var(--sunset-orange)">
+                Acconsento al trattamento dei dati per la gestione della prenotazione. *
+            </label>
+
+            <button type="submit" id="submitBtn"
+                class="w-full py-4 rounded-full text-[12px] uppercase tracking-widest font-bold transition-all"
+                style="color:var(--night-bg); background:var(--sunset-orange); box-shadow:0 0 20px rgba(194,102,14,0.35)">
+                <i class="fa-solid fa-list-check"></i> Mettiti in lista
+            </button>
+            <p id="formError" class="text-[11px] text-center" style="color:var(--sunset-coral); display:none"></p>
+        </form>
+    </div>
+
+    <!-- Thank you / QR view -->
+    <div id="successCard" class="glass-card neon-border-orange p-6 text-center" style="display:none">
+        <p class="text-3xl mb-2">🌊</p>
+        <h3 class="brutalist text-xl mb-2" style="color:var(--sunset-gold)">ACCESSO CONFERMATO!</h3>
+        <p class="text-[12px] text-gray-300 leading-relaxed mb-5">
+            Senza questo QR, la sicurezza non ti farà accedere all'area evento.<br>
+            Mostralo in cassa all'Ocean Beach per ritirare il drink omaggio.<br>
+            Ci vediamo domenica 13 settembre dalle 18:00.
+        </p>
+        <div id="qr" style="display:flex;justify-content:center;margin-bottom:14px"></div>
+        <p class="text-[10px] text-gray-500">Ti abbiamo inviato lo stesso QR anche via email, come backup.</p>
+    </div>
+</section>
+
+</main>
+<script src="assets/ultima-onda-app.js"></script>
+<script>
+    document.querySelectorAll('.opt-choice').forEach(el => {
+        el.addEventListener('click', () => {
+            document.querySelectorAll('.opt-choice').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            const input = el.querySelector('input');
+            if (input) input.checked = true;
+        });
+    });
+
+    document.getElementById('sesso').addEventListener('change', (e) => {
+        const wrap = document.getElementById('sessoAltroWrap');
+        wrap.style.display = e.target.value === 'altro' ? 'block' : 'none';
+    });
+
+    // Sostituisci con i valori del tuo progetto Supabase (stesso progetto di MagaCard/Marea/Battigia)
+    const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const DATA_EVENTO = '2026-09-13';
+
+    const form = document.getElementById('ultimaOndaForm');
+    const errEl = document.getElementById('formError');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errEl.style.display = 'none';
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Invio in corso...';
+
+        // Genera il QR token nel browser: evita di dover rileggere la riga
+        // dal database subito dopo l'insert (lettura non consentita al
+        // pubblico per privacy — solo lo staff autenticato può leggere).
+        const qrToken = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random()).replace(/-/g, '');
+
+        const payload = {
+            qr_token: qrToken,
+            data_evento: DATA_EVENTO,
+            nome_capogruppo: document.getElementById('nome').value.trim(),
+            telefono: document.getElementById('telefono').value.trim(),
+            instagram: document.getElementById('instagram').value.trim() || null,
+            chi_ti_ha_invitato: document.getElementById('chiTiHaInvitato').value.trim(),
+            sesso: document.getElementById('sesso').value,
+            sesso_altro: document.getElementById('sesso').value === 'altro'
+                ? (document.getElementById('sessoAltro').value.trim() || null)
+                : null,
+            email: document.getElementById('email').value.trim(),
+            interesse_sup: document.getElementById('interesseSup').checked,
+            consenso_privacy: document.getElementById('privacy').checked
+        };
+
+        const { error } = await sb
+            .from('ultima_onda_prenotazioni')
+            .insert(payload);
+
+        if (error) {
+            errEl.textContent = "Qualcosa è andato storto. Riprova o scrivici su Instagram.";
+            errEl.style.display = 'block';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-list-check"></i> Mettiti in lista';
+            return;
+        }
+
+        document.getElementById('formCard').style.display = 'none';
+        const successCard = document.getElementById('successCard');
+        successCard.style.display = 'block';
+        new QRCode(document.getElementById('qr'), {
+            text: qrToken,
+            width: 200,
+            height: 200,
+            colorDark: '#2B1206',
+            colorLight: '#ffffff'
+        });
+        successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+</script>
+</body>
+</html>
