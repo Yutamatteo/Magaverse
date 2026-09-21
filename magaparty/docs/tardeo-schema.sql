@@ -22,7 +22,6 @@ create table if not exists tardeo_prenotazioni (
     check (sesso in ('uomo', 'donna', 'altro')),
   sesso_altro text,                              -- specifica libera, solo se sesso = 'altro'
   email text not null,
-  interesse_sup boolean not null default false,  -- vuole info per lezione/noleggio SUP (Adventure Lab & Next)
   qr_token text unique not null default replace(gen_random_uuid()::text, '-', ''),
   stato text not null default 'confermata'
     check (stato in ('confermata', 'usato', 'annullata')),
@@ -74,7 +73,6 @@ returns table(
   esito text,
   nome_capogruppo text,
   chi_ti_ha_invitato text,
-  interesse_sup boolean,
   data_evento date
 ) as $$
 declare
@@ -82,7 +80,7 @@ declare
   v_stato text;
 begin
   if ruolo_utente() not in ('ingresso', 'admin', 'superadmin') then
-    return query select 'non_autorizzato'::text, null::text, null::text, null::boolean, null::date;
+    return query select 'non_autorizzato'::text, null::text, null::text, null::date;
     return;
   end if;
 
@@ -91,19 +89,19 @@ begin
     where qr_token = p_qr_token;
 
   if v_id is null then
-    return query select 'non_trovato'::text, null::text, null::text, null::boolean, null::date;
+    return query select 'non_trovato'::text, null::text, null::text, null::date;
     return;
   end if;
 
   if v_stato = 'usato' then
     return query
-      select 'gia_usato'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.interesse_sup, r.data_evento
+      select 'gia_usato'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.data_evento
       from tardeo_prenotazioni r where r.id = v_id;
     return;
   end if;
 
   if v_stato = 'annullata' then
-    return query select 'annullata'::text, null::text, null::text, null::boolean, null::date;
+    return query select 'annullata'::text, null::text, null::text, null::date;
     return;
   end if;
 
@@ -112,7 +110,7 @@ begin
     where id = v_id;
 
   return query
-    select 'ok'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.interesse_sup, r.data_evento
+    select 'ok'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.data_evento
     from tardeo_prenotazioni r where r.id = v_id;
 end;
 $$ language plpgsql security definer;
