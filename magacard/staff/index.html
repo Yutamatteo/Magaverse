@@ -167,6 +167,8 @@
     <div id="vista-prenotazioni" class="hidden">
       <label for="select-evento-prenotazioni">Evento</label>
       <select class="mc-select-evento" id="select-evento-prenotazioni"></select>
+      <label for="select-data-prenotazioni" id="label-data-prenotazioni" class="hidden" style="margin-top:10px;">Data</label>
+      <select class="mc-select-evento hidden" id="select-data-prenotazioni" style="margin-top:2px;"></select>
       <div style="display:flex; gap:8px; align-items:center;">
         <input class="mc-search" type="text" id="search-prenotazioni" placeholder="Cerca per nome, telefono o email..." style="flex:1; margin-bottom:0;">
         <button class="btn-ghost" id="btn-esporta-excel" style="width:auto; margin:0; padding:12px 16px; white-space:nowrap;">Esporta Excel</button>
@@ -202,6 +204,8 @@
   const vistaGestione = document.getElementById('vista-gestione');
   const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
   let prenotazioniCorrenti = [];
+  let prenotazioniEventoTutte = [];
+  let dataPrenotazioniAttiva = null;
 
   // ============================== LOGIN ==============================
   document.getElementById('btn-login').addEventListener('click', async () => {
@@ -358,6 +362,12 @@
     }
   }
 
+  function formatDataBreve(dataIso) {
+    if (!dataIso) return '';
+    const d = new Date(dataIso + 'T12:00:00');
+    return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long' });
+  }
+
   async function gestisciIngresso(codice) {
     resultArea.classList.remove('hidden');
     resultArea.innerHTML = `<div class="result-card"><div class="esito">Verifica in corso...</div></div>`;
@@ -415,7 +425,72 @@
       return;
     }
 
-    // 3) Non è né un QR Marea né Ultima Onda (o non trovato): prova come MagaCard (timbro)
+    // 3) Non è Marea né Ultima Onda (o non trovato): prova come QR d'ingresso Tardeo
+    const tardeo = await sb.rpc('valida_ingresso_tardeo', { p_qr_token: codice });
+    const tEsito = tardeo.data?.[0]?.esito;
+
+    if (!tardeo.error && tEsito && tEsito !== 'non_trovato') {
+      let html = '';
+      if (tEsito === 'ok') {
+        const r = tardeo.data[0];
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito ok">✓ Accesso Tardeo consentito</div>
+                <p style="margin-top:8px; font-size:14px;">🌇 Ingresso + drink omaggio</p>`;
+      } else if (tEsito === 'gia_usato') {
+        const r = tardeo.data[0];
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito errore">⚠️ QR Tardeo già utilizzato — accesso già avvenuto.</div>`;
+      } else if (tEsito === 'annullata') {
+        html = `<div class="esito errore">Prenotazione Tardeo annullata.</div>`;
+      } else if (tEsito === 'non_autorizzato') {
+        html = `<div class="esito errore">Il tuo account non può scansionare ingressi Tardeo.</div>`;
+      } else if (tEsito === 'non_ancora_valido') {
+        const r = tardeo.data[0];
+        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Tardeo del ${formatDataBreve(r.data_evento)}.</div>`;
+      } else if (tEsito === 'scaduto') {
+        const r = tardeo.data[0];
+        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Tardeo del ${formatDataBreve(r.data_evento)}.</div>`;
+      }
+      resultArea.innerHTML = `<div class="result-card">${html}</div>
+        <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+      document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+      return;
+    }
+
+    // 4) Non è Marea, Ultima Onda né Tardeo (o non trovato): prova come QR d'ingresso Battigia
+    const battigia = await sb.rpc('valida_ingresso_battigia', { p_qr_token: codice });
+    const bEsito = battigia.data?.[0]?.esito;
+
+    if (!battigia.error && bEsito && bEsito !== 'non_trovato') {
+      let html = '';
+      if (bEsito === 'ok') {
+        const r = battigia.data[0];
+        const dettaglio = `${BATTIGIA_OPZIONE_LABEL[r.opzione] || r.opzione}${r.opzione === 'tavolo' && r.numero_persone ? ' · ' + r.numero_persone + ' persone' : ''}`;
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito ok">✓ Accesso Battigia consentito</div>
+                <p style="margin-top:8px; font-size:14px;">${dettaglio}</p>`;
+      } else if (bEsito === 'gia_usato') {
+        const r = battigia.data[0];
+        html = `<div class="nome">${r.nome_capogruppo}</div>
+                <div class="esito errore">⚠️ QR Battigia già utilizzato — accesso già avvenuto.</div>`;
+      } else if (bEsito === 'annullata') {
+        html = `<div class="esito errore">Prenotazione Battigia annullata.</div>`;
+      } else if (bEsito === 'non_autorizzato') {
+        html = `<div class="esito errore">Il tuo account non può scansionare ingressi Battigia.</div>`;
+      } else if (bEsito === 'non_ancora_valido') {
+        const r = battigia.data[0];
+        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Battigia del ${formatDataBreve(r.data_evento)}.</div>`;
+      } else if (bEsito === 'scaduto') {
+        const r = battigia.data[0];
+        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Battigia del ${formatDataBreve(r.data_evento)}.</div>`;
+      }
+      resultArea.innerHTML = `<div class="result-card">${html}</div>
+        <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+      document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+      return;
+    }
+
+    // 5) Non è né Marea, né Ultima Onda, né Tardeo, né Battigia (o non trovato): prova come MagaCard (timbro)
     const { data, error } = await sb.rpc('aggiungi_timbro', { p_card_code: codice });
     const esito = data?.[0]?.esito;
 
@@ -423,7 +498,7 @@
     if (error || !esito) {
       html = `<div class="esito errore">Errore di connessione, riprova.</div>`;
     } else if (esito === 'card_non_trovata') {
-      html = `<div class="esito errore">Codice non riconosciuto (né Marea, né Ultima Onda, né MagaCard).</div>`;
+      html = `<div class="esito errore">Codice non riconosciuto (né Marea, né Ultima Onda, né Tardeo, né Battigia, né MagaCard).</div>`;
     } else if (esito === 'gia_timbrato_oggi') {
       html = `<div class="esito errore">Timbro già assegnato oggi per questa card.</div>`;
     } else {
@@ -677,14 +752,40 @@
   let eventoPrenotazioniAttivo = 'tardeo';
 
   const selectEventoPren = document.getElementById('select-evento-prenotazioni');
+  const selectDataPren = document.getElementById('select-data-prenotazioni');
+  const labelDataPren = document.getElementById('label-data-prenotazioni');
   selectEventoPren.innerHTML = Object.entries(EVENTI_PRENOTAZIONI)
     .map(([key, cfg]) => `<option value="${key}">${cfg.label}</option>`).join('');
   selectEventoPren.value = eventoPrenotazioniAttivo;
   selectEventoPren.addEventListener('change', () => {
     eventoPrenotazioniAttivo = selectEventoPren.value;
+    dataPrenotazioniAttiva = null;
     document.getElementById('search-prenotazioni').value = '';
     caricaPrenotazioni();
   });
+
+  selectDataPren.addEventListener('change', () => {
+    dataPrenotazioniAttiva = selectDataPren.value;
+    document.getElementById('search-prenotazioni').value = '';
+    applicaFiltroData();
+  });
+
+  // Sceglie di default la data più vicina a oggi: preferisce la prossima
+  // data futura/odierna, altrimenti l'ultima data passata più recente.
+  function dataDefaultPren(dateList) {
+    const oggi = new Date().toISOString().slice(0, 10);
+    const future = dateList.filter(d => d >= oggi).sort();
+    if (future.length) return future[0];
+    const passate = dateList.filter(d => d < oggi).sort();
+    return passate.length ? passate[passate.length - 1] : dateList[0];
+  }
+
+  function applicaFiltroData() {
+    prenotazioniCorrenti = dataPrenotazioniAttiva
+      ? prenotazioniEventoTutte.filter(r => r.data_evento === dataPrenotazioniAttiva)
+      : prenotazioniEventoTutte;
+    disegnaPrenotazioni(prenotazioniCorrenti);
+  }
 
   function sessoLabelPren(r) {
     if (r.sesso === 'altro' && r.sesso_altro) return `Altro (${r.sesso_altro})`;
@@ -721,8 +822,28 @@
       lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
       return;
     }
-    prenotazioniCorrenti = data;
-    disegnaPrenotazioni(prenotazioniCorrenti);
+    prenotazioniEventoTutte = data;
+
+    // Popola il selettore data solo se ci sono più occorrenze di questo
+    // evento, così una seconda edizione futura non si mescola con la
+    // prima nella stessa lista/conteggio.
+    const dateUniche = [...new Set(data.map(r => r.data_evento).filter(Boolean))].sort();
+    if (dateUniche.length > 1) {
+      selectDataPren.innerHTML = dateUniche.map(d => `<option value="${d}">${formatDataBreve(d)}</option>`).join('');
+      if (!dataPrenotazioniAttiva || !dateUniche.includes(dataPrenotazioniAttiva)) {
+        dataPrenotazioniAttiva = dataDefaultPren(dateUniche);
+      }
+      selectDataPren.value = dataPrenotazioniAttiva;
+      selectDataPren.classList.remove('hidden');
+      labelDataPren.classList.remove('hidden');
+    } else {
+      dataPrenotazioniAttiva = null;
+      selectDataPren.innerHTML = '';
+      selectDataPren.classList.add('hidden');
+      labelDataPren.classList.add('hidden');
+    }
+
+    applicaFiltroData();
   }
 
   function disegnaPrenotazioni(items) {
