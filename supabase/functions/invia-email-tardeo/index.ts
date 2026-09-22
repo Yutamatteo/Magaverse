@@ -33,14 +33,14 @@ Deno.serve(async (req: Request) => {
     return new Response("missing fields", { status: 400 });
   }
 
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&color=0B1626&bgcolor=ffffff&data=${encodeURIComponent(row.qr_token)}`;
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=360x360&color=0A0A0C&bgcolor=ffffff&data=${encodeURIComponent(row.qr_token)}`;
   const dataLabel = formatDataEvento(row.data_evento);
 
   const html = `
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#0B1626;color:#F4E8CE;padding:32px 24px;border-radius:20px">
-    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#F2874A;margin:0 0 6px">Dal tramonto a notte fonda</p>
+  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#0A0A0C;color:#F5F5F0;padding:32px 24px;border-radius:20px">
+    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#FF6A4D;margin:0 0 6px">Dal tramonto a notte fonda</p>
     <h1 style="font-size:26px;margin:0 0 4px;color:#fff">TARDEO</h1>
-    <p style="font-size:13px;color:#E2540E;margin:0 0 24px">Nello Ocean Beach · ${dataLabel} · dalle 19:00</p>
+    <p style="font-size:13px;color:#FF3319;margin:0 0 24px">Nello Ocean Beach · ${dataLabel} · dalle 19:00</p>
 
     <p style="font-size:14px;line-height:1.5;margin:0 0 20px">
       Ciao <strong>${row.nome_capogruppo}</strong>, la tua richiesta è confermata.
