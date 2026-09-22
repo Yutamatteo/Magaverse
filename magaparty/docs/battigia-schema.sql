@@ -77,6 +77,11 @@ create policy "staff legge prenotazioni battigia"
 -- Stesso ruolo 'ingresso' usato per MagaCard e Marea: un solo
 -- account/accesso staff per tutti i format.
 -- ============================================================
+-- Il QR è valido dalla mezzanotte del mercoledì evento fino a 24 ore
+-- dopo l'orario di inizio (20:00): un ospite che arriva alle 2 del
+-- mattino deve poter comunque entrare. Fuori da questa finestra il QR
+-- viene rifiutato con un esito dedicato, così un QR di una data non
+-- può essere riusato per un Battigia futuro.
 create or replace function valida_ingresso_battigia(p_qr_token text)
 returns table(
   esito text,
@@ -89,18 +94,38 @@ returns table(
 declare
   v_id uuid;
   v_stato text;
+  v_data_evento date;
+  v_inizio timestamptz;
+  v_scadenza timestamptz;
 begin
   if ruolo_utente() not in ('ingresso', 'admin', 'superadmin') then
     return query select 'non_autorizzato'::text, null::text, null::text, null::text, null::integer, null::date;
     return;
   end if;
 
-  select id, stato into v_id, v_stato
+  select id, stato, data_evento into v_id, v_stato, v_data_evento
     from battigia_prenotazioni
     where qr_token = p_qr_token;
 
   if v_id is null then
     return query select 'non_trovato'::text, null::text, null::text, null::text, null::integer, null::date;
+    return;
+  end if;
+
+  v_inizio := (v_data_evento::timestamp) at time zone 'Europe/Rome';
+  v_scadenza := (v_data_evento::timestamp + time '20:00' + interval '24 hours') at time zone 'Europe/Rome';
+
+  if now() < v_inizio then
+    return query
+      select 'non_ancora_valido'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.opzione, r.numero_persone, r.data_evento
+      from battigia_prenotazioni r where r.id = v_id;
+    return;
+  end if;
+
+  if now() > v_scadenza then
+    return query
+      select 'scaduto'::text, r.nome_capogruppo, r.chi_ti_ha_invitato, r.opzione, r.numero_persone, r.data_evento
+      from battigia_prenotazioni r where r.id = v_id;
     return;
   end if;
 
