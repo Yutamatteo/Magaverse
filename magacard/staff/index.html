@@ -61,6 +61,12 @@
   .livello-row button { width: auto; margin: 0; padding: 10px 14px; }
 
   .hidden { display: none !important; }
+
+  .mc-select-evento {
+    width:100%; padding:13px 14px; border-radius:12px; border:1px solid var(--mc-border);
+    background:#0F0A17; color:var(--mc-text); font-size:15px; font-family:inherit;
+    margin-bottom:12px; appearance:none; -webkit-appearance:none;
+  }
 </style>
 </head>
 <body>
@@ -157,8 +163,10 @@
       </div>
     </div>
 
-    <!-- VISTA PRENOTAZIONI ULTIMA ONDA (solo superadmin) -->
+    <!-- VISTA PRENOTAZIONI (admin/superadmin/ingresso) -->
     <div id="vista-prenotazioni" class="hidden">
+      <label for="select-evento-prenotazioni">Evento</label>
+      <select class="mc-select-evento" id="select-evento-prenotazioni"></select>
       <div style="display:flex; gap:8px; align-items:center;">
         <input class="mc-search" type="text" id="search-prenotazioni" placeholder="Cerca per nome, telefono o email..." style="flex:1; margin-bottom:0;">
         <button class="btn-ghost" id="btn-esporta-excel" style="width:auto; margin:0; padding:12px 16px; white-space:nowrap;">Esporta Excel</button>
@@ -193,7 +201,7 @@
   const vistaScanner = document.getElementById('vista-scanner');
   const vistaGestione = document.getElementById('vista-gestione');
   const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
-  let prenotazioniUltimaOnda = [];
+  let prenotazioniCorrenti = [];
 
   // ============================== LOGIN ==============================
   document.getElementById('btn-login').addEventListener('click', async () => {
@@ -628,8 +636,55 @@
     msg.textContent = `Livello ${livello} aggiornato ✓`;
   };
 
-  // ============================== PRENOTAZIONI ULTIMA ONDA (solo superadmin) ==============================
+  // ============================== PRENOTAZIONI EVENTI (admin/superadmin/ingresso) ==============================
   const SESSO_LABEL_PREN = { uomo: 'Uomo', donna: 'Donna', altro: 'Altro' };
+  const BATTIGIA_OPZIONE_LABEL = { base: '🎟️ Ingresso Base', tavolo: '🪑 Tavolo' };
+
+  const EVENTI_PRENOTAZIONI = {
+    tardeo: {
+      label: 'Tardeo',
+      tabella: 'tardeo_prenotazioni',
+      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, stato, data_evento, created_at',
+      extra: () => [],
+      extraExcel: () => ({}),
+    },
+    ultima_onda: {
+      label: 'Ultima Onda',
+      tabella: 'ultima_onda_prenotazioni',
+      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, interesse_sup, stato, data_evento, created_at',
+      extra: (r) => [r.interesse_sup ? '🏄 Interesse SUP' : null],
+      extraExcel: (r) => ({ 'Interesse SUP': r.interesse_sup ? 'Sì' : 'No' }),
+    },
+    battigia: {
+      label: 'Battigia',
+      tabella: 'battigia_prenotazioni',
+      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, numero_persone, stato, data_evento, created_at',
+      extra: (r) => [
+        BATTIGIA_OPZIONE_LABEL[r.opzione] || r.opzione,
+        r.opzione === 'tavolo' && r.numero_persone ? `${r.numero_persone} persone` : null,
+      ],
+      extraExcel: (r) => ({ 'Opzione': BATTIGIA_OPZIONE_LABEL[r.opzione] || r.opzione, 'Numero persone': r.numero_persone || '' }),
+    },
+    marea: {
+      label: 'Marea',
+      tabella: 'marea_prenotazioni',
+      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, stato, data_evento, created_at',
+      extra: (r) => [MAREA_OPZIONE_LABEL[r.opzione] || r.opzione],
+      extraExcel: (r) => ({ 'Opzione': MAREA_OPZIONE_LABEL[r.opzione] || r.opzione }),
+    },
+  };
+
+  let eventoPrenotazioniAttivo = 'tardeo';
+
+  const selectEventoPren = document.getElementById('select-evento-prenotazioni');
+  selectEventoPren.innerHTML = Object.entries(EVENTI_PRENOTAZIONI)
+    .map(([key, cfg]) => `<option value="${key}">${cfg.label}</option>`).join('');
+  selectEventoPren.value = eventoPrenotazioniAttivo;
+  selectEventoPren.addEventListener('change', () => {
+    eventoPrenotazioniAttivo = selectEventoPren.value;
+    document.getElementById('search-prenotazioni').value = '';
+    caricaPrenotazioni();
+  });
 
   function sessoLabelPren(r) {
     if (r.sesso === 'altro' && r.sesso_altro) return `Altro (${r.sesso_altro})`;
@@ -643,11 +698,12 @@
   }
 
   function scelteLabelPren(r) {
+    const cfg = EVENTI_PRENOTAZIONI[eventoPrenotazioniAttivo];
     const parti = [
       sessoLabelPren(r),
       `Invitato da: ${r.chi_ti_ha_invitato}`,
       r.instagram ? `IG: ${r.instagram}` : null,
-      r.interesse_sup ? '🏄 Interesse SUP' : null,
+      ...cfg.extra(r),
       statoLabelPren(r),
     ];
     return parti.filter(Boolean).join(' · ');
@@ -656,16 +712,17 @@
   async function caricaPrenotazioni() {
     const lista = document.getElementById('lista-prenotazioni');
     lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const cfg = EVENTI_PRENOTAZIONI[eventoPrenotazioniAttivo];
     const { data, error } = await sb
-      .from('ultima_onda_prenotazioni')
-      .select('nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, interesse_sup, stato, data_evento, created_at')
+      .from(cfg.tabella)
+      .select(cfg.colonne)
       .order('created_at', { ascending: false });
     if (error) {
       lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
       return;
     }
-    prenotazioniUltimaOnda = data;
-    disegnaPrenotazioni(prenotazioniUltimaOnda);
+    prenotazioniCorrenti = data;
+    disegnaPrenotazioni(prenotazioniCorrenti);
   }
 
   function disegnaPrenotazioni(items) {
@@ -689,17 +746,18 @@
 
   document.getElementById('search-prenotazioni').addEventListener('input', (e) => {
     const q = e.target.value.toLowerCase();
-    const filtrate = prenotazioniUltimaOnda.filter(r =>
+    const filtrate = prenotazioniCorrenti.filter(r =>
       `${r.nome_capogruppo} ${r.telefono} ${r.email}`.toLowerCase().includes(q)
     );
     disegnaPrenotazioni(filtrate);
   });
 
   document.getElementById('btn-esporta-excel').addEventListener('click', () => {
+    const cfg = EVENTI_PRENOTAZIONI[eventoPrenotazioniAttivo];
     const q = document.getElementById('search-prenotazioni').value.toLowerCase();
     const items = q
-      ? prenotazioniUltimaOnda.filter(r => `${r.nome_capogruppo} ${r.telefono} ${r.email}`.toLowerCase().includes(q))
-      : prenotazioniUltimaOnda;
+      ? prenotazioniCorrenti.filter(r => `${r.nome_capogruppo} ${r.telefono} ${r.email}`.toLowerCase().includes(q))
+      : prenotazioniCorrenti;
     if (items.length === 0) {
       alert('Nessuna prenotazione da esportare.');
       return;
@@ -711,19 +769,15 @@
       'Instagram': r.instagram || '',
       'Sesso': sessoLabelPren(r),
       'Chi ti ha invitato': r.chi_ti_ha_invitato,
-      'Interesse SUP': r.interesse_sup ? 'Sì' : 'No',
+      ...cfg.extraExcel(r),
       'Stato ingresso': statoLabelPren(r),
       'Data evento': r.data_evento,
       'Data prenotazione': new Date(r.created_at).toLocaleString('it-IT'),
     }));
     const ws = XLSX.utils.json_to_sheet(righe);
-    ws['!cols'] = [
-      { wch: 24 }, { wch: 14 }, { wch: 26 }, { wch: 18 }, { wch: 12 },
-      { wch: 20 }, { wch: 13 }, { wch: 20 }, { wch: 12 }, { wch: 18 },
-    ];
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Prenotazioni');
-    XLSX.writeFile(wb, `ultima-onda-prenotazioni-${new Date().toISOString().slice(0, 10)}.xlsx`);
+    XLSX.utils.book_append_sheet(wb, ws, cfg.label);
+    XLSX.writeFile(wb, `${eventoPrenotazioniAttivo}-prenotazioni-${new Date().toISOString().slice(0, 10)}.xlsx`);
   });
 </script>
 </body>
