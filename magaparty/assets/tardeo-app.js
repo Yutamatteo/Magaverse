@@ -52,7 +52,7 @@
                 </div>
                 ${logoMarkup()}
                 <p class="brutalist" style="font-size:14px;letter-spacing:0.2em;margin-top:8px;color:var(--sunset-gold)">TARDEO</p>
-                <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.55;margin-top:4px">Nuovo format Magaparty</p>
+                <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.55;margin-top:4px">Dal tramonto a notte fonda</p>
             </div>
 
             <nav class="sidebar-nav">${items}</nav>
@@ -90,7 +90,7 @@
                 </div>
                 ${logoMarkup('max-width:150px')}
                 <p class="brutalist sunset-title" style="font-size:22px;letter-spacing:0.2em;margin-top:8px">TARDEO</p>
-                <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.55;margin-top:4px">Nuovo format Magaparty</p>
+                <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.55;margin-top:4px">Dal tramonto a notte fonda</p>
                 <a href="index.html" class="maga-back-link" style="justify-content:center;margin-top:12px;">&#8592; Magaparty</a>
             </header>
         </div>`;
@@ -171,7 +171,7 @@
     }
     function share() {
         if (navigator.share) {
-            navigator.share({ title: 'TARDEO – Magaparty', text: "Il nuovo format Magaparty @ Nello Ocean Beach, 24 settembre", url: window.location.href }).catch(() => {});
+            navigator.share({ title: 'TARDEO – Magaparty', text: "Dal tramonto a notte fonda @ Nello Ocean Beach, 24 settembre", url: window.location.href }).catch(() => {});
         } else {
             navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copiato!'));
         }
@@ -180,7 +180,7 @@
         const fmt = d => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
         const t = encodeURIComponent('TARDEO – Magaparty');
         const l = encodeURIComponent('Nello Ocean Beach, Via Mar Ionio 22, Magazzeno, Salerno');
-        const det = encodeURIComponent("Il nuovo format Magaparty. SUP School alle 08:00, start alle 19:00, DJ Set Kiki, Adolfo Citro, H8daprep e Omen.");
+        const det = encodeURIComponent("Start alle 19:00, DJ Set Kiki, Adolfo Citro, H8daprep e Omen.");
         window.open(`https://calendar.google.com/calendar/r/eventedit?text=${t}&dates=${fmt(EVENT_START)}/${fmt(EVENT_END)}&location=${l}&details=${det}`, '_blank');
     }
     function showToast(msg) {
