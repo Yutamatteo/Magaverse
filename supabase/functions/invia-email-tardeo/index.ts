@@ -38,7 +38,7 @@ Deno.serve(async (req: Request) => {
 
   const html = `
   <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#0B1626;color:#F4E8CE;padding:32px 24px;border-radius:20px">
-    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#F2874A;margin:0 0 6px">Il nuovo format Magaparty</p>
+    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#F2874A;margin:0 0 6px">Dal tramonto a notte fonda</p>
     <h1 style="font-size:26px;margin:0 0 4px;color:#fff">TARDEO</h1>
     <p style="font-size:13px;color:#E2540E;margin:0 0 24px">Nello Ocean Beach · ${dataLabel} · dalle 19:00</p>
 
