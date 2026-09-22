@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TARDEO · 24 Settembre | Magaparty</title>
-    <meta name="description" content="TARDEO — il nuovo format di Magaparty @ Nello Ocean Beach, giovedì 24 settembre. DJ Kiki, Adolfo Citro, H8daprep, Omen. Ingresso 10€, drink omaggio se sei in lista.">
+    <meta name="description" content="TARDEO — Nello Ocean Beach, giovedì 24 settembre. DJ Kiki, Adolfo Citro, H8daprep, Omen. Ingresso 10€, drink omaggio se sei in lista.">
     <meta property="og:title" content="TARDEO · 24 Settembre | Magaparty">
     <meta property="og:description" content="Nello Ocean Beach, dalle 19:00. DJ Kiki, Adolfo Citro, H8daprep, Omen. Mettiti in lista: ingresso 10€ con drink omaggio.">
     <meta property="og:image" content="assets/img/logo-teal.png">
@@ -18,7 +18,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         /* ═══ Palette TARDEO — presa dalla locandina (crema, blu notte + arancio) ═══ */
         :root {
@@ -610,13 +609,8 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
         document.getElementById('formCard').style.display = 'none';
         const successCard = document.getElementById('successCard');
         successCard.style.display = 'block';
-        new QRCode(document.getElementById('qr'), {
-            text: qrToken,
-            width: 200,
-            height: 200,
-            colorDark: '#0B1626',
-            colorLight: '#ffffff'
-        });
+        document.getElementById('qr').innerHTML =
+            `<img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&color=0B1626&bgcolor=ffffff&data=${encodeURIComponent(qrToken)}" width="200" height="200" alt="QR ingresso" style="border-radius:8px">`;
         successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 </script>
