@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#050510" />
+    <title>Magaverse · Anteprima Storymap</title>
+    <meta name="description" content="Magaverse · Anteprima della nuova esperienza storymap — non pubblica." />
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/magaverse.css" />
+    <link rel="stylesheet" href="../assets/storymap.css" />
+    <script src="../assets/storymap.js" defer></script>
+    <style>
+        .preview-strip{
+            max-width:1100px; margin:0 auto; padding:14px 24px 0;
+            display:flex; align-items:center; gap:10px; justify-content:center; text-align:center;
+        }
+        .preview-strip .pill{
+            font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+            color:rgba(255,255,255,0.6); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:7px 14px;
+        }
+        .preview-note{
+            max-width:560px; margin:14px auto 0; text-align:center; font-size:12px; line-height:1.7; color:rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-bg">
+        <div class="stars layer1"></div>
+        <div class="stars layer2"></div>
+        <div class="stars layer3"></div>
+        <div class="glow glow-orange"></div>
+        <div class="glow glow-teal"></div>
+        <div class="glow glow-purple"></div>
+    </div>
+
+    <header class="hub-header">
+        <a href="/" class="brand" aria-label="Magaverse">
+            <span class="brand-mark">
+                <span class="brand-mark-glow"></span>
+                <span class="brand-mark-core">✦</span>
+            </span>
+            <span class="brand-name">MAGAVERSE</span>
+        </a>
+        <div class="hub-meta">
+            <span>Magazzeno · SA</span>
+            <span class="dot"></span>
+            <span id="clock">--:--</span>
+        </div>
+    </header>
+
+    <div class="preview-strip reveal">
+        <span class="pill">● Anteprima — sezione non pubblica</span>
+    </div>
+    <p class="preview-note reveal">Qui stiamo provando la nuova direzione "storymap": motion allo scroll e mappe narrative su tutto il Magaverse. Niente di questo è ancora collegato alla navigazione del sito pubblico.</p>
+
+    <main class="hub-main">
+        <section class="hero reveal">
+            <div class="hero-kicker">
+                <span class="pulse"></span>
+                Network di esperienze · Pontecagnano
+            </div>
+            <h1 class="hero-title">
+                <span>Esplora il</span>
+                <span class="grad">Magaverse.</span>
+            </h1>
+            <p class="hero-sub">
+                Un solo brand, infiniti mondi. Spiagge, party, esperienze sotto il sole e
+                molto altro. Scegli dove portarti questa estate.
+            </p>
+        </section>
+
+        <section class="cards reveal">
+            <!-- Nello Ocean Beach -->
+            <a href="oceanbeach/index.html" class="card card-large" data-brand="ocean">
+                <div class="card-bg">
+                    <img src="/assets/img/nello lido.jpeg" alt="Tramonto a Nello Ocean Beach" loading="lazy" />
+                </div>
+                <div class="card-overlay"></div>
+                <div class="card-top">
+                    <div class="card-tag">
+                        <span class="ico">☀</span>
+                        Stabilimento balneare
+                    </div>
+                    <span class="card-arrow">↗</span>
+                </div>
+                <div class="card-bottom">
+                    <h2 class="card-title">Nello Ocean Beach</h2>
+                    <p class="card-sub">L'oasi di relax</p>
+                    <div class="chips">
+                        <span class="chip">Ombrelloni</span>
+                        <span class="chip">Canoe</span>
+                        <span class="chip">Bar</span>
+                        <span class="chip">Famiglie</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Magaparty -->
+            <a href="magaparty/index.html" class="card card-medium" data-brand="party">
+                <div class="card-bg">
+                    <img src="../assets/img/logo_maga.png" alt="Maga Party - L'universo delle feste" loading="lazy" />
+                </div>
+                <div class="card-overlay"></div>
+                <div class="card-top">
+                    <div class="card-tag">
+                        <span class="ico">☾</span>
+                        Organizzazione Eventi
+                    </div>
+                    <span class="card-arrow">↗</span>
+                </div>
+                <div class="card-bottom">
+                    <h2 class="card-title">Maga Party</h2>
+                    <p class="card-sub">L'universo delle feste — ora con Halloween in Villa</p>
+                    <div class="chips">
+                        <span class="chip">Lineup DJ</span>
+                        <span class="chip">Cocktail</span>
+                        <span class="chip">Planimetria interattiva</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- MagaCard -->
+            <a href="magacard/index.html" class="card card-soon" data-brand="card" style="border-style:solid; background:linear-gradient(135deg, rgba(255,46,146,0.10), rgba(139,92,246,0.10));">
+                <span class="soon-tag" style="color:rgba(255,255,255,0.55);">✦ Membership</span>
+                <h3 class="soon-title" style="color:#FAF7F2;">MagaCard</h3>
+                <p class="soon-sub" style="color:rgba(255,255,255,0.55);">La tessera per le serate Magaparty</p>
+            </a>
+        </section>
+    </main>
+
+    <footer class="hub-footer">
+        <div>© <span id="year">2026</span> Magaverse · Anteprima interna, non pubblica</div>
+        <div class="footer-links">
+            <a href="oceanbeach/index.html">Ocean Beach</a>
+            <a href="magaparty/index.html">Magaparty</a>
+            <a href="magacard/index.html">MagaCard</a>
+        </div>
+    </footer>
+
+    <script>
+        function tickClock() {
+            var d = new Date();
+            var hh = String(d.getHours()).padStart(2, "0");
+            var mm = String(d.getMinutes()).padStart(2, "0");
+            document.getElementById("clock").textContent = hh + ":" + mm;
+        }
+        document.getElementById("year").textContent = new Date().getFullYear();
+        tickClock();
+        setInterval(tickClock, 30000);
+    </script>
+</body>
+</html>
