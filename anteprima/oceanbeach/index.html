@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#8B5A2B" />
+    <title>Nello Ocean Beach · Lido a Magazzeno (Pontecagnano)o</title>
+    <meta name="description" content="Nello Ocean Beach — stabilimento balneare a Magazzeno (Pontecagnano). Ombrelloni, lettini, noleggio canoe, beach bar e prenotazione su WhatsApp." />
+    <meta name="keywords" content="lido Magazzeno, stabilimento balneare Pontecagnano, Nello Ocean Beach, noleggio canoe Pontecagnano" />
+    <meta property="og:title" content="Nello Ocean Beach · Lido a Magazzeno (Pontecagnano)" />
+    <meta property="og:description" content="La tua oasi di relax. Ombrelloni, canoe, beach bar. Prenota su WhatsApp." />
+    <meta property="og:image" content="/assets/img/nello lido.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
+    <link rel="stylesheet" href="../../assets/storymap.css" />
+    <script src="../../assets/storymap.js" defer></script>
+    <style>
+        /* ---- Storymap palette override: keep Nello Ocean Beach's own
+           warm beige/brown/white identity — no Halloween dark theme. ---- */
+        :root{
+            --sm-accent: var(--accent);
+            --sm-accent-2: var(--primary);
+            --sm-good: #8FB88A;
+            --sm-bg: var(--bg);
+            --sm-surface: var(--white);
+            --sm-surface-2: var(--muted);
+            --sm-line: var(--border);
+            --sm-text: var(--fg);
+            --sm-muted: var(--muted-fg);
+            --sm-font-display: 'Playfair Display', Georgia, serif;
+            --sm-font-body: 'Outfit', system-ui, sans-serif;
+            --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+        }
+        .story-card{ background: rgba(255,255,255,0.97); box-shadow: 0 10px 30px -12px rgba(62,39,35,0.25); }
+        .story-card h4{ color: var(--fg); }
+        .story-card p{ color: var(--muted-fg); }
+        .story-card .kind{ font-size:10px; letter-spacing:.12em; text-transform:uppercase; color: var(--sm-accent); }
+        .story-card .kind.avail{ color: var(--sm-good); }
+        .story-card .kind.occ{ color: var(--muted-fg); }
+        .story-pin.pin--primary.is-occupied{ background:#B8A68C; }
+        .story-stage{ box-shadow: 0 24px 50px -24px rgba(62,39,35,0.35); }
+
+        /* ---- Beach schematic (blueprint-style, warm palette) ---- */
+        .sm-beach-plan{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+        .sm-plan-sand{ fill: var(--sm-surface); }
+        .sm-plan-sea{ fill:#BFD8D3; transition: fill .6s ease, opacity .6s ease; }
+        .sm-plan-wave{ fill:none; stroke:#ffffff; stroke-width:1.4; opacity:.55; }
+        .sm-plan-walk{ fill: var(--sm-surface-2); }
+        .sm-umbrella-top{ fill: var(--sm-accent-2); stroke: var(--sm-accent-2); stroke-width:1.2; opacity:.5; transition: opacity .6s ease, fill .6s ease; }
+        .sm-umbrella-pole{ fill: var(--sm-text); opacity:.45; }
+        .sm-plan-dock{ fill: var(--sm-surface-2); stroke: var(--sm-line); stroke-width:1.2; }
+        .sm-plan-canoe-shape{ fill: var(--sm-accent); opacity:.6; transition: opacity .6s ease; }
+        .sm-plan-bar-shape{ fill: var(--sm-surface-2); stroke: var(--sm-line); stroke-width:1.4; }
+        .sm-plan-bar-line{ stroke: var(--sm-line); stroke-width:1.2; }
+        .sm-plan-stool{ fill: var(--sm-muted); opacity:.45; transition: opacity .6s ease, fill .6s ease; }
+        .sm-plan-relax-shape{ fill:none; stroke: var(--sm-line); stroke-width:1.2; }
+        .sm-plan-overlay{ fill: transparent; transition: fill .6s ease, opacity .6s ease; }
+
+        .story-panel[data-layer="mattina"] .sm-plan-sea{ fill:#D7E6E1; opacity:.8; }
+        .story-panel[data-layer="mattina"] .sm-umbrella-top{ fill:none; opacity:.6; }
+        .story-panel[data-layer="mattina"] .sm-plan-overlay{ fill: var(--sm-accent-2); opacity:.06; }
+
+        .story-panel[data-layer="giorno"] .sm-plan-sea{ fill:#A9D4CA; opacity:1; }
+        .story-panel[data-layer="giorno"] .sm-umbrella-top{ opacity:.6; }
+        .story-panel[data-layer="giorno"] .sm-plan-overlay{ fill:#ffffff; opacity:0; }
+
+        .story-panel[data-layer="aperitivo"] .sm-plan-sea{ fill:#F3C98B; opacity:.45; }
+        .story-panel[data-layer="aperitivo"] .sm-umbrella-top{ opacity:.35; }
+        .story-panel[data-layer="aperitivo"] .sm-plan-stool{ opacity:.8; fill: var(--sm-accent); }
+        .story-panel[data-layer="aperitivo"] .sm-plan-overlay{ fill: var(--sm-accent); opacity:.1; }
+
+        .story-panel[data-layer="sera"] .sm-plan-sea{ fill:#CBB89A; opacity:.4; }
+        .story-panel[data-layer="sera"] .sm-umbrella-top{ opacity:.25; }
+        .story-panel[data-layer="sera"] .sm-plan-overlay{ fill:#3E2723; opacity:.13; }
+    </style>
+</head>
+<body data-page="home">
+
+<!-- NAVBAR -->
+<header class="nav">
+    <div class="nav-inner">
+        <div style="display:flex; align-items:center; gap:8px;">
+            <a href="/oceanbeach/" class="nav-logo">
+                <span class="nav-logo-mark">~</span>
+                <span class="nav-logo-text">Nello <span class="accent">Ocean</span> Beach</span>
+            </a>
+            <a href="/" class="nav-back">← MAGAVERSE</a>
+        </div>
+        <nav class="nav-links">
+            <a href="/oceanbeach/"          data-nav="home">Home</a>
+            <a href="/oceanbeach/about.html"     data-nav="about">Chi Siamo</a>
+            <a href="/oceanbeach/services.html"  data-nav="services">Servizi</a>
+            <a href="/oceanbeach/menu.html"      data-nav="menu">Menù</a>
+            <a href="/oceanbeach/pricing.html"   data-nav="pricing">Listino</a>
+            <a href="/oceanbeach/booking.html"   data-nav="booking">Prenota</a>
+            <a href="/oceanbeach/contact.html"   data-nav="contact">Contatti</a>
+        </nav>
+        <div class="nav-right">
+            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+        </div>
+        <button class="menu-toggle" aria-label="Menu">☰</button>
+    </div>
+    <div class="mobile-menu">
+        <div class="mobile-menu-inner">
+            <a href="/oceanbeach/"         data-nav="home">Home</a>
+            <a href="/oceanbeach/about.html"    data-nav="about">Chi Siamo</a>
+            <a href="/oceanbeach/services.html" data-nav="services">Servizi</a>
+            <a href="/oceanbeach/menu.html"      data-nav="menu">Menù</a>
+            <a href="/oceanbeach/pricing.html"  data-nav="pricing">Listino</a>
+            <a href="/oceanbeach/booking.html"  data-nav="booking">Prenota</a>
+            <a href="/oceanbeach/contact.html"  data-nav="contact">Contatti</a>
+            <div class="mobile-menu-foot">
+                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg">
+        <img src="/assets/img/nello lido.jpeg" alt="Tramonto al Nello Ocean Beach" />
+    </div>
+    <div class="hero-grad"></div>
+    <div class="hero-inner">
+        <div class="hero-kicker">
+            <span>📍</span>
+            <span>Stabilimento balneare · Magazzeno, Salerno</span>
+        </div>
+        <h1 class="hero-title">La tua oasi di relax.</h1>
+        <p class="hero-sub">Al Nello Ocean Beach celebriamo l'estate. Ombrelloni eleganti, bar accogliente, canoe pronte all'avventura — l'atmosfera perfetta per famiglie, giovani e coppie.</p>
+        <div class="hero-ctas">
+            <a href="/oceanbeach/booking.html" class="btn btn-white"><span>Prenota su WhatsApp</span> →</a>
+            <a href="/oceanbeach/services.html" class="btn btn-ghost">Scopri i servizi</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><div class="stat-k">500m</div><div class="stat-v">di spiaggia dorata</div></div>
+            <div class="stat"><div class="stat-k">4★</div><div class="stat-v">valutazione clienti</div></div>
+            <div class="stat"><div class="stat-k">12h</div><div class="stat-v">di sole al giorno</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT TEASER -->
+<section class="reveal">
+    <div class="container split">
+        <div class="split-img">
+            <img src="/assets/img/nello-sunset.jpg" alt="Spiaggia al tramonto" />
+        </div>
+        <div>
+            <span class="kicker">Chi siamo</span>
+            <h2 class="h2">Una spiaggia rinnovata che profuma di mare.</h2>
+            <p class="lead">Beige, marrone caldo, bianco panna: il Nello Ocean Beach si presenta in una veste moderna che si fonde con i toni della sabbia e del legno. Un luogo curato, pensato per chi cerca relax di qualità senza rinunciare al carattere autentico della costa campana.</p>
+            <a href="/oceanbeach/about.html" class="link-arrow">Leggi la nostra storia →</a>
+        </div>
+    </div>
+</section>
+
+<!-- STORYMAP CENTERPIECE: UNA GIORNATA A NELLO OCEAN BEACH -->
+<section class="reveal" style="padding-top:0;">
+    <div class="container">
+        <div style="max-width:640px; margin:0 auto 8px; text-align:center;">
+            <span class="kicker">Un giorno al lido</span>
+            <h2 class="h2">Una giornata a Nello Ocean Beach</h2>
+            <p class="lead" style="margin-left:auto;margin-right:auto;">Dall'allestimento dell'alba alle luci della sera: scorri per seguire il ritmo di una giornata tipo sulla nostra spiaggia.</p>
+        </div>
+
+        <div class="storymap">
+            <div class="story-narrative">
+                <div class="sm-pill-nav">
+                    <button type="button" class="sm-pill" data-goto="mattina">Mattina</button>
+                    <button type="button" class="sm-pill" data-goto="giorno">Giorno</button>
+                    <button type="button" class="sm-pill" data-goto="aperitivo">Aperitivo</button>
+                    <button type="button" class="sm-pill" data-goto="sera">Sera</button>
+                </div>
+
+                <article class="story-beat" data-layer="mattina" data-focus-x="47" data-focus-y="48" data-pin="pin-mattina-staff">
+                    <span class="sm-label">06:30 · Prima dell'alba</span>
+                    <h3>Si comincia quando la spiaggia è ancora deserta</h3>
+                    <p>Mentre Magazzeno dorme ancora, il nostro team rastrella la sabbia, apre gli ombrelloni fila per fila e prepara il beach bar. Tutto pronto prima che arrivi il primo ospite, alle 08:30.</p>
+                </article>
+
+                <article class="story-beat" data-layer="giorno" data-focus-x="62" data-focus-y="62" data-pin="pin-giorno-ombrelloni">
+                    <span class="sm-label">10:30 · Il lido si riempie</span>
+                    <h3>Famiglie, asciugamani e il primo bagno</h3>
+                    <p>Le file di ombrelloni si riempiono, i bambini corrono verso l'acqua, i lettini si scaldano al sole. È il cuore della giornata: relax ordinato, spazio per tutti.</p>
+                </article>
+
+                <article class="story-beat" data-layer="giorno" data-focus-x="9" data-focus-y="13" data-pin="pin-giorno-canoa">
+                    <span class="sm-label">12:00 · Si va al largo</span>
+                    <h3>Le canoe prendono il mare</h3>
+                    <p>Chi cerca un po' di movimento raggiunge il punto noleggio: pagaia in mano e si parte, lungo la costa, con la scogliera di Magazzeno sullo sfondo.</p>
+                </article>
+
+                <article class="story-beat" data-layer="aperitivo" data-focus-x="90" data-focus-y="77" data-pin="pin-aperitivo-bar">
+                    <span class="sm-label">18:30 · L'ora dell'aperitivo</span>
+                    <h3>Il cielo si accende, il bar si anima</h3>
+                    <p>Il sole si abbassa sul mare e il beach bar prende vita: granite, analcolici e snack serviti sotto l'ombrellone, con il tramonto come sfondo.</p>
+                </article>
+
+                <article class="story-beat" data-layer="sera" data-focus-x="47" data-focus-y="80" data-pin="pin-sera-luci">
+                    <span class="sm-label">20:00 · Il mare si acquieta</span>
+                    <h3>Le ultime luci sulla sabbia</h3>
+                    <p>Le luci calde si accendono lungo la passerella, il rumore delle onde rallenta. Gli ultimi bagnanti restano a godersi la sabbia ancora tiepida.</p>
+                </article>
+            </div>
+
+            <div class="story-stage-col">
+                <div class="story-stage" data-stage>
+                    <span class="sm-badge-demo">Planimetria · non in scala</span>
+
+                    <!-- MATTINA -->
+                    <div class="story-panel" data-layer="mattina">
+                        <svg class="sm-beach-plan" viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                            <rect class="sm-plan-sand" x="0" y="0" width="400" height="280" />
+                            <rect class="sm-plan-sea" x="0" y="0" width="400" height="48" />
+                            <path class="sm-plan-wave" d="M0 28 Q20 22 40 28 T80 28 T120 28 T160 28 T200 28 T240 28 T280 28 T320 28 T360 28 T400 28" />
+                            <rect class="sm-plan-walk" x="0" y="48" width="400" height="10" />
+                            <rect class="sm-plan-dock" x="12" y="14" width="46" height="10" rx="2" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="34" rx="14" ry="5" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="44" rx="14" ry="5" />
+                            <g>
+                                <circle class="sm-umbrella-top" cx="70" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="175" r="1.6" />
+                            </g>
+                            <rect class="sm-plan-bar-shape" x="330" y="195" width="55" height="45" rx="4" />
+                            <line class="sm-plan-bar-line" x1="330" y1="210" x2="385" y2="210" />
+                            <circle class="sm-plan-stool" cx="340" cy="222" r="3" /><circle class="sm-plan-stool" cx="357" cy="222" r="3" /><circle class="sm-plan-stool" cx="374" cy="222" r="3" />
+                            <rect class="sm-plan-relax-shape" x="108" y="208" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="150" y="224" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="192" y="210" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="234" y="226" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="270" y="212" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
+                        </svg>
+                        <div class="story-pins">
+                            <button class="story-pin" id="pin-mattina-staff" style="left:47.5%; top:48.2%;" data-kind="info" data-name="Allestimento in corso" data-desc="Il team sistema ombrelloni e lettini prima dell'arrivo degli ospiti, rastrella la sabbia e prepara il beach bar per l'apertura delle 08:30."></button>
+                        </div>
+                    </div>
+
+                    <!-- GIORNO -->
+                    <div class="story-panel" data-layer="giorno">
+                        <svg class="sm-beach-plan" viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                            <rect class="sm-plan-sand" x="0" y="0" width="400" height="280" />
+                            <rect class="sm-plan-sea" x="0" y="0" width="400" height="48" />
+                            <path class="sm-plan-wave" d="M0 28 Q20 22 40 28 T80 28 T120 28 T160 28 T200 28 T240 28 T280 28 T320 28 T360 28 T400 28" />
+                            <rect class="sm-plan-walk" x="0" y="48" width="400" height="10" />
+                            <rect class="sm-plan-dock" x="12" y="14" width="46" height="10" rx="2" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="34" rx="14" ry="5" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="44" rx="14" ry="5" />
+                            <g>
+                                <circle class="sm-umbrella-top" cx="70" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="175" r="1.6" />
+                            </g>
+                            <rect class="sm-plan-bar-shape" x="330" y="195" width="55" height="45" rx="4" />
+                            <line class="sm-plan-bar-line" x1="330" y1="210" x2="385" y2="210" />
+                            <circle class="sm-plan-stool" cx="340" cy="222" r="3" /><circle class="sm-plan-stool" cx="357" cy="222" r="3" /><circle class="sm-plan-stool" cx="374" cy="222" r="3" />
+                            <rect class="sm-plan-relax-shape" x="108" y="208" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="150" y="224" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="192" y="210" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="234" y="226" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="270" y="212" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
+                        </svg>
+                        <div class="story-pins">
+                            <button class="story-pin pin--primary is-occupied" id="pin-giorno-ombrelloni" style="left:62.5%; top:62.5%;" data-kind="occ" data-name="File ombrelloni" data-desc="Ombrelloni e lettini allineati, pensati per famiglie e gruppi: ombra generosa e spazio per tutti, a due passi dal bagnasciuga."></button>
+                            <button class="story-pin pin--primary is-available" id="pin-giorno-canoa" style="left:8.75%; top:12.5%;" data-kind="avail" data-name="Punto noleggio canoe" data-desc="Canoe singole e doppie pronte a ore, con breve briefing di sicurezza: il modo più dinamico di vivere la costa di Magazzeno."></button>
+                        </div>
+                    </div>
+
+                    <!-- APERITIVO -->
+                    <div class="story-panel" data-layer="aperitivo">
+                        <svg class="sm-beach-plan" viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                            <rect class="sm-plan-sand" x="0" y="0" width="400" height="280" />
+                            <rect class="sm-plan-sea" x="0" y="0" width="400" height="48" />
+                            <path class="sm-plan-wave" d="M0 28 Q20 22 40 28 T80 28 T120 28 T160 28 T200 28 T240 28 T280 28 T320 28 T360 28 T400 28" />
+                            <rect class="sm-plan-walk" x="0" y="48" width="400" height="10" />
+                            <rect class="sm-plan-dock" x="12" y="14" width="46" height="10" rx="2" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="34" rx="14" ry="5" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="44" rx="14" ry="5" />
+                            <g>
+                                <circle class="sm-umbrella-top" cx="70" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="175" r="1.6" />
+                            </g>
+                            <rect class="sm-plan-bar-shape" x="330" y="195" width="55" height="45" rx="4" />
+                            <line class="sm-plan-bar-line" x1="330" y1="210" x2="385" y2="210" />
+                            <circle class="sm-plan-stool" cx="340" cy="222" r="3" /><circle class="sm-plan-stool" cx="357" cy="222" r="3" /><circle class="sm-plan-stool" cx="374" cy="222" r="3" />
+                            <rect class="sm-plan-relax-shape" x="108" y="208" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="150" y="224" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="192" y="210" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="234" y="226" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="270" y="212" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
+                        </svg>
+                        <div class="story-pins">
+                            <button class="story-pin" id="pin-aperitivo-bar" style="left:90%; top:76.8%;" data-kind="info" data-name="Aperitivo al Beach Bar" data-desc="Quando il sole si abbassa il bar si anima: granite, spritz analcolici e snack serviti sotto l'ombrellone o al bancone, vista tramonto."></button>
+                        </div>
+                    </div>
+
+                    <!-- SERA -->
+                    <div class="story-panel" data-layer="sera">
+                        <svg class="sm-beach-plan" viewBox="0 0 400 280" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                            <rect class="sm-plan-sand" x="0" y="0" width="400" height="280" />
+                            <rect class="sm-plan-sea" x="0" y="0" width="400" height="48" />
+                            <path class="sm-plan-wave" d="M0 28 Q20 22 40 28 T80 28 T120 28 T160 28 T200 28 T240 28 T280 28 T320 28 T360 28 T400 28" />
+                            <rect class="sm-plan-walk" x="0" y="48" width="400" height="10" />
+                            <rect class="sm-plan-dock" x="12" y="14" width="46" height="10" rx="2" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="34" rx="14" ry="5" />
+                            <ellipse class="sm-plan-canoe-shape" cx="30" cy="44" rx="14" ry="5" />
+                            <g>
+                                <circle class="sm-umbrella-top" cx="70" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="95" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="95" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="135" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="135" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="70" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="70" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="130" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="130" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="190" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="190" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="250" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="250" cy="175" r="1.6" />
+                                <circle class="sm-umbrella-top" cx="310" cy="175" r="9" /><circle class="sm-umbrella-pole" cx="310" cy="175" r="1.6" />
+                            </g>
+                            <rect class="sm-plan-bar-shape" x="330" y="195" width="55" height="45" rx="4" />
+                            <line class="sm-plan-bar-line" x1="330" y1="210" x2="385" y2="210" />
+                            <circle class="sm-plan-stool" cx="340" cy="222" r="3" /><circle class="sm-plan-stool" cx="357" cy="222" r="3" /><circle class="sm-plan-stool" cx="374" cy="222" r="3" />
+                            <rect class="sm-plan-relax-shape" x="108" y="208" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="150" y="224" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="192" y="210" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="234" y="226" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-relax-shape" x="270" y="212" width="26" height="10" rx="3" />
+                            <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
+                        </svg>
+                        <div class="story-pins">
+                            <button class="story-pin" id="pin-sera-luci" style="left:47.5%; top:80.4%;" data-kind="info" data-name="Luci della sera" data-desc="Le luci calde si accendono lungo la passerella, il ritmo rallenta: gli ultimi bagnanti si godono il refrigerio della sera sulla sabbia ancora tiepida."></button>
+                        </div>
+                    </div>
+
+                    <div class="story-card">
+                        <button class="close" aria-label="Chiudi">×</button>
+                        <span class="kind" data-role="kind">Info</span>
+                        <h4 data-role="name"></h4>
+                        <p data-role="desc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="muted reveal">
+    <div class="container">
+        <div style="display:flex; flex-direction:column; gap:24px; margin-bottom:48px;">
+            <div>
+                <span class="kicker">I nostri servizi</span>
+                <h2 class="h2">Tutto ciò che serve per una giornata perfetta.</h2>
+            </div>
+            <a href="/oceanbeach/services.html" class="link-arrow">Scopri di più →</a>
+        </div>
+        <div class="grid-3">
+            <div class="svc-card"><div class="svc-icon">☂</div><h3 class="svc-title">Ombrelloni & Lettini</h3><p class="svc-desc">File ordinate, ombra generosa, lettini imbottiti. La quiete della spiaggia, come la immagini.</p></div>
+            <div class="svc-card"><div class="svc-icon">🛶</div><h3 class="svc-title">Noleggio Canoe</h3><p class="svc-desc">Pagaia leggera, vista sulla costa: il modo migliore per vivere il mare attivamente.</p></div>
+            <div class="svc-card"><div class="svc-icon">☕</div><h3 class="svc-title">Beach Bar</h3><p class="svc-desc">Aperitivi, caffè, granite e snack freschi serviti direttamente sotto l'ombrellone.</p></div>
+            <div class="svc-card"><div class="svc-icon">🚿</div><h3 class="svc-title">Docce Calde & Fredde</h3><p class="svc-desc">Acqua calda dopo il bagno, fredda nelle ore più assolate. Sempre pulite, sempre disponibili.</p></div>
+            <div class="svc-card"><div class="svc-icon">📶</div><h3 class="svc-title">Wi-Fi su richiesta</h3><p class="svc-desc">Connessione veloce per chi vuole restare in contatto, senza disturbare il relax.</p></div>
+            <div class="svc-card"><div class="svc-icon">🚪</div><h3 class="svc-title">Bagni & Cabine</h3><p class="svc-desc">Servizi igienici sempre puliti e cabine private per cambiarsi con comodità.</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY -->
+<section class="reveal">
+    <div class="container">
+        <div class="center" style="margin-bottom:48px;">
+            <h2 class="h2">Vivilo con i tuoi occhi</h2>
+            <p class="lead" style="margin-left:auto;margin-right:auto;">Sabbia, ombrelloni allineati, il rumore delle onde. Dai un'occhiata all'atmosfera che ti aspetta.</p>
+        </div>
+        <div class="gallery">
+            <div class="gal-item large"><img src="/assets/img/nello lido 4.jpeg" alt="" /></div>
+            <div class="gal-item"><img src="/assets/img/nello lido 2.jpeg" alt="" /></div>
+            <div class="gal-item"><img src="/assets/img/nello lido 3.jpeg" alt="" /></div>
+            <div class="gal-item"><img src="/assets/img/cornetti.jpeg" alt="" /></div>
+            <div class="gal-item"><img src="/assets/img/colazione.jpeg" alt="" /></div>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta reveal">
+    <div class="container">
+        <span class="kicker">Prenota ora</span>
+        <h2 class="h2">L'estate non aspetta. Fatti trovare in prima fila.</h2>
+        <p class="lead">Scrivici su WhatsApp e ricevi conferma immediata. È il modo più rapido per assicurarti il posto migliore.</p>
+        <div class="hero-ctas">
+            <a href="/oceanbeach/booking.html" class="btn btn-white">Prenota ora →</a>
+            <a href="#" data-wa-quick class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <a href="/oceanbeach/" class="nav-logo">
+                    <span class="nav-logo-mark">~</span>
+                    <span class="nav-logo-text">Nello <span class="accent">Ocean</span> Beach</span>
+                </a>
+                <p class="footer-tagline" style="margin-top:16px;">Stabilimento balneare.</p>
+            </div>
+            <div>
+                <h4>Pagine</h4>
+                <ul>
+                    <li><a href="/oceanbeach/">Home</a></li>
+                    <li><a href="/oceanbeach/about.html">Chi Siamo</a></li>
+                    <li><a href="/oceanbeach/services.html">Servizi</a></li>
+                    <li><a href="/oceanbeach/pricing.html">Listino</a></li>
+                    <li><a href="/oceanbeach/booking.html">Prenota</a></li>
+                    <li><a href="/" style="opacity:.7;">↗ Magaverse</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Contatti</h4>
+                <ul>
+                    <li>📍 <a href="https://www.google.com/maps?q=Via+Mar+Ionio+22,+84098+Magazzeno+SA" target="_blank" rel="noopener">Via Mar Ionio, 22, 84098 Magazzeno SA</a></li>
+                    <li>💬 <a href="#" data-wa-quick target="_blank" rel="noopener">WhatsApp Business</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© <span id="year">2026</span> Nello Ocean Beach · <span>Tutti i diritti riservati.</span></span>
+            <span style="opacity:.75;">Sito realizzato con cura da Matteo Finizio.</span>
+        </div>
+    </div>
+</footer>
+
+<!-- STICKY CTA -->
+<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">💬 <span>Prenota WhatsApp</span></a>
+
+<script src="/oceanbeach/assets/app.js"></script>
+<a href="../index.html" class="sm-preview-ribbon">● Anteprima — non pubblica</a>
+</body>
+</html>
