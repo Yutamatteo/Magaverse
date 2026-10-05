@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Villa di Halloween · Magaparty</title>
+<meta name="description" content="Halloween in Villa — Magaparty, 31 ottobre. Planimetria interattiva multi-livello: scopri la villa piano per piano e le stanze disponibili per la notte.">
+<meta property="og:title" content="Halloween in Villa · Magaparty">
+<meta property="og:description" content="Planimetria interattiva multi-livello per la festa di Halloween in villa.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<link rel="icon" type="image/png" href="../../magaparty/assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/storymap.css">
+<script src="../../assets/storymap.js" defer></script>
+<style>
+/* ============================================================
+   Halloween in Villa — pagina dedicata. Mondo visivo a parte
+   (notturno, candele/ember) rispetto al core Magaparty: usa i
+   propri token --ink/--ember/--moss/--gold invece di --sm-*,
+   coerente con come ogni format Magaparty ha la sua palette.
+   ============================================================ */
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{background:var(--ink); color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0;}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+p{margin:0;}
+a{color:inherit;}
+img{max-width:100%;}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1180px; margin:0 auto; }
+.topbar a{ font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted); text-decoration:none; }
+.topbar a:hover{ color:var(--gold); }
+
+.hero{ position:relative; padding-block:56px 64px; overflow:hidden; border-bottom:1px solid var(--line);
+  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,122,51,0.14), transparent 60%), var(--ink); }
+.ember-field{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+.ember-field span{ position:absolute; bottom:-20px; width:5px; height:5px; border-radius:50%; background:var(--ember); opacity:0.55; filter:blur(0.3px); animation: embers 9s linear infinite; }
+@keyframes embers{ 0%{transform:translateY(0) translateX(0); opacity:0;} 10%{opacity:0.6;} 100%{transform:translateY(-520px) translateX(var(--drift,20px)); opacity:0;} }
+.hero-inner{position:relative; z-index:1; text-align:center; animation:heroIn .9s ease-out both;}
+@keyframes heroIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+.eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:22px; }
+.eyebrow::before, .eyebrow::after{content:""; width:22px; height:1px; background:var(--ember); opacity:0.5;}
+.hero h1{ font-size:clamp(2.2rem, 5.6vw, 4.2rem); font-weight:600; line-height:1.05; letter-spacing:-0.01em; color:var(--bone); text-wrap:balance; }
+.hero h1 em{font-style:italic; color:var(--ember); font-weight:500;}
+.hero-sub{ max-width:46ch; margin:22px auto 0; font-size:16px; line-height:1.6; color:var(--muted); }
+.hero-cue{ margin-top:40px; display:inline-flex; flex-direction:column; align-items:center; gap:10px; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+.hero-cue .line{width:1px; height:34px; background:linear-gradient(to bottom, var(--gold), transparent); animation:pulseLine 2s ease-in-out infinite;}
+@keyframes pulseLine{ 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+
+.intro{padding-block:72px; border-bottom:1px solid var(--line);}
+.intro-grid{display:grid; grid-template-columns: 1fr; gap:28px; max-width:760px; margin:0 auto; text-align:center;}
+.intro h2{font-size:clamp(1.6rem,3vw,2.1rem); font-weight:600; color:var(--bone);}
+.intro p{color:var(--muted); line-height:1.7; font-size:15px;}
+.intro-tags{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
+.tag{ font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:8px 14px; border:1px solid var(--line); border-radius:999px; color:var(--gold); }
+
+.storymap-head{padding-block:64px 8px; text-align:center;}
+.storymap-head .section-label{ display:block; font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:14px; }
+.storymap-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); font-weight:600;}
+.storymap-head p{color:var(--muted); max-width:52ch; margin:16px auto 0; font-size:14.5px; line-height:1.7;}
+
+.legend{display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin:26px auto 0; font-size:11px; color:var(--muted);}
+.legend span{display:inline-flex; align-items:center; gap:7px;}
+.legend .dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+.legend .dot.avail{background:var(--moss); box-shadow:0 0 0 3px var(--moss-soft);}
+.legend .dot.occ{background:#5B5468;}
+.legend .dot.info{background:var(--gold); opacity:0.8;}
+
+.hw-storymap{ display:grid; grid-template-columns: 1fr; grid-template-areas: "stack"; padding-block: 20px 60px; }
+.hw-narrative{grid-area:stack; padding-top:min(68vw,420px); position:relative; z-index:1;}
+.hw-stage-col{ grid-area:stack; position:sticky; top:env(safe-area-inset-top,0px); align-self:start; z-index:3; padding-top:10px; }
+@media (min-width:900px){
+  .hw-storymap{grid-template-columns: 1.05fr 1fr; grid-template-areas: "narrative stage"; gap:56px;}
+  .hw-narrative{grid-area:narrative; padding-top:0;}
+  .hw-stage-col{grid-area:stage; top:32px; max-width:600px;}
+}
+
+.level-pills{display:flex; justify-content:center; gap:8px; margin-bottom:12px;}
+@media (min-width:900px){ .level-pills{justify-content:flex-start;} }
+.level-pill{ font-family:inherit; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s ease; }
+.level-pill.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+
+.hw-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden; background:var(--surface); border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
+.badge-demo{ position:absolute; top:10px; left:10px; z-index:5; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:rgba(14,10,20,0.7); border:1px solid var(--line); border-radius:999px; padding:5px 10px; backdrop-filter:blur(4px); }
+
+.floor-layer{ position:absolute; inset:0; opacity:0; pointer-events:none; transform-origin:50% 50%; transition:opacity .6s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.floor-layer.is-active{opacity:1; pointer-events:auto;}
+.hw-stage.is-zoomed .floor-layer{ transform:scale(1.55); }
+
+.floor-layer svg{position:absolute; inset:0; width:100%; height:100%; display:block;}
+.room-rect{fill:var(--surface-2); stroke:var(--line); stroke-width:1.5;}
+.room-rect.is-camera{fill:var(--ember-soft); stroke:var(--gold); stroke-opacity:0.55;}
+.room-code{fill:var(--gold); font-size:13px; opacity:0.75;}
+.room-label{fill:var(--bone); font-size:15px; text-anchor:middle; opacity:0.9;}
+.plan-outline{fill:none; stroke:var(--gold); stroke-width:2; stroke-opacity:0.4;}
+.compass{opacity:0.5;}
+.scalebar line{stroke:var(--muted); stroke-width:1.5;}
+.scalebar text{fill:var(--muted); font-size:11px;}
+
+.hw-pin{ position:absolute; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; border:none; padding:0; cursor:pointer; background:var(--gold); opacity:0.85; transition:transform .25s ease, box-shadow .25s ease; }
+.hw-pin:hover{transform:translate(-50%,-50%) scale(1.2);}
+.hw-pin.pin--camera{width:20px; height:20px;}
+.hw-pin.pin--camera.is-available{background:var(--moss); box-shadow:0 0 0 6px var(--moss-soft); animation:pinPulse 2.2s ease-in-out infinite;}
+.hw-pin.pin--camera.is-occupied{background:#5B5468; opacity:0.9;}
+@keyframes pinPulse{ 0%,100%{box-shadow:0 0 0 5px var(--moss-soft);} 50%{box-shadow:0 0 0 9px transparent;} }
+.hw-pin.spotlight{transform:translate(-50%,-50%) scale(1.35); z-index:4;}
+
+.hw-card{ position:absolute; left:12px; right:12px; bottom:12px; z-index:6; background:rgba(23,16,31,0.96); border:1px solid var(--line); border-radius:14px; padding:16px 16px 14px; backdrop-filter:blur(6px); transform:translateY(130%); opacity:0; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease; pointer-events:none; }
+.hw-card.is-open{transform:translateY(0); opacity:1; pointer-events:auto;}
+.hw-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+.hw-card .kind{font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase;}
+.hw-card .kind.avail{color:var(--moss);}
+.hw-card .kind.occ{color:var(--muted);}
+.hw-card .kind.info{color:var(--gold);}
+.hw-card h4{font-size:17px; font-weight:600; margin-top:4px; color:var(--bone);}
+.hw-card p{font-size:12.5px; line-height:1.6; color:var(--muted); margin-top:8px;}
+.hw-card .note{font-size:10px; color:var(--muted); opacity:0.6; margin-top:10px;}
+.hw-card button.close{ background:none; border:none; color:var(--muted); font-size:18px; line-height:1; cursor:pointer; padding:2px; }
+
+.hw-beat{min-height:56vh; display:flex; flex-direction:column; justify-content:center; padding-block:7vh;}
+.hw-beat .section-label{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; display:block;}
+.hw-beat h3{font-size:clamp(1.3rem,2.6vw,1.8rem); font-weight:600; color:var(--bone);}
+.hw-beat p{margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--muted); max-width:46ch;}
+.status-chip{ display:inline-flex; align-items:center; gap:7px; margin-top:14px; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:6px 12px; border-radius:999px; border:1px solid var(--line); }
+.status-chip.avail{color:var(--moss); border-color:var(--moss-soft);}
+.status-chip.occ{color:var(--muted);}
+
+.closing{padding-block:70px 90px; text-align:center; border-top:1px solid var(--line);}
+.closing h2{font-size:clamp(1.5rem,3vw,2rem); font-weight:600;}
+.closing p{color:var(--muted); max-width:44ch; margin:16px auto 26px; font-size:14px; line-height:1.7;}
+.ghost-btn, .ghost-link{ display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; padding:13px 24px; border-radius:999px; border:1px solid var(--gold); color:var(--gold); background:transparent; cursor:pointer; transition:all .2s; text-decoration:none; }
+.ghost-btn:hover, .ghost-link:hover{background:var(--ember-soft); color:var(--ember); border-color:var(--ember);}
+.foot-note{margin-top:34px; font-size:10.5px; letter-spacing:0.08em; color:var(--muted); opacity:0.55;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Magaparty</a>
+  <a href="../index.html">Magaverse</a>
+</div>
+
+<section class="hero">
+  <div class="ember-field" aria-hidden="true">
+    <span style="left:8%; --drift:14px; animation-delay:0s;"></span>
+    <span style="left:18%; --drift:-10px; animation-delay:1.1s;"></span>
+    <span style="left:30%; --drift:18px; animation-delay:2.3s;"></span>
+    <span style="left:44%; --drift:-16px; animation-delay:0.6s;"></span>
+    <span style="left:58%; --drift:12px; animation-delay:3.1s;"></span>
+    <span style="left:70%; --drift:-14px; animation-delay:1.8s;"></span>
+    <span style="left:81%; --drift:10px; animation-delay:4s;"></span>
+    <span style="left:92%; --drift:-8px; animation-delay:2.7s;"></span>
+    <span style="left:50%; --drift:20px; animation-delay:5s;"></span>
+    <span style="left:24%; --drift:-20px; animation-delay:4.4s;"></span>
+  </div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Magaparty · Capitolo 5 · 31 Ottobre</span>
+    <h1>La villa si risveglia<br><em>una notte all'anno.</em></h1>
+    <p class="hero-sub">Tre livelli, dieci stanze, una festa che non finisce al piano terra. Scorri per entrare nella planimetria — ogni stanza racconta la sua parte di notte.</p>
+    <span class="hero-cue">Scorri<span class="line"></span></span>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="wrap intro-grid">
+    <h2>Non è solo una mappa. È la villa che parla.</h2>
+    <p>
+      Quello che segue è un prototipo tecnico: una planimetria interattiva a più livelli,
+      pensata per raccontare la villa di Halloween piano per piano mentre si scorre la pagina —
+      <strong style="color:var(--bone)">scrollytelling</strong> e <strong style="color:var(--bone)">mappa parlante</strong>.
+      I dati di camere e disponibilità qui sotto sono di esempio: mostrano come funzionerà il meccanismo,
+      non sono ancora collegati alle prenotazioni reali.
+    </p>
+    <div class="intro-tags">
+      <span class="tag">Planimetria multi-livello</span>
+      <span class="tag">Animazioni allo scroll</span>
+      <span class="tag">Pin cliccabili</span>
+    </div>
+  </div>
+</section>
+
+<section class="storymap-head wrap">
+  <span class="section-label">Planimetria interattiva</span>
+  <h2>Esplora la villa, piano per piano</h2>
+  <p>Ogni stanza ha un pin. I pin ambra segnano gli spazi comuni della festa; i pin verdi o grigi segnano le camere — disponibili o già affittate per questa edizione.</p>
+  <div class="legend">
+    <span><i class="dot avail"></i>Camera disponibile</span>
+    <span><i class="dot occ"></i>Camera occupata</span>
+    <span><i class="dot info"></i>Spazio comune</span>
+  </div>
+</section>
+
+<section class="hw-storymap wrap">
+
+  <div class="hw-narrative">
+
+    <article class="hw-beat" data-level="terra">
+      <span class="section-label">Piano Terra</span>
+      <h3>Il cancello si apre sul buio del giardino</h3>
+      <p>Dentro, la villa è già viva: luci calde alle finestre, musica che filtra dalle porte, zucche accese lungo il viale. Il piano terra è il cuore della festa — ingresso, salone, cucina, terrazza: tutto lo spazio comune si muove su questo livello.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="15.0" data-focus-y="23.6" data-pin="pin-ingresso">
+      <span class="section-label">01 · Ingresso</span>
+      <h3>Si entra da qui</h3>
+      <p>Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="45.5" data-focus-y="23.6" data-pin="pin-salone">
+      <span class="section-label">02 · Salone Principale</span>
+      <h3>Il centro gravitazionale della serata</h3>
+      <p>Dj set, luci basse, la pista che non si vuota mai del tutto. Qualunque sia il piano della serata, prima o poi si torna sempre qui.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="23.5" data-focus-y="66.4" data-pin="pin-cucina">
+      <span class="section-label">04 · Cucina &amp; Sala da Pranzo</span>
+      <h3>Il buffet di Ognissanti</h3>
+      <p>Dalla cucina esce il necessario — zucca, vino caldo, dolci a forma di cosa-non-si-sa. La sala da pranzo accoglie chi preferisce sedersi un momento prima di tornare in pista.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="80.5" data-focus-y="23.6" data-pin="pin-terrazza">
+      <span class="section-label">03 · Terrazza Coperta</span>
+      <h3>Dove si prende aria</h3>
+      <p>La terrazza guarda il giardino: il posto giusto per una pausa, una sigaretta, o una conversazione lontano dalle casse.</p>
+    </article>
+
+    <article class="hw-beat" data-level="primo">
+      <span class="section-label">Primo Piano</span>
+      <h3>Si sale, e la festa cambia forma</h3>
+      <p>Il primo piano è dove la villa smette di essere solo festa e diventa anche un posto per restare — le camere da cui, domani, si guarderà il giardino ancora addormentato. Queste sono le stanze pensate per essere affittate per la notte.</p>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="24.0" data-focus-y="27.9" data-pin="pin-suite">
+      <span class="section-label">01 · Suite Padronale</span>
+      <h3>La più grande del piano</h3>
+      <p>Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso. Per questa edizione è già stata prenotata.</p>
+      <span class="status-chip occ">Occupata</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="56.5" data-focus-y="27.9" data-pin="pin-camerablu">
+      <span class="section-label">02 · Camera Blu</span>
+      <h3>Due posti, toni notturni</h3>
+      <p>Finestra sul retro della villa, lontana dal salone. Ancora libera per chi arriva da fuori e vuole restare fino a mattina.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="82.5" data-focus-y="27.9" data-pin="pin-cameraverde">
+      <span class="section-label">03 · Camera Verde</span>
+      <h3>Specchio della Camera Blu</h3>
+      <p>Stessa quiete, sull'altro lato del corridoio: vista sul giardino invece che sul vialetto.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="65.0" data-focus-y="70.7" data-pin="pin-terrazzino">
+      <span class="section-label">05 · Terrazzino</span>
+      <h3>Metà camera, metà balcone</h3>
+      <p>La stanza più particolare del piano: pensata per chi vuole dormire quasi all'aperto, sotto la luna di fine ottobre.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="giardino">
+      <span class="section-label">Giardino &amp; Piscina</span>
+      <h3>Si torna giù, ma non dentro</h3>
+      <p>Il giardino è il terzo livello della villa — quello senza soffitto: piscina, gazebo, un falò per chi non ha ancora sonno.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="31.0" data-focus-y="30.7" data-pin="pin-piscina">
+      <span class="section-label">01 · Piscina</span>
+      <h3>Più scenografia che bagno</h3>
+      <p>Illuminata di notte, è il punto fermo delle foto — ma qualcuno, ogni anno, ci finisce dentro vestito.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="76.0" data-focus-y="30.7" data-pin="pin-gazebo">
+      <span class="section-label">02 · Gazebo &amp; Falò</span>
+      <h3>Per chi vuole stare fermo</h3>
+      <p>Una chiacchierata, un bicchiere, il fuoco che sostituisce la musica per un po'.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="80.0" data-focus-y="73.6" data-pin="pin-parcheggio">
+      <span class="section-label">04 · Parcheggio</span>
+      <h3>L'unica stanza senza storia</h3>
+      <p>Ma è lì che la notte, per qualcuno, finisce — o comincia, se arriva solo adesso.</p>
+    </article>
+
+  </div>
+
+  <div class="hw-stage-col">
+    <div class="level-pills">
+      <button class="level-pill" data-goto="terra">Piano Terra</button>
+      <button class="level-pill" data-goto="primo">Primo Piano</button>
+      <button class="level-pill" data-goto="giardino">Giardino</button>
+    </div>
+
+    <div class="hw-stage" id="stage">
+      <span class="badge-demo">Esempio · dati dimostrativi</span>
+
+      <!-- PIANO TERRA -->
+      <div class="floor-layer is-active" data-layer="terra">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect" x="50" y="50" width="200" height="230"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="150" y="175">Ingresso</text>
+          <rect class="room-rect" x="250" y="50" width="410" height="230"></rect>
+          <text class="room-code mono" x="264" y="76">02</text>
+          <text class="room-label" x="455" y="175">Salone Principale</text>
+          <rect class="room-rect" x="660" y="50" width="290" height="230"></rect>
+          <text class="room-code mono" x="674" y="76">03</text>
+          <text class="room-label" x="805" y="175">Terrazza Coperta</text>
+          <rect class="room-rect" x="50" y="280" width="370" height="370"></rect>
+          <text class="room-code mono" x="64" y="306">04</text>
+          <text class="room-label" x="235" y="475">Cucina</text>
+          <rect class="room-rect" x="420" y="280" width="530" height="370"></rect>
+          <text class="room-code mono" x="434" y="306">05</text>
+          <text class="room-label" x="685" y="475">Sala da Pranzo</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--info" id="pin-ingresso" style="left:15.0%; top:23.6%" data-kind="info" data-name="Ingresso" data-desc="Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva." aria-label="Ingresso"></button>
+          <button class="hw-pin pin--info" id="pin-salone" style="left:45.5%; top:23.6%" data-kind="info" data-name="Salone Principale" data-desc="Dj set, luci basse: il centro gravitazionale della serata, dove tutti tornano prima o poi." aria-label="Salone Principale"></button>
+          <button class="hw-pin pin--info" id="pin-terrazza" style="left:80.5%; top:23.6%" data-kind="info" data-name="Terrazza Coperta" data-desc="Guarda il giardino: il posto giusto per prendere aria lontano dalle casse." aria-label="Terrazza Coperta"></button>
+          <button class="hw-pin pin--info" id="pin-cucina" style="left:23.5%; top:66.4%" data-kind="info" data-name="Cucina" data-desc="Da qui esce il buffet di Ognissanti: zucca, vino caldo, dolci a forma di cosa-non-si-sa." aria-label="Cucina"></button>
+          <button class="hw-pin pin--info" id="pin-salapranzo" style="left:68.5%; top:66.4%" data-kind="info" data-name="Sala da Pranzo" data-desc="Per chi preferisce sedersi un momento prima di tornare in pista." aria-label="Sala da Pranzo"></button>
+        </div>
+      </div>
+
+      <!-- PRIMO PIANO -->
+      <div class="floor-layer" data-layer="primo">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect is-camera" x="50" y="50" width="380" height="290"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="240" y="200">Suite Padronale</text>
+          <rect class="room-rect is-camera" x="430" y="50" width="270" height="290"></rect>
+          <text class="room-code mono" x="444" y="76">02</text>
+          <text class="room-label" x="565" y="200">Camera Blu</text>
+          <rect class="room-rect is-camera" x="700" y="50" width="250" height="290"></rect>
+          <text class="room-code mono" x="714" y="76">03</text>
+          <text class="room-label" x="825" y="200">Camera Verde</text>
+          <rect class="room-rect" x="50" y="340" width="300" height="310"></rect>
+          <text class="room-code mono" x="64" y="366">04</text>
+          <text class="room-label" x="200" y="500">Bagno Comune</text>
+          <rect class="room-rect is-camera" x="350" y="340" width="600" height="310"></rect>
+          <text class="room-code mono" x="364" y="366">05</text>
+          <text class="room-label" x="650" y="500">Terrazzino</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--camera is-occupied" id="pin-suite" style="left:24.0%; top:27.9%" data-kind="occ" data-name="Suite Padronale" data-desc="Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso." aria-label="Suite Padronale, occupata"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-camerablu" style="left:56.5%; top:27.9%" data-kind="avail" data-name="Camera Blu" data-desc="Due posti letto, toni notturni, finestra sul retro della villa." aria-label="Camera Blu, disponibile"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-cameraverde" style="left:82.5%; top:27.9%" data-kind="avail" data-name="Camera Verde" data-desc="Stessa quiete della Camera Blu, vista sul giardino." aria-label="Camera Verde, disponibile"></button>
+          <button class="hw-pin pin--info" id="pin-bagno" style="left:20.0%; top:70.7%" data-kind="info" data-name="Bagno Comune" data-desc="A servizio delle camere del piano." aria-label="Bagno Comune"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-terrazzino" style="left:65.0%; top:70.7%" data-kind="avail" data-name="Terrazzino" data-desc="Metà camera, metà balcone coperto: per dormire quasi all'aperto." aria-label="Terrazzino, disponibile"></button>
+        </div>
+      </div>
+
+      <!-- GIARDINO -->
+      <div class="floor-layer" data-layer="giardino">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect" x="50" y="50" width="520" height="330"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="310" y="220">Piscina</text>
+          <rect class="room-rect" x="570" y="50" width="380" height="330"></rect>
+          <text class="room-code mono" x="584" y="76">02</text>
+          <text class="room-label" x="760" y="220">Gazebo</text>
+          <rect class="room-rect" x="50" y="380" width="600" height="270"></rect>
+          <text class="room-code mono" x="64" y="406">03</text>
+          <text class="room-label" x="350" y="520">Prato &amp; Falò</text>
+          <rect class="room-rect" x="650" y="380" width="300" height="270"></rect>
+          <text class="room-code mono" x="664" y="406">04</text>
+          <text class="room-label" x="800" y="520">Parcheggio</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--info" id="pin-piscina" style="left:31.0%; top:30.7%" data-kind="info" data-name="Piscina" data-desc="Illuminata di notte, più scenografia che bagno — ma qualcuno ci finisce dentro vestito." aria-label="Piscina"></button>
+          <button class="hw-pin pin--info" id="pin-gazebo" style="left:76.0%; top:30.7%" data-kind="info" data-name="Gazebo" data-desc="Per chi vuole stare fermo con una chiacchierata e un bicchiere." aria-label="Gazebo"></button>
+          <button class="hw-pin pin--info" id="pin-pratofalo" style="left:35.0%; top:73.6%" data-kind="info" data-name="Prato &amp; Falò" data-desc="Il fuoco che sostituisce la musica per un po'." aria-label="Prato e Falò"></button>
+          <button class="hw-pin pin--info" id="pin-parcheggio" style="left:80.0%; top:73.6%" data-kind="info" data-name="Parcheggio" data-desc="Dove la notte, per qualcuno, finisce o comincia." aria-label="Parcheggio"></button>
+        </div>
+      </div>
+
+      <div class="hw-card" id="roomCard">
+        <div class="hw-card-top">
+          <div>
+            <span class="kind" id="roomCardKind">Spazio comune</span>
+            <h4 id="roomCardName">—</h4>
+          </div>
+          <button class="close" id="roomCardClose" aria-label="Chiudi">&times;</button>
+        </div>
+        <p id="roomCardDesc"></p>
+        <p class="note">Dato dimostrativo — capacità, prezzo e disponibilità reali arriveranno con l'integrazione delle prenotazioni.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="closing wrap">
+  <h2>Questa è solo la tecnica.</h2>
+  <p>Planimetria, livelli e animazioni funzionano così. Il prossimo passo è collegare i pin alle disponibilità reali delle camere — e poi decidere, insieme, se portare tutto online.</p>
+  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="ghost-btn" id="restartBtn">Torna all'inizio ↑</button>
+    <a class="ghost-link" href="index.html">← Torna a Magaparty</a>
+  </div>
+  <div class="foot-note">Prototipo tecnico — Magaverse · Halloween in Villa · dati di esempio</div>
+</section>
+
+<a href="../index.html" class="sm-preview-ribbon">● Anteprima — non pubblica</a>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var layers = {};
+  document.querySelectorAll('.floor-layer').forEach(function(el){ layers[el.dataset.layer] = el; });
+  var pills = document.querySelectorAll('.level-pill');
+  var card = document.getElementById('roomCard');
+  var cardKind = document.getElementById('roomCardKind');
+  var cardName = document.getElementById('roomCardName');
+  var cardDesc = document.getElementById('roomCardDesc');
+  var openPinId = null;
+  var currentLevel = 'terra';
+  var currentSpotlight = null;
+
+  function setLevel(level){
+    if (level === currentLevel) return;
+    currentLevel = level;
+    Object.keys(layers).forEach(function(k){
+      layers[k].classList.toggle('is-active', k === level);
+    });
+    pills.forEach(function(p){ p.classList.toggle('is-active', p.dataset.goto === level); });
+  }
+
+  function setFocus(x, y){
+    if (x == null || y == null){
+      stage.classList.remove('is-zoomed');
+      Object.keys(layers).forEach(function(k){ layers[k].style.transformOrigin = '50% 50%'; });
+    } else {
+      Object.keys(layers).forEach(function(k){ layers[k].style.transformOrigin = x + '% ' + y + '%'; });
+      stage.classList.add('is-zoomed');
+    }
+  }
+
+  function setSpotlight(pinId){
+    if (currentSpotlight) currentSpotlight.classList.remove('spotlight');
+    currentSpotlight = pinId ? document.getElementById(pinId) : null;
+    if (currentSpotlight) currentSpotlight.classList.add('spotlight');
+  }
+
+  function openCard(btn){
+    var kind = btn.dataset.kind;
+    cardKind.textContent = kind === 'avail' ? 'Camera disponibile' : kind === 'occ' ? 'Camera occupata' : 'Spazio comune';
+    cardKind.className = 'kind ' + kind;
+    cardName.textContent = btn.dataset.name;
+    cardDesc.textContent = btn.dataset.desc;
+    card.classList.add('is-open');
+    openPinId = btn.id;
+  }
+  function closeCard(){
+    card.classList.remove('is-open');
+    openPinId = null;
+  }
+
+  document.querySelectorAll('.hw-pin').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (openPinId === btn.id) { closeCard(); } else { openCard(btn); }
+    });
+  });
+  document.getElementById('roomCardClose').addEventListener('click', closeCard);
+
+  pills.forEach(function(p){
+    p.addEventListener('click', function(){
+      var first = document.querySelector('.hw-beat[data-level="' + p.dataset.goto + '"]');
+      if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+  });
+
+  document.getElementById('restartBtn').addEventListener('click', function(){
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  var beats = document.querySelectorAll('.hw-beat');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      var beat = entry.target;
+      setLevel(beat.dataset.level);
+      var fx = beat.dataset.focusX, fy = beat.dataset.focusY;
+      setFocus(fx ? parseFloat(fx) : null, fy ? parseFloat(fy) : null);
+      setSpotlight(beat.dataset.pin || null);
+    });
+  }, { rootMargin: '-48% 0px -48% 0px', threshold: 0 });
+  beats.forEach(function(b){ observer.observe(b); });
+
+  pills[0].classList.add('is-active');
+})();
+</script>
+</body>
+</html>

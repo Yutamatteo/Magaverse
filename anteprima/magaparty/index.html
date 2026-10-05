@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Magaparty · Eventi a Magazzeno (Salerno)</title>
+    <meta name="description" content="Magaparty — gli eventi firmati Maga a Magazzeno, Salerno: Marea, Battigia, Ultima Onda, Tardeo e Halloween in Villa. Nello Ocean Beach.">
+    <meta property="og:title" content="Magaparty · Eventi a Magazzeno">
+    <meta property="og:description" content="Una stagione, cinque capitoli: Marea, Battigia, Ultima Onda, Tardeo, Halloween in Villa.">
+    <meta property="og:image" content="../../magaparty/assets/img/logo-teal.png">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="../../magaparty/assets/img/logo-teal.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../magaparty/assets/styles.css">
+    <link rel="stylesheet" href="../../assets/storymap.css">
+    <script src="../../assets/storymap.js" defer></script>
+    <style>
+        /* ═══ Palette Magaparty core — teal/ciano ispirata al logo ═══ */
+        :root {
+            --sunset-orange:  #14A6C7;
+            --sunset-amber:   #0F8CA8;
+            --sunset-gold:    #7FE3EF;
+            --sunset-teal:    #0B6478;
+            --sunset-teal2:   #084A5A;
+            --sunset-coral:   #22C3E6;
+            --sunset-cream:   #EAFBFF;
+            --sunset-deep:    #052832;
+
+            --night-bg:      #0A0A0A;
+            --night-surface: #141414;
+            --night-border:  #262626;
+            --night-border-soft: rgba(255,255,255,0.08);
+
+            /* storymap tokens remapped sul core Magaparty */
+            --sm-accent: #14A6C7;
+            --sm-accent-2: #7FE3EF;
+            --sm-good: #5BD98A;
+            --sm-bg: #0A0A0A;
+            --sm-surface: #141414;
+            --sm-surface-2: #1B1B1B;
+            --sm-line: rgba(255,255,255,0.08);
+            --sm-text: #EAFBFF;
+            --sm-muted: #8A9BA3;
+        }
+
+        body { max-width: none !important; border: none !important; padding-bottom: 0 !important; }
+        .h-wrap { max-width: 900px; margin: 0 auto; padding: 0 20px 80px; }
+        .h-top { display:flex; align-items:center; justify-content:space-between; padding:20px 20px 0; max-width:900px; margin:0 auto; }
+        .section-anchor { padding-top: 24px; }
+        .section-label {
+            display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+            color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px;
+        }
+        .home-hero-logo {
+            width: 96px; height: 96px; border-radius: 24px; object-fit: cover;
+            margin: 0 auto 20px; display: block; box-shadow: 0 0 40px rgba(20,166,199,0.25);
+        }
+        .h-divider { margin:48px 0 32px; height:1px; background:linear-gradient(90deg, transparent, rgba(127,227,239,0.25), transparent); }
+
+        .format-card {
+            display: flex; flex-direction: column; gap: 10px; padding: 24px;
+            transition: transform .2s ease, border-color .2s ease; position: relative; overflow:hidden;
+        }
+        .format-card:hover { transform: translateY(-3px); }
+        .format-card .arrow { transition: transform .2s ease; }
+        .format-card:hover .arrow { transform: translateX(4px); }
+        .wip-badge {
+            position:absolute; top:14px; right:14px; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
+            font-weight:700; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,0.08); color:#8A7B6E;
+        }
+        .format-day {
+            display:inline-flex; align-items:center; gap:6px; font-size:9px; text-transform:uppercase; letter-spacing:0.15em;
+            font-weight:700; padding:5px 10px; border-radius:999px; width:fit-content;
+        }
+
+        /* ── Timeline stagionale (storymap) ── */
+        .season-timeline text{ font-family:'JetBrains Mono', monospace; }
+        .season-track{ stroke:var(--sm-line); stroke-width:3; }
+        .season-dot{ fill:var(--sm-surface-2); stroke:var(--sm-accent-2); stroke-width:2; }
+        .season-dot.is-new{ stroke:#FF9A3C; }
+        .season-month{ fill:var(--sm-muted); font-size:13px; letter-spacing:0.08em; }
+        .season-label{ fill:var(--sm-text); font-size:15px; }
+    </style>
+</head>
+<body data-page="home">
+
+<div class="h-top">
+    <a href="../index.html" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280;text-decoration:none">Magaverse</a>
+    <div style="display:flex;gap:14px">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
+    </div>
+</div>
+
+<div class="h-wrap">
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="home" class="section-anchor reveal text-center" style="padding-bottom:8px">
+    <img src="../../magaparty/assets/img/logo-teal.png" alt="Magaparty" class="home-hero-logo" style="width:150px; height:auto; border-radius:0; object-fit:contain; background:transparent; box-shadow:none">
+    <span class="section-label">Magaparty · Eventi</span>
+    <h1 class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">L'universo delle nostre feste</h1>
+    <p class="text-[12px] text-gray-400 leading-relaxed" style="max-width:520px;margin:0 auto 24px">
+        Magaparty porta la notte (e il tramonto) a Magazzeno: un solo posto, Nello Ocean Beach,
+        e una stagione che si racconta capitolo dopo capitolo. Scorri per vivertela.
+    </p>
+</section>
+
+<!-- ═══════════════════════ STORYMAP · LA STAGIONE ═══════════════════════ -->
+<section class="section-anchor">
+    <div class="text-center mb-2 reveal">
+        <span class="section-label">Una stagione, cinque capitoli</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il calendario Magaparty</h2>
+        <p class="text-[11px] text-gray-400 mt-2" style="max-width:420px;margin:8px auto 0">Da Marea a Halloween in Villa: scorri per seguire la stagione mese per mese.</p>
+    </div>
+
+    <div class="storymap">
+        <div class="story-narrative">
+
+            <article class="story-beat" data-layer="stagione" data-focus-x="16" data-focus-y="50" data-pin="pin-marea">
+                <span class="sm-label">Capitolo 1 · Ogni domenica</span>
+                <h3>Marea</h3>
+                <p>Happy Hour dalle 17:00 a mezzanotte, tre DJ, beach games e la Promo Lettino + Drink. Numero chiuso, lista obbligatoria: è il capitolo che apre ogni settimana.</p>
+                <a href="marea.html" class="sm-pill" style="margin-top:14px">Vai a Marea →</a>
+            </article>
+
+            <article class="story-beat" data-layer="stagione" data-focus-x="32" data-focus-y="50" data-pin="pin-battigia">
+                <span class="sm-label">Capitolo 2 · Ogni mercoledì</span>
+                <h3>Battigia</h3>
+                <p>Il mercoledì chill, in riva al mare. Ingresso gratuito dalle 20:00, lista obbligatoria, tavolo prenotabile gratis: la pausa a metà settimana.</p>
+                <a href="battigia.html" class="sm-pill" style="margin-top:14px">Vai a Battigia →</a>
+            </article>
+
+            <article class="story-beat" data-layer="stagione" data-focus-x="56" data-focus-y="50" data-pin="pin-ultimaonda">
+                <span class="sm-label">Capitolo 3 · 13 Settembre</span>
+                <h3>Ultima Onda</h3>
+                <p>L'ultimo format dell'estate: SUP School, showcase Indieficio e DJ set di Adolfo Citro. Il saluto alla bella stagione.</p>
+                <a href="ultima-onda.html" class="sm-pill" style="margin-top:14px">Vai a Ultima Onda →</a>
+            </article>
+
+            <article class="story-beat" data-layer="stagione" data-focus-x="68" data-focus-y="50" data-pin="pin-tardeo">
+                <span class="sm-label">Capitolo 4 · 24 Settembre</span>
+                <h3>Tardeo</h3>
+                <p>DJ Kiki, Adolfo Citro, H8daprep e Omen. Ingresso 10€, drink omaggio se sei in lista: la notte che chiude l'estate a Nello Ocean Beach.</p>
+                <a href="tardeo.html" class="sm-pill" style="margin-top:14px">Vai a Tardeo →</a>
+            </article>
+
+            <article class="story-beat" data-layer="stagione" data-focus-x="88" data-focus-y="50" data-pin="pin-halloween">
+                <span class="sm-label">Capitolo 5 · 31 Ottobre · Nuovo</span>
+                <h3>Halloween in Villa</h3>
+                <p>Si cambia scena: dal beach club alla villa. Tre livelli, dieci stanze, alcune disponibili per passarci la notte — il capitolo più ambizioso della stagione, ora con la sua planimetria interattiva.</p>
+                <a href="halloween.html" class="sm-pill" style="margin-top:14px; border-color:#FF9A3C; color:#FF9A3C">Esplora la planimetria →</a>
+            </article>
+
+        </div>
+
+        <div class="story-stage-col">
+            <div class="sm-pill-nav">
+                <button class="sm-pill" data-goto="stagione">● Timeline stagione</button>
+            </div>
+            <div class="story-stage" data-stage>
+                <span class="sm-badge-demo">Capitoli della stagione</span>
+                <div class="story-panel is-active" data-layer="stagione">
+                    <svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid meet" style="position:absolute; inset:0; width:100%; height:100%;">
+                        <line class="season-track" x1="80" y1="150" x2="920" y2="150"></line>
+                        <text class="season-month" x="80" y="110">GIU</text>
+                        <text class="season-month" x="330" y="110">LUG–AGO</text>
+                        <text class="season-month" x="560" y="110">SET</text>
+                        <text class="season-month" x="760" y="110">SET</text>
+                        <text class="season-month" x="880" y="110">OTT</text>
+                        <circle class="season-dot" cx="160" cy="150" r="10"></circle>
+                        <text class="season-label" x="160" y="195" text-anchor="middle">Marea</text>
+                        <circle class="season-dot" cx="320" cy="150" r="10"></circle>
+                        <text class="season-label" x="320" y="195" text-anchor="middle">Battigia</text>
+                        <circle class="season-dot" cx="560" cy="150" r="10"></circle>
+                        <text class="season-label" x="560" y="195" text-anchor="middle">Ultima Onda</text>
+                        <circle class="season-dot" cx="680" cy="150" r="10"></circle>
+                        <text class="season-label" x="680" y="195" text-anchor="middle">Tardeo</text>
+                        <circle class="season-dot is-new" cx="880" cy="150" r="12"></circle>
+                        <text class="season-label" x="880" y="195" text-anchor="middle" style="fill:#FF9A3C">Halloween</text>
+                    </svg>
+                    <div class="story-pins">
+                        <button class="story-pin" id="pin-marea" style="left:16%; top:50%" data-kind="info" data-name="Marea" data-desc="Ogni domenica, Happy Hour dalle 17:00. Numero chiuso, lista obbligatoria."></button>
+                        <button class="story-pin" id="pin-battigia" style="left:32%; top:50%" data-kind="info" data-name="Battigia" data-desc="Ogni mercoledì, ingresso gratuito dalle 20:00, lista obbligatoria."></button>
+                        <button class="story-pin" id="pin-ultimaonda" style="left:56%; top:50%" data-kind="info" data-name="Ultima Onda" data-desc="13 Settembre — il saluto all'estate: SUP School, Indieficio, Adolfo Citro."></button>
+                        <button class="story-pin" id="pin-tardeo" style="left:68%; top:50%" data-kind="info" data-name="Tardeo" data-desc="24 Settembre — DJ Kiki, Adolfo Citro, H8daprep, Omen. Ingresso 10€."></button>
+                        <button class="story-pin pin--primary is-available" id="pin-halloween" style="left:88%; top:50%" data-kind="avail" data-name="Halloween in Villa" data-desc="31 Ottobre — nuovo capitolo: planimetria interattiva multi-livello, stanze disponibili per la notte."></button>
+                    </div>
+                </div>
+                <div class="story-card">
+                    <div class="room-card-top" style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px">
+                        <div>
+                            <span class="kind" data-role="kind" style="font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--sm-accent-2)">Capitolo</span>
+                            <h4 data-role="name">—</h4>
+                        </div>
+                        <button class="close" aria-label="Chiudi">&times;</button>
+                    </div>
+                    <p data-role="desc"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ I 5 FORMAT (griglia diretta) ═══════════════════════ -->
+<section class="section-anchor reveal">
+    <div class="text-center mb-8">
+        <span class="section-label">Tutti i format</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Scegli la tua serata</h2>
+    </div>
+    <div class="desktop-3col">
+
+        <a href="tardeo.html" data-testid="link-tardeo" class="glass-card format-card" style="border:1px solid rgba(255,51,25,0.3)">
+            <span class="format-day" style="background:rgba(255,51,25,0.14); color:#FF3319">
+                <i class="fa-regular fa-clock"></i> Giovedì 24 Settembre
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Tardeo</h3>
+                <span class="arrow text-lg" style="color:#FF3319">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">DJ Kiki, Adolfo Citro, H8daprep e Omen. Ingresso 10€, drink omaggio se sei in lista.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#FF3319"><i class="fa-solid fa-list-check"></i> Mettiti in lista</span>
+        </a>
+
+        <a href="ultima-onda.html" data-testid="link-ultima-onda" class="glass-card format-card" style="border:1px solid rgba(194,102,14,0.3)">
+            <span class="format-day" style="background:rgba(194,102,14,0.14); color:#C2660E">
+                <i class="fa-regular fa-clock"></i> Domenica 13 Settembre
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Ultima Onda</h3>
+                <span class="arrow text-lg" style="color:#C2660E">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">SUP School, showcase Indieficio e DJ Set di Adolfo Citro. Ingresso 10€, drink omaggio se sei in lista.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#C2660E"><i class="fa-solid fa-list-check"></i> Mettiti in lista</span>
+        </a>
+
+        <a href="battigia.html" data-testid="link-battigia" class="glass-card format-card" style="border:1px solid rgba(217,114,15,0.25)">
+            <span class="format-day" style="background:rgba(217,114,15,0.12); color:#D9720F">
+                <i class="fa-regular fa-clock"></i> Tutti i mercoledì
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Battigia</h3>
+                <span class="arrow text-lg" style="color:#D9720F">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Il mercoledì chill di Magaparty, in riva al mare. Ingresso gratuito dalle 20:00, lista obbligatoria.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#D9720F"><i class="fa-solid fa-list-check"></i> Mettiti in lista</span>
+        </a>
+
+        <a href="marea.html" data-testid="link-marea" class="glass-card format-card neon-border-orange">
+            <span class="format-day" style="background:rgba(20,166,199,0.15); color:var(--sunset-orange)">
+                <i class="fa-regular fa-clock"></i> Tutte le domeniche
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Marea</h3>
+                <span class="arrow text-lg" style="color:var(--sunset-orange)">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Happy Hour dalle 17:00 a mezzanotte. 3 DJ, beach games e la Promo Lettino + Drink.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:var(--sunset-orange)"><i class="fa-solid fa-list-check"></i> Mettiti in lista</span>
+        </a>
+
+        <a href="halloween.html" data-testid="link-halloween" class="glass-card format-card" style="border:1px solid rgba(255,154,60,0.35)">
+            <span class="format-day" style="background:rgba(255,154,60,0.14); color:#FF9A3C">
+                <i class="fa-solid fa-sparkles"></i> 31 Ottobre · Nuovo
+            </span>
+            <div class="flex items-center justify-between mt-1">
+                <h3 class="brutalist text-xl text-white">Halloween in Villa</h3>
+                <span class="arrow text-lg" style="color:#FF9A3C">→</span>
+            </div>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Planimetria interattiva multi-livello: scopri la villa e le stanze disponibili per la notte.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#FF9A3C"><i class="fa-solid fa-map-location-dot"></i> Esplora la mappa</span>
+        </a>
+
+        <div class="glass-card format-card" style="border:1px solid rgba(224,25,53,0.2)">
+            <span class="wip-badge">Work in progress</span>
+            <h3 class="brutalist text-xl text-white mt-1">Drink Another Night</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Serate speciali dell'estate. Dettagli in arrivo a breve.</p>
+            <span class="text-[10px] uppercase tracking-widest font-bold mt-2" style="color:#8A7B6E"><i class="fa-solid fa-hourglass-half"></i> Presto online</span>
+        </div>
+
+    </div>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ BAR & GALLERIA ═══════════════════════ -->
+<section class="section-anchor reveal">
+    <div class="text-center mb-8">
+        <span class="section-label">Sempre disponibili</span>
+        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Bar & Galleria</h2>
+    </div>
+    <div class="desktop-2col">
+        <a href="bar.html" data-testid="link-bar" class="glass-card format-card" style="border:1px solid rgba(127,227,239,0.2)">
+            <div class="flex items-center justify-between">
+                <span class="text-2xl" style="color:var(--sunset-gold)"><i class="fa-solid fa-martini-glass"></i></span>
+                <span class="arrow text-lg" style="color:var(--sunset-gold)">→</span>
+            </div>
+            <h3 class="brutalist text-lg text-white">Bar</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Il menu drink e aperitivo di Magaparty.</p>
+        </a>
+        <a href="galleria.html" data-testid="link-galleria" class="glass-card format-card" style="border:1px solid rgba(34,195,230,0.2)">
+            <div class="flex items-center justify-between">
+                <span class="text-2xl" style="color:var(--sunset-teal)"><i class="fa-solid fa-camera"></i></span>
+                <span class="arrow text-lg" style="color:var(--sunset-teal)">→</span>
+            </div>
+            <h3 class="brutalist text-lg text-white">Galleria</h3>
+            <p class="text-[11px] text-gray-400 leading-relaxed">Carica e rivivi le foto e i video delle serate.</p>
+        </a>
+    </div>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ CHI SIAMO TEASER ═══════════════════════ -->
+<section class="section-anchor reveal text-center">
+    <span class="section-label">Dal 2024</span>
+    <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title mb-4">La nostra storia</h2>
+    <p class="text-[11px] text-gray-400 mb-6" style="max-width:460px;margin:0 auto 24px">
+        Dai pool party del 2024 a Halloween in Villa, Capodanno, Carnevale e i Beach Party: scopri come è nata Magaparty
+        e come contattarci.
+    </p>
+    <a href="chi-siamo.html" data-testid="link-chi-siamo"
+       class="inline-flex items-center gap-2 px-6 py-3 rounded-full text-[12px] uppercase tracking-widest font-bold transition-all"
+       style="color:var(--night-surface); background:var(--sunset-gold); box-shadow:0 0 20px rgba(127,227,239,0.3)">
+        Chi siamo <i class="fa-solid fa-arrow-right"></i>
+    </a>
+</section>
+
+<div class="h-divider"></div>
+
+<!-- ═══════════════════════ SOCIAL TEASER ═══════════════════════ -->
+<section class="section-anchor reveal text-center">
+    <span class="section-label">Resta connesso</span>
+    <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title mb-4">Segui Magaparty</h2>
+    <p class="text-[11px] text-gray-400 mb-6" style="max-width:420px;margin:0 auto 24px">
+        Anteprime, aggiornamenti e liste ingresso: tutto passa prima dai nostri social.
+    </p>
+    <div class="desktop-3col" style="max-width:640px;margin:0 auto">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" data-testid="home-instagram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-coral); background:rgba(34,195,230,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Instagram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)">Foto &amp; Aggiornamenti</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></span>
+        </a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" data-testid="home-tiktok"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-gold); background:rgba(127,227,239,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">TikTok</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-gold)">Video &amp; Trend</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></span>
+        </a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" data-testid="home-telegram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer"
+           style="border-left-color:var(--sunset-orange); background:rgba(20,166,199,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Telegram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)">Info &amp; Photo Dump</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></span>
+        </a>
+    </div>
+</section>
+
+</div>
+
+<a href="../index.html" class="sm-preview-ribbon">● Anteprima — non pubblica</a>
+
+</body>
+</html>
