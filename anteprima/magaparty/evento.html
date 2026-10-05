@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JUNGLE NIGHT · Dettagli evento | Magaparty</title>
+    <meta name="description" content="La spiaggia si trasforma in giungla. 8 Luglio 2026 – Nello Ocean Beach, Magazzeno Salerno. 2 DJ. Dalle 19:00 alle 2:00.">
+    <meta property="og:title" content="JUNGLE NIGHT – 8 Luglio 2026 | Magaparty">
+    <meta property="og:description" content="La spiaggia si trasforma in giungla. Nello Ocean Beach, Magazzeno Salerno.">
+    <meta property="og:image" content="../../magaparty/logo_maga.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <link rel="icon" type="image/png" href="../../magaparty/logo_maga.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../magaparty/assets/styles.css">
+    <link rel="stylesheet" href="../../assets/storymap.css">
+    <script src="../../assets/storymap.js" defer></script>
+    <style>
+
+        /* storymap system vars — allineate alla palette "Jungle Night" di questa pagina */
+        :root {
+            --sm-accent: var(--sunset-orange);
+            --sm-accent-2: var(--sunset-gold);
+            --sm-good: var(--sunset-amber);
+            --sm-line: var(--night-border-soft);
+        }
+
+        /* Single-page sections styling */
+        .section-anchor { padding-top: 24px; scroll-margin-top: 80px; }
+        .section-divider {
+            margin: 56px 0 32px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(198,232,107,0.25), transparent);
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 10px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--sunset-gold);
+            opacity: 0.7;
+            margin-bottom: 12px;
+        }
+
+        /* Centerpiece storymap: "Come funziona la serata" */
+        .sm-pill-nav { margin-bottom: 20px; }
+        .story-stage { background: var(--night-bg); }
+        .story-card .kind {
+            display: block;
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--sm-accent);
+            margin-bottom: 2px;
+        }
+        .story-panel svg { display: block; width: 100%; height: 100%; }
+    </style>
+</head>
+<body data-page="info">
+<main id="page-main">
+
+<!-- ═══════════════════════ INFO ═══════════════════════ -->
+<section id="info" class="section-anchor animate-fade-in" data-testid="page-info">
+    <div class="desktop-2col" style="row-gap:12px">
+        <!-- Card dinamica: Countdown ingresso / Countdown fascia / Festa in corso / Dopo evento -->
+        <div id="dynamic-card" class="glass-card p-6 text-center desktop-full neon-border-orange reveal">
+            <!-- Stato 1: Countdown (riutilizzato per le due fasi pre-evento) -->
+            <div id="state-countdown">
+                <h3 id="countdown-label" class="brutalist text-xl mb-4" style="color:var(--sunset-orange)">ALLA GIUNGLA MANCANO</h3>
+                <div class="grid grid-cols-4 gap-2 border-t pt-4" style="border-color:rgba(240,255,232,0.05)">
+                    <div><span class="block text-2xl font-bold brutalist" id="cd" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Giorni</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="ch" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Ore</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cm" style="color:var(--sunset-gold)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Min</span></div>
+                    <div><span class="block text-2xl font-bold brutalist" id="cs" style="color:var(--sunset-orange)">00</span><span class="text-[9px] opacity-50 uppercase tracking-wider">Sec</span></div>
+                </div>
+            </div>
+            <!-- Stato 2: Festa in corso (dalle 21:00 a fine serata) -->
+            <div id="state-live" style="display:none">
+                <div class="flex items-center justify-center gap-2 mb-3">
+                    <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--sunset-orange)"></span>
+                    <span class="text-[9px] uppercase tracking-[0.2em] font-bold" style="color:var(--sunset-orange)">Live ora</span>
+                </div>
+                <p class="text-3xl mb-2">&#127796;</p>
+                <h3 class="brutalist text-2xl mb-1" style="color:var(--sunset-gold)">FESTA IN CORSO</h3>
+                <p class="text-[11px] text-gray-400 tracking-wider">La giungla è accesa. Vieni a ballare.</p>
+            </div>
+            <!-- Stato 3: Dopo evento -->
+            <div id="state-after" style="display:none">
+                <p class="text-3xl mb-3">&#127749;</p>
+                <h3 class="brutalist text-xl mb-2" style="color:var(--sunset-gold)">Che serata.</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Grazie a tutti per aver fatto parte di questa notte.<br>Ci vediamo alla prossima.</p>
+                <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                   style="background:rgba(255,71,87,0.1); border:1px solid rgba(255,71,87,0.3); color:var(--sunset-coral)">
+                    <i class="fa-brands fa-instagram"></i> Segui per le foto
+                </a>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="glass-card overflow-hidden reveal">
+            <div class="p-5">
+                <h3 class="brutalist text-xl mb-1 sunset-title">NELLO OCEAN BEACH</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Magazzeno, Salerno</p>
+                <a href="https://maps.google.com/?q=Nello+Ocean+Beach+Salerno" target="_blank" rel="noopener" data-testid="map-link"
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] uppercase tracking-wider font-bold transition-colors"
+                   style="background:rgba(224,25,53,0.1); border:1px solid rgba(198,232,107,0.1); color:var(--sunset-coral)">
+                    <i class="fa-solid fa-location-dot"></i> Apri Mappa
+                </a>
+            </div>
+            <div class="p-4 border-t" style="background:rgba(0,0,0,0.4); border-color:rgba(240,255,232,0.05)">
+                <p class="text-[9px] uppercase tracking-[0.15em] mb-3 flex items-center gap-2" style="color:var(--sunset-teal)">
+                    <span class="w-1.5 h-1.5 rounded-full animate-pulse" style="background:var(--sunset-teal)"></span> Infoline
+                </p>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="tel:+393454237269" data-testid="phone-1" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-phone mr-1"></i> 345 423 7269</a>
+                    <a href="tel:+393914700024" data-testid="phone-2" class="bg-white/5 border border-white/10 rounded-lg p-3 text-center text-[11px] font-mono hover:bg-white/10 transition-all">
+                        <i class="fa-solid fa-phone mr-1"></i> 391 470 0024</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vibe + Navetta (colonna destra, raggruppate) -->
+        <div class="flex flex-col gap-3 reveal">
+            <!-- Vibe -->
+            <div class="glass-card p-5" style="border:1px solid rgba(198,232,107,0.2); background:rgba(198,232,107,0.04)">
+                <div class="flex justify-between items-end mb-3">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-gold)">Energia Sunset</span>
+                    <i class="fa-solid fa-sun" style="color:var(--sunset-gold)"></i>
+                </div>
+                <div class="h-2 w-full rounded-full overflow-hidden mb-3" style="background:rgba(255,255,255,0.1)">
+                    <div class="h-full w-[88%] animate-pulse rounded-full"
+                         style="background:linear-gradient(90deg, var(--sunset-teal), var(--sunset-orange), var(--sunset-gold))"></div>
+                </div>
+                <p class="text-[11px] italic opacity-80">Previsione: <strong class="not-italic" style="color:var(--sunset-cream)">Foglie, neon e bassi che ruggiscono fino a notte fonda.</strong></p>
+            </div>
+
+            <!-- Navetta -->
+            <div class="glass-card p-5" style="border:1px solid rgba(224,25,53,0.2); background:rgba(224,25,53,0.04)">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-teal)"><i class="fa-solid fa-bus mr-1"></i> Navetta</span>
+                    <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(224,25,53,0.15); color:var(--sunset-teal)">Dedicata</span>
+                </div>
+                <p class="text-[11px] text-gray-300 leading-relaxed mb-3">Servizio navetta dedicato per l'evento. Per info, orari e prenotazione posti chiedi in DM.</p>
+                <button data-testid="navetta-wa" onclick="MAGA.wa('Navetta – Info e prenotazione posti')" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all"
+                        style="background:rgba(224,25,53,0.15); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Chiedi in DM
+                </button>
+            </div>
+        </div>
+
+        <!-- Parcheggio -->
+        <div class="glass-card p-5 reveal" style="border:1px solid rgba(154,216,47,0.2); background:rgba(154,216,47,0.04)">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-[9px] uppercase tracking-[0.15em] font-bold" style="color:var(--sunset-orange)"><i class="fa-solid fa-car mr-1"></i> Parcheggio</span>
+                <span class="text-[9px] px-2 py-1 rounded font-bold uppercase" style="background:rgba(154,216,47,0.15); color:var(--sunset-orange)">Gratuito</span>
+            </div>
+            <p class="text-[11px] text-gray-300 leading-relaxed">Parcheggio <strong class="text-white">custodito gratuito</strong> disponibile per l&apos;evento. Ingresso lato <strong class="text-white">Salerno</strong> sulla SS18.</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ LINEUP ═══════════════════════ -->
+<section id="lineup" class="section-anchor animate-fade-in" data-testid="page-lineup">
+    <div class="text-center mb-8 reveal">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Line Up</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">2 DJ · DJ set dalle 21:00</p>
+    </div>
+    <div class="desktop-2col" style="gap:24px; align-items:start">
+        <!-- DJ 1 -->
+        <div class="glass-card p-6 relative overflow-hidden group neon-border-amber reveal">
+            <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist group-hover:scale-110 transition-transform" style="color:var(--sunset-amber)">1</div>
+            <div class="relative z-10">
+                <span class="inline-block px-3 py-1 rounded text-[9px] font-bold uppercase tracking-widest mb-3" style="background:rgba(123,198,45,0.12); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">In console</span>
+                <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Nella giungla</p>
+                <h4 class="brutalist text-3xl mb-3 text-white">H8DAPREP</h4>
+                <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Urban Amapiano</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Afrobeat</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Trap</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Dembow</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(123,198,45,0.1); border:1px solid rgba(123,198,45,0.3); color:var(--sunset-amber)">Baile Funk</span>
+                </div>
+                <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 pl-3" style="border-color:rgba(123,198,45,0.4)">H8DAPREP miscela urban culture e sonorità globali in un set esplosivo: amapiano, afrobeat, trap, dembow e baile funk si fondono in un viaggio intenso, energico e super coinvolgente.</p>
+            </div>
+        </div>
+        <!-- DJ 2 -->
+        <div class="glass-card p-6 relative overflow-hidden group neon-border-teal reveal">
+            <div class="absolute -right-6 -bottom-6 opacity-5 text-9xl font-black brutalist group-hover:scale-110 transition-transform" style="color:var(--sunset-teal)">2</div>
+            <div class="relative z-10">
+                <span class="inline-block px-3 py-1 rounded text-[9px] font-bold uppercase tracking-widest mb-3" style="background:rgba(224,25,53,0.12); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">In console</span>
+                <p class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Nella giungla</p>
+                <h4 class="brutalist text-3xl mb-3 text-white">ADOLFO CITRO</h4>
+                <div class="flex flex-wrap items-center gap-1.5 mb-4">
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(224,25,53,0.1); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">TECH-HOUSE</span>
+                    <span class="px-2 py-1 rounded text-[9px] font-bold uppercase" style="background:rgba(224,25,53,0.1); border:1px solid rgba(224,25,53,0.3); color:var(--sunset-teal)">ELETTRONICA UNDERGROUND</span>
+                </div>
+                <p class="text-[11px] text-gray-400 leading-relaxed italic border-l-2 pl-3" style="border-color:rgba(224,25,53,0.4)">Con groove ipnotici e atmosfere elettroniche profonde, Adolfo Citro accompagna il party quando la giungla si accende di rosso. Un set tech-house underground pensato per chi vuole perdersi nella musica fino a notte fonda.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ ORARI — STORYMAP CENTERPIECE ═══════════════════════ -->
+<section id="orari" class="section-anchor animate-fade-in" data-testid="page-orari">
+    <div class="text-center mb-6 reveal">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Come Funziona la Serata</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Scorri per seguire l'arco della notte · dalle 19:00 alle 2:00</p>
+    </div>
+
+    <div class="sm-pill-nav">
+        <button type="button" class="sm-pill" data-goto="apertura">1 · Apertura</button>
+        <button type="button" class="sm-pill" data-goto="djset">2 · DJ Set</button>
+        <button type="button" class="sm-pill" data-goto="notte">3 · Notte Fonda</button>
+    </div>
+
+    <div class="storymap">
+        <div class="story-narrative">
+
+            <article class="story-beat" data-layer="apertura" data-focus-x="35" data-focus-y="30" data-pin="pin-ingresso">
+                <span class="sm-label">19:00 · Free Entry</span>
+                <h3>La giungla apre i cancelli</h3>
+                <p>Ingresso gratuito e lettino omaggio per scaldare l'atmosfera. Chi arriva presto trova posto comodo prima del pienone e lascia l'auto gratis nel parcheggio custodito, ingresso lato Salerno sulla SS18.</p>
+            </article>
+
+            <article class="story-beat" data-layer="djset" data-focus-x="58" data-focus-y="32" data-pin="pin-palco">
+                <span class="sm-label">21:00 · Tariffa Notte</span>
+                <h3>Si accende il palco</h3>
+                <p>Il momento clou: parte il DJ set e il party entra nel vivo tra drink, lettino omaggio e sound irresistibili. In console H8DAPREP apre con urban culture e sonorità globali — amapiano, afrobeat, trap, dembow, baile funk.</p>
+            </article>
+
+            <article class="story-beat" data-layer="notte" data-focus-x="55" data-focus-y="58" data-pin="pin-pista">
+                <span class="sm-label">2:00 · Notte Fonda</span>
+                <h3>La giungla ruggisce</h3>
+                <p>Luci verdi e rosse, bassi che ruggiscono fino a tarda notte. Adolfo Citro prende la console con groove ipnotici e tech-house underground: dancefloor open till nobody's standing still.</p>
+            </article>
+
+        </div>
+
+        <div class="story-stage-col">
+            <div class="story-stage" data-stage>
+                <span class="sm-badge-demo">Planimetria · Nello Ocean Beach</span>
+
+                <!-- LAYER 1 · APERTURA -->
+                <div class="story-panel" data-layer="apertura">
+                    <svg viewBox="0 0 400 280" role="img" aria-label="Planimetria Nello Ocean Beach all'apertura, ore 19:00">
+                        <defs>
+                            <linearGradient id="sky-apertura" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#3a2a0c"/>
+                                <stop offset="60%" stop-color="#1a260f"/>
+                                <stop offset="100%" stop-color="#0A1F0E"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="400" height="280" fill="url(#sky-apertura)"/>
+                        <path d="M0,0 Q26,16 16,52 Q2,30 0,0 Z" style="fill:var(--sunset-amber)" opacity="0.3"/>
+                        <path d="M400,0 Q374,16 384,52 Q398,30 400,0 Z" style="fill:var(--sunset-amber)" opacity="0.3"/>
+                        <rect x="0" y="236" width="400" height="44" style="fill:var(--sunset-deep)" opacity="0.7"/>
+                        <path d="M0,236 Q50,228 100,236 T200,236 T300,236 T400,236 L400,280 L0,280 Z" style="fill:var(--night-surface)"/>
+                        <rect x="14" y="24" width="70" height="38" rx="6" style="fill:var(--night-surface);stroke:var(--sm-line);stroke-width:1"/>
+                        <text x="49" y="44" text-anchor="middle" style="fill:var(--sunset-gold);font-family:var(--sm-font-mono);font-size:12px">P</text>
+                        <text x="49" y="56" text-anchor="middle" style="fill:var(--sm-muted);font-size:6px;letter-spacing:1px">SS18 GRATIS</text>
+                        <rect x="128" y="20" width="7" height="44" style="fill:var(--sm-surface-2)"/>
+                        <rect x="173" y="20" width="7" height="44" style="fill:var(--sm-surface-2)"/>
+                        <rect x="128" y="16" width="52" height="7" rx="2" style="fill:var(--sunset-orange)"/>
+                        <circle cx="154" cy="40" r="26" style="fill:var(--sunset-orange)" opacity="0.3"/>
+                        <text x="154" y="90" text-anchor="middle" style="fill:var(--sunset-gold);font-size:8px;letter-spacing:1px">INGRESSO</text>
+                        <g opacity="0.9">
+                            <rect x="34" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="66" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="98" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="34" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)" opacity="0.7"/>
+                            <rect x="66" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)" opacity="0.7"/>
+                            <rect x="98" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)" opacity="0.7"/>
+                        </g>
+                        <text x="80" y="198" text-anchor="middle" style="fill:var(--sm-muted);font-size:7px;letter-spacing:1px">LETTINI</text>
+                        <rect x="188" y="68" width="92" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sm-line)" opacity="0.6"/>
+                        <rect x="190" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)" opacity="0.5"/>
+                        <rect x="270" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)" opacity="0.5"/>
+                        <text x="234" y="120" text-anchor="middle" style="fill:var(--sm-muted);font-size:7px;letter-spacing:1px">PALCO</text>
+                        <rect x="300" y="112" width="60" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sm-line)" opacity="0.6"/>
+                        <path d="M296,112 L330,94 L364,112 Z" style="fill:var(--sunset-teal)" opacity="0.4"/>
+                        <text x="330" y="134" text-anchor="middle" style="fill:var(--sm-muted);font-size:7px">BAR</text>
+                        <ellipse cx="234" cy="168" rx="58" ry="26" style="fill:var(--night-surface)" opacity="0.35"/>
+                        <text x="234" y="172" text-anchor="middle" style="fill:var(--sm-muted);font-size:7px;letter-spacing:1px">PISTA</text>
+                    </svg>
+                    <div class="story-pins">
+                        <button type="button" class="story-pin pin--primary is-available" id="pin-ingresso" style="left:38%;top:18%" data-kind="info" data-kind-label="Ore 19:00" data-name="Ingresso" data-desc="Apertura cancelli alle 19:00. Ingresso gratuito e lettino omaggio per scaldare l'atmosfera."></button>
+                        <button type="button" class="story-pin" id="pin-parcheggio" style="left:12%;top:18%" data-kind="info" data-name="Parcheggio" data-desc="Parcheggio custodito gratuito, ingresso lato Salerno sulla SS18."></button>
+                    </div>
+                </div>
+
+                <!-- LAYER 2 · DJ SET -->
+                <div class="story-panel" data-layer="djset">
+                    <svg viewBox="0 0 400 280" role="img" aria-label="Planimetria Nello Ocean Beach durante il DJ set, ore 21:00">
+                        <defs>
+                            <linearGradient id="sky-djset" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#0d2614"/>
+                                <stop offset="60%" stop-color="#0c2010"/>
+                                <stop offset="100%" stop-color="#0A1F0E"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="0" y="0" width="400" height="280" fill="url(#sky-djset)"/>
+                        <path d="M0,0 Q26,16 16,52 Q2,30 0,0 Z" style="fill:var(--sunset-amber)" opacity="0.3"/>
+                        <path d="M400,0 Q374,16 384,52 Q398,30 400,0 Z" style="fill:var(--sunset-amber)" opacity="0.3"/>
+                        <rect x="0" y="236" width="400" height="44" style="fill:var(--sunset-deep)" opacity="0.7"/>
+                        <path d="M0,236 Q50,228 100,236 T200,236 T300,236 T400,236 L400,280 L0,280 Z" style="fill:var(--night-surface)"/>
+                        <rect x="14" y="24" width="70" height="38" rx="6" style="fill:var(--night-surface);stroke:var(--sm-line);stroke-width:1" opacity="0.6"/>
+                        <text x="49" y="44" text-anchor="middle" style="fill:var(--sm-muted);font-family:var(--sm-font-mono);font-size:12px">P</text>
+                        <rect x="128" y="20" width="7" height="44" style="fill:var(--sm-surface-2)" opacity="0.5"/>
+                        <rect x="173" y="20" width="7" height="44" style="fill:var(--sm-surface-2)" opacity="0.5"/>
+                        <rect x="128" y="16" width="52" height="7" rx="2" style="fill:var(--sunset-orange)" opacity="0.35"/>
+                        <g opacity="0.55">
+                            <rect x="34" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="66" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="98" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="34" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="66" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="98" y="166" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                        </g>
+                        <rect x="188" y="68" width="92" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sunset-orange);stroke-width:1.5"/>
+                        <rect x="190" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)"/>
+                        <rect x="270" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)"/>
+                        <rect x="220" y="52" width="40" height="16" rx="3" style="fill:var(--sunset-orange)"/>
+                        <path d="M200,68 L170,0 L190,0 Z" style="fill:var(--sunset-orange)" opacity="0.22"/>
+                        <path d="M268,68 L298,0 L278,0 Z" style="fill:var(--sunset-orange)" opacity="0.22"/>
+                        <text x="234" y="90" text-anchor="middle" style="fill:#17110C;font-size:7px;font-weight:700;letter-spacing:0.5px">H8DAPREP</text>
+                        <rect x="300" y="112" width="60" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sunset-gold);stroke-width:1"/>
+                        <path d="M296,112 L330,94 L364,112 Z" style="fill:var(--sunset-teal)"/>
+                        <text x="330" y="134" text-anchor="middle" style="fill:var(--sunset-gold);font-size:7px">BAR</text>
+                        <ellipse cx="234" cy="168" rx="58" ry="26" style="fill:var(--night-surface)" opacity="0.6"/>
+                        <circle cx="212" cy="162" r="4" style="fill:var(--sunset-coral)"/>
+                        <circle cx="240" cy="172" r="4" style="fill:var(--sunset-gold)"/>
+                        <circle cx="258" cy="158" r="4" style="fill:var(--sunset-coral)"/>
+                        <circle cx="226" cy="178" r="4" style="fill:var(--sunset-gold)"/>
+                    </svg>
+                    <div class="story-pins">
+                        <button type="button" class="story-pin pin--primary is-available" id="pin-palco" style="left:58%;top:32%" data-kind="info" data-kind-label="Ore 21:00" data-name="Palco · H8DAPREP" data-desc="Dalle 21:00 parte il DJ set: amapiano, afrobeat, trap, dembow e baile funk in console con H8DAPREP."></button>
+                        <button type="button" class="story-pin" id="pin-bar" style="left:83%;top:46%" data-kind="info" data-name="Bar" data-desc="Tariffa notte €10 con drink e lettino omaggio inclusi."></button>
+                    </div>
+                </div>
+
+                <!-- LAYER 3 · NOTTE FONDA -->
+                <div class="story-panel" data-layer="notte">
+                    <svg viewBox="0 0 400 280" role="img" aria-label="Planimetria Nello Ocean Beach in notte fonda, ore 2:00">
+                        <defs>
+                            <radialGradient id="sky-notte" cx="50%" cy="55%" r="75%">
+                                <stop offset="0%" stop-color="#2a0710"/>
+                                <stop offset="55%" stop-color="#0c1f10"/>
+                                <stop offset="100%" stop-color="#060f08"/>
+                            </radialGradient>
+                        </defs>
+                        <rect x="0" y="0" width="400" height="280" fill="url(#sky-notte)"/>
+                        <path d="M0,0 Q26,16 16,52 Q2,30 0,0 Z" style="fill:var(--sunset-teal)" opacity="0.25"/>
+                        <path d="M400,0 Q374,16 384,52 Q398,30 400,0 Z" style="fill:var(--sunset-teal)" opacity="0.25"/>
+                        <rect x="0" y="236" width="400" height="44" style="fill:var(--sunset-deep)" opacity="0.85"/>
+                        <path d="M0,236 Q50,228 100,236 T200,236 T300,236 T400,236 L400,280 L0,280 Z" style="fill:var(--night-surface)"/>
+                        <rect x="14" y="24" width="70" height="38" rx="6" style="fill:var(--night-surface);stroke:var(--sm-line);stroke-width:1" opacity="0.4"/>
+                        <text x="49" y="44" text-anchor="middle" style="fill:var(--sm-muted);font-family:var(--sm-font-mono);font-size:12px" opacity="0.5">P</text>
+                        <rect x="128" y="20" width="7" height="44" style="fill:var(--sm-surface-2)" opacity="0.3"/>
+                        <rect x="173" y="20" width="7" height="44" style="fill:var(--sm-surface-2)" opacity="0.3"/>
+                        <g opacity="0.25">
+                            <rect x="34" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="66" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                            <rect x="98" y="148" width="26" height="11" rx="4" style="fill:var(--sunset-gold)"/>
+                        </g>
+                        <rect x="188" y="68" width="92" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sunset-teal);stroke-width:1.5"/>
+                        <rect x="190" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)"/>
+                        <rect x="270" y="58" width="10" height="42" rx="2" style="fill:var(--sm-surface-2)"/>
+                        <rect x="220" y="52" width="40" height="16" rx="3" style="fill:var(--sunset-teal)"/>
+                        <path d="M200,68 L160,0 L190,0 Z" style="fill:var(--sunset-teal)" opacity="0.3"/>
+                        <path d="M268,68 L308,0 L278,0 Z" style="fill:var(--sunset-teal)" opacity="0.3"/>
+                        <text x="234" y="90" text-anchor="middle" style="fill:var(--sunset-cream);font-size:6.5px;font-weight:700;letter-spacing:0.5px">ADOLFO CITRO</text>
+                        <rect x="300" y="112" width="60" height="36" rx="4" style="fill:var(--night-surface);stroke:var(--sunset-gold);stroke-width:1" opacity="0.8"/>
+                        <path d="M296,112 L330,94 L364,112 Z" style="fill:var(--sunset-teal)" opacity="0.8"/>
+                        <ellipse cx="234" cy="168" rx="58" ry="26" style="fill:var(--night-surface)"/>
+                        <circle cx="234" cy="168" r="40" style="fill:none;stroke:var(--sunset-orange);stroke-width:1" opacity="0.35"/>
+                        <circle cx="234" cy="168" r="54" style="fill:none;stroke:var(--sunset-teal);stroke-width:1" opacity="0.25"/>
+                        <circle cx="206" cy="158" r="4" style="fill:var(--sunset-coral)"/>
+                        <circle cx="222" cy="176" r="4" style="fill:var(--sunset-gold)"/>
+                        <circle cx="240" cy="160" r="4" style="fill:var(--sunset-orange)"/>
+                        <circle cx="256" cy="174" r="4" style="fill:var(--sunset-coral)"/>
+                        <circle cx="234" cy="150" r="4" style="fill:var(--sunset-gold)"/>
+                        <circle cx="214" cy="186" r="4" style="fill:var(--sunset-orange)"/>
+                        <circle cx="252" cy="188" r="4" style="fill:var(--sunset-coral)"/>
+                        <circle cx="264" cy="162" r="4" style="fill:var(--sunset-gold)"/>
+                    </svg>
+                    <div class="story-pins">
+                        <button type="button" class="story-pin pin--primary is-available" id="pin-pista" style="left:55%;top:60%" data-kind="info" data-kind-label="Ore 2:00" data-name="Pista" data-desc="La giungla resta accesa fino a tarda notte: luci verdi e rosse, bassi che ruggiscono fino alle 2:00."></button>
+                        <button type="button" class="story-pin" id="pin-palco-notte" style="left:58%;top:32%" data-kind="info" data-name="Adolfo Citro" data-desc="Groove ipnotici e tech-house underground accompagnano la notte fonda."></button>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <button type="button" class="close" aria-label="Chiudi">&times;</button>
+                    <span data-role="kind" class="kind"></span>
+                    <h4 data-role="name"></h4>
+                    <p data-role="desc"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ TICKETS ═══════════════════════ -->
+<section id="tickets" class="section-anchor animate-fade-in" data-testid="page-tickets">
+    <div class="text-center mb-8 reveal">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Lettino omaggio sempre incluso</p>
+    </div>
+    <div class="space-y-4">
+        <div class="glass-card p-5 border-l-4 reveal" style="border-left-color:var(--sunset-coral); background:rgba(224,25,53,0.05)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(198,232,107,0.1); color:var(--sunset-coral)">19:00 – 21:00</span>
+                    <h4 class="brutalist text-xl text-white">FREE ENTRY</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)"><i class="fa-solid fa-umbrella-beach mr-1"></i> Lettino omaggio incluso</p>
+                </div>
+                <span class="brutalist text-4xl" style="color:var(--sunset-coral)">€0</span>
+            </div>
+            <button data-testid="ticket-free" onclick="MAGA.openModal()" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all" style="background:rgba(154,216,47,0.05); border:1px solid rgba(255,71,87,0.4); color:var(--sunset-coral)"><i class="fa-solid fa-list-check mr-1"></i> Mettiti in lista</button>
+        </div>
+        <div class="glass-card p-5 border-l-4 reveal" style="border-left-color:var(--sunset-orange)">
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(154,216,47,0.15); color:var(--sunset-orange)">Dalle 21:00</span>
+                    <h4 class="brutalist text-xl text-white">NIGHT TARIFF</h4>
+                    <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)"><i class="fa-solid fa-martini-glass mr-1"></i> Drink e lettino omaggio inclusi</p>
+                </div>
+                <div class="text-right">
+                    <span class="brutalist text-4xl" style="color:var(--sunset-orange)">€10</span>
+                </div>
+            </div>
+            <button data-testid="ticket-night" onclick="MAGA.openModal()" class="w-full py-2 rounded-lg text-[10px] uppercase tracking-widest font-bold transition-all" style="background:rgba(154,216,47,0.15); border:1px solid rgba(154,216,47,0.3); color:var(--sunset-orange)"><i class="fa-solid fa-list-check mr-1"></i> Mettiti in lista</button>
+        </div>
+        <div class="glass-card p-4 border border-white/10 text-center reveal">
+            <p class="text-[11px] text-gray-400">Prezzi <strong style="color:var(--sunset-orange)">in lista</strong> validi solo prenotando su <strong style="color:var(--sunset-orange)">@_magaparty</strong>. Fuori lista tariffe più alte alla cassa.</p>
+        </div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ═══════════════════════ SOCIAL ═══════════════════════ -->
+<section id="social" class="section-anchor animate-fade-in" data-testid="page-social">
+    <div class="text-center mb-8 reveal">
+        <span class="section-label">Sezione</span>
+        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Social</h2>
+        <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Unisciti alla community</p>
+    </div>
+    <div class="desktop-3col">
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" data-testid="social-instagram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer reveal"
+           style="border-left-color:var(--sunset-coral); background:rgba(255,71,87,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Instagram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-coral)">Foto &amp; Aggiornamenti</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></span>
+        </a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" data-testid="social-tiktok"
+           class="glass-card p-5 border-l-4 border-l-white bg-white/5 flex justify-between items-center hover:bg-white/10 hover:scale-[1.02] transition-all cursor-pointer reveal">
+            <div>
+                <h4 class="font-bold text-sm text-white">TikTok</h4>
+                <p class="text-[10px] uppercase tracking-wider text-gray-300 mt-1">Video &amp; Trend</p>
+            </div>
+            <span class="text-3xl text-white"><i class="fa-brands fa-tiktok"></i></span>
+        </a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" data-testid="social-telegram"
+           class="glass-card p-5 border-l-4 flex justify-between items-center hover:scale-[1.02] transition-all cursor-pointer reveal"
+           style="border-left-color:var(--sunset-teal); background:rgba(224,25,53,0.05)">
+            <div>
+                <h4 class="font-bold text-sm text-white">Telegram</h4>
+                <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-teal)">Info &amp; Photo Dump</p>
+            </div>
+            <span class="text-3xl" style="color:var(--sunset-teal)"><i class="fa-brands fa-telegram"></i></span>
+        </a>
+    </div>
+</section>
+
+</main>
+<script src="../../magaparty/assets/app.js"></script>
+<a href="../index.html" class="sm-preview-ribbon">&#9679; Anteprima — non pubblica</a>
+</body>
+</html>
