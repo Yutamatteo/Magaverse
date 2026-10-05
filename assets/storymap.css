@@ -1,0 +1,129 @@
+/* ============================================================
+   MAGAVERSE · STORYMAP SYSTEM
+   Libreria condivisa di motion + componenti "mappa parlante",
+   nata dal prototipo della Villa di Halloween ed estesa a tutto
+   il sito. Ogni pagina mantiene la propria palette (definita nel
+   proprio <style> con le stesse variabili --sm-accent/--sm-accent-2/
+   --sm-good/--sm-line), questo file fornisce la grammatica visiva
+   e di interazione comune: reveal allo scroll, e il pattern
+   "story-stage" (pannello agganciato + narrativa che scorre) usato
+   per planimetrie, percorsi, timeline e passo-passo.
+   ============================================================ */
+
+:root{
+  --sm-accent: #FF7A33;
+  --sm-accent-2: #D8B66B;
+  --sm-good: #8FB88A;
+  --sm-bg: #0E0A14;
+  --sm-surface: #17101F;
+  --sm-surface-2: #1F1730;
+  --sm-line: rgba(255,255,255,0.09);
+  --sm-text: #ECE6DD;
+  --sm-muted: #9A91A8;
+  --sm-font-display: 'Fraunces', Georgia, serif;
+  --sm-font-body: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  --sm-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal, .story-stage, .story-panel, .story-pin, .sm-hero-inner{
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ── REVEAL ON SCROLL ──
+   Stato di riposo leggibile anche senza JS: il contenuto parte
+   quasi visibile (non da opacity:0 puro) e scatta in posizione. */
+.reveal{
+  opacity: 0.001;
+  transform: translateY(16px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.is-visible{ opacity: 1; transform: translateY(0); }
+.reveal-stagger > *{ transition-delay: calc(var(--sm-i, 0) * 70ms); }
+.no-js .reveal, noscript ~ .reveal{ opacity: 1; transform: none; }
+
+/* ── HERO ── */
+.sm-hero{ position:relative; padding-block:88px 64px; overflow:hidden; border-bottom:1px solid var(--sm-line); }
+.sm-hero-inner{ position:relative; z-index:1; }
+.sm-eyebrow{
+  display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em;
+  text-transform:uppercase; color:var(--sm-accent); margin-bottom:22px;
+}
+.sm-eyebrow::before, .sm-eyebrow::after{ content:""; width:22px; height:1px; background:var(--sm-accent); opacity:0.5; }
+
+/* ── STORY STAGE (planimetrie, percorsi, timeline passo-passo) ──
+   Markup atteso:
+   <div class="storymap">
+     <div class="story-narrative"> <article class="story-beat" data-layer="x" data-focus-x=".." data-focus-y=".." data-pin="id">…</article> … </div>
+     <div class="story-stage-col">
+       <div class="story-stage" data-stage>
+         <div class="story-panel is-active" data-layer="x"> …visual… <div class="story-pins">
+           <button class="story-pin" id="..." data-name=".." data-desc=".."></button>
+         </div></div>
+       </div>
+     </div>
+   </div>                                                        */
+.storymap{ display:grid; grid-template-columns:1fr; grid-template-areas:"stack"; padding-block:20px 60px; }
+.story-narrative{ grid-area:stack; position:relative; z-index:1; padding-top:min(68vw,420px); }
+.story-stage-col{ grid-area:stack; position:sticky; top:env(safe-area-inset-top,0px); align-self:start; z-index:3; padding-top:10px; }
+@media (min-width:900px){
+  .storymap{ grid-template-columns:1.05fr 1fr; grid-template-areas:"narrative stage"; gap:56px; }
+  .story-narrative{ grid-area:narrative; padding-top:0; }
+  .story-stage-col{ grid-area:stage; top:32px; max-width:600px; }
+}
+.story-stage{
+  position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden;
+  background:var(--sm-surface); border:1px solid var(--sm-line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+}
+.story-panel{ position:absolute; inset:0; opacity:0; pointer-events:none; transform-origin:50% 50%; transition:opacity .6s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.story-panel.is-active{ opacity:1; pointer-events:auto; }
+.story-stage.is-zoomed .story-panel{ transform:scale(1.55); }
+.story-pin{
+  position:absolute; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; border:none;
+  padding:0; cursor:pointer; background:var(--sm-accent-2); opacity:0.85; transition:transform .25s ease, box-shadow .25s ease;
+}
+.story-pin:hover{ transform:translate(-50%,-50%) scale(1.2); }
+.story-pin.spotlight{ transform:translate(-50%,-50%) scale(1.35); z-index:4; }
+.story-pin.pin--primary.is-available{ background:var(--sm-good); box-shadow:0 0 0 6px color-mix(in srgb, var(--sm-good) 20%, transparent); animation:smPinPulse 2.2s ease-in-out infinite; }
+.story-pin.pin--primary.is-occupied{ background:#5B5468; opacity:0.9; }
+@keyframes smPinPulse{ 0%,100%{ box-shadow:0 0 0 5px color-mix(in srgb, var(--sm-good) 20%, transparent); } 50%{ box-shadow:0 0 0 9px transparent; } }
+
+.story-card{
+  position:absolute; left:12px; right:12px; bottom:12px; z-index:6; background:rgba(14,10,20,0.96);
+  border:1px solid var(--sm-line); border-radius:14px; padding:16px 16px 14px; backdrop-filter:blur(6px);
+  transform:translateY(130%); opacity:0; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease; pointer-events:none;
+}
+.story-card.is-open{ transform:translateY(0); opacity:1; pointer-events:auto; }
+.story-card h4{ font-family:var(--sm-font-display); font-size:17px; font-weight:600; margin:4px 0 0; color:var(--sm-text); }
+.story-card p{ font-size:12.5px; line-height:1.6; color:var(--sm-muted); margin-top:8px; }
+.story-card button.close{ background:none; border:none; color:var(--sm-muted); font-size:18px; line-height:1; cursor:pointer; padding:2px; }
+
+.story-beat{ min-height:56vh; display:flex; flex-direction:column; justify-content:center; padding-block:7vh; }
+.story-beat .sm-label{ font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--sm-accent); margin-bottom:10px; display:block; }
+.story-beat h3{ font-family:var(--sm-font-display); font-size:clamp(1.3rem,2.6vw,1.8rem); font-weight:600; color:var(--sm-text); }
+.story-beat p{ margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--sm-muted); max-width:46ch; }
+
+.sm-pill-nav{ display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
+@media (min-width:900px){ .sm-pill-nav{ justify-content:flex-start; } }
+.sm-pill{
+  font-family:inherit; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px;
+  border-radius:999px; border:1px solid var(--sm-line); background:var(--sm-surface); color:var(--sm-muted);
+  cursor:pointer; transition:all .2s ease; text-decoration:none; display:inline-flex; align-items:center;
+}
+.sm-pill.is-active{ background:var(--sm-accent); color:#20120A; border-color:var(--sm-accent); }
+
+.sm-preview-ribbon{
+  position:fixed; bottom:16px; right:16px; z-index:999; display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--sm-font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--sm-muted); background:rgba(14,10,20,0.85); border:1px solid var(--sm-line); border-radius:999px;
+  padding:8px 14px; backdrop-filter:blur(6px); text-decoration:none; box-shadow:0 10px 30px -10px rgba(0,0,0,0.6);
+}
+.sm-preview-ribbon::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sm-accent); }
+
+.sm-badge-demo{
+  position:absolute; top:10px; left:10px; z-index:5; font-size:9px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--sm-muted); background:rgba(14,10,20,0.7); border:1px solid var(--sm-line); border-radius:999px;
+  padding:5px 10px; backdrop-filter:blur(4px);
+}
