@@ -15,6 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/storymap.css">
 <script src="../../assets/storymap.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/128/three.min.js" defer></script>
 <style>
 /* ============================================================
    Halloween in Villa — pagina dedicata. Mondo visivo a parte
@@ -167,6 +168,38 @@ img{max-width:100%;}
 .logi-hotels li{font-size:12px; color:var(--bone); display:flex; align-items:center; gap:7px;}
 .logi-hotels li::before{content:"✦"; color:var(--moss); font-size:9px;}
 .logi-note{font-size:10.5px; color:var(--muted); opacity:0.7; margin-top:2px; font-style:italic;}
+
+/* ── LOGISTICA 3D ── */
+.l3-storymap{ display:grid; grid-template-columns: 1fr; grid-template-areas: "stack"; padding-block: 10px 60px; }
+.l3-narrative{grid-area:stack; padding-top:min(60vw,360px); position:relative; z-index:1;}
+.l3-stage-col{ grid-area:stack; position:sticky; top:env(safe-area-inset-top,0px); align-self:start; z-index:3; padding-top:10px; }
+@media (min-width:900px){
+  .l3-storymap{grid-template-columns: 1.05fr 1fr; grid-template-areas: "narrative stage"; gap:56px;}
+  .l3-narrative{grid-area:narrative; padding-top:0;}
+  .l3-stage-col{grid-area:stage; top:32px; max-width:600px;}
+}
+.l3-tabs{display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+@media (min-width:900px){ .l3-tabs{justify-content:flex-start;} }
+.l3-tab{ font-family:inherit; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:9px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s ease; }
+.l3-tab.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+
+.l3-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, var(--surface), var(--ink)); border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
+.l3-stage canvas{position:absolute; inset:0; width:100%; height:100%; display:block;}
+.l3-pins{position:absolute; inset:0; pointer-events:none;}
+.l3-pin{ position:absolute; transform:translate(-50%,-100%); display:flex; flex-direction:column; align-items:center; gap:4px; pointer-events:none; opacity:0; transition:opacity .4s ease; z-index:4; top:0; left:0; }
+.l3-pin.is-visible{opacity:1;}
+.l3-pin .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 5px rgba(216,182,107,0.18); align-self:center;}
+.l3-pin.is-active .dot{background:var(--ember); box-shadow:0 0 0 6px var(--ember-soft); animation:pinPulse 2s ease-in-out infinite;}
+.l3-pin .label{font-size:9.5px; letter-spacing:0.04em; background:rgba(14,10,20,0.85); color:var(--bone); padding:4px 9px; border-radius:999px; border:1px solid var(--line); white-space:nowrap; backdrop-filter:blur(4px);}
+
+.l3-beat{min-height:50vh; display:flex; flex-direction:column; justify-content:center; padding-block:6vh;}
+.l3-beat .section-label{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; display:block;}
+.l3-beat h3{font-size:clamp(1.25rem,2.4vw,1.7rem); font-weight:600; color:var(--bone);}
+.l3-beat p{margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--muted); max-width:46ch;}
+.l3-chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px;}
+.l3-chip{font-size:10px; letter-spacing:0.06em; padding:6px 11px; border-radius:999px; border:1px solid var(--line); color:var(--gold);}
+.l3-loading{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:var(--surface); transition:opacity .5s ease; text-align:center; padding:20px;}
+.l3-loading.is-hidden{opacity:0; pointer-events:none;}
 </style>
 </head>
 <body>
@@ -465,39 +498,122 @@ img{max-width:100%;}
 <section class="wrap logi-head reveal">
   <span class="section-label">Come arrivare, dove dormire, come entrare</span>
   <h2>Oltre la villa: la serata pensata fino in fondo</h2>
-  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione.</p>
+  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione. Scorri per seguire la navetta, girare tra le strutture partner e vedere come funziona il saltafila.</p>
 </section>
 
-<section class="wrap logi-grid reveal">
-  <div class="logi-card">
-    <div class="logi-icon">🚌</div>
-    <h4>Navetta</h4>
-    <p>Servizio navetta introdotto per questa edizione, 30 posti disponibili. Ritiro e riconsegna sulle tratte principali verso la villa.</p>
-    <div class="logi-routes">
-      <span class="logi-route">Baronissi</span>
-      <span class="logi-route">Fisciano</span>
-      <span class="logi-route">Salerno Centro</span>
-      <span class="logi-route">Pastena</span>
-      <span class="logi-route">Torrione</span>
+<section class="l3-storymap wrap">
+
+  <div class="l3-narrative">
+
+    <article class="l3-beat" data-scene="navetta">
+      <span class="section-label">La navetta</span>
+      <h3>Non serve l'auto per arrivare</h3>
+      <p>Per questa edizione la navetta è ufficiale: un mezzo da 30 posti che fa la spola dai punti di ritrovo principali fino al cancello della villa. Si sale, ci si siede, si arriva.</p>
+      <div class="l3-chips"><span class="l3-chip">30 posti</span><span class="l3-chip">5 fermate</span><span class="l3-chip">Mezzo unico</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="0">
+      <span class="section-label">Fermata 1 · Baronissi</span>
+      <h3>Si parte da Baronissi</h3>
+      <p>Primo punto di ritrovo della serata: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="1">
+      <span class="section-label">Fermata 2 · Fisciano</span>
+      <h3>Si passa da Fisciano</h3>
+      <p>La navetta prosegue verso Fisciano, un altro gruppo sale a bordo — comodo per chi viene dall'università.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="2">
+      <span class="section-label">Fermata 3 · Salerno Centro</span>
+      <h3>Il cuore della città</h3>
+      <p>La fermata più centrale, pensata per chi arriva da fuori Salerno o preferisce non guidare fino in villa.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="3">
+      <span class="section-label">Fermata 4 · Pastena</span>
+      <h3>Si continua verso Pastena</h3>
+      <p>Penultima tappa prima della villa: la navetta è ormai quasi al completo.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="4">
+      <span class="section-label">Fermata 5 · Torrione</span>
+      <h3>Ultima fermata: Torrione</h3>
+      <p>L'ultimo gruppo sale a bordo. Da qui, dritti in villa.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-explode="true">
+      <span class="section-label">A bordo</span>
+      <h3>Trenta posti, un solo viaggio</h3>
+      <p>Il mezzo arriva in villa: trenta posti a sedere, nessuno lasciato alla fermata.</p>
+      <div class="l3-chips"><span class="l3-chip">30/30 posti confermati</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel">
+      <span class="section-label">Dove dormire</span>
+      <h3>Il check-in non è un problema</h3>
+      <p>Per chi non vuole guidare dopo la festa, alcune strutture partner tengono delle camere bloccate per gli ospiti dell'evento. Il check-in resta a carico della struttura scelta — a voi resta solo scegliere dove svegliarvi.</p>
+      <div class="l3-chips"><span class="l3-chip">4 strutture partner</span><span class="l3-chip">Camere bloccate</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="0">
+      <span class="section-label">Partner 1</span>
+      <h3>Hotel Ancora</h3>
+      <p>Camere riservate agli ospiti Magaparty per questa edizione, check-in gestito direttamente dalla struttura.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="1">
+      <span class="section-label">Partner 2</span>
+      <h3>Villa Belvedere</h3>
+      <p>Un'altra struttura con camere bloccate per chi partecipa alla serata e vuole fermarsi a dormire.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="2">
+      <span class="section-label">Partner 3</span>
+      <h3>Villa Cavallo</h3>
+      <p>Stesso meccanismo: posti riservati, nessuna pratica da sbrigare con Magaparty.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="3">
+      <span class="section-label">Partner 4</span>
+      <h3>B&amp;B Calypso</h3>
+      <p>L'ultima struttura partner della lista, stesse condizioni delle altre.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="saltafila">
+      <span class="section-label">Saltafila</span>
+      <h3>Chi non vuole aspettare in fila</h3>
+      <p>Un ingresso prioritario per chi preferisce evitare la coda principale: si salta la fila d'ingresso e si entra subito.</p>
+      <div class="l3-chips"><span class="l3-chip">Dettagli e costo in arrivo con le prenotazioni</span></div>
+    </article>
+
+  </div>
+
+  <div class="l3-stage-col">
+    <div class="l3-tabs">
+      <button class="l3-tab" data-goto="navetta">Navetta</button>
+      <button class="l3-tab" data-goto="hotel">Dove dormire</button>
+      <button class="l3-tab" data-goto="saltafila">Saltafila</button>
+    </div>
+
+    <div class="l3-stage" id="l3Stage">
+      <span class="badge-demo">Scena 3D · prototipo tecnico</span>
+      <canvas id="l3Canvas"></canvas>
+      <div class="l3-pins" id="l3Pins">
+        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Baronissi</span></div>
+        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Fisciano</span></div>
+        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Salerno Centro</span></div>
+        <div class="l3-pin" data-pin="navetta-3"><span class="dot"></span><span class="label">Pastena</span></div>
+        <div class="l3-pin" data-pin="navetta-4"><span class="dot"></span><span class="label">Torrione</span></div>
+        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Hotel Ancora</span></div>
+        <div class="l3-pin" data-pin="hotel-1"><span class="dot"></span><span class="label">Villa Belvedere</span></div>
+        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Villa Cavallo</span></div>
+        <div class="l3-pin" data-pin="hotel-3"><span class="dot"></span><span class="label">B&amp;B Calypso</span></div>
+      </div>
+      <div class="l3-loading" id="l3Loading">Carico la scena 3D…</div>
     </div>
   </div>
-  <div class="logi-card">
-    <div class="logi-icon">🛏</div>
-    <h4>Dove dormire</h4>
-    <p>Camere bloccate per chi partecipa all'evento in alcune strutture partner. Il check-in resta a carico della struttura scelta.</p>
-    <ul class="logi-hotels">
-      <li>Hotel Ancora</li>
-      <li>Villa Belvedere</li>
-      <li>Villa Cavallo</li>
-      <li>B&amp;B Calypso</li>
-    </ul>
-  </div>
-  <div class="logi-card">
-    <div class="logi-icon">⚡</div>
-    <h4>Saltafila</h4>
-    <p>Un ingresso prioritario per chi non vuole aspettare in coda all'arrivo: si salta la fila d'ingresso principale.</p>
-    <p class="logi-note">Dettagli e costo dell'opzione in arrivo con l'apertura delle prenotazioni.</p>
-  </div>
+
 </section>
 
 <section class="closing wrap">
@@ -598,6 +714,430 @@ img{max-width:100%;}
 
   pills[0].classList.add('is-active');
 })();
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', function(){
+  'use strict';
+  if (typeof THREE === 'undefined') {
+    var loadingEl0 = document.getElementById('l3Loading');
+    if (loadingEl0) loadingEl0.textContent = 'Scena 3D non disponibile in questo browser.';
+    return;
+  }
+
+  var stageEl = document.getElementById('l3Stage');
+  var canvas = document.getElementById('l3Canvas');
+  var loadingEl = document.getElementById('l3Loading');
+  var pinsRoot = document.getElementById('l3Pins');
+  var l3PinEls = {};
+  pinsRoot.querySelectorAll('.l3-pin').forEach(function(el){ l3PinEls[el.dataset.pin] = el; });
+
+  var renderer, scene, camera, clock;
+  var W = 1, H = 1;
+
+  var state = {
+    activeScene: 'navetta',
+    camCurrentPos: new THREE.Vector3(-2, 2.0, 2.6),
+    camCurrentLook: new THREE.Vector3(1.0, 0.3, 0),
+    camTargetPos: new THREE.Vector3(-2, 2.0, 2.6),
+    camTargetLook: new THREE.Vector3(1.0, 0.3, 0)
+  };
+
+  var navetta = { state: { t: 0.02, targetT: 0.02, explode: 0, targetExplode: 0 }, activeStop: -1 };
+  var hotels = [];
+  var hotelScene = { activeIndex: -1 };
+  var saltafila = { phase: 0 };
+
+  function initThree(){
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    clock = new THREE.Clock();
+
+    var hemi = new THREE.HemisphereLight(0x6a5a8a, 0x1a1020, 0.6);
+    scene.add(hemi);
+    var key = new THREE.DirectionalLight(0xffb37a, 1.2);
+    key.position.set(5, 8, 4);
+    scene.add(key);
+    var rim = new THREE.DirectionalLight(0x8fb88a, 0.35);
+    rim.position.set(-6, 3, -4);
+    scene.add(rim);
+
+    buildNavetta();
+    buildHotels();
+    buildSaltafila();
+    scene.add(navetta.group, hotelScene.group, saltafila.group);
+    setActiveScene('navetta');
+
+    resize();
+    window.addEventListener('resize', resize);
+    computeCameraTarget();
+    state.camCurrentPos.copy(state.camTargetPos);
+    state.camCurrentLook.copy(state.camTargetLook);
+
+    if (loadingEl) loadingEl.classList.add('is-hidden');
+    clock.start();
+    requestAnimationFrame(animate);
+  }
+
+  function resize(){
+    W = stageEl.clientWidth || 1;
+    H = stageEl.clientHeight || 1;
+    renderer.setSize(W, H, false);
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+  }
+
+  function setActiveScene(name){
+    state.activeScene = name;
+    navetta.group.visible = (name === 'navetta');
+    hotelScene.group.visible = (name === 'hotel');
+    saltafila.group.visible = (name === 'saltafila');
+    document.querySelectorAll('.l3-tab').forEach(function(t){
+      t.classList.toggle('is-active', t.dataset.goto === name);
+    });
+  }
+
+  /* ───────── NAVETTA ───────── */
+  function buildNavetta(){
+    var g = new THREE.Group();
+    var stopPositions = [
+      new THREE.Vector3(-4.6, 0, 1.1),
+      new THREE.Vector3(-2.6, 0, -1.1),
+      new THREE.Vector3(-0.4, 0, 1.3),
+      new THREE.Vector3(1.9, 0, -0.8),
+      new THREE.Vector3(3.9, 0, 0.9),
+      new THREE.Vector3(5.6, 0, -0.4)
+    ];
+    navetta.curve = new THREE.CatmullRomCurve3(stopPositions);
+    navetta.markerPositions = stopPositions.slice(0, 5);
+
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x1a1326, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    g.add(ground);
+
+    var tubeGeo = new THREE.TubeGeometry(navetta.curve, 100, 0.045, 8, false);
+    var tubeMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x3a2c10, roughness: 0.45 });
+    g.add(new THREE.Mesh(tubeGeo, tubeMat));
+
+    navetta.markerPositions.forEach(function(p){
+      var poleMat = new THREE.MeshStandardMaterial({ color: 0x8FB88A, emissive: 0x16210f });
+      var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.7, 8), poleMat);
+      pole.position.set(p.x, 0.35, p.z);
+      g.add(pole);
+      var ballMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x4a2208, emissiveIntensity: 0.6 });
+      var ball = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), ballMat);
+      ball.position.set(p.x, 0.72, p.z);
+      g.add(ball);
+    });
+
+    var van = new THREE.Group();
+    /* chassis: a low solid shell — kept short on purpose so the seats
+       (added below) sit visibly ABOVE its top face rather than sealed
+       inside a closed box, otherwise lifting the roof reveals nothing */
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0x2a2038, roughness: 0.55 });
+    var body = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.20, 0.34), bodyMat);
+    body.position.y = 0.12;
+    van.add(body);
+    var roof = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.07, 0.32), new THREE.MeshStandardMaterial({ color: 0x3a2d4d }));
+    roof.position.y = 0.34;
+    van.add(roof);
+    navetta.roof = roof;
+    navetta.roofRestY = 0.34;
+    var glassMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x3a2c10, roughness: 0.25 });
+    var windshield = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.13, 0.27), glassMat);
+    windshield.position.set(0.31, 0.19, 0);
+    van.add(windshield);
+    var wheelMat = new THREE.MeshStandardMaterial({ color: 0x0E0A14 });
+    [[0.21, 0.07, 0.19], [0.21, 0.07, -0.19], [-0.21, 0.07, 0.19], [-0.21, 0.07, -0.19]].forEach(function(pos){
+      var wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.05, 14), wheelMat);
+      wheel.rotation.x = Math.PI / 2;
+      wheel.position.set(pos[0], pos[1], pos[2]);
+      van.add(wheel);
+    });
+    var lightMat = new THREE.MeshStandardMaterial({ color: 0xFFEFC2, emissive: 0xFFEFC2, emissiveIntensity: 1 });
+    var hl = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), lightMat);
+    hl.position.set(0.32, 0.12, 0);
+    van.add(hl);
+
+    var seatsGroup = new THREE.Group();
+    var seatMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, roughness: 0.6 });
+    for (var r = 0; r < 10; r++){
+      for (var c = 0; c < 3; c++){
+        var seat = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.045), seatMat);
+        seat.position.set(-0.24 + r * 0.052, 0.25, -0.11 + c * 0.11);
+        seatsGroup.add(seat);
+      }
+    }
+    seatsGroup.visible = false;
+    van.add(seatsGroup);
+    navetta.seatsGroup = seatsGroup;
+    navetta.van = van;
+    g.add(van);
+
+    navetta.group = g;
+  }
+
+  function updateNavetta(dt){
+    var s = navetta.state;
+    var k = 1 - Math.pow(0.0008, dt);
+    s.t += (s.targetT - s.t) * k;
+    s.explode += (s.targetExplode - s.explode) * k;
+    var tc = Math.min(Math.max(s.t, 0.001), 0.999);
+    var p = navetta.curve.getPointAt(tc);
+    var tangent = navetta.curve.getTangentAt(tc);
+    navetta.van.position.set(p.x, 0, p.z);
+    if (tangent.lengthSq() > 0.0001){
+      /* van's front faces local +X; align it with the direction of travel
+         (lookAt would orient local -Z instead, which is the wrong axis here) */
+      navetta.van.rotation.y = Math.atan2(-tangent.z, tangent.x);
+    }
+    navetta.roof.position.y = navetta.roofRestY + s.explode * 0.5;
+    navetta.seatsGroup.visible = s.explode > 0.04;
+    navetta.seatsGroup.scale.setScalar(0.3 + s.explode * 0.7);
+  }
+
+  /* ───────── DOVE DORMIRE ───────── */
+  function buildHotels(){
+    var g = new THREE.Group();
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(18, 11), new THREE.MeshStandardMaterial({ color: 0x160f20, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    g.add(ground);
+
+    var names = ['Hotel Ancora', 'Villa Belvedere', 'Villa Cavallo', 'B&B Calypso'];
+    var floorsCount = [6, 4, 4, 3];
+    var blockedFloors = [2, 2, 1, 1];
+    var xPositions = [-4.8, -1.6, 1.6, 4.8];
+
+    names.forEach(function(name, i){
+      var group = new THREE.Group();
+      group.position.set(xPositions[i], 0, (i % 2 === 0 ? -0.5 : 0.5));
+      var floors = floorsCount[i];
+      var floorH = 0.26, gap = 0.035;
+      for (var f = 0; f < floors; f++){
+        var isBlocked = f >= floors - blockedFloors[i];
+        var mat = new THREE.MeshStandardMaterial({
+          color: isBlocked ? 0xFF7A33 : 0x241a33,
+          emissive: isBlocked ? 0x3a1d0a : 0x000000,
+          roughness: 0.55
+        });
+        var slab = new THREE.Mesh(new THREE.BoxGeometry(1.0, floorH, 0.75), mat);
+        var restY = 0.13 + f * (floorH + gap);
+        slab.position.y = restY;
+        slab.userData.restY = restY;
+        slab.userData.explodedY = restY + f * 0.075;
+        group.add(slab);
+      }
+      var topY = 0.13 + floors * (floorH + gap);
+      var roof = new THREE.Mesh(new THREE.ConeGeometry(0.72, 0.3, 4), new THREE.MeshStandardMaterial({ color: 0xD8B66B }));
+      roof.position.y = topY + 0.1;
+      roof.rotation.y = Math.PI / 4;
+      group.add(roof);
+      hotels.push({ name: name, group: group, floors: floors, topY: topY, explode: 0, targetExplode: 0, pos: group.position.clone() });
+      g.add(group);
+    });
+
+    hotelScene.group = g;
+  }
+
+  function updateHotels(dt){
+    var k = 1 - Math.pow(0.0008, dt);
+    hotels.forEach(function(h){
+      h.explode += (h.targetExplode - h.explode) * k;
+      h.group.children.forEach(function(slab){
+        if (slab.userData.restY != null){
+          slab.position.y = slab.userData.restY + (slab.userData.explodedY - slab.userData.restY) * h.explode;
+        }
+      });
+    });
+  }
+
+  /* ───────── SALTAFILA ───────── */
+  function buildPerson(mat, scale){
+    scale = scale || 1;
+    var p = new THREE.Group();
+    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.045 * scale, 0.045 * scale, 0.22 * scale, 8), mat);
+    body.position.y = 0.14 * scale;
+    p.add(body);
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.042 * scale, 10, 10), mat);
+    head.position.y = 0.27 * scale;
+    p.add(head);
+    return p;
+  }
+
+  function buildSaltafila(){
+    var g = new THREE.Group();
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({ color: 0x160f20, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    g.add(ground);
+
+    var queueMat = new THREE.MeshStandardMaterial({ color: 0x5B5468, roughness: 0.7 });
+    for (var i = 0; i < 8; i++){
+      var person = buildPerson(queueMat);
+      person.position.set(-1.9 + i * 0.26, 0, -0.55);
+      g.add(person);
+    }
+
+    var laneMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x4a3714, roughness: 0.3 });
+    var lane = new THREE.Mesh(new THREE.BoxGeometry(4.1, 0.025, 0.3), laneMat);
+    lane.position.set(0, 0.01, 0.55);
+    g.add(lane);
+
+    var gateMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x3a1a08 });
+    var gateL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8), gateMat);
+    gateL.position.set(1.95, 0.27, 0.42);
+    g.add(gateL);
+    var gateR = gateL.clone();
+    gateR.position.z = 0.68;
+    g.add(gateR);
+
+    var walkerMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x3a1a08, roughness: 0.4 });
+    var walker = buildPerson(walkerMat, 1.1);
+    g.add(walker);
+    saltafila.walker = walker;
+
+    saltafila.group = g;
+  }
+
+  function updateSaltafila(dt, active){
+    if (!active) return;
+    saltafila.phase = (saltafila.phase + dt * 0.3) % 1;
+    var x = -1.9 + saltafila.phase * 3.9;
+    saltafila.walker.position.set(x, 0, 0.55);
+  }
+
+  /* ───────── BEATS ───────── */
+  function applyBeat(beat){
+    var sceneName = beat.dataset.scene;
+    setActiveScene(sceneName);
+    if (sceneName === 'navetta'){
+      var stop = beat.dataset.stop;
+      var explode = beat.dataset.explode === 'true';
+      navetta.state.targetExplode = explode ? 1 : 0;
+      if (stop !== undefined && stop !== ''){
+        navetta.activeStop = parseInt(stop, 10);
+        navetta.state.targetT = navetta.activeStop / 5;
+      } else if (explode){
+        navetta.activeStop = -1;
+        navetta.state.targetT = 1;
+      } else {
+        navetta.activeStop = -1;
+        navetta.state.targetT = 0.02;
+      }
+    } else if (sceneName === 'hotel'){
+      var hi = beat.dataset.hotel;
+      hotelScene.activeIndex = (hi !== undefined && hi !== '') ? parseInt(hi, 10) : -1;
+      hotels.forEach(function(h, idx){ h.targetExplode = (hotelScene.activeIndex === idx) ? 1 : 0; });
+    }
+  }
+
+  function computeCameraTarget(){
+    if (state.activeScene === 'navetta'){
+      var tc = Math.min(Math.max(navetta.state.t, 0.001), 0.999);
+      var p = navetta.curve.getPointAt(tc);
+      if (navetta.state.targetExplode > 0.5){
+        state.camTargetPos.set(p.x + 0.5, 1.5, p.z + 1.9);
+        state.camTargetLook.set(p.x, 0.35, p.z);
+      } else {
+        state.camTargetPos.set(p.x - 1.9, 1.7, p.z + 2.6);
+        state.camTargetLook.set(p.x + 0.4, 0.15, p.z);
+      }
+    } else if (state.activeScene === 'hotel'){
+      var idx = hotelScene.activeIndex;
+      if (idx < 0){
+        state.camTargetPos.set(0, 2.6, 6.4);
+        state.camTargetLook.set(0, 0.9, 0);
+      } else {
+        var h = hotels[idx];
+        state.camTargetPos.set(h.pos.x + 2.3, 1.6, 3.2);
+        state.camTargetLook.set(h.pos.x, h.topY * 0.5, h.pos.z);
+      }
+    } else if (state.activeScene === 'saltafila'){
+      state.camTargetPos.set(0, 2.2, 3.3);
+      state.camTargetLook.set(0.3, 0.25, 0.1);
+    }
+  }
+
+  function worldToScreen(vec3, targetEl){
+    var v = vec3.clone().project(camera);
+    var x = (v.x * 0.5 + 0.5) * W;
+    var y = (-v.y * 0.5 + 0.5) * H;
+    targetEl.style.left = x + 'px';
+    targetEl.style.top = y + 'px';
+    return v.z < 1;
+  }
+
+  function updatePinPositions(){
+    var i;
+    if (state.activeScene === 'navetta' && navetta.state.targetExplode < 0.5){
+      navetta.markerPositions.forEach(function(pos, idx){
+        var el = l3PinEls['navetta-' + idx];
+        var top = pos.clone(); top.y = 0.78;
+        var visible = worldToScreen(top, el);
+        el.classList.toggle('is-visible', visible);
+        el.classList.toggle('is-active', navetta.activeStop === idx);
+      });
+      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+    } else if (state.activeScene === 'hotel'){
+      hotels.forEach(function(h, idx){
+        var el = l3PinEls['hotel-' + idx];
+        var top = h.pos.clone(); top.y = h.topY + 0.25;
+        var visible = worldToScreen(top, el);
+        el.classList.toggle('is-visible', visible);
+        el.classList.toggle('is-active', hotelScene.activeIndex === idx);
+      });
+      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+    } else {
+      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+    }
+  }
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt = Math.min(clock.getDelta(), 0.1);
+    updateNavetta(dt);
+    updateHotels(dt);
+    updateSaltafila(dt, state.activeScene === 'saltafila');
+    computeCameraTarget();
+    var lerpK = 1 - Math.pow(0.001, dt);
+    state.camCurrentPos.lerp(state.camTargetPos, lerpK);
+    state.camCurrentLook.lerp(state.camTargetLook, lerpK);
+    camera.position.copy(state.camCurrentPos);
+    camera.lookAt(state.camCurrentLook);
+    updatePinPositions();
+    renderer.render(scene, camera);
+  }
+
+  document.querySelectorAll('.l3-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var first = document.querySelector('.l3-beat[data-scene="' + btn.dataset.goto + '"]');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  var l3Beats = document.querySelectorAll('.l3-beat');
+  var l3Observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      applyBeat(entry.target);
+    });
+  }, { rootMargin: '-48% 0px -48% 0px', threshold: 0 });
+  l3Beats.forEach(function(b){ l3Observer.observe(b); });
+
+  try {
+    initThree();
+  } catch (e){
+    if (loadingEl){
+      loadingEl.textContent = 'Scena 3D non disponibile in questo browser.';
+      loadingEl.classList.remove('is-hidden');
+    }
+  }
+});
 </script>
 </body>
 </html>
