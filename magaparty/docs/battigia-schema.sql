@@ -103,9 +103,9 @@ begin
     return;
   end if;
 
-  select id, stato, data_evento into v_id, v_stato, v_data_evento
-    from battigia_prenotazioni
-    where qr_token = p_qr_token;
+  select b.id, b.stato, b.data_evento into v_id, v_stato, v_data_evento
+    from battigia_prenotazioni b
+    where b.qr_token = p_qr_token;
 
   if v_id is null then
     return query select 'non_trovato'::text, null::text, null::text, null::text, null::integer, null::date;
