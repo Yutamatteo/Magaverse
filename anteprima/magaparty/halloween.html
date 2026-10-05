@@ -146,6 +146,27 @@ img{max-width:100%;}
 .ghost-btn, .ghost-link{ display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; padding:13px 24px; border-radius:999px; border:1px solid var(--gold); color:var(--gold); background:transparent; cursor:pointer; transition:all .2s; text-decoration:none; }
 .ghost-btn:hover, .ghost-link:hover{background:var(--ember-soft); color:var(--ember); border-color:var(--ember);}
 .foot-note{margin-top:34px; font-size:10.5px; letter-spacing:0.08em; color:var(--muted); opacity:0.55;}
+
+/* ── LOGISTICA ── */
+.logi-head{padding-block:12px 8px; text-align:center;}
+.logi-grid{display:grid; grid-template-columns:1fr; gap:16px; padding-block:32px 60px;}
+@media (min-width:760px){ .logi-grid{grid-template-columns:repeat(3,1fr);} }
+.logi-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px 22px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.logi-card .logi-icon{
+  width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  background:var(--ember-soft); color:var(--ember); font-size:17px; margin-bottom:4px;
+}
+.logi-card h4{font-size:16px; font-weight:600; color:var(--bone);}
+.logi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
+.logi-routes{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
+.logi-route{font-size:10px; letter-spacing:0.05em; padding:5px 10px; border-radius:999px; border:1px solid var(--line); color:var(--gold);}
+.logi-hotels{list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:4px;}
+.logi-hotels li{font-size:12px; color:var(--bone); display:flex; align-items:center; gap:7px;}
+.logi-hotels li::before{content:"✦"; color:var(--moss); font-size:9px;}
+.logi-note{font-size:10.5px; color:var(--muted); opacity:0.7; margin-top:2px; font-style:italic;}
 </style>
 </head>
 <body>
@@ -439,6 +460,44 @@ img{max-width:100%;}
     </div>
   </div>
 
+</section>
+
+<section class="wrap logi-head reveal">
+  <span class="section-label">Come arrivare, dove dormire, come entrare</span>
+  <h2>Oltre la villa: la serata pensata fino in fondo</h2>
+  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione.</p>
+</section>
+
+<section class="wrap logi-grid reveal">
+  <div class="logi-card">
+    <div class="logi-icon">🚌</div>
+    <h4>Navetta</h4>
+    <p>Servizio navetta introdotto per questa edizione, 30 posti disponibili. Ritiro e riconsegna sulle tratte principali verso la villa.</p>
+    <div class="logi-routes">
+      <span class="logi-route">Baronissi</span>
+      <span class="logi-route">Fisciano</span>
+      <span class="logi-route">Salerno Centro</span>
+      <span class="logi-route">Pastena</span>
+      <span class="logi-route">Torrione</span>
+    </div>
+  </div>
+  <div class="logi-card">
+    <div class="logi-icon">🛏</div>
+    <h4>Dove dormire</h4>
+    <p>Camere bloccate per chi partecipa all'evento in alcune strutture partner. Il check-in resta a carico della struttura scelta.</p>
+    <ul class="logi-hotels">
+      <li>Hotel Ancora</li>
+      <li>Villa Belvedere</li>
+      <li>Villa Cavallo</li>
+      <li>B&amp;B Calypso</li>
+    </ul>
+  </div>
+  <div class="logi-card">
+    <div class="logi-icon">⚡</div>
+    <h4>Saltafila</h4>
+    <p>Un ingresso prioritario per chi non vuole aspettare in coda all'arrivo: si salta la fila d'ingresso principale.</p>
+    <p class="logi-note">Dettagli e costo dell'opzione in arrivo con l'apertura delle prenotazioni.</p>
+  </div>
 </section>
 
 <section class="closing wrap">
