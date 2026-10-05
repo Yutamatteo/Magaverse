@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MagaCard | Magaverse</title>
+<meta name="description" content="Richiedi la tua MagaCard: la tessera per le serate Magaparty. Punti, timbri e vantaggi ad ogni evento.">
+<link rel="icon" type="image/jpeg" href="../../assets/img/logo_maga.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../magacard/assets/styles.css">
+<link rel="stylesheet" href="../../assets/storymap.css">
+<script src="../../assets/storymap.js" defer></script>
+<style>
+  /* Pagina anteprima: stessa identità MagaCard (Neon Riviera), ma il
+     body originale è pensato come singolo pannello centrato (flex).
+     Qui estendiamo il layout a più sezioni mantenendo la stessa palette. */
+  :root{
+    --sm-accent: #FF2E92;      /* mc-magenta */
+    --sm-accent-2: #FFC145;    /* mc-gold */
+    --sm-good: #22D3EE;        /* mc-cyan */
+    --sm-bg: #0B0712;
+    --sm-surface: #17101F;
+    --sm-surface-2: #1E1628;
+    --sm-line: rgba(255,240,250,0.08);
+    --sm-text: #F5F0FA;
+    --sm-muted: #9C90AE;
+    --sm-font-display: 'Playfair Display', 'Archivo Black', serif;
+    --sm-font-body: 'Outfit', system-ui, sans-serif;
+  }
+  body{ display:block; align-items:unset; justify-content:unset; padding:0; min-height:auto; }
+  .mc-page-hero{ max-width:720px; margin:0 auto; padding:72px 20px 8px; text-align:center; }
+  .mc-page-hero h2{ font-family:var(--sm-font-display); font-size:clamp(1.8rem,6vw,2.7rem); margin:14px 0 14px; color:var(--sm-text); }
+  .mc-page-hero p{ color:var(--sm-muted); font-size:15px; line-height:1.7; max-width:46ch; margin:0 auto; }
+  .mc-cta-section{ display:flex; justify-content:center; padding:18px 20px 110px; }
+  .mc-cta-lead{ text-align:center; padding:6px 0 26px; }
+  .storymap{ padding-inline:20px; max-width:1180px; margin:0 auto; }
+</style>
+</head>
+<body>
+
+<header class="sm-hero reveal">
+  <div class="mc-page-hero">
+    <div class="sm-eyebrow" style="justify-content:center;">Magaparty · Membership</div>
+    <h2>Come funziona MagaCard</h2>
+    <p>La tessera per le serate Magaparty: un modulo, un timbro a ogni evento, livelli da sbloccare e un premio ad aspettarti in fondo al percorso.</p>
+  </div>
+</header>
+
+<section class="storymap" aria-label="Come funziona MagaCard">
+  <div class="story-narrative">
+    <div class="sm-pill-nav reveal">
+      <button type="button" class="sm-pill" data-goto="iscrizione">1 · Iscrizione</button>
+      <button type="button" class="sm-pill" data-goto="timbri">2 · Timbri</button>
+      <button type="button" class="sm-pill" data-goto="livelli">3 · Livelli</button>
+      <button type="button" class="sm-pill" data-goto="premio">4 · Premio</button>
+    </div>
+
+    <article class="story-beat" data-layer="iscrizione" data-pin="pin-iscrizione">
+      <span class="sm-label">Step 1</span>
+      <h3>Ti iscrivi in trenta secondi</h3>
+      <p>Compili il modulo qui sotto con nome, cognome, telefono ed email. Niente pagamento online: la richiesta resta registrata finché non passi in cassa a una serata.</p>
+    </article>
+
+    <article class="story-beat" data-layer="timbri" data-pin="pin-timbri">
+      <span class="sm-label">Step 2</span>
+      <h3>Attivi la card a una serata Magaparty</h3>
+      <p>Vai in cassa, dici nome e cognome, paghi la quota: lo staff attiva la tua MagaCard sul momento e ti manda il link con QR. Da quella sera, ogni serata vissuta con la card ti frutta un timbro e dei punti.</p>
+    </article>
+
+    <article class="story-beat" data-layer="livelli" data-pin="pin-livelli">
+      <span class="sm-label">Step 3</span>
+      <h3>Sali di livello, sblocchi vantaggi</h3>
+      <p>Più timbri raccogli, più sali: da Bronzo ad Argento, fino a Oro. Ogni livello porta vantaggi reali — ingressi prioritari, sconti e inviti riservati alle serate Magaparty.</p>
+    </article>
+
+    <article class="story-beat" data-layer="premio" data-pin="pin-premio">
+      <span class="sm-label">Step 4</span>
+      <h3>Riscuoti il premio</h3>
+      <p>Al livello più alto ti aspetta un premio. Mostri la card con il suo QR allo staff a una serata, e lo riscatti lì, sul posto.</p>
+    </article>
+  </div>
+
+  <div class="story-stage-col">
+    <div class="story-stage" data-stage>
+      <span class="sm-badge-demo">Come funziona</span>
+
+      <div class="story-panel" data-layer="iscrizione">
+        <svg viewBox="0 0 100 70" width="100%" height="100%" aria-hidden="true">
+          <path d="M12,50 L38,26 L64,44 L90,18" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.4" stroke-dasharray="3 3"/>
+          <circle cx="38" cy="26" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <circle cx="64" cy="44" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <circle cx="90" cy="18" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <text x="12" y="59" text-anchor="middle" font-size="3.6" fill="#F5F0FA" font-family="Outfit, sans-serif">Iscrizione</text>
+          <text x="38" y="35" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Timbri</text>
+          <text x="64" y="53" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Livelli</text>
+          <text x="90" y="27" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Premio</text>
+        </svg>
+        <div class="story-pins">
+          <button type="button" class="story-pin" id="pin-iscrizione" data-kind="info" data-name="Iscrizione" data-desc="Compili nome, cognome, telefono ed email. Bastano 30 secondi, nessun pagamento online." style="left:12%;top:71%;box-shadow:0 0 0 8px rgba(255,46,146,.25);"></button>
+        </div>
+      </div>
+
+      <div class="story-panel" data-layer="timbri">
+        <svg viewBox="0 0 100 70" width="100%" height="100%" aria-hidden="true">
+          <path d="M38,26 L64,44 L90,18" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.4" stroke-dasharray="3 3"/>
+          <path d="M12,50 L38,26" fill="none" stroke="#FF2E92" stroke-width="1.6"/>
+          <circle cx="12" cy="50" r="4" fill="#FF2E92"/>
+          <path d="M9.8,50.1 L11.2,51.6 L14.3,47.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="64" cy="44" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <circle cx="90" cy="18" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <text x="12" y="59" text-anchor="middle" font-size="3.2" fill="#FF2E92" font-family="Outfit, sans-serif">Iscrizione</text>
+          <text x="38" y="35" text-anchor="middle" font-size="3.6" fill="#F5F0FA" font-family="Outfit, sans-serif">Timbri</text>
+          <text x="64" y="53" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Livelli</text>
+          <text x="90" y="27" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Premio</text>
+        </svg>
+        <div class="story-pins">
+          <button type="button" class="story-pin" id="pin-timbri" data-kind="info" data-name="Timbri &amp; punti" data-desc="Ogni serata Magaparty vissuta con la card ti frutta un timbro e punti, assegnati dallo staff al tuo arrivo." style="left:38%;top:37%;box-shadow:0 0 0 8px rgba(255,46,146,.25);"></button>
+        </div>
+      </div>
+
+      <div class="story-panel" data-layer="livelli">
+        <svg viewBox="0 0 100 70" width="100%" height="100%" aria-hidden="true">
+          <path d="M64,44 L90,18" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="1.4" stroke-dasharray="3 3"/>
+          <path d="M12,50 L38,26 L64,44" fill="none" stroke="#FF2E92" stroke-width="1.6"/>
+          <circle cx="12" cy="50" r="4" fill="#FF2E92"/>
+          <path d="M9.8,50.1 L11.2,51.6 L14.3,47.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="26" r="4" fill="#FF2E92"/>
+          <path d="M35.8,26.1 L37.2,27.6 L40.3,23.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="90" cy="18" r="4" fill="none" stroke="#6B6478" stroke-width="1.2"/>
+          <text x="12" y="59" text-anchor="middle" font-size="3.2" fill="#FF2E92" font-family="Outfit, sans-serif">Iscrizione</text>
+          <text x="38" y="35" text-anchor="middle" font-size="3.2" fill="#FF2E92" font-family="Outfit, sans-serif">Timbri</text>
+          <text x="64" y="53" text-anchor="middle" font-size="3.6" fill="#F5F0FA" font-family="Outfit, sans-serif">Livelli</text>
+          <text x="90" y="27" text-anchor="middle" font-size="3.2" fill="#9C90AE" font-family="Outfit, sans-serif">Premio</text>
+        </svg>
+        <div class="story-pins">
+          <button type="button" class="story-pin" id="pin-livelli" data-kind="info" data-name="Livelli" data-desc="Bronzo, Argento, Oro: più timbri accumuli, più sali di livello e sblocchi vantaggi — ingresso prioritario, sconti, inviti riservati." style="left:64%;top:63%;box-shadow:0 0 0 8px rgba(255,193,69,.3);"></button>
+        </div>
+      </div>
+
+      <div class="story-panel" data-layer="premio">
+        <svg viewBox="0 0 100 70" width="100%" height="100%" aria-hidden="true">
+          <path d="M12,50 L38,26 L64,44" fill="none" stroke="#FF2E92" stroke-width="1.6"/>
+          <path d="M64,44 L90,18" fill="none" stroke="#FFC145" stroke-width="1.8"/>
+          <circle cx="12" cy="50" r="4" fill="#FF2E92"/>
+          <path d="M9.8,50.1 L11.2,51.6 L14.3,47.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="38" cy="26" r="4" fill="#FF2E92"/>
+          <path d="M35.8,26.1 L37.2,27.6 L40.3,23.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="64" cy="44" r="4" fill="#FFC145"/>
+          <path d="M61.8,44.1 L63.2,45.6 L66.3,41.9" fill="none" stroke="#0B0712" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="12" y="59" text-anchor="middle" font-size="3.2" fill="#FF2E92" font-family="Outfit, sans-serif">Iscrizione</text>
+          <text x="38" y="35" text-anchor="middle" font-size="3.2" fill="#FF2E92" font-family="Outfit, sans-serif">Timbri</text>
+          <text x="64" y="53" text-anchor="middle" font-size="3.2" fill="#FFC145" font-family="Outfit, sans-serif">Livelli</text>
+          <text x="90" y="27" text-anchor="middle" font-size="3.6" fill="#F5F0FA" font-family="Outfit, sans-serif">Premio</text>
+        </svg>
+        <div class="story-pins">
+          <button type="button" class="story-pin pin--primary is-available" id="pin-premio" data-kind="avail" data-kind-label="Premio pronto" data-name="Premio finale" data-desc="Al livello più alto sblocchi un premio: lo mostri allo staff con la card e lo riscatti sul posto." style="left:90%;top:26%;"></button>
+        </div>
+      </div>
+
+      <div class="story-card">
+        <button type="button" class="close" aria-label="Chiudi">×</button>
+        <span class="kind" data-role="kind"></span>
+        <h4 data-role="name"></h4>
+        <p data-role="desc"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mc-cta-section reveal">
+  <div style="width:100%;max-width:420px;">
+    <div class="mc-cta-lead">
+      <div class="sm-eyebrow" style="justify-content:center;">Pronto a iniziare?</div>
+    </div>
+    <div class="mc-wrap">
+      <div class="mc-eyebrow"><span class="dot"></span>Magaparty · Membership</div>
+      <h1 class="mc-title brutalist">MAGACARD</h1>
+      <p class="mc-sub" id="subtitle">La tua tessera per le serate Magaparty. Un modulo, un pagamento in cassa, e sei dentro.</p>
+      <div class="glass-card" id="content">Caricamento...</div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+// ===================== CONFIGURAZIONE =====================
+// Sostituisci questi due valori con quelli del tuo progetto Supabase
+// (Project Settings > API)
+const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
+// ============================================================
+
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const content = document.getElementById("content");
+
+function renderSent(nome) {
+  content.innerHTML = `
+    <div style="text-align:center; position:relative; z-index:1;">
+      <span class="badge pending">Richiesta inviata</span>
+      <h2 style="margin:0 0 10px; font-size:19px;">Grazie, ${nome}!</h2>
+      <p style="color:var(--mc-muted); font-size:13.5px; line-height:1.6; margin:0;">
+        La tua richiesta è registrata. Vai in cassa a una serata Magaparty, di' nome e cognome
+        e paga la quota: lo staff attiverà la card sul momento e riceverai il link della tua
+        MagaCard digitale con QR.
+      </p>
+    </div>
+  `;
+}
+
+function renderForm() {
+  content.innerHTML = `
+    <form id="signupForm">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" required autocomplete="given-name">
+      <label for="cognome">Cognome</label>
+      <input type="text" id="cognome" required autocomplete="family-name">
+      <label for="telefono">Telefono</label>
+      <input type="tel" id="telefono" required autocomplete="tel">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="email">
+      <div class="mc-check">
+        <input type="checkbox" id="consenso" required>
+        <label for="consenso">Acconsento al trattamento dei miei dati (nome, telefono, email) per la gestione della tessera MagaCard, secondo la normativa privacy.</label>
+      </div>
+      <button type="submit" class="btn-primary" id="submitBtn">Richiedi la MagaCard</button>
+      <div class="error" id="formError"></div>
+    </form>
+  `;
+
+  document.getElementById("signupForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("submitBtn");
+    const errBox = document.getElementById("formError");
+    const consenso = document.getElementById("consenso").checked;
+
+    if (!consenso) {
+      errBox.textContent = "Devi accettare il trattamento dei dati per continuare.";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Invio in corso...";
+    errBox.textContent = "";
+
+    const nome = document.getElementById("nome").value.trim();
+    const payload = {
+      nome,
+      cognome: document.getElementById("cognome").value.trim(),
+      telefono: document.getElementById("telefono").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      consenso_privacy: true,
+    };
+
+    const { error } = await supabase.from("magacard_richieste").insert(payload);
+
+    if (error) {
+      errBox.textContent = "Errore durante l'invio. Riprova tra poco.";
+      btn.disabled = false;
+      btn.textContent = "Richiedi la MagaCard";
+      return;
+    }
+
+    renderSent(nome);
+  });
+}
+
+renderForm();
+</script>
+<a href="../index.html" class="sm-preview-ribbon">● Anteprima — non pubblica</a>
+</body>
+</html>
