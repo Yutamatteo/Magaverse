@@ -748,25 +748,169 @@ window.addEventListener('DOMContentLoaded', function(){
   var hotelScene = { activeIndex: -1 };
   var saltafila = { phase: 0 };
 
+  /* ───────── PALETTE: apocalisse zombie (spooky-fun stilizzato) ───────── */
+  var PAL = {
+    toxic: 0x8FD13F,
+    toxicGlow: 0x274d12,
+    rust: 0x8a5a3a,
+    rustDark: 0x5a3a24,
+    concrete: 0x52503f,
+    concreteDark: 0x3a382b,
+    hazardYellow: 0xE8C23A,
+    hazardBlack: 0x18160f,
+    zombieSkin: 0x7a9a5c,
+    zombieSkinGlow: 0x5a8a3c,
+    tatters: 0x3a3832,
+    fog: 0x15200f
+  };
+
+  /* ───────── canvas-drawn icon textures (no external assets) ───────── */
+  function makeIconTexture(drawFn){
+    var c = document.createElement('canvas');
+    c.width = 128; c.height = 128;
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 128, 128);
+    ctx.fillStyle = '#17150e';
+    ctx.beginPath();
+    ctx.arc(64, 64, 60, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#E8C23A';
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    drawFn(ctx);
+    var tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  function drawRadiationIcon(ctx){
+    ctx.save();
+    ctx.translate(64, 64);
+    ctx.fillStyle = '#E8C23A';
+    ctx.beginPath(); ctx.arc(0, 0, 9, 0, Math.PI * 2); ctx.fill();
+    for (var i = 0; i < 3; i++){
+      ctx.save();
+      ctx.rotate(i * Math.PI * 2 / 3 + Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, 36, -Math.PI / 7, Math.PI / 7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+  function drawSkullIcon(ctx){
+    ctx.fillStyle = '#e9ecdf';
+    ctx.beginPath();
+    ctx.arc(64, 54, 30, Math.PI, 0);
+    ctx.lineTo(90, 76);
+    ctx.quadraticCurveTo(64, 92, 38, 76);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#17150e';
+    ctx.beginPath(); ctx.arc(50, 56, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(78, 56, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(64, 64); ctx.lineTo(58, 75); ctx.lineTo(70, 75); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#e9ecdf';
+    for (var i = 0; i < 5; i++) ctx.fillRect(44 + i * 8, 79, 6, 10);
+  }
+
+  /* ───────── reusable zombie figure ───────── */
+  function buildZombie(scale, accentGlow){
+    scale = scale || 1;
+    var skinMat = new THREE.MeshStandardMaterial({ color: PAL.zombieSkin, emissive: accentGlow ? PAL.zombieSkinGlow : 0x0d1a08, emissiveIntensity: accentGlow ? 0.5 : 0.18, roughness: 0.8 });
+    var ragMat = new THREE.MeshStandardMaterial({ color: PAL.tatters, roughness: 0.9 });
+    var p = new THREE.Group();
+    var torsoGrp = new THREE.Group();
+    torsoGrp.rotation.x = 0.3; /* hunched forward posture */
+    torsoGrp.position.y = 0.0;
+    var torso = new THREE.Mesh(new THREE.CylinderGeometry(0.042 * scale, 0.05 * scale, 0.2 * scale, 8), skinMat);
+    torso.position.y = 0.13 * scale;
+    torsoGrp.add(torso);
+    var rag = new THREE.Mesh(new THREE.BoxGeometry(0.072 * scale, 0.1 * scale, 0.018 * scale), ragMat);
+    rag.position.set(0, 0.17 * scale, 0.04 * scale);
+    torsoGrp.add(rag);
+    var head = new THREE.Mesh(new THREE.SphereGeometry(0.038 * scale, 10, 10), skinMat);
+    head.position.y = 0.26 * scale;
+    torsoGrp.add(head);
+    [-1, 1].forEach(function(side){
+      var armGrp = new THREE.Group();
+      armGrp.position.set(0, 0.19 * scale, 0);
+      armGrp.rotation.z = side * 1.05;
+      armGrp.rotation.x = -0.55;
+      var arm = new THREE.Mesh(new THREE.CylinderGeometry(0.013 * scale, 0.013 * scale, 0.15 * scale, 6), skinMat);
+      arm.position.y = -0.075 * scale;
+      armGrp.add(arm);
+      torsoGrp.add(armGrp);
+    });
+    p.add(torsoGrp);
+    p.userData.torso = torsoGrp;
+    return p;
+  }
+
+  /* ───────── hazard barrel (radioactive-waste prop) ───────── */
+  function buildBarrel(radTex){
+    var g = new THREE.Group();
+    var stripes = [PAL.hazardYellow, PAL.hazardBlack, PAL.hazardYellow, PAL.hazardBlack];
+    var segH = 0.09;
+    stripes.forEach(function(col, i){
+      var seg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, segH, 12), new THREE.MeshStandardMaterial({ color: col, roughness: 0.6 }));
+      seg.position.y = 0.05 + i * segH;
+      g.add(seg);
+    });
+    var lid = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.02, 12), new THREE.MeshStandardMaterial({ color: 0x242017, roughness: 0.4 }));
+    lid.position.y = 0.05 + stripes.length * segH;
+    g.add(lid);
+    var decal = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 0.14), new THREE.MeshBasicMaterial({ map: radTex, transparent: true }));
+    decal.position.set(0, 0.05 + 2 * segH, 0.101);
+    g.add(decal);
+    return g;
+  }
+
+  /* ───────── ruined skyline silhouette: shared "background" prop ───────── */
+  function addRuinSkyline(g, zBack, xMin, xMax, count){
+    for (var i = 0; i < count; i++){
+      var w = 0.5 + Math.random() * 0.9;
+      var h = 0.6 + Math.random() * 1.6;
+      var x = xMin + (xMax - xMin) * (i / (count - 1));
+      var mat = new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? PAL.concrete : PAL.concreteDark, roughness: 1 });
+      var ruin = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.5), mat);
+      ruin.position.set(x + (Math.random() - 0.5) * 0.4, h / 2 - 0.02, zBack + (Math.random() - 0.5) * 0.6);
+      ruin.rotation.z = (Math.random() - 0.5) * 0.1;
+      ruin.rotation.y = (Math.random() - 0.5) * 0.25;
+      g.add(ruin);
+      if (Math.random() > 0.45){
+        var notch = new THREE.Mesh(new THREE.BoxGeometry(w * 0.5, h * 0.3, 0.52), mat);
+        notch.position.set(ruin.position.x + w * 0.22, h + h * 0.08, ruin.position.z);
+        notch.rotation.z = ruin.rotation.z + 0.35;
+        g.add(notch);
+      }
+    }
+  }
+
   function initThree(){
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(PAL.fog, 0.05);
     camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
     clock = new THREE.Clock();
 
-    var hemi = new THREE.HemisphereLight(0x6a5a8a, 0x1a1020, 0.6);
+    var hemi = new THREE.HemisphereLight(0x4a5a34, 0x120f08, 0.6);
     scene.add(hemi);
-    var key = new THREE.DirectionalLight(0xffb37a, 1.2);
+    var key = new THREE.DirectionalLight(0xbfa05a, 1.1);
     key.position.set(5, 8, 4);
     scene.add(key);
-    var rim = new THREE.DirectionalLight(0x8fb88a, 0.35);
+    var rim = new THREE.DirectionalLight(PAL.toxic, 0.4);
     rim.position.set(-6, 3, -4);
     scene.add(rim);
 
-    buildNavetta();
-    buildHotels();
-    buildSaltafila();
+    var radTex = makeIconTexture(drawRadiationIcon);
+    var skullTex = makeIconTexture(drawSkullIcon);
+
+    buildNavetta(skullTex);
+    buildHotels(radTex);
+    buildSaltafila(skullTex);
     scene.add(navetta.group, hotelScene.group, saltafila.group);
     setActiveScene('navetta');
 
@@ -799,8 +943,8 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  /* ───────── NAVETTA ───────── */
-  function buildNavetta(){
+  /* ───────── NAVETTA: bus blindato a tema apocalisse zombie ───────── */
+  function buildNavetta(skullTex){
     var g = new THREE.Group();
     var stopPositions = [
       new THREE.Vector3(-4.6, 0, 1.1),
@@ -813,21 +957,22 @@ window.addEventListener('DOMContentLoaded', function(){
     navetta.curve = new THREE.CatmullRomCurve3(stopPositions);
     navetta.markerPositions = stopPositions.slice(0, 5);
 
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x1a1326, roughness: 1 }));
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x120f09, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
     g.add(ground);
+    addRuinSkyline(g, -5.2, -7, 7, 7);
 
     var tubeGeo = new THREE.TubeGeometry(navetta.curve, 100, 0.045, 8, false);
-    var tubeMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x3a2c10, roughness: 0.45 });
+    var tubeMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, emissive: 0x3a2c0a, roughness: 0.45 });
     g.add(new THREE.Mesh(tubeGeo, tubeMat));
 
     navetta.markerPositions.forEach(function(p){
-      var poleMat = new THREE.MeshStandardMaterial({ color: 0x8FB88A, emissive: 0x16210f });
+      var poleMat = new THREE.MeshStandardMaterial({ color: PAL.rustDark, emissive: 0x0e0802 });
       var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.7, 8), poleMat);
       pole.position.set(p.x, 0.35, p.z);
       g.add(pole);
-      var ballMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x4a2208, emissiveIntensity: 0.6 });
+      var ballMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.9 });
       var ball = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), ballMat);
       ball.position.set(p.x, 0.72, p.z);
       g.add(ball);
@@ -837,20 +982,33 @@ window.addEventListener('DOMContentLoaded', function(){
     /* chassis: a low solid shell — kept short on purpose so the seats
        (added below) sit visibly ABOVE its top face rather than sealed
        inside a closed box, otherwise lifting the roof reveals nothing */
-    var bodyMat = new THREE.MeshStandardMaterial({ color: 0x2a2038, roughness: 0.55 });
+    var bodyMat = new THREE.MeshStandardMaterial({ color: PAL.rustDark, roughness: 0.75 });
     var body = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.20, 0.34), bodyMat);
     body.position.y = 0.12;
     van.add(body);
-    var roof = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.07, 0.32), new THREE.MeshStandardMaterial({ color: 0x3a2d4d }));
+    /* hazard stripe trim along the flank, like improvised armor plating */
+    var stripeMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, roughness: 0.6 });
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(0.63, 0.035, 0.345), stripeMat);
+    stripe.position.y = 0.09;
+    van.add(stripe);
+    var roof = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.07, 0.32), new THREE.MeshStandardMaterial({ color: PAL.concreteDark }));
     roof.position.y = 0.34;
     van.add(roof);
     navetta.roof = roof;
     navetta.roofRestY = 0.34;
-    var glassMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x3a2c10, roughness: 0.25 });
+    var glassMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, roughness: 0.25 });
     var windshield = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.13, 0.27), glassMat);
     windshield.position.set(0.31, 0.19, 0);
     van.add(windshield);
-    var wheelMat = new THREE.MeshStandardMaterial({ color: 0x0E0A14 });
+    /* biohazard-ish decal on the flank, painted on by the survivors */
+    var decal = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), new THREE.MeshBasicMaterial({ map: skullTex, transparent: true }));
+    decal.position.set(0, 0.17, 0.171);
+    van.add(decal);
+    var decal2 = decal.clone();
+    decal2.position.z = -0.171;
+    decal2.rotation.y = Math.PI;
+    van.add(decal2);
+    var wheelMat = new THREE.MeshStandardMaterial({ color: 0x0E0A05 });
     [[0.21, 0.07, 0.19], [0.21, 0.07, -0.19], [-0.21, 0.07, 0.19], [-0.21, 0.07, -0.19]].forEach(function(pos){
       var wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.05, 14), wheelMat);
       wheel.rotation.x = Math.PI / 2;
@@ -862,13 +1020,15 @@ window.addEventListener('DOMContentLoaded', function(){
     hl.position.set(0.32, 0.12, 0);
     van.add(hl);
 
+    /* seats become mini zombie passengers once the roof lifts off */
     var seatsGroup = new THREE.Group();
-    var seatMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, roughness: 0.6 });
     for (var r = 0; r < 10; r++){
       for (var c = 0; c < 3; c++){
-        var seat = new THREE.Mesh(new THREE.BoxGeometry(0.045, 0.06, 0.045), seatMat);
-        seat.position.set(-0.24 + r * 0.052, 0.25, -0.11 + c * 0.11);
-        seatsGroup.add(seat);
+        var passenger = buildZombie(0.42);
+        passenger.rotation.x = -0.3; /* seated: undo the standing hunch so it reads as sitting */
+        passenger.rotation.y = Math.PI / 2 * (c - 1) * 0.3 + (Math.random() - 0.5) * 0.3;
+        passenger.position.set(-0.24 + r * 0.052, 0.21, -0.11 + c * 0.11);
+        seatsGroup.add(passenger);
       }
     }
     seatsGroup.visible = false;
@@ -899,13 +1059,14 @@ window.addEventListener('DOMContentLoaded', function(){
     navetta.seatsGroup.scale.setScalar(0.3 + s.explode * 0.7);
   }
 
-  /* ───────── DOVE DORMIRE ───────── */
-  function buildHotels(){
+  /* ───────── DOVE DORMIRE: bunker post-apocalittici ───────── */
+  function buildHotels(radTex){
     var g = new THREE.Group();
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(18, 11), new THREE.MeshStandardMaterial({ color: 0x160f20, roughness: 1 }));
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(18, 11), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
     g.add(ground);
+    addRuinSkyline(g, -4.6, -8, 8, 6);
 
     var names = ['Hotel Ancora', 'Villa Belvedere', 'Villa Cavallo', 'B&B Calypso'];
     var floorsCount = [6, 4, 4, 3];
@@ -920,9 +1081,10 @@ window.addEventListener('DOMContentLoaded', function(){
       for (var f = 0; f < floors; f++){
         var isBlocked = f >= floors - blockedFloors[i];
         var mat = new THREE.MeshStandardMaterial({
-          color: isBlocked ? 0xFF7A33 : 0x241a33,
-          emissive: isBlocked ? 0x3a1d0a : 0x000000,
-          roughness: 0.55
+          color: isBlocked ? PAL.toxic : (f % 2 === 0 ? PAL.concrete : PAL.concreteDark),
+          emissive: isBlocked ? PAL.toxicGlow : 0x000000,
+          emissiveIntensity: isBlocked ? 0.9 : 0,
+          roughness: 0.75
         });
         var slab = new THREE.Mesh(new THREE.BoxGeometry(1.0, floorH, 0.75), mat);
         var restY = 0.13 + f * (floorH + gap);
@@ -932,10 +1094,21 @@ window.addEventListener('DOMContentLoaded', function(){
         group.add(slab);
       }
       var topY = 0.13 + floors * (floorH + gap);
-      var roof = new THREE.Mesh(new THREE.ConeGeometry(0.72, 0.3, 4), new THREE.MeshStandardMaterial({ color: 0xD8B66B }));
-      roof.position.y = topY + 0.1;
-      roof.rotation.y = Math.PI / 4;
+      /* rusted flat bunker roof + antenna, swapped for the old gable cone */
+      var roof = new THREE.Mesh(new THREE.BoxGeometry(1.08, 0.06, 0.82), new THREE.MeshStandardMaterial({ color: PAL.rust, roughness: 0.7 }));
+      roof.position.y = topY + 0.03;
       group.add(roof);
+      var antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
+      antenna.position.set(0.3, topY + 0.21, 0.2);
+      group.add(antenna);
+      /* radiation barrels stacked at the base */
+      var barrel1 = buildBarrel(radTex);
+      barrel1.position.set(-0.62, 0, 0.42);
+      group.add(barrel1);
+      var barrel2 = buildBarrel(radTex);
+      barrel2.scale.setScalar(0.85);
+      barrel2.position.set(-0.48, 0, 0.5);
+      group.add(barrel2);
       hotels.push({ name: name, group: group, floors: floors, topY: topY, explode: 0, targetExplode: 0, pos: group.position.clone() });
       g.add(group);
     });
@@ -955,39 +1128,28 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  /* ───────── SALTAFILA ───────── */
-  function buildPerson(mat, scale){
-    scale = scale || 1;
-    var p = new THREE.Group();
-    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.045 * scale, 0.045 * scale, 0.22 * scale, 8), mat);
-    body.position.y = 0.14 * scale;
-    p.add(body);
-    var head = new THREE.Mesh(new THREE.SphereGeometry(0.042 * scale, 10, 10), mat);
-    head.position.y = 0.27 * scale;
-    p.add(head);
-    return p;
-  }
-
-  function buildSaltafila(){
+  /* ───────── SALTAFILA: coda di zombie verso il bancone ───────── */
+  function buildSaltafila(skullTex){
     var g = new THREE.Group();
-    var ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({ color: 0x160f20, roughness: 1 }));
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
     g.add(ground);
+    addRuinSkyline(g, -3.6, -3.5, 4, 5);
 
-    var queueMat = new THREE.MeshStandardMaterial({ color: 0x5B5468, roughness: 0.7 });
     for (var i = 0; i < 8; i++){
-      var person = buildPerson(queueMat);
+      var person = buildZombie(1);
       person.position.set(-1.9 + i * 0.26, 0, -0.55);
+      person.rotation.y = (Math.random() - 0.5) * 0.6;
       g.add(person);
     }
 
-    var laneMat = new THREE.MeshStandardMaterial({ color: 0xD8B66B, emissive: 0x4a3714, roughness: 0.3 });
+    var laneMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, emissive: 0x3a2c0a, roughness: 0.3 });
     var lane = new THREE.Mesh(new THREE.BoxGeometry(4.1, 0.025, 0.3), laneMat);
     lane.position.set(0, 0.01, 0.55);
     g.add(lane);
 
-    var gateMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x3a1a08 });
+    var gateMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.8 });
     var gateL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8), gateMat);
     gateL.position.set(1.95, 0.27, 0.42);
     g.add(gateL);
@@ -995,19 +1157,43 @@ window.addEventListener('DOMContentLoaded', function(){
     gateR.position.z = 0.68;
     g.add(gateR);
 
-    var walkerMat = new THREE.MeshStandardMaterial({ color: 0xFF7A33, emissive: 0x3a1a08, roughness: 0.4 });
-    var walker = buildPerson(walkerMat, 1.1);
+    /* destination: a scavenged bar counter the fast-lane zombie heads toward */
+    var bar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.22, 0.22), new THREE.MeshStandardMaterial({ color: PAL.rust, roughness: 0.65 }));
+    bar.position.set(2.5, 0.11, 0.55);
+    g.add(bar);
+    var barTop = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.02, 0.26), new THREE.MeshStandardMaterial({ color: PAL.concreteDark, roughness: 0.4 }));
+    barTop.position.set(2.5, 0.23, 0.55);
+    g.add(barTop);
+    var bottleMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.7, roughness: 0.3 });
+    for (var b = 0; b < 3; b++){
+      var bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.018, 0.09, 8), bottleMat);
+      bottle.position.set(2.35 + b * 0.12, 0.29, 0.52);
+      g.add(bottle);
+    }
+    var flagPole = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
+    flagPole.position.set(2.68, 0.4, 0.55);
+    g.add(flagPole);
+    var flagSign = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), new THREE.MeshBasicMaterial({ map: skullTex, transparent: true }));
+    flagSign.position.set(2.68, 0.5, 0.551);
+    g.add(flagSign);
+    saltafila.barX = 2.3;
+
+    var walker = buildZombie(1.1, true);
     g.add(walker);
     saltafila.walker = walker;
+    saltafila.startX = -1.9;
 
     saltafila.group = g;
   }
 
   function updateSaltafila(dt, active){
     if (!active) return;
-    saltafila.phase = (saltafila.phase + dt * 0.3) % 1;
-    var x = -1.9 + saltafila.phase * 3.9;
+    saltafila.phase = (saltafila.phase + dt * 0.22) % 1;
+    var p = saltafila.phase;
+    var reach = Math.min(p, 0.88) / 0.88;
+    var x = saltafila.startX + reach * (saltafila.barX - saltafila.startX);
     saltafila.walker.position.set(x, 0, 0.55);
+    saltafila.walker.visible = p < 0.92; /* slips behind the bar counter for a moment before looping back */
   }
 
   /* ───────── BEATS ───────── */
@@ -1057,8 +1243,8 @@ window.addEventListener('DOMContentLoaded', function(){
         state.camTargetLook.set(h.pos.x, h.topY * 0.5, h.pos.z);
       }
     } else if (state.activeScene === 'saltafila'){
-      state.camTargetPos.set(0, 2.2, 3.3);
-      state.camTargetLook.set(0.3, 0.25, 0.1);
+      state.camTargetPos.set(0.9, 2.7, 4.3);
+      state.camTargetLook.set(0.8, 0.22, 0.15);
     }
   }
 
