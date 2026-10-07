@@ -918,6 +918,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     p.scale.setScalar(scale);
     p.userData.torso = body;
+    p.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
     return p;
   }
 
@@ -937,6 +938,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var decal = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 0.14), new THREE.MeshBasicMaterial({ map: radTex, transparent: true }));
     decal.position.set(0, 0.05 + 2 * segH, 0.101);
     g.add(decal);
+    g.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
     return g;
   }
 
@@ -964,6 +966,11 @@ window.addEventListener('DOMContentLoaded', function(){
   function initThree(){
     renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.8;
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(PAL.fog, 0.05);
     camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
@@ -971,8 +978,18 @@ window.addEventListener('DOMContentLoaded', function(){
 
     var hemi = new THREE.HemisphereLight(0x4a5a34, 0x120f08, 0.6);
     scene.add(hemi);
-    var key = new THREE.DirectionalLight(0xbfa05a, 1.1);
+    var key = new THREE.DirectionalLight(0xbfa05a, 1.3);
     key.position.set(5, 8, 4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 25;
+    key.shadow.camera.left = -11;
+    key.shadow.camera.right = 11;
+    key.shadow.camera.top = 7;
+    key.shadow.camera.bottom = -7;
+    key.shadow.bias = -0.0015;
+    key.shadow.radius = 2;
     scene.add(key);
     var rim = new THREE.DirectionalLight(PAL.toxic, 0.4);
     rim.position.set(-6, 3, -4);
@@ -1033,6 +1050,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x120f09, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
+    ground.receiveShadow = true;
     g.add(ground);
     addRuinSkyline(g, -5.2, -7, 7, 7);
 
@@ -1152,6 +1170,7 @@ window.addEventListener('DOMContentLoaded', function(){
     van.add(seatsGroup);
     navetta.seatsGroup = seatsGroup;
     navetta.van = van;
+    van.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
     g.add(van);
 
     navetta.group = g;
@@ -1182,6 +1201,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var ground = new THREE.Mesh(new THREE.PlaneGeometry(18, 11), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
+    ground.receiveShadow = true;
     g.add(ground);
     addRuinSkyline(g, -4.6, -8, 8, 6);
 
@@ -1216,6 +1236,8 @@ window.addEventListener('DOMContentLoaded', function(){
         slab.position.y = restY;
         slab.userData.restY = restY;
         slab.userData.explodedY = restY + f * 0.075;
+        slab.castShadow = true;
+        slab.receiveShadow = true;
         group.add(slab);
 
         /* window grid on the front face, parented to the slab so it travels
@@ -1243,6 +1265,8 @@ window.addEventListener('DOMContentLoaded', function(){
       /* rusted flat bunker roof + antenna, swapped for the old gable cone */
       var roof = new THREE.Mesh(new THREE.BoxGeometry(1.08, 0.06, 0.82), new THREE.MeshStandardMaterial({ color: PAL.rust, roughness: 0.7 }));
       roof.position.y = topY + 0.03;
+      roof.castShadow = true;
+      roof.receiveShadow = true;
       group.add(roof);
       var antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
       antenna.position.set(0.3, topY + 0.21, 0.2);
@@ -1286,6 +1310,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.02;
+    ground.receiveShadow = true;
     g.add(ground);
     addRuinSkyline(g, -3.6, -3.5, 4, 5);
 
