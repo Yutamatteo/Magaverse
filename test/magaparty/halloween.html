@@ -16,6 +16,13 @@
 <link rel="stylesheet" href="../../assets/storymap.css">
 <script src="../../assets/storymap.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js" defer></script>
 <style>
 /* ============================================================
    Halloween in Villa — pagina dedicata. Mondo visivo a parte
@@ -726,6 +733,11 @@ window.addEventListener('DOMContentLoaded', function(){
   pinsRoot.querySelectorAll('.l3-pin').forEach(function(el){ l3PinEls[el.dataset.pin] = el; });
 
   var renderer, scene, camera, clock;
+  var composer, bloomComposer, bloomPass, mixPass;
+  var BLOOM_LAYER = 1;
+  var bloomLayer = null;
+  var darkMaterial = null;
+  var bloomDarkenedMats = {};
   var W = 1, H = 1;
 
   var state = {
@@ -891,6 +903,7 @@ window.addEventListener('DOMContentLoaded', function(){
     [-1, 1].forEach(function(side){
       var eye = new THREE.Mesh(ZGEO.eye, ZMAT.eye);
       eye.position.set(side * 0.014, 0.32, 0.03);
+      eye.layers.enable(BLOOM_LAYER);
       body.add(eye);
     });
 
@@ -1004,6 +1017,36 @@ window.addEventListener('DOMContentLoaded', function(){
     scene.add(navetta.group, hotelScene.group, saltafila.group);
     setActiveScene('navetta');
 
+    if (typeof THREE.EffectComposer !== 'undefined' && typeof THREE.UnrealBloomPass !== 'undefined' && typeof THREE.ShaderPass !== 'undefined') {
+      bloomLayer = new THREE.Layers();
+      bloomLayer.set(BLOOM_LAYER);
+      darkMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+      var size0 = new THREE.Vector2(stageEl.clientWidth || 1, stageEl.clientHeight || 1);
+      var renderScenePass = new THREE.RenderPass(scene, camera);
+
+      bloomPass = new THREE.UnrealBloomPass(size0, 1.15, 0.4, 0.08);
+      bloomComposer = new THREE.EffectComposer(renderer);
+      bloomComposer.renderToScreen = false;
+      bloomComposer.addPass(renderScenePass);
+      bloomComposer.addPass(bloomPass);
+
+      mixPass = new THREE.ShaderPass(new THREE.ShaderMaterial({
+        uniforms: {
+          baseTexture: { value: null },
+          bloomTexture: { value: bloomComposer.readBuffer.texture }
+        },
+        vertexShader: 'varying vec2 vUv;\nvoid main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: 'uniform sampler2D baseTexture;\nuniform sampler2D bloomTexture;\nvarying vec2 vUv;\nvoid main(){ gl_FragColor = texture2D(baseTexture, vUv) + vec4(1.0) * texture2D(bloomTexture, vUv); }',
+        defines: {}
+      }), 'baseTexture');
+      mixPass.needsSwap = true;
+
+      composer = new THREE.EffectComposer(renderer);
+      composer.addPass(renderScenePass);
+      composer.addPass(mixPass);
+    }
+
     resize();
     window.addEventListener('resize', resize);
     computeCameraTarget();
@@ -1021,6 +1064,21 @@ window.addEventListener('DOMContentLoaded', function(){
     renderer.setSize(W, H, false);
     camera.aspect = W / H;
     camera.updateProjectionMatrix();
+    if (composer) composer.setSize(W, H);
+    if (bloomComposer) bloomComposer.setSize(W, H);
+  }
+
+  function darkenNonBloomed(obj){
+    if (obj.isMesh && bloomLayer.test(obj.layers) === false) {
+      bloomDarkenedMats[obj.uuid] = obj.material;
+      obj.material = darkMaterial;
+    }
+  }
+  function restoreBloomedMaterial(obj){
+    if (bloomDarkenedMats[obj.uuid]) {
+      obj.material = bloomDarkenedMats[obj.uuid];
+      delete bloomDarkenedMats[obj.uuid];
+    }
   }
 
   function setActiveScene(name){
@@ -1066,6 +1124,7 @@ window.addEventListener('DOMContentLoaded', function(){
       var ballMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.9 });
       var ball = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), ballMat);
       ball.position.set(p.x, 0.72, p.z);
+      ball.layers.enable(BLOOM_LAYER);
       g.add(ball);
     });
 
@@ -1090,6 +1149,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var glassMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, roughness: 0.25 });
     var windshield = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.13, 0.27), glassMat);
     windshield.position.set(0.31, 0.19, 0);
+    windshield.layers.enable(BLOOM_LAYER);
     van.add(windshield);
     /* side-window row along both flanks, between the stripe and the roofline */
     var sideGlassMat = new THREE.MeshStandardMaterial({ color: 0x1c2a14, emissive: PAL.toxicGlow, emissiveIntensity: 0.3, roughness: 0.3 });
@@ -1097,6 +1157,7 @@ window.addEventListener('DOMContentLoaded', function(){
       [-0.18, -0.03, 0.12].forEach(function(x){
         var sw = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.07, 0.012), sideGlassMat);
         sw.position.set(x, 0.19, z);
+        sw.layers.enable(BLOOM_LAYER);
         van.add(sw);
       });
     });
@@ -1146,12 +1207,14 @@ window.addEventListener('DOMContentLoaded', function(){
     [0.1, -0.1].forEach(function(z){
       var hl = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), lightMat);
       hl.position.set(0.335, 0.1, z);
+      hl.layers.enable(BLOOM_LAYER);
       van.add(hl);
     });
     var tailMat = new THREE.MeshStandardMaterial({ color: 0xC23B3B, emissive: 0xC23B3B, emissiveIntensity: 0.9 });
     [0.12, -0.12].forEach(function(z){
       var tl = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.04, 0.03), tailMat);
       tl.position.set(-0.315, 0.12, z);
+      tl.layers.enable(BLOOM_LAYER);
       van.add(tl);
     });
 
@@ -1232,6 +1295,7 @@ window.addEventListener('DOMContentLoaded', function(){
           roughness: 0.75
         });
         var slab = new THREE.Mesh(new THREE.BoxGeometry(1.0, floorH, 0.75), mat);
+        if (isBlocked) slab.layers.enable(BLOOM_LAYER);
         var restY = 0.13 + f * (floorH + gap);
         slab.position.y = restY;
         slab.userData.restY = restY;
@@ -1253,6 +1317,7 @@ window.addEventListener('DOMContentLoaded', function(){
           var wm = isBlocked ? winRadMat : (Math.random() > 0.72 ? winLitMat : winDarkMat);
           var win = new THREE.Mesh(winGeo, wm);
           win.position.set(wx, 0, 0.386);
+          if (wm === winRadMat) win.layers.enable(BLOOM_LAYER);
           slab.add(win);
         });
         if (f > 0 && f % 2 === 1){
@@ -1329,6 +1394,7 @@ window.addEventListener('DOMContentLoaded', function(){
     var gateMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.8 });
     var gateL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8), gateMat);
     gateL.position.set(1.95, 0.27, 0.42);
+    gateL.layers.enable(BLOOM_LAYER);
     g.add(gateL);
     var gateR = gateL.clone();
     gateR.position.z = 0.68;
@@ -1345,6 +1411,7 @@ window.addEventListener('DOMContentLoaded', function(){
     for (var b = 0; b < 3; b++){
       var bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.018, 0.09, 8), bottleMat);
       bottle.position.set(2.35 + b * 0.12, 0.29, 0.52);
+      bottle.layers.enable(BLOOM_LAYER);
       g.add(bottle);
     }
     var flagPole = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
@@ -1473,7 +1540,16 @@ window.addEventListener('DOMContentLoaded', function(){
     camera.position.copy(state.camCurrentPos);
     camera.lookAt(state.camCurrentLook);
     updatePinPositions();
-    renderer.render(scene, camera);
+    if (composer && bloomComposer) {
+      scene.traverse(darkenNonBloomed);
+      bloomComposer.render();
+      scene.traverse(restoreBloomedMaterial);
+      composer.render();
+    } else if (composer) {
+      composer.render();
+    } else {
+      renderer.render(scene, camera);
+    }
   }
 
   document.querySelectorAll('.l3-tab').forEach(function(btn){
