@@ -251,9 +251,11 @@ img{max-width:100%;}
 .state-chip.chip-open{ border-color:var(--moss-soft); color:var(--moss); }
 .state-chip.chip-sold{ border-color:rgba(255,255,255,0.18); color:var(--muted); }
 .state-chip.chip-locked{ border-color:var(--ember-soft); color:var(--ember); }
+.state-chip.chip-waitlist{ border-color:rgba(255,255,255,0.18); color:var(--muted); }
 .ticket-card[data-state="open"] .chip-open,
 .ticket-card[data-state="sold"] .chip-sold,
-.ticket-card[data-state="locked"] .chip-locked{ display:inline-flex; }
+.ticket-card[data-state="locked"] .chip-locked,
+.ticket-card[data-state="waitlist"] .chip-waitlist{ display:inline-flex; }
 .ticket-card[data-state="sold"] .ticket-cta,
 .ticket-card[data-state="sold"] .ticket-form,
 .ticket-card[data-state="sold"] .ticket-buy,
@@ -266,8 +268,12 @@ img{max-width:100%;}
 .ticket-card[data-state="locked"] .ticket-success,
 .ticket-card[data-state="locked"] .ticket-progress,
 .ticket-card[data-state="locked"] .ticket-progress-label{ display:none !important; }
+.ticket-card[data-state="waitlist"] .ticket-progress,
+.ticket-card[data-state="waitlist"] .ticket-progress-label,
+.ticket-card[data-state="waitlist"] .ticket-buy{ display:none !important; }
 .ticket-card[data-state="sold"],
 .ticket-card[data-state="locked"]{ opacity:0.6; }
+.ticket-card[data-state="waitlist"] .price{ color:var(--muted); text-decoration:line-through; opacity:0.7; }
 .ticket-progress{ height:6px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; }
 .ticket-progress-bar{ height:100%; background:linear-gradient(90deg, var(--ember), var(--gold)); border-radius:999px; }
 .ticket-progress-label{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); opacity:0.8; }
@@ -796,13 +802,13 @@ img{max-width:100%;}
     <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
   </div>
 
-  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-state="open">
-    <h4>Biglietto Prima Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-state="waitlist">
+    <h4>Biglietto Prima Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span><span class="state-chip chip-waitlist">Lista d'attesa</span></h4>
     <span class="price">€45</span>
     <div class="ticket-progress"><div class="ticket-progress-bar" style="width:15%"></div></div>
     <span class="ticket-progress-label">Appena aperte</span>
-    <p>Posti a questo prezzo limitati. Compila il form: per ora il link d'acquisto non è ancora attivo, quindi ti ricontattiamo noi per confermare.</p>
-    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
+    <p>I posti alla Prima Release sono terminati. Compila il form per iscriverti alla lista d'attesa: se si libera un posto ti ricontattiamo noi.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Iscriviti alla lista d'attesa</button>
     <form class="ticket-form" hidden>
       <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
       <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
@@ -815,10 +821,10 @@ img{max-width:100%;}
         <input type="checkbox" name="accetta_termini" required>
         <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
       </label>
-      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+      <button type="submit" class="ticket-cta full-w">Iscrivimi alla lista d'attesa</button>
     </form>
     <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
-    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo a breve per confermare. ✅</p>
+    <p class="ticket-success" hidden>Richiesta inviata — sei in lista d'attesa, ti ricontattiamo se si libera un posto. ✅</p>
   </div>
 
   <div class="prezzi-card ticket-card" data-tier="seconda" data-tier-label="Biglietto Seconda Release" data-state="locked">
