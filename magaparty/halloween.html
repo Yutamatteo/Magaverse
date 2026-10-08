@@ -15,6 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/storymap.css">
 <script src="../assets/storymap.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" defer></script>
@@ -277,6 +278,7 @@ img{max-width:100%;}
 .ticket-form input:focus{ border-color:var(--ember); }
 .ticket-form label{ display:block; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
 .ticket-success{ font-size:12.5px; color:var(--moss); line-height:1.6; margin-top:6px; }
+.ticket-error{ font-size:12px; color:var(--ember); line-height:1.5; margin:2px 0 0; }
 .prezzi-card .includes{ list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:3px; }
 .prezzi-card .includes li{ font-size:12px; color:var(--muted); padding-left:14px; position:relative; }
 .prezzi-card .includes li::before{ content:'✓'; position:absolute; left:0; color:var(--moss); }
@@ -1968,21 +1970,35 @@ window.addEventListener('DOMContentLoaded', function(){
 (function(){
   'use strict';
   /* ── RICHIESTE: biglietti, saltafila, navetta, alloggi ──
-     Il link esterno per le release biglietti si collega qui quando
-     disponibile; finché è vuoto, il form si limita a registrare la
-     richiesta e la conferma arriva via WhatsApp. */
+     Ogni invio salva una riga nella tabella Supabase
+     "halloween_richieste"; da lì un Database Webhook manda una mail
+     di notifica allo staff. Il link esterno per le release biglietti
+     si collega qui quando disponibile. */
+  var SUPABASE_URL = 'https://dkzzmxsreaegjagqbdnh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
   var TICKET_LINKS = {
     prima: ''
   };
-  var WA_NUMBER = '393454237269';
 
   document.querySelectorAll('.ticket-card').forEach(function(card){
     var tier = card.dataset.tier;
-    var label = card.dataset.tierLabel || '';
     var toggleBtn = card.querySelector('[data-action="toggle-form"]');
     var form = card.querySelector('.ticket-form');
     var success = card.querySelector('.ticket-success');
     var buyLink = card.querySelector('.ticket-buy');
+    var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+    var submitLabel = submitBtn ? submitBtn.textContent : '';
+    var errorEl = form ? form.querySelector('.ticket-error') : null;
+    if (form && !errorEl){
+      errorEl = document.createElement('p');
+      errorEl.className = 'ticket-error full-w';
+      errorEl.hidden = true;
+      form.appendChild(errorEl);
+    }
 
     if (toggleBtn && form){
       toggleBtn.addEventListener('click', function(){
@@ -2001,26 +2017,45 @@ window.addEventListener('DOMContentLoaded', function(){
             telefono = val('telefono'), nascita = val('nascita'),
             instagram = val('instagram'), invitatoDa = val('invitato_da');
         if (!nome || !cognome || !email || !telefono || !nascita) return;
-        var parts = [
-          'Ciao! Vorrei prenotare: ' + label + ' (Halloween in Villa, 31 Ottobre).',
-          'Nome: ' + nome + ' ' + cognome,
-          'Email: ' + email,
-          'Telefono: ' + telefono,
-          'Data di nascita: ' + nascita
-        ];
-        if (instagram) parts.push('Instagram: ' + instagram);
-        if (invitatoDa) parts.push('Invitato da: ' + invitatoDa);
-        var text = parts.join(' — ');
-        var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
-        window.open(waUrl, '_blank', 'noopener');
-        form.hidden = true;
-        var externalUrl = TICKET_LINKS[tier];
-        if (externalUrl && buyLink){
-          buyLink.href = externalUrl;
-          buyLink.hidden = false;
-        } else if (success){
-          success.hidden = false;
+
+        if (errorEl) errorEl.hidden = true;
+        if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Invio…'; }
+
+        if (!sb){
+          if (errorEl){ errorEl.textContent = 'Errore di connessione, riprova tra poco.'; errorEl.hidden = false; }
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          return;
         }
+
+        var payload = {
+          tipo: tier,
+          nome: nome,
+          cognome: cognome,
+          email: email,
+          telefono: telefono,
+          data_nascita: nascita,
+          instagram: instagram || null,
+          invitato_da: invitatoDa || null
+        };
+
+        sb.from('halloween_richieste').insert(payload).then(function(res){
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          if (res && res.error){
+            if (errorEl){ errorEl.textContent = 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
+            return;
+          }
+          form.hidden = true;
+          var externalUrl = TICKET_LINKS[tier];
+          if (externalUrl && buyLink){
+            buyLink.href = externalUrl;
+            buyLink.hidden = false;
+          } else if (success){
+            success.hidden = false;
+          }
+        }, function(){
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          if (errorEl){ errorEl.textContent = 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
+        });
       });
     }
   });
