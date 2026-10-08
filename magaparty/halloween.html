@@ -238,28 +238,50 @@ img{max-width:100%;}
 .prezzi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
 .tbd-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--ember-soft); color:var(--ember); width:fit-content; }
 
-/* ── BIGLIETTI (vendita a release) ── */
-.release-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--moss-soft); color:var(--moss); width:fit-content; }
-.soldout-chip{ display:none; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.18); color:var(--muted); width:fit-content; }
+/* ── BIGLIETTI / RICHIESTE (biglietti, saltafila, navetta, alloggi) ── */
+.prezzi-subhead{ text-align:center; padding-block:52px 6px; }
+.prezzi-subhead .section-label{ display:block; margin-bottom:6px; }
+.prezzi-subhead h3{ font-family:'Fraunces', Georgia, serif; font-size:clamp(1.1rem,2vw,1.5rem); font-weight:600; color:var(--bone); }
+.prezzi-subhead p{ margin-top:8px; font-size:13px; line-height:1.7; color:var(--muted); max-width:56ch; margin-inline:auto; }
+.state-chip{ display:none; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid; width:fit-content; flex:none; }
+.state-chip.chip-open{ border-color:var(--moss-soft); color:var(--moss); }
+.state-chip.chip-sold{ border-color:rgba(255,255,255,0.18); color:var(--muted); }
+.state-chip.chip-locked{ border-color:var(--ember-soft); color:var(--ember); }
+.ticket-card[data-state="open"] .chip-open,
+.ticket-card[data-state="sold"] .chip-sold,
+.ticket-card[data-state="locked"] .chip-locked{ display:inline-flex; }
+.ticket-card[data-state="sold"] .ticket-cta,
+.ticket-card[data-state="sold"] .ticket-form,
+.ticket-card[data-state="sold"] .ticket-buy,
+.ticket-card[data-state="sold"] .ticket-success,
+.ticket-card[data-state="sold"] .ticket-progress,
+.ticket-card[data-state="sold"] .ticket-progress-label,
+.ticket-card[data-state="locked"] .ticket-cta,
+.ticket-card[data-state="locked"] .ticket-form,
+.ticket-card[data-state="locked"] .ticket-buy,
+.ticket-card[data-state="locked"] .ticket-success,
+.ticket-card[data-state="locked"] .ticket-progress,
+.ticket-card[data-state="locked"] .ticket-progress-label{ display:none !important; }
+.ticket-card[data-state="sold"],
+.ticket-card[data-state="locked"]{ opacity:0.6; }
 .ticket-progress{ height:6px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; }
 .ticket-progress-bar{ height:100%; background:linear-gradient(90deg, var(--ember), var(--gold)); border-radius:999px; }
 .ticket-progress-label{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); opacity:0.8; }
 .ticket-cta{ font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:11px 16px; border-radius:10px; border:1px solid var(--ember); background:var(--ember); color:#20120A; cursor:pointer; text-align:center; text-decoration:none; display:inline-block; margin-top:6px; transition:all .2s ease; }
 .ticket-cta:hover{ background:var(--gold); border-color:var(--gold); }
-.ticket-form{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+.ticket-form{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
+@media (min-width:460px){ .ticket-form{ grid-template-columns:1fr 1fr; } }
 .ticket-form[hidden], .ticket-cta[hidden]{ display:none; }
-.ticket-form input{ font-family:inherit; font-size:13px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; }
+.ticket-form .full-w{ grid-column:1 / -1; }
+.ticket-form input{ font-family:inherit; font-size:13px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; width:100%; box-sizing:border-box; }
 .ticket-form input:focus{ border-color:var(--ember); }
+.ticket-form label{ display:block; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
 .ticket-success{ font-size:12.5px; color:var(--moss); line-height:1.6; margin-top:6px; }
-.ticket-card[data-sold="true"] .ticket-cta,
-.ticket-card[data-sold="true"] .ticket-form,
-.ticket-card[data-sold="true"] .ticket-buy,
-.ticket-card[data-sold="true"] .ticket-success,
-.ticket-card[data-sold="true"] .ticket-progress,
-.ticket-card[data-sold="true"] .ticket-progress-label,
-.ticket-card[data-sold="true"] .release-chip{ display:none !important; }
-.ticket-card[data-sold="true"] .soldout-chip{ display:inline-flex; }
-.ticket-card[data-sold="true"]{ opacity:0.55; }
+.prezzi-card .includes{ list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:3px; }
+.prezzi-card .includes li{ font-size:12px; color:var(--muted); padding-left:14px; position:relative; }
+.prezzi-card .includes li::before{ content:'✓'; position:absolute; left:0; color:var(--moss); }
+.prezzi-card .price .was{ font-size:13px; text-decoration:line-through; color:var(--muted); font-weight:500; margin-right:4px; }
+.prezzi-card .price-note{ display:block; font-size:10px; letter-spacing:0.04em; text-transform:none; color:var(--muted); font-family:'Work Sans', sans-serif; font-weight:500; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -583,7 +605,7 @@ img{max-width:100%;}
 <section class="wrap logi-head reveal">
   <span class="section-label">Come arrivare, dove dormire, come entrare</span>
   <h2>Oltre la villa: la serata pensata fino in fondo</h2>
-  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione. Scorri per seguire la navetta, girare tra le strutture partner e vedere come funziona il saltafila.</p>
+  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica. Scorri per seguire la navetta, girare tra le soluzioni per dormire e vedere come funziona il saltafila.</p>
 </section>
 
 <section class="l3-storymap wrap">
@@ -593,83 +615,65 @@ img{max-width:100%;}
     <article class="l3-beat" data-scene="navetta">
       <span class="section-label">La navetta</span>
       <h3>Non serve l'auto per arrivare</h3>
-      <p>Per questa edizione la navetta è ufficiale: un mezzo da 30 posti che fa la spola dai punti di ritrovo principali fino al cancello della villa. Si sale, ci si siede, si arriva.</p>
-      <div class="l3-chips"><span class="l3-chip">30 posti</span><span class="l3-chip">5 fermate</span><span class="l3-chip">Mezzo unico</span></div>
+      <p>Per questa edizione la navetta è ufficiale: fa la spola tra i punti di ritrovo e il cancello della villa, andata e ritorno. Si sale, ci si siede, si arriva.</p>
+      <div class="l3-chips"><span class="l3-chip">3 fermate</span><span class="l3-chip">Andata e ritorno</span><span class="l3-chip">Partenza 00:00 da Salerno</span></div>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="0">
-      <span class="section-label">Fermata 1 · Baronissi</span>
-      <h3>Si parte da Baronissi</h3>
-      <p>Primo punto di ritrovo della serata: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
+      <span class="section-label">Fermata 1 · Salerno</span>
+      <h3>Si parte da Salerno</h3>
+      <p>Primo punto di ritrovo della serata, partenza ore 00:00: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="1">
-      <span class="section-label">Fermata 2 · Fisciano</span>
-      <h3>Si passa da Fisciano</h3>
-      <p>La navetta prosegue verso Fisciano, un altro gruppo sale a bordo — comodo per chi viene dall'università.</p>
+      <span class="section-label">Fermata 2 · Pontecagnano</span>
+      <h3>Si passa da Pontecagnano</h3>
+      <p>La navetta prosegue verso Pontecagnano, un altro gruppo sale a bordo.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="2">
-      <span class="section-label">Fermata 3 · Salerno Centro</span>
-      <h3>Il cuore della città</h3>
-      <p>La fermata più centrale, pensata per chi arriva da fuori Salerno o preferisce non guidare fino in villa.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="navetta" data-stop="3">
-      <span class="section-label">Fermata 4 · Pastena</span>
-      <h3>Si continua verso Pastena</h3>
-      <p>Penultima tappa prima della villa: la navetta è ormai quasi al completo.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="navetta" data-stop="4">
-      <span class="section-label">Fermata 5 · Torrione</span>
-      <h3>Ultima fermata: Torrione</h3>
-      <p>L'ultimo gruppo sale a bordo. Da qui, dritti in villa.</p>
+      <span class="section-label">Fermata 3 · Magazzeno</span>
+      <h3>Ultima fermata: Magazzeno</h3>
+      <p>L'ultimo gruppo sale a bordo, a due passi dalla villa. Da qui, dritti al cancello.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-explode="true">
       <span class="section-label">A bordo</span>
-      <h3>Trenta posti, un solo viaggio</h3>
-      <p>Il mezzo arriva in villa: trenta posti a sedere, nessuno lasciato alla fermata.</p>
-      <div class="l3-chips"><span class="l3-chip">30/30 posti confermati</span></div>
+      <h3>Andata e ritorno, un solo biglietto</h3>
+      <p>Il mezzo arriva in villa. Il ritorno segue lo stesso percorso al contrario — Magazzeno, Pontecagnano, Salerno — con partenza alle 5 del mattino.</p>
+      <div class="l3-chips"><span class="l3-chip">Ritorno ore 5:00</span></div>
     </article>
 
     <article class="l3-beat" data-scene="hotel">
       <span class="section-label">Dove dormire</span>
       <h3>Il check-in non è un problema</h3>
-      <p>Per chi non vuole guidare dopo la festa, alcune strutture partner tengono delle camere bloccate per gli ospiti dell'evento. Il check-in resta a carico della struttura scelta — a voi resta solo scegliere dove svegliarvi.</p>
-      <div class="l3-chips"><span class="l3-chip">4 strutture partner</span><span class="l3-chip">Camere bloccate</span></div>
+      <p>Per chi non vuole guidare dopo la festa, tre soluzioni tengono posti bloccati per gli ospiti dell'evento — dall'appartamento privato dentro la villa alla camera d'hotel. Ingresso e open bar fino alle 06:00 sempre inclusi.</p>
+      <div class="l3-chips"><span class="l3-chip">3 soluzioni</span><span class="l3-chip">Posti bloccati</span></div>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="0">
-      <span class="section-label">Partner 1</span>
-      <h3>Hotel Ancora</h3>
-      <p>Camere riservate agli ospiti Magaparty per questa edizione, check-in gestito direttamente dalla struttura.</p>
+      <span class="section-label">Soluzione 1</span>
+      <h3>Appartamenti VIP</h3>
+      <p>Dentro la villa: 2 appartamenti (4 e 5 posti), si vendono interi, minimo 4 persone. Entri e esci quando vuoi, a fine serata non ti sposti di un metro.</p>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="1">
-      <span class="section-label">Partner 2</span>
+      <span class="section-label">Soluzione 2</span>
       <h3>Villa Belvedere</h3>
-      <p>Un'altra struttura con camere bloccate per chi partecipa alla serata e vuole fermarsi a dormire.</p>
+      <p>Hotel con bagno privato in camera: matrimoniale, tripla o quadrupla, minimo 2 persone. Festa e hotel in un'unica soluzione.</p>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="2">
-      <span class="section-label">Partner 3</span>
-      <h3>Villa Cavallo</h3>
-      <p>Stesso meccanismo: posti riservati, nessuna pratica da sbrigare con Magaparty.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="hotel" data-hotel="3">
-      <span class="section-label">Partner 4</span>
-      <h3>B&amp;B Calypso</h3>
-      <p>L'ultima struttura partner della lista, stesse condizioni delle altre.</p>
+      <span class="section-label">Soluzione 3</span>
+      <h3>Lido Azzurro</h3>
+      <p>Sei camere doppie, bagno in comune, minimo 2 persone. La soluzione più semplice per chi vuole solo un letto comodo.</p>
     </article>
 
     <article class="l3-beat" data-scene="saltafila">
       <span class="section-label">Saltafila</span>
       <h3>Chi non vuole aspettare in fila</h3>
       <p>Un ingresso prioritario per chi preferisce evitare la coda principale: si salta la fila d'ingresso e si entra subito.</p>
-      <div class="l3-chips"><span class="l3-chip">€15 · bracciale saltafila</span></div>
+      <div class="l3-chips"><span class="l3-chip">€15 fino al 22/10, poi €25</span><span class="l3-chip">Posti limitati</span></div>
     </article>
 
   </div>
@@ -684,15 +688,12 @@ img{max-width:100%;}
     <div class="l3-stage" id="l3Stage">
       <canvas id="l3Canvas"></canvas>
       <div class="l3-pins" id="l3Pins">
-        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Baronissi</span></div>
-        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Fisciano</span></div>
-        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Salerno Centro</span></div>
-        <div class="l3-pin" data-pin="navetta-3"><span class="dot"></span><span class="label">Pastena</span></div>
-        <div class="l3-pin" data-pin="navetta-4"><span class="dot"></span><span class="label">Torrione</span></div>
-        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Hotel Ancora</span></div>
+        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Salerno</span></div>
+        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Pontecagnano</span></div>
+        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Magazzeno</span></div>
+        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Appartamenti VIP</span></div>
         <div class="l3-pin" data-pin="hotel-1"><span class="dot"></span><span class="label">Villa Belvedere</span></div>
-        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Villa Cavallo</span></div>
-        <div class="l3-pin" data-pin="hotel-3"><span class="dot"></span><span class="label">B&amp;B Calypso</span></div>
+        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Lido Azzurro</span></div>
       </div>
       <div class="l3-loading" id="l3Loading">Carico la scena 3D…</div>
     </div>
@@ -703,57 +704,210 @@ img{max-width:100%;}
 <section class="wrap prezzi-head" id="prezzi">
   <span class="section-label">Quanto costa</span>
   <h2>Prezzi</h2>
-  <p>Vendita a fasce, posti limitati: compila il form per prenotare il tuo biglietto.</p>
+  <p>Vendita a fasce, posti limitati: compila il form per prenotare. I prezzi segnati con una freccia aumentano dal 22 ottobre.</p>
 </section>
 
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Biglietti</span>
+  <h3>Vendita a release</h3>
+</div>
+
 <section class="wrap prezzi-grid" id="ticketGrid">
-  <div class="prezzi-card ticket-card" data-tier="community" data-tier-label="Biglietto Community" data-sold="false">
-    <h4>Biglietto Community <span class="release-chip">Aperto</span><span class="soldout-chip">Esaurito</span></h4>
+  <div class="prezzi-card ticket-card" data-tier="community" data-tier-label="Biglietto Community" data-state="open">
+    <h4>Biglietto Community <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
     <span class="price">€40</span>
     <div class="ticket-progress"><div class="ticket-progress-bar" style="width:20%"></div></div>
     <span class="ticket-progress-label">Richieste in arrivo</span>
     <p>Tariffa riservata alla community, posti limitati. Compila il form: ti ricontattiamo noi su WhatsApp per confermare.</p>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome e cognome" autocomplete="name" required>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <button type="submit" class="ticket-cta">Invia richiesta</button>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
     </form>
     <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
   </div>
 
-  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-sold="false">
-    <h4>Biglietto Prima Release <span class="release-chip">Aperto</span><span class="soldout-chip">Esaurito</span></h4>
+  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-state="open">
+    <h4>Biglietto Prima Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
     <span class="price">€45</span>
     <div class="ticket-progress"><div class="ticket-progress-bar" style="width:15%"></div></div>
     <span class="ticket-progress-label">Appena aperte</span>
     <p>Posti a questo prezzo limitati. Compila il form, poi completa l'acquisto su posto riservato.</p>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome e cognome" autocomplete="name" required>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <button type="submit" class="ticket-cta">Continua</button>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Continua</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta registrata — ti mandiamo noi il link per completare l'acquisto. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="seconda" data-tier-label="Biglietto Seconda Release" data-state="locked">
+    <h4>Biglietto Seconda Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+    <span class="price">€50</span>
+    <p>Si apre automaticamente a esaurimento della Prima Release.</p>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Continua</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta registrata — ti mandiamo noi il link per completare l'acquisto. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="terza" data-tier-label="Biglietto Terza Release" data-state="locked">
+    <h4>Biglietto Terza Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+    <span class="price">€55</span>
+    <p>Ultima fascia. Si apre automaticamente a esaurimento della Seconda Release.</p>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Continua</button>
     </form>
     <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
     <p class="ticket-success" hidden>Richiesta registrata — ti mandiamo noi il link per completare l'acquisto. ✅</p>
   </div>
 </section>
 
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Extra</span>
+  <h3>Saltafila &amp; navetta</h3>
+</div>
+
 <section class="wrap prezzi-grid">
-  <div class="prezzi-card">
-    <h4>Bracciale saltafila</h4>
-    <span class="price">€15</span>
-    <p>Upgrade opzionale: salti la fila principale ed entri subito. Vedi la sezione <a href="#saltafila" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;saltafila&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Saltafila</a>.</p>
+  <div class="prezzi-card ticket-card" data-tier="saltafila" data-tier-label="Bracciale saltafila" data-state="open">
+    <h4>Bracciale saltafila <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price">€15 <span class="price-note">€25 dal 22 ottobre · posti limitati</span></span>
+    <p>Upgrade opzionale: salti la fila principale ed entri subito. Compila il form, ti ricontattiamo noi per confermare.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il saltafila</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
   </div>
-  <div class="prezzi-card">
-    <h4>Navetta <span class="tbd-chip">Da confermare</span></h4>
-    <span class="price"><span class="tbd">—</span></span>
-    <p>Fermate e orari in via di conferma. Vedi la sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a> per il percorso.</p>
+
+  <div class="prezzi-card ticket-card" data-tier="navetta" data-tier-label="Navetta + Ingresso omaggio" data-state="open">
+    <h4>Navetta + Ingresso omaggio <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price">€60 <span class="price-note">€70 dal 22 ottobre</span></span>
+    <p>Andata e ritorno in navetta più ingresso incluso. Vedi orari e fermate nella sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a>.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il posto</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
   </div>
-  <div class="prezzi-card">
-    <h4>Dove dormire <span class="tbd-chip">Da confermare</span></h4>
-    <span class="price"><span class="tbd">da —</span></span>
-    <p>Appartamenti convenzionati, elenco e prezzi per stanza in arrivo. Vedi la sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;hotel&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Dove dormire</a>.</p>
+</section>
+
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Dove dormire</span>
+  <h3>Tre soluzioni, tutte con ingresso e open bar inclusi</h3>
+  <p>Open bar fino alle 06:00 incluso in ogni soluzione. Prezzo a persona, minimo gruppo indicato per ciascuna.</p>
+</div>
+
+<section class="wrap prezzi-grid">
+  <div class="prezzi-card ticket-card" data-tier="appartamenti-vip" data-tier-label="Appartamenti VIP (dentro la villa)" data-state="open">
+    <h4>Appartamenti VIP <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€90</span>€100 <span class="price-note">dal 22 ottobre (min. 4 persone, a persona)</span></span>
+    <p>La festa è casa vostra. Un appartamento privato dentro la villa, solo per il tuo gruppo: entri e esci quando vuoi, e a fine serata non ti sposti di un metro. 2 appartamenti disponibili (4 e 5 posti), si vendono interi.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+      <li>Appartamento privato dentro la villa per tutta la notte</li>
+      <li>Posti letto per tutto il gruppo (2 posti letto + divano letto, oppure singolo + matrimoniale + divano letto)</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi l'appartamento</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="villa-belvedere" data-tier-label="Villa Belvedere (hotel, bagno privato)" data-state="open">
+    <h4>Villa Belvedere <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€80</span>€90 <span class="price-note">dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <p>Festa e hotel in un'unica soluzione. Camera con bagno privato, ingresso e open bar inclusi: tu pensa solo a ballare. 3 tipologie di stanza: matrimoniale, tripla, quadrupla.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+      <li>Notte in hotel con bagno privato in camera</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="lido-azzurro" data-tier-label="Lido Azzurro (camere doppie)" data-state="open">
+    <h4>Lido Azzurro <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€70</span>€80 <span class="price-note">dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <p>La soluzione più semplice: un letto comodo e il resto della notte libero per la festa. 6 camere doppie, bagno in comune.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
   </div>
 </section>
 
@@ -1242,7 +1396,7 @@ window.addEventListener('DOMContentLoaded', function(){
       new THREE.Vector3(5.6, 0, -0.4)
     ];
     navetta.curve = new THREE.CatmullRomCurve3(stopPositions);
-    navetta.markerPositions = stopPositions.slice(0, 5);
+    navetta.markerPositions = stopPositions.slice(0, 3);
 
     var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x120f09, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
@@ -1407,10 +1561,10 @@ window.addEventListener('DOMContentLoaded', function(){
     g.add(ground);
     addRuinSkyline(g, -4.6, -8, 8, 6);
 
-    var names = ['Hotel Ancora', 'Villa Belvedere', 'Villa Cavallo', 'B&B Calypso'];
-    var floorsCount = [6, 4, 4, 3];
-    var blockedFloors = [2, 2, 1, 1];
-    var xPositions = [-4.8, -1.6, 1.6, 4.8];
+    var names = ['Appartamenti VIP', 'Villa Belvedere', 'Lido Azzurro'];
+    var floorsCount = [3, 4, 6];
+    var blockedFloors = [1, 2, 2];
+    var xPositions = [-3.6, 0, 3.6];
 
     var winGeo = new THREE.BoxGeometry(0.1, 0.1, 0.02);
     var winDarkMat = new THREE.MeshStandardMaterial({ color: 0x0a0906, roughness: 0.9 });
@@ -1589,7 +1743,7 @@ window.addEventListener('DOMContentLoaded', function(){
       navetta.state.targetExplode = explode ? 1 : 0;
       if (stop !== undefined && stop !== ''){
         navetta.activeStop = parseInt(stop, 10);
-        navetta.state.targetT = navetta.activeStop / 5;
+        navetta.state.targetT = navetta.activeStop / 3;
       } else if (explode){
         navetta.activeStop = -1;
         navetta.state.targetT = 1;
@@ -1650,7 +1804,7 @@ window.addEventListener('DOMContentLoaded', function(){
         el.classList.toggle('is-visible', visible);
         el.classList.toggle('is-active', navetta.activeStop === idx);
       });
-      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
     } else if (state.activeScene === 'hotel'){
       hotels.forEach(function(h, idx){
         var el = l3PinEls['hotel-' + idx];
@@ -1659,10 +1813,10 @@ window.addEventListener('DOMContentLoaded', function(){
         el.classList.toggle('is-visible', visible);
         el.classList.toggle('is-active', hotelScene.activeIndex === idx);
       });
-      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
     } else {
-      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
-      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
     }
   }
 
@@ -1813,9 +1967,10 @@ window.addEventListener('DOMContentLoaded', function(){
 <script>
 (function(){
   'use strict';
-  /* ── BIGLIETTI: form di richiesta + flusso verso Posto Riservato ──
-     Il link esterno per ogni release si collega qui quando disponibile;
-     finché è vuoto, il form si limita a registrare la richiesta. */
+  /* ── RICHIESTE: biglietti, saltafila, navetta, alloggi ──
+     Il link esterno per le release biglietti si collega qui quando
+     disponibile; finché è vuoto, il form si limita a registrare la
+     richiesta e la conferma arriva via WhatsApp. */
   var TICKET_LINKS = {
     prima: ''
   };
@@ -1838,12 +1993,24 @@ window.addEventListener('DOMContentLoaded', function(){
     if (form){
       form.addEventListener('submit', function(e){
         e.preventDefault();
-        var nomeEl = form.querySelector('[name="nome"]');
-        var telEl = form.querySelector('[name="telefono"]');
-        var nome = nomeEl ? nomeEl.value.trim() : '';
-        var tel = telEl ? telEl.value.trim() : '';
-        if (!nome || !tel) return;
-        var text = 'Ciao! Vorrei prenotare: ' + label + ' (Halloween in Villa, 31 Ottobre). Nome: ' + nome + ' - Telefono: ' + tel;
+        function val(name){
+          var el = form.querySelector('[name="' + name + '"]');
+          return el ? el.value.trim() : '';
+        }
+        var nome = val('nome'), cognome = val('cognome'), email = val('email'),
+            telefono = val('telefono'), nascita = val('nascita'),
+            instagram = val('instagram'), invitatoDa = val('invitato_da');
+        if (!nome || !cognome || !email || !telefono || !nascita) return;
+        var parts = [
+          'Ciao! Vorrei prenotare: ' + label + ' (Halloween in Villa, 31 Ottobre).',
+          'Nome: ' + nome + ' ' + cognome,
+          'Email: ' + email,
+          'Telefono: ' + telefono,
+          'Data di nascita: ' + nascita
+        ];
+        if (instagram) parts.push('Instagram: ' + instagram);
+        if (invitatoDa) parts.push('Invitato da: ' + invitatoDa);
+        var text = parts.join(' — ');
         var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
         window.open(waUrl, '_blank', 'noopener');
         form.hidden = true;
