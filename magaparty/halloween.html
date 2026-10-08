@@ -1,0 +1,1762 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Villa di Halloween · Magaparty</title>
+<meta name="description" content="Halloween in Villa — Magaparty, 31 ottobre. Planimetria interattiva multi-livello: scopri la villa piano per piano e le stanze disponibili per la notte.">
+<meta property="og:title" content="Halloween in Villa · Magaparty">
+<meta property="og:description" content="Planimetria interattiva multi-livello per la festa di Halloween in villa.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/storymap.css">
+<script src="../assets/storymap.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js" defer></script>
+<style>
+/* ============================================================
+   Halloween in Villa — pagina dedicata. Mondo visivo a parte
+   (notturno, candele/ember) rispetto al core Magaparty: usa i
+   propri token --ink/--ember/--moss/--gold invece di --sm-*,
+   coerente con come ogni format Magaparty ha la sua palette.
+   ============================================================ */
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{background:var(--ink); color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0;}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+p{margin:0;}
+a{color:inherit;}
+img{max-width:100%;}
+.wrap{max-width:1180px; margin:0 auto; padding-inline:20px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1180px; margin:0 auto; }
+.topbar a{ font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted); text-decoration:none; }
+.topbar a:hover{ color:var(--gold); }
+
+.hero{ position:relative; padding-block:56px 64px; overflow:hidden; border-bottom:1px solid var(--line);
+  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,122,51,0.14), transparent 60%), var(--ink); }
+.ember-field{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+.ember-field span{ position:absolute; bottom:-20px; width:5px; height:5px; border-radius:50%; background:var(--ember); opacity:0.55; filter:blur(0.3px); animation: embers 9s linear infinite; }
+@keyframes embers{ 0%{transform:translateY(0) translateX(0); opacity:0;} 10%{opacity:0.6;} 100%{transform:translateY(-520px) translateX(var(--drift,20px)); opacity:0;} }
+.hero-inner{position:relative; z-index:1; text-align:center; animation:heroIn .9s ease-out both;}
+@keyframes heroIn{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+.eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:22px; }
+.eyebrow::before, .eyebrow::after{content:""; width:22px; height:1px; background:var(--ember); opacity:0.5;}
+.hero h1{ font-size:clamp(2.2rem, 5.6vw, 4.2rem); font-weight:600; line-height:1.05; letter-spacing:-0.01em; color:var(--bone); text-wrap:balance; }
+.hero h1 em{font-style:italic; color:var(--ember); font-weight:500;}
+.hero-sub{ max-width:46ch; margin:22px auto 0; font-size:16px; line-height:1.6; color:var(--muted); }
+.hero-cue{ margin-top:40px; display:inline-flex; flex-direction:column; align-items:center; gap:10px; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+.hero-cue .line{width:1px; height:34px; background:linear-gradient(to bottom, var(--gold), transparent); animation:pulseLine 2s ease-in-out infinite;}
+@keyframes pulseLine{ 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+
+.intro{padding-block:72px; border-bottom:1px solid var(--line);}
+.intro-grid{display:grid; grid-template-columns: 1fr; gap:28px; max-width:760px; margin:0 auto; text-align:center;}
+.intro h2{font-size:clamp(1.6rem,3vw,2.1rem); font-weight:600; color:var(--bone);}
+.intro p{color:var(--muted); line-height:1.7; font-size:15px;}
+.intro-tags{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:8px;}
+.tag{ font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:8px 14px; border:1px solid var(--line); border-radius:999px; color:var(--gold); }
+
+.storymap-head{padding-block:64px 8px; text-align:center;}
+.storymap-head .section-label{ display:block; font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:14px; }
+.storymap-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem); font-weight:600;}
+.storymap-head p{color:var(--muted); max-width:52ch; margin:16px auto 0; font-size:14.5px; line-height:1.7;}
+
+.legend{display:flex; gap:18px; flex-wrap:wrap; justify-content:center; margin:26px auto 0; font-size:11px; color:var(--muted);}
+.legend span{display:inline-flex; align-items:center; gap:7px;}
+.legend .dot{width:9px; height:9px; border-radius:50%; display:inline-block;}
+.legend .dot.avail{background:var(--moss); box-shadow:0 0 0 3px var(--moss-soft);}
+.legend .dot.occ{background:#5B5468;}
+.legend .dot.info{background:var(--gold); opacity:0.8;}
+
+.hw-storymap{ display:grid; grid-template-columns: 1fr; grid-template-areas: "stack"; padding-block: 20px 60px; }
+.hw-narrative{grid-area:stack; padding-top:min(68vw,420px); position:relative; z-index:1;}
+.hw-stage-col{ grid-area:stack; position:sticky; top:env(safe-area-inset-top,0px); align-self:start; z-index:3; padding-top:10px; }
+@media (min-width:900px){
+  .hw-storymap{grid-template-columns: 1.05fr 1fr; grid-template-areas: "narrative stage"; gap:56px;}
+  .hw-narrative{grid-area:narrative; padding-top:0;}
+  .hw-stage-col{grid-area:stage; top:32px; max-width:600px;}
+}
+
+.level-pills{display:flex; justify-content:center; gap:8px; margin-bottom:12px;}
+@media (min-width:900px){ .level-pills{justify-content:flex-start;} }
+.level-pill{ font-family:inherit; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s ease; }
+.level-pill.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+
+.hw-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden; background:var(--surface); border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
+.badge-demo{ position:absolute; top:10px; left:10px; z-index:5; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:rgba(14,10,20,0.7); border:1px solid var(--line); border-radius:999px; padding:5px 10px; backdrop-filter:blur(4px); }
+
+.floor-layer{ position:absolute; inset:0; opacity:0; pointer-events:none; transform-origin:50% 50%; transition:opacity .6s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.floor-layer.is-active{opacity:1; pointer-events:auto;}
+.hw-stage.is-zoomed .floor-layer{ transform:scale(1.55); }
+
+.floor-layer svg{position:absolute; inset:0; width:100%; height:100%; display:block;}
+.room-rect{fill:var(--surface-2); stroke:var(--line); stroke-width:1.5;}
+.room-rect.is-camera{fill:var(--ember-soft); stroke:var(--gold); stroke-opacity:0.55;}
+.room-code{fill:var(--gold); font-size:13px; opacity:0.75;}
+.room-label{fill:var(--bone); font-size:15px; text-anchor:middle; opacity:0.9;}
+.plan-outline{fill:none; stroke:var(--gold); stroke-width:2; stroke-opacity:0.4;}
+.compass{opacity:0.5;}
+.scalebar line{stroke:var(--muted); stroke-width:1.5;}
+.scalebar text{fill:var(--muted); font-size:11px;}
+
+.hw-pin{ position:absolute; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; border:none; padding:0; cursor:pointer; background:var(--gold); opacity:0.85; transition:transform .25s ease, box-shadow .25s ease; }
+.hw-pin:hover{transform:translate(-50%,-50%) scale(1.2);}
+.hw-pin.pin--camera{width:20px; height:20px;}
+.hw-pin.pin--camera.is-available{background:var(--moss); box-shadow:0 0 0 6px var(--moss-soft); animation:pinPulse 2.2s ease-in-out infinite;}
+.hw-pin.pin--camera.is-occupied{background:#5B5468; opacity:0.9;}
+@keyframes pinPulse{ 0%,100%{box-shadow:0 0 0 5px var(--moss-soft);} 50%{box-shadow:0 0 0 9px transparent;} }
+.hw-pin.spotlight{transform:translate(-50%,-50%) scale(1.35); z-index:4;}
+
+.hw-card{ position:absolute; left:12px; right:12px; bottom:12px; z-index:6; background:rgba(23,16,31,0.96); border:1px solid var(--line); border-radius:14px; padding:16px 16px 14px; backdrop-filter:blur(6px); transform:translateY(130%); opacity:0; transition:transform .35s cubic-bezier(.2,.8,.2,1), opacity .35s ease; pointer-events:none; }
+.hw-card.is-open{transform:translateY(0); opacity:1; pointer-events:auto;}
+.hw-card-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
+.hw-card .kind{font-size:9.5px; letter-spacing:0.16em; text-transform:uppercase;}
+.hw-card .kind.avail{color:var(--moss);}
+.hw-card .kind.occ{color:var(--muted);}
+.hw-card .kind.info{color:var(--gold);}
+.hw-card h4{font-size:17px; font-weight:600; margin-top:4px; color:var(--bone);}
+.hw-card p{font-size:12.5px; line-height:1.6; color:var(--muted); margin-top:8px;}
+.hw-card .note{font-size:10px; color:var(--muted); opacity:0.6; margin-top:10px;}
+.hw-card button.close{ background:none; border:none; color:var(--muted); font-size:18px; line-height:1; cursor:pointer; padding:2px; }
+
+.hw-beat{min-height:56vh; display:flex; flex-direction:column; justify-content:center; padding-block:7vh;}
+.hw-beat .section-label{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; display:block;}
+.hw-beat h3{font-size:clamp(1.3rem,2.6vw,1.8rem); font-weight:600; color:var(--bone);}
+.hw-beat p{margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--muted); max-width:46ch;}
+.status-chip{ display:inline-flex; align-items:center; gap:7px; margin-top:14px; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:6px 12px; border-radius:999px; border:1px solid var(--line); }
+.status-chip.avail{color:var(--moss); border-color:var(--moss-soft);}
+.status-chip.occ{color:var(--muted);}
+
+.closing{padding-block:70px 90px; text-align:center; border-top:1px solid var(--line);}
+.closing h2{font-size:clamp(1.5rem,3vw,2rem); font-weight:600;}
+.closing p{color:var(--muted); max-width:44ch; margin:16px auto 26px; font-size:14px; line-height:1.7;}
+.ghost-btn, .ghost-link{ display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; padding:13px 24px; border-radius:999px; border:1px solid var(--gold); color:var(--gold); background:transparent; cursor:pointer; transition:all .2s; text-decoration:none; }
+.ghost-btn:hover, .ghost-link:hover{background:var(--ember-soft); color:var(--ember); border-color:var(--ember);}
+.foot-note{margin-top:34px; font-size:10.5px; letter-spacing:0.08em; color:var(--muted); opacity:0.55;}
+
+/* ── LOGISTICA ── */
+.logi-head{padding-block:12px 8px; text-align:center;}
+.logi-grid{display:grid; grid-template-columns:1fr; gap:16px; padding-block:32px 60px;}
+@media (min-width:760px){ .logi-grid{grid-template-columns:repeat(3,1fr);} }
+.logi-card{
+  background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px 22px;
+  display:flex; flex-direction:column; gap:10px;
+}
+.logi-card .logi-icon{
+  width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  background:var(--ember-soft); color:var(--ember); font-size:17px; margin-bottom:4px;
+}
+.logi-card h4{font-size:16px; font-weight:600; color:var(--bone);}
+.logi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
+.logi-routes{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
+.logi-route{font-size:10px; letter-spacing:0.05em; padding:5px 10px; border-radius:999px; border:1px solid var(--line); color:var(--gold);}
+.logi-hotels{list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:4px;}
+.logi-hotels li{font-size:12px; color:var(--bone); display:flex; align-items:center; gap:7px;}
+.logi-hotels li::before{content:"✦"; color:var(--moss); font-size:9px;}
+.logi-note{font-size:10.5px; color:var(--muted); opacity:0.7; margin-top:2px; font-style:italic;}
+
+/* ── LOGISTICA 3D ── */
+.l3-storymap{ display:grid; grid-template-columns: 1fr; grid-template-areas: "stack"; padding-block: 10px 60px; }
+.l3-narrative{grid-area:stack; padding-top:min(60vw,360px); position:relative; z-index:1;}
+.l3-stage-col{ grid-area:stack; position:sticky; top:env(safe-area-inset-top,0px); align-self:start; z-index:3; padding-top:10px; }
+@media (min-width:900px){
+  .l3-storymap{grid-template-columns: 1.05fr 1fr; grid-template-areas: "narrative stage"; gap:56px;}
+  .l3-narrative{grid-area:narrative; padding-top:0;}
+  .l3-stage-col{grid-area:stage; top:32px; max-width:600px;}
+}
+.l3-tabs{display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+@media (min-width:900px){ .l3-tabs{justify-content:flex-start;} }
+.l3-tab{ font-family:inherit; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:9px 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s ease; }
+.l3-tab.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+
+.l3-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden; background:linear-gradient(180deg, var(--surface), var(--ink)); border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
+.l3-stage canvas{position:absolute; inset:0; width:100%; height:100%; display:block;}
+.l3-pins{position:absolute; inset:0; pointer-events:none;}
+.l3-pin{ position:absolute; transform:translate(-50%,-100%); display:flex; flex-direction:column; align-items:center; gap:4px; pointer-events:none; opacity:0; transition:opacity .4s ease; z-index:4; top:0; left:0; }
+.l3-pin.is-visible{opacity:1;}
+.l3-pin .dot{width:9px; height:9px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 5px rgba(216,182,107,0.18); align-self:center;}
+.l3-pin.is-active .dot{background:var(--ember); box-shadow:0 0 0 6px var(--ember-soft); animation:pinPulse 2s ease-in-out infinite;}
+.l3-pin .label{font-size:9.5px; letter-spacing:0.04em; background:rgba(14,10,20,0.85); color:var(--bone); padding:4px 9px; border-radius:999px; border:1px solid var(--line); white-space:nowrap; backdrop-filter:blur(4px);}
+
+.l3-beat{min-height:50vh; display:flex; flex-direction:column; justify-content:center; padding-block:6vh;}
+.l3-beat .section-label{font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; display:block;}
+.l3-beat h3{font-size:clamp(1.25rem,2.4vw,1.7rem); font-weight:600; color:var(--bone);}
+.l3-beat p{margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--muted); max-width:46ch;}
+.l3-chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:14px;}
+.l3-chip{font-size:10px; letter-spacing:0.06em; padding:6px 11px; border-radius:999px; border:1px solid var(--line); color:var(--gold);}
+.l3-loading{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:var(--surface); transition:opacity .5s ease; text-align:center; padding:20px;}
+.l3-loading.is-hidden{opacity:0; pointer-events:none;}
+
+/* ── NAV BAR (sticky, sezioni di pagina) ── */
+.hw-nav{ position:sticky; top:0; z-index:30; background:rgba(14,10,20,0.86); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+.hw-nav-inner{ display:flex; align-items:center; gap:8px; overflow-x:auto; padding:12px 20px; max-width:1180px; margin:0 auto; scrollbar-width:none; }
+.hw-nav-inner::-webkit-scrollbar{ display:none; }
+.hw-nav-pill{ flex:none; font-family:inherit; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer; transition:all .2s ease; text-decoration:none; white-space:nowrap; }
+.hw-nav-pill.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+.hw-nav-pill:hover:not(.is-active){ border-color:var(--gold); color:var(--bone); }
+
+/* ── COUNTDOWN ── */
+.countdown-strip{ padding-block:0 56px; }
+.countdown-card{ max-width:560px; margin:0 auto; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:26px 22px; text-align:center; box-shadow:0 30px 60px -30px rgba(255,122,51,0.25); }
+.countdown-label{ font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:18px; display:block; }
+.countdown-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding-top:16px; border-top:1px solid var(--line); }
+.countdown-grid .num{ display:block; font-family:'Fraunces', Georgia, serif; font-size:28px; font-weight:600; color:var(--gold); }
+.countdown-grid .unit{ font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); opacity:0.7; }
+.countdown-live{ display:none; }
+.countdown-live .pulse-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ember); animation:pinPulse 1.6s ease-in-out infinite; margin-right:8px; }
+.countdown-live p{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+/* ── PREZZI ── */
+.prezzi-head{padding-block:64px 8px; text-align:center;}
+.prezzi-grid{display:grid; grid-template-columns:1fr; gap:16px; padding-block:32px 70px;}
+@media (min-width:760px){ .prezzi-grid{grid-template-columns:repeat(2,1fr);} }
+.prezzi-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px 22px; display:flex; flex-direction:column; gap:8px; position:relative; }
+.prezzi-card h4{font-size:16px; font-weight:600; color:var(--bone); display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.prezzi-card .price{ font-family:'Fraunces', Georgia, serif; font-size:26px; font-weight:600; color:var(--gold); }
+.prezzi-card .price .tbd{ font-size:13px; font-family:'Work Sans', sans-serif; color:var(--muted); font-weight:500; }
+.prezzi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
+.tbd-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--ember-soft); color:var(--ember); width:fit-content; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Magaparty</a>
+  <a href="../index.html">Magaverse</a>
+</div>
+
+<nav class="hw-nav" aria-label="Sezioni della pagina">
+  <div class="hw-nav-inner" id="hwNavInner">
+    <a href="#info" class="hw-nav-pill" data-nav="info">Info</a>
+    <a href="#planimetria" class="hw-nav-pill" data-nav="planimetria">Planimetria</a>
+    <button type="button" class="hw-nav-pill" data-nav="navetta" data-scroll-scene="navetta">Navetta</button>
+    <button type="button" class="hw-nav-pill" data-nav="hotel" data-scroll-scene="hotel">Dove dormire</button>
+    <button type="button" class="hw-nav-pill" data-nav="saltafila" data-scroll-scene="saltafila">Saltafila</button>
+    <a href="#prezzi" class="hw-nav-pill" data-nav="prezzi">Prezzi</a>
+  </div>
+</nav>
+
+<section class="hero" id="info">
+  <div class="ember-field" aria-hidden="true">
+    <span style="left:8%; --drift:14px; animation-delay:0s;"></span>
+    <span style="left:18%; --drift:-10px; animation-delay:1.1s;"></span>
+    <span style="left:30%; --drift:18px; animation-delay:2.3s;"></span>
+    <span style="left:44%; --drift:-16px; animation-delay:0.6s;"></span>
+    <span style="left:58%; --drift:12px; animation-delay:3.1s;"></span>
+    <span style="left:70%; --drift:-14px; animation-delay:1.8s;"></span>
+    <span style="left:81%; --drift:10px; animation-delay:4s;"></span>
+    <span style="left:92%; --drift:-8px; animation-delay:2.7s;"></span>
+    <span style="left:50%; --drift:20px; animation-delay:5s;"></span>
+    <span style="left:24%; --drift:-20px; animation-delay:4.4s;"></span>
+  </div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Magaparty · Capitolo 5 · 31 Ottobre</span>
+    <h1>La villa si risveglia<br><em>una notte all'anno.</em></h1>
+    <p class="hero-sub">Tre livelli, dieci stanze, una festa che non finisce al piano terra. Scorri per entrare nella planimetria — ogni stanza racconta la sua parte di notte.</p>
+    <span class="hero-cue">Scorri<span class="line"></span></span>
+  </div>
+</section>
+
+<section class="countdown-strip wrap">
+  <div class="countdown-card">
+    <div id="countdownPending">
+      <span class="countdown-label">Halloween in Villa tra</span>
+      <div class="countdown-grid">
+        <div><span class="num" id="cdDays">00</span><span class="unit">Giorni</span></div>
+        <div><span class="num" id="cdHours">00</span><span class="unit">Ore</span></div>
+        <div><span class="num" id="cdMin">00</span><span class="unit">Min</span></div>
+        <div><span class="num" id="cdSec">00</span><span class="unit">Sec</span></div>
+      </div>
+    </div>
+    <div id="countdownLive" class="countdown-live">
+      <span class="pulse-dot"></span><span class="eyebrow" style="margin:0;display:inline;">La villa è viva, stanotte</span>
+      <p>31 Ottobre — l'evento è in corso.</p>
+    </div>
+  </div>
+</section>
+
+<section class="intro">
+  <div class="wrap intro-grid">
+    <h2>Non è solo una mappa. È la villa che parla.</h2>
+    <p>
+      Quella che segue è una planimetria interattiva a più livelli,
+      pensata per raccontare la villa di Halloween piano per piano mentre si scorre la pagina —
+      <strong style="color:var(--bone)">scrollytelling</strong> e <strong style="color:var(--bone)">mappa parlante</strong>.
+    </p>
+    <div class="intro-tags">
+      <span class="tag">Planimetria multi-livello</span>
+      <span class="tag">Animazioni allo scroll</span>
+      <span class="tag">Pin cliccabili</span>
+    </div>
+  </div>
+</section>
+
+<section class="storymap-head wrap" id="planimetria">
+  <span class="section-label">Planimetria interattiva</span>
+  <h2>Esplora la villa, piano per piano</h2>
+  <p>Ogni stanza ha un pin. I pin ambra segnano gli spazi comuni della festa; i pin verdi o grigi segnano le camere — disponibili o già affittate per questa edizione.</p>
+  <div class="legend">
+    <span><i class="dot avail"></i>Camera disponibile</span>
+    <span><i class="dot occ"></i>Camera occupata</span>
+    <span><i class="dot info"></i>Spazio comune</span>
+  </div>
+</section>
+
+<section class="hw-storymap wrap">
+
+  <div class="hw-narrative">
+
+    <article class="hw-beat" data-level="terra">
+      <span class="section-label">Piano Terra</span>
+      <h3>Il cancello si apre sul buio del giardino</h3>
+      <p>Dentro, la villa è già viva: luci calde alle finestre, musica che filtra dalle porte, zucche accese lungo il viale. Il piano terra è il cuore della festa — ingresso, salone, cucina, terrazza: tutto lo spazio comune si muove su questo livello.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="15.0" data-focus-y="23.6" data-pin="pin-ingresso">
+      <span class="section-label">01 · Ingresso</span>
+      <h3>Si entra da qui</h3>
+      <p>Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="45.5" data-focus-y="23.6" data-pin="pin-salone">
+      <span class="section-label">02 · Salone Principale</span>
+      <h3>Il centro gravitazionale della serata</h3>
+      <p>Dj set, luci basse, la pista che non si vuota mai del tutto. Qualunque sia il piano della serata, prima o poi si torna sempre qui.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="23.5" data-focus-y="66.4" data-pin="pin-cucina">
+      <span class="section-label">04 · Cucina &amp; Sala da Pranzo</span>
+      <h3>Il buffet di Ognissanti</h3>
+      <p>Dalla cucina esce il necessario — zucca, vino caldo, dolci a forma di cosa-non-si-sa. La sala da pranzo accoglie chi preferisce sedersi un momento prima di tornare in pista.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="80.5" data-focus-y="23.6" data-pin="pin-terrazza">
+      <span class="section-label">03 · Terrazza Coperta</span>
+      <h3>Dove si prende aria</h3>
+      <p>La terrazza guarda il giardino: il posto giusto per una pausa, una sigaretta, o una conversazione lontano dalle casse.</p>
+    </article>
+
+    <article class="hw-beat" data-level="primo">
+      <span class="section-label">Primo Piano</span>
+      <h3>Si sale, e la festa cambia forma</h3>
+      <p>Il primo piano è dove la villa smette di essere solo festa e diventa anche un posto per restare — le camere da cui, domani, si guarderà il giardino ancora addormentato. Queste sono le stanze pensate per essere affittate per la notte.</p>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="24.0" data-focus-y="27.9" data-pin="pin-suite">
+      <span class="section-label">01 · Suite Padronale</span>
+      <h3>La più grande del piano</h3>
+      <p>Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso. Per questa edizione è già stata prenotata.</p>
+      <span class="status-chip occ">Occupata</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="56.5" data-focus-y="27.9" data-pin="pin-camerablu">
+      <span class="section-label">02 · Camera Blu</span>
+      <h3>Due posti, toni notturni</h3>
+      <p>Finestra sul retro della villa, lontana dal salone. Ancora libera per chi arriva da fuori e vuole restare fino a mattina.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="82.5" data-focus-y="27.9" data-pin="pin-cameraverde">
+      <span class="section-label">03 · Camera Verde</span>
+      <h3>Specchio della Camera Blu</h3>
+      <p>Stessa quiete, sull'altro lato del corridoio: vista sul giardino invece che sul vialetto.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="primo" data-focus-x="65.0" data-focus-y="70.7" data-pin="pin-terrazzino">
+      <span class="section-label">05 · Terrazzino</span>
+      <h3>Metà camera, metà balcone</h3>
+      <p>La stanza più particolare del piano: pensata per chi vuole dormire quasi all'aperto, sotto la luna di fine ottobre.</p>
+      <span class="status-chip avail">Disponibile</span>
+    </article>
+
+    <article class="hw-beat" data-level="giardino">
+      <span class="section-label">Giardino &amp; Piscina</span>
+      <h3>Si torna giù, ma non dentro</h3>
+      <p>Il giardino è il terzo livello della villa — quello senza soffitto: piscina, gazebo, un falò per chi non ha ancora sonno.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="31.0" data-focus-y="30.7" data-pin="pin-piscina">
+      <span class="section-label">01 · Piscina</span>
+      <h3>Più scenografia che bagno</h3>
+      <p>Illuminata di notte, è il punto fermo delle foto — ma qualcuno, ogni anno, ci finisce dentro vestito.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="76.0" data-focus-y="30.7" data-pin="pin-gazebo">
+      <span class="section-label">02 · Gazebo &amp; Falò</span>
+      <h3>Per chi vuole stare fermo</h3>
+      <p>Una chiacchierata, un bicchiere, il fuoco che sostituisce la musica per un po'.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="80.0" data-focus-y="73.6" data-pin="pin-parcheggio">
+      <span class="section-label">04 · Parcheggio</span>
+      <h3>L'unica stanza senza storia</h3>
+      <p>Ma è lì che la notte, per qualcuno, finisce — o comincia, se arriva solo adesso.</p>
+    </article>
+
+  </div>
+
+  <div class="hw-stage-col">
+    <div class="level-pills">
+      <button class="level-pill" data-goto="terra">Piano Terra</button>
+      <button class="level-pill" data-goto="primo">Primo Piano</button>
+      <button class="level-pill" data-goto="giardino">Giardino</button>
+    </div>
+
+    <div class="hw-stage" id="stage">
+
+      <!-- PIANO TERRA -->
+      <div class="floor-layer is-active" data-layer="terra">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect" x="50" y="50" width="200" height="230"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="150" y="175">Ingresso</text>
+          <rect class="room-rect" x="250" y="50" width="410" height="230"></rect>
+          <text class="room-code mono" x="264" y="76">02</text>
+          <text class="room-label" x="455" y="175">Salone Principale</text>
+          <rect class="room-rect" x="660" y="50" width="290" height="230"></rect>
+          <text class="room-code mono" x="674" y="76">03</text>
+          <text class="room-label" x="805" y="175">Terrazza Coperta</text>
+          <rect class="room-rect" x="50" y="280" width="370" height="370"></rect>
+          <text class="room-code mono" x="64" y="306">04</text>
+          <text class="room-label" x="235" y="475">Cucina</text>
+          <rect class="room-rect" x="420" y="280" width="530" height="370"></rect>
+          <text class="room-code mono" x="434" y="306">05</text>
+          <text class="room-label" x="685" y="475">Sala da Pranzo</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--info" id="pin-ingresso" style="left:15.0%; top:23.6%" data-kind="info" data-name="Ingresso" data-desc="Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva." aria-label="Ingresso"></button>
+          <button class="hw-pin pin--info" id="pin-salone" style="left:45.5%; top:23.6%" data-kind="info" data-name="Salone Principale" data-desc="Dj set, luci basse: il centro gravitazionale della serata, dove tutti tornano prima o poi." aria-label="Salone Principale"></button>
+          <button class="hw-pin pin--info" id="pin-terrazza" style="left:80.5%; top:23.6%" data-kind="info" data-name="Terrazza Coperta" data-desc="Guarda il giardino: il posto giusto per prendere aria lontano dalle casse." aria-label="Terrazza Coperta"></button>
+          <button class="hw-pin pin--info" id="pin-cucina" style="left:23.5%; top:66.4%" data-kind="info" data-name="Cucina" data-desc="Da qui esce il buffet di Ognissanti: zucca, vino caldo, dolci a forma di cosa-non-si-sa." aria-label="Cucina"></button>
+          <button class="hw-pin pin--info" id="pin-salapranzo" style="left:68.5%; top:66.4%" data-kind="info" data-name="Sala da Pranzo" data-desc="Per chi preferisce sedersi un momento prima di tornare in pista." aria-label="Sala da Pranzo"></button>
+        </div>
+      </div>
+
+      <!-- PRIMO PIANO -->
+      <div class="floor-layer" data-layer="primo">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect is-camera" x="50" y="50" width="380" height="290"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="240" y="200">Suite Padronale</text>
+          <rect class="room-rect is-camera" x="430" y="50" width="270" height="290"></rect>
+          <text class="room-code mono" x="444" y="76">02</text>
+          <text class="room-label" x="565" y="200">Camera Blu</text>
+          <rect class="room-rect is-camera" x="700" y="50" width="250" height="290"></rect>
+          <text class="room-code mono" x="714" y="76">03</text>
+          <text class="room-label" x="825" y="200">Camera Verde</text>
+          <rect class="room-rect" x="50" y="340" width="300" height="310"></rect>
+          <text class="room-code mono" x="64" y="366">04</text>
+          <text class="room-label" x="200" y="500">Bagno Comune</text>
+          <rect class="room-rect is-camera" x="350" y="340" width="600" height="310"></rect>
+          <text class="room-code mono" x="364" y="366">05</text>
+          <text class="room-label" x="650" y="500">Terrazzino</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--camera is-occupied" id="pin-suite" style="left:24.0%; top:27.9%" data-kind="occ" data-name="Suite Padronale" data-desc="Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso." aria-label="Suite Padronale, occupata"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-camerablu" style="left:56.5%; top:27.9%" data-kind="avail" data-name="Camera Blu" data-desc="Due posti letto, toni notturni, finestra sul retro della villa." aria-label="Camera Blu, disponibile"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-cameraverde" style="left:82.5%; top:27.9%" data-kind="avail" data-name="Camera Verde" data-desc="Stessa quiete della Camera Blu, vista sul giardino." aria-label="Camera Verde, disponibile"></button>
+          <button class="hw-pin pin--info" id="pin-bagno" style="left:20.0%; top:70.7%" data-kind="info" data-name="Bagno Comune" data-desc="A servizio delle camere del piano." aria-label="Bagno Comune"></button>
+          <button class="hw-pin pin--camera is-available" id="pin-terrazzino" style="left:65.0%; top:70.7%" data-kind="avail" data-name="Terrazzino" data-desc="Metà camera, metà balcone coperto: per dormire quasi all'aperto." aria-label="Terrazzino, disponibile"></button>
+        </div>
+      </div>
+
+      <!-- GIARDINO -->
+      <div class="floor-layer" data-layer="giardino">
+        <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="room-rect" x="50" y="50" width="520" height="330"></rect>
+          <text class="room-code mono" x="64" y="76">01</text>
+          <text class="room-label" x="310" y="220">Piscina</text>
+          <rect class="room-rect" x="570" y="50" width="380" height="330"></rect>
+          <text class="room-code mono" x="584" y="76">02</text>
+          <text class="room-label" x="760" y="220">Gazebo</text>
+          <rect class="room-rect" x="50" y="380" width="600" height="270"></rect>
+          <text class="room-code mono" x="64" y="406">03</text>
+          <text class="room-label" x="350" y="520">Prato &amp; Falò</text>
+          <rect class="room-rect" x="650" y="380" width="300" height="270"></rect>
+          <text class="room-code mono" x="664" y="406">04</text>
+          <text class="room-label" x="800" y="520">Parcheggio</text>
+          <g class="compass" transform="translate(905,90)">
+            <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
+            <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
+            <text x="0" y="-22" text-anchor="middle" class="mono" fill="var(--gold)" font-size="11">N</text>
+          </g>
+          <g class="scalebar" transform="translate(70,618)">
+            <line x1="0" y1="0" x2="60" y2="0"></line>
+            <line x1="0" y1="-4" x2="0" y2="4"></line>
+            <line x1="60" y1="-4" x2="60" y2="4"></line>
+            <text x="30" y="16" text-anchor="middle">5 m</text>
+          </g>
+        </svg>
+        <div class="pins">
+          <button class="hw-pin pin--info" id="pin-piscina" style="left:31.0%; top:30.7%" data-kind="info" data-name="Piscina" data-desc="Illuminata di notte, più scenografia che bagno — ma qualcuno ci finisce dentro vestito." aria-label="Piscina"></button>
+          <button class="hw-pin pin--info" id="pin-gazebo" style="left:76.0%; top:30.7%" data-kind="info" data-name="Gazebo" data-desc="Per chi vuole stare fermo con una chiacchierata e un bicchiere." aria-label="Gazebo"></button>
+          <button class="hw-pin pin--info" id="pin-pratofalo" style="left:35.0%; top:73.6%" data-kind="info" data-name="Prato &amp; Falò" data-desc="Il fuoco che sostituisce la musica per un po'." aria-label="Prato e Falò"></button>
+          <button class="hw-pin pin--info" id="pin-parcheggio" style="left:80.0%; top:73.6%" data-kind="info" data-name="Parcheggio" data-desc="Dove la notte, per qualcuno, finisce o comincia." aria-label="Parcheggio"></button>
+        </div>
+      </div>
+
+      <div class="hw-card" id="roomCard">
+        <div class="hw-card-top">
+          <div>
+            <span class="kind" id="roomCardKind">Spazio comune</span>
+            <h4 id="roomCardName">—</h4>
+          </div>
+          <button class="close" id="roomCardClose" aria-label="Chiudi">&times;</button>
+        </div>
+        <p id="roomCardDesc"></p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap logi-head reveal">
+  <span class="section-label">Come arrivare, dove dormire, come entrare</span>
+  <h2>Oltre la villa: la serata pensata fino in fondo</h2>
+  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione. Scorri per seguire la navetta, girare tra le strutture partner e vedere come funziona il saltafila.</p>
+</section>
+
+<section class="l3-storymap wrap">
+
+  <div class="l3-narrative">
+
+    <article class="l3-beat" data-scene="navetta">
+      <span class="section-label">La navetta</span>
+      <h3>Non serve l'auto per arrivare</h3>
+      <p>Per questa edizione la navetta è ufficiale: un mezzo da 30 posti che fa la spola dai punti di ritrovo principali fino al cancello della villa. Si sale, ci si siede, si arriva.</p>
+      <div class="l3-chips"><span class="l3-chip">30 posti</span><span class="l3-chip">5 fermate</span><span class="l3-chip">Mezzo unico</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="0">
+      <span class="section-label">Fermata 1 · Baronissi</span>
+      <h3>Si parte da Baronissi</h3>
+      <p>Primo punto di ritrovo della serata: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="1">
+      <span class="section-label">Fermata 2 · Fisciano</span>
+      <h3>Si passa da Fisciano</h3>
+      <p>La navetta prosegue verso Fisciano, un altro gruppo sale a bordo — comodo per chi viene dall'università.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="2">
+      <span class="section-label">Fermata 3 · Salerno Centro</span>
+      <h3>Il cuore della città</h3>
+      <p>La fermata più centrale, pensata per chi arriva da fuori Salerno o preferisce non guidare fino in villa.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="3">
+      <span class="section-label">Fermata 4 · Pastena</span>
+      <h3>Si continua verso Pastena</h3>
+      <p>Penultima tappa prima della villa: la navetta è ormai quasi al completo.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-stop="4">
+      <span class="section-label">Fermata 5 · Torrione</span>
+      <h3>Ultima fermata: Torrione</h3>
+      <p>L'ultimo gruppo sale a bordo. Da qui, dritti in villa.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="navetta" data-explode="true">
+      <span class="section-label">A bordo</span>
+      <h3>Trenta posti, un solo viaggio</h3>
+      <p>Il mezzo arriva in villa: trenta posti a sedere, nessuno lasciato alla fermata.</p>
+      <div class="l3-chips"><span class="l3-chip">30/30 posti confermati</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel">
+      <span class="section-label">Dove dormire</span>
+      <h3>Il check-in non è un problema</h3>
+      <p>Per chi non vuole guidare dopo la festa, alcune strutture partner tengono delle camere bloccate per gli ospiti dell'evento. Il check-in resta a carico della struttura scelta — a voi resta solo scegliere dove svegliarvi.</p>
+      <div class="l3-chips"><span class="l3-chip">4 strutture partner</span><span class="l3-chip">Camere bloccate</span></div>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="0">
+      <span class="section-label">Partner 1</span>
+      <h3>Hotel Ancora</h3>
+      <p>Camere riservate agli ospiti Magaparty per questa edizione, check-in gestito direttamente dalla struttura.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="1">
+      <span class="section-label">Partner 2</span>
+      <h3>Villa Belvedere</h3>
+      <p>Un'altra struttura con camere bloccate per chi partecipa alla serata e vuole fermarsi a dormire.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="2">
+      <span class="section-label">Partner 3</span>
+      <h3>Villa Cavallo</h3>
+      <p>Stesso meccanismo: posti riservati, nessuna pratica da sbrigare con Magaparty.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="hotel" data-hotel="3">
+      <span class="section-label">Partner 4</span>
+      <h3>B&amp;B Calypso</h3>
+      <p>L'ultima struttura partner della lista, stesse condizioni delle altre.</p>
+    </article>
+
+    <article class="l3-beat" data-scene="saltafila">
+      <span class="section-label">Saltafila</span>
+      <h3>Chi non vuole aspettare in fila</h3>
+      <p>Un ingresso prioritario per chi preferisce evitare la coda principale: si salta la fila d'ingresso e si entra subito.</p>
+      <div class="l3-chips"><span class="l3-chip">Dettagli e costo in arrivo con le prenotazioni</span></div>
+    </article>
+
+  </div>
+
+  <div class="l3-stage-col">
+    <div class="l3-tabs">
+      <button class="l3-tab" data-goto="navetta">Navetta</button>
+      <button class="l3-tab" data-goto="hotel">Dove dormire</button>
+      <button class="l3-tab" data-goto="saltafila">Saltafila</button>
+    </div>
+
+    <div class="l3-stage" id="l3Stage">
+      <canvas id="l3Canvas"></canvas>
+      <div class="l3-pins" id="l3Pins">
+        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Baronissi</span></div>
+        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Fisciano</span></div>
+        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Salerno Centro</span></div>
+        <div class="l3-pin" data-pin="navetta-3"><span class="dot"></span><span class="label">Pastena</span></div>
+        <div class="l3-pin" data-pin="navetta-4"><span class="dot"></span><span class="label">Torrione</span></div>
+        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Hotel Ancora</span></div>
+        <div class="l3-pin" data-pin="hotel-1"><span class="dot"></span><span class="label">Villa Belvedere</span></div>
+        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Villa Cavallo</span></div>
+        <div class="l3-pin" data-pin="hotel-3"><span class="dot"></span><span class="label">B&amp;B Calypso</span></div>
+      </div>
+      <div class="l3-loading" id="l3Loading">Carico la scena 3D…</div>
+    </div>
+  </div>
+
+</section>
+
+<section class="wrap prezzi-head" id="prezzi">
+  <span class="section-label">Quanto costa</span>
+  <h2>Prezzi</h2>
+  <p>I numeri definitivi arrivano con l'apertura delle prenotazioni — qui sotto trovi lo schema aggiornato in tempo reale.</p>
+</section>
+
+<section class="wrap prezzi-grid">
+  <div class="prezzi-card">
+    <h4>Biglietto base <span class="tbd-chip">Da confermare</span></h4>
+    <span class="price"><span class="tbd">—</span></span>
+    <p>L'ingresso alla festa. Acquistabile online, senza bisogno di registrarti alla piattaforma.</p>
+  </div>
+  <div class="prezzi-card">
+    <h4>Bracciale saltafila <span class="tbd-chip">Da confermare</span></h4>
+    <span class="price"><span class="tbd">—</span></span>
+    <p>Upgrade opzionale: salti la fila principale ed entri subito. Vedi la sezione <a href="#saltafila" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;saltafila&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Saltafila</a>.</p>
+  </div>
+  <div class="prezzi-card">
+    <h4>Navetta <span class="tbd-chip">Da confermare</span></h4>
+    <span class="price"><span class="tbd">—</span></span>
+    <p>Fermate e orari in via di conferma. Vedi la sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a> per il percorso.</p>
+  </div>
+  <div class="prezzi-card">
+    <h4>Dove dormire <span class="tbd-chip">Da confermare</span></h4>
+    <span class="price"><span class="tbd">da —</span></span>
+    <p>Appartamenti convenzionati, elenco e prezzi per stanza in arrivo. Vedi la sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;hotel&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Dove dormire</a>.</p>
+  </div>
+</section>
+
+<section class="closing wrap">
+  <h2>La villa ti aspetta.</h2>
+  <p>Planimetria, navetta, alloggi e saltafila — tutto quello che ti serve per organizzare la notte è qui sopra. Scorri pure da capo, o torna alla pagina dell'evento per i dettagli.</p>
+  <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+    <button class="ghost-btn" id="restartBtn">Torna all'inizio ↑</button>
+    <a class="ghost-link" href="index.html">← Torna a Magaparty</a>
+  </div>
+  <div class="foot-note">Magaverse · Halloween in Villa</div>
+</section>
+
+<script>
+(function(){
+  var stage = document.getElementById('stage');
+  var layers = {};
+  document.querySelectorAll('.floor-layer').forEach(function(el){ layers[el.dataset.layer] = el; });
+  var pills = document.querySelectorAll('.level-pill');
+  var card = document.getElementById('roomCard');
+  var cardKind = document.getElementById('roomCardKind');
+  var cardName = document.getElementById('roomCardName');
+  var cardDesc = document.getElementById('roomCardDesc');
+  var openPinId = null;
+  var currentLevel = 'terra';
+  var currentSpotlight = null;
+
+  function setLevel(level){
+    if (level === currentLevel) return;
+    currentLevel = level;
+    Object.keys(layers).forEach(function(k){
+      layers[k].classList.toggle('is-active', k === level);
+    });
+    pills.forEach(function(p){ p.classList.toggle('is-active', p.dataset.goto === level); });
+  }
+
+  function setFocus(x, y){
+    if (x == null || y == null){
+      stage.classList.remove('is-zoomed');
+      Object.keys(layers).forEach(function(k){ layers[k].style.transformOrigin = '50% 50%'; });
+    } else {
+      Object.keys(layers).forEach(function(k){ layers[k].style.transformOrigin = x + '% ' + y + '%'; });
+      stage.classList.add('is-zoomed');
+    }
+  }
+
+  function setSpotlight(pinId){
+    if (currentSpotlight) currentSpotlight.classList.remove('spotlight');
+    currentSpotlight = pinId ? document.getElementById(pinId) : null;
+    if (currentSpotlight) currentSpotlight.classList.add('spotlight');
+  }
+
+  function openCard(btn){
+    var kind = btn.dataset.kind;
+    cardKind.textContent = kind === 'avail' ? 'Camera disponibile' : kind === 'occ' ? 'Camera occupata' : 'Spazio comune';
+    cardKind.className = 'kind ' + kind;
+    cardName.textContent = btn.dataset.name;
+    cardDesc.textContent = btn.dataset.desc;
+    card.classList.add('is-open');
+    openPinId = btn.id;
+  }
+  function closeCard(){
+    card.classList.remove('is-open');
+    openPinId = null;
+  }
+
+  document.querySelectorAll('.hw-pin').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (openPinId === btn.id) { closeCard(); } else { openCard(btn); }
+    });
+  });
+  document.getElementById('roomCardClose').addEventListener('click', closeCard);
+
+  pills.forEach(function(p){
+    p.addEventListener('click', function(){
+      var first = document.querySelector('.hw-beat[data-level="' + p.dataset.goto + '"]');
+      if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+  });
+
+  document.getElementById('restartBtn').addEventListener('click', function(){
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  var beats = document.querySelectorAll('.hw-beat');
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      var beat = entry.target;
+      setLevel(beat.dataset.level);
+      var fx = beat.dataset.focusX, fy = beat.dataset.focusY;
+      setFocus(fx ? parseFloat(fx) : null, fy ? parseFloat(fy) : null);
+      setSpotlight(beat.dataset.pin || null);
+    });
+  }, { rootMargin: '-48% 0px -48% 0px', threshold: 0 });
+  beats.forEach(function(b){ observer.observe(b); });
+
+  pills[0].classList.add('is-active');
+})();
+</script>
+
+<script>
+window.addEventListener('DOMContentLoaded', function(){
+  'use strict';
+  if (typeof THREE === 'undefined') {
+    var loadingEl0 = document.getElementById('l3Loading');
+    if (loadingEl0) loadingEl0.textContent = 'Scena 3D non disponibile in questo browser.';
+    return;
+  }
+
+  var stageEl = document.getElementById('l3Stage');
+  var canvas = document.getElementById('l3Canvas');
+  var loadingEl = document.getElementById('l3Loading');
+  var pinsRoot = document.getElementById('l3Pins');
+  var l3PinEls = {};
+  pinsRoot.querySelectorAll('.l3-pin').forEach(function(el){ l3PinEls[el.dataset.pin] = el; });
+
+  var renderer, scene, camera, clock;
+  var composer, bloomComposer, bloomPass, mixPass;
+  var BLOOM_LAYER = 1;
+  var bloomLayer = null;
+  var darkMaterial = null;
+  var bloomDarkenedMats = {};
+  var W = 1, H = 1;
+
+  var state = {
+    activeScene: 'navetta',
+    camCurrentPos: new THREE.Vector3(-2, 2.0, 2.6),
+    camCurrentLook: new THREE.Vector3(1.0, 0.3, 0),
+    camTargetPos: new THREE.Vector3(-2, 2.0, 2.6),
+    camTargetLook: new THREE.Vector3(1.0, 0.3, 0)
+  };
+
+  var navetta = { state: { t: 0.09, targetT: 0.09, explode: 0, targetExplode: 0 }, activeStop: -1 };
+  var hotels = [];
+  var hotelScene = { activeIndex: -1 };
+  var saltafila = { phase: 0 };
+
+  /* ───────── PALETTE: apocalisse zombie (spooky-fun stilizzato) ───────── */
+  var PAL = {
+    toxic: 0x8FD13F,
+    toxicGlow: 0x274d12,
+    rust: 0x8a5a3a,
+    rustDark: 0x5a3a24,
+    concrete: 0x52503f,
+    concreteDark: 0x3a382b,
+    hazardYellow: 0xE8C23A,
+    hazardBlack: 0x18160f,
+    zombieSkin: 0x7a9a5c,
+    zombieSkinGlow: 0x5a8a3c,
+    tatters: 0x3a3832,
+    fog: 0x15200f
+  };
+
+  /* ───────── canvas-drawn icon textures (no external assets) ───────── */
+  function makeIconTexture(drawFn){
+    var c = document.createElement('canvas');
+    c.width = 128; c.height = 128;
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 128, 128);
+    ctx.fillStyle = '#17150e';
+    ctx.beginPath();
+    ctx.arc(64, 64, 60, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#E8C23A';
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    drawFn(ctx);
+    var tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  function drawRadiationIcon(ctx){
+    ctx.save();
+    ctx.translate(64, 64);
+    ctx.fillStyle = '#E8C23A';
+    ctx.beginPath(); ctx.arc(0, 0, 9, 0, Math.PI * 2); ctx.fill();
+    for (var i = 0; i < 3; i++){
+      ctx.save();
+      ctx.rotate(i * Math.PI * 2 / 3 + Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.arc(0, 0, 36, -Math.PI / 7, Math.PI / 7);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+  function drawSkullIcon(ctx){
+    ctx.fillStyle = '#e9ecdf';
+    ctx.beginPath();
+    ctx.arc(64, 54, 30, Math.PI, 0);
+    ctx.lineTo(90, 76);
+    ctx.quadraticCurveTo(64, 92, 38, 76);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#17150e';
+    ctx.beginPath(); ctx.arc(50, 56, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(78, 56, 8, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(64, 64); ctx.lineTo(58, 75); ctx.lineTo(70, 75); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#e9ecdf';
+    for (var i = 0; i < 5; i++) ctx.fillRect(44 + i * 8, 79, 6, 10);
+  }
+
+  /* ───────── reusable zombie figure ───────── */
+  /* geometry + materials built once at canonical size (scale 1) and shared
+     across every zombie instance — root group is scaled per-call instead,
+     so ~39 figures on screen cost one GPU upload each, not thirty-nine */
+  var ZGEO = null, ZMAT = null;
+  function ensureZombieAssets(){
+    if (ZGEO) return;
+    ZGEO = {
+      thigh: new THREE.CylinderGeometry(0.016, 0.014, 0.07, 6),
+      shin: new THREE.CylinderGeometry(0.013, 0.011, 0.07, 6),
+      foot: new THREE.BoxGeometry(0.03, 0.014, 0.05),
+      torso: new THREE.CylinderGeometry(0.05, 0.036, 0.12, 7),
+      rag: new THREE.BoxGeometry(0.03, 0.1, 0.012),
+      neck: new THREE.CylinderGeometry(0.018, 0.02, 0.03, 6),
+      head: new THREE.SphereGeometry(0.036, 9, 8),
+      eye: new THREE.SphereGeometry(0.006, 6, 6),
+      upperArm: new THREE.CylinderGeometry(0.013, 0.011, 0.09, 6),
+      forearm: new THREE.CylinderGeometry(0.011, 0.009, 0.08, 6),
+      hand: new THREE.SphereGeometry(0.013, 6, 6)
+    };
+    ZMAT = {
+      skin: new THREE.MeshStandardMaterial({ color: PAL.zombieSkin, emissive: 0x0d1a08, emissiveIntensity: 0.18, roughness: 0.85 }),
+      skinAccent: new THREE.MeshStandardMaterial({ color: PAL.zombieSkin, emissive: PAL.zombieSkinGlow, emissiveIntensity: 0.5, roughness: 0.85 }),
+      rag: new THREE.MeshStandardMaterial({ color: PAL.tatters, roughness: 0.95 }),
+      rag2: new THREE.MeshStandardMaterial({ color: PAL.rustDark, roughness: 0.95 }),
+      eye: new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxic, emissiveIntensity: 1.4 })
+    };
+  }
+
+  function buildZombie(scale, accentGlow){
+    scale = scale || 1;
+    ensureZombieAssets();
+    var skinMat = accentGlow ? ZMAT.skinAccent : ZMAT.skin;
+    var p = new THREE.Group(); /* root: free to position/scale/rotate for seating or staggering */
+    var body = new THREE.Group();
+    body.rotation.x = 0.3; /* hunched forward, shambling posture */
+    p.add(body);
+
+    /* legs: hip → thigh → knee → shin → foot, uneven stagger per side */
+    [-1, 1].forEach(function(side){
+      var hip = new THREE.Group();
+      hip.position.set(side * 0.02, 0.14, 0);
+      var thigh = new THREE.Mesh(ZGEO.thigh, skinMat);
+      thigh.position.y = -0.035;
+      thigh.rotation.z = side * 0.06;
+      hip.add(thigh);
+      var knee = new THREE.Group();
+      knee.position.y = -0.07;
+      knee.rotation.x = side > 0 ? 0.35 : 0.15;
+      var shin = new THREE.Mesh(ZGEO.shin, skinMat);
+      shin.position.y = -0.035;
+      knee.add(shin);
+      var foot = new THREE.Mesh(ZGEO.foot, ZMAT.rag2);
+      foot.position.set(0, -0.07, 0.012);
+      knee.add(foot);
+      hip.add(knee);
+      body.add(hip);
+    });
+
+    var torso = new THREE.Mesh(ZGEO.torso, skinMat);
+    torso.position.y = 0.2;
+    body.add(torso);
+
+    /* ragged shirt: a few irregular overlapping strips, not one clean box */
+    [[0, 0.24, 0.042, ZMAT.rag], [0.025, 0.19, 0.045, ZMAT.rag2], [-0.025, 0.17, 0.044, ZMAT.rag]].forEach(function(r){
+      var strip = new THREE.Mesh(ZGEO.rag, r[3]);
+      strip.position.set(r[0], r[1], r[2]);
+      strip.rotation.z = (Math.random() - 0.5) * 0.5;
+      body.add(strip);
+    });
+
+    var neck = new THREE.Mesh(ZGEO.neck, skinMat);
+    neck.position.y = 0.275;
+    body.add(neck);
+
+    var head = new THREE.Mesh(ZGEO.head, skinMat);
+    head.position.y = 0.315;
+    head.scale.set(0.88, 1.08, 0.92); /* gaunt */
+    body.add(head);
+
+    [-1, 1].forEach(function(side){
+      var eye = new THREE.Mesh(ZGEO.eye, ZMAT.eye);
+      eye.position.set(side * 0.014, 0.32, 0.03);
+      eye.layers.enable(BLOOM_LAYER);
+      body.add(eye);
+    });
+
+    /* arms: shoulder → upper arm → elbow → forearm → hand, reaching forward */
+    [-1, 1].forEach(function(side){
+      var shoulder = new THREE.Group();
+      shoulder.position.set(side * 0.052, 0.255, 0);
+      shoulder.rotation.z = side * 1.0;
+      shoulder.rotation.x = -0.75;
+      var upperArm = new THREE.Mesh(ZGEO.upperArm, skinMat);
+      upperArm.position.y = -0.045;
+      shoulder.add(upperArm);
+      var elbow = new THREE.Group();
+      elbow.position.y = -0.09;
+      elbow.rotation.x = -0.3;
+      var forearm = new THREE.Mesh(ZGEO.forearm, skinMat);
+      forearm.position.y = -0.04;
+      elbow.add(forearm);
+      var hand = new THREE.Mesh(ZGEO.hand, skinMat);
+      hand.position.y = -0.08;
+      elbow.add(hand);
+      shoulder.add(elbow);
+      body.add(shoulder);
+    });
+
+    p.scale.setScalar(scale);
+    p.userData.torso = body;
+    p.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
+    return p;
+  }
+
+  /* ───────── hazard barrel (radioactive-waste prop) ───────── */
+  function buildBarrel(radTex){
+    var g = new THREE.Group();
+    var stripes = [PAL.hazardYellow, PAL.hazardBlack, PAL.hazardYellow, PAL.hazardBlack];
+    var segH = 0.09;
+    stripes.forEach(function(col, i){
+      var seg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, segH, 12), new THREE.MeshStandardMaterial({ color: col, roughness: 0.6 }));
+      seg.position.y = 0.05 + i * segH;
+      g.add(seg);
+    });
+    var lid = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.02, 12), new THREE.MeshStandardMaterial({ color: 0x242017, roughness: 0.4 }));
+    lid.position.y = 0.05 + stripes.length * segH;
+    g.add(lid);
+    var decal = new THREE.Mesh(new THREE.PlaneGeometry(0.14, 0.14), new THREE.MeshBasicMaterial({ map: radTex, transparent: true }));
+    decal.position.set(0, 0.05 + 2 * segH, 0.101);
+    g.add(decal);
+    g.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
+    return g;
+  }
+
+  /* ───────── ruined skyline silhouette: shared "background" prop ───────── */
+  function addRuinSkyline(g, zBack, xMin, xMax, count){
+    for (var i = 0; i < count; i++){
+      var w = 0.5 + Math.random() * 0.9;
+      var h = 0.6 + Math.random() * 1.6;
+      var x = xMin + (xMax - xMin) * (i / (count - 1));
+      var mat = new THREE.MeshStandardMaterial({ color: i % 2 === 0 ? PAL.concrete : PAL.concreteDark, roughness: 1 });
+      var ruin = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.5), mat);
+      ruin.position.set(x + (Math.random() - 0.5) * 0.4, h / 2 - 0.02, zBack + (Math.random() - 0.5) * 0.6);
+      ruin.rotation.z = (Math.random() - 0.5) * 0.1;
+      ruin.rotation.y = (Math.random() - 0.5) * 0.25;
+      g.add(ruin);
+      if (Math.random() > 0.45){
+        var notch = new THREE.Mesh(new THREE.BoxGeometry(w * 0.5, h * 0.3, 0.52), mat);
+        notch.position.set(ruin.position.x + w * 0.22, h + h * 0.08, ruin.position.z);
+        notch.rotation.z = ruin.rotation.z + 0.35;
+        g.add(notch);
+      }
+    }
+  }
+
+  function initThree(){
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.8;
+    scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(PAL.fog, 0.05);
+    camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    clock = new THREE.Clock();
+
+    var hemi = new THREE.HemisphereLight(0x4a5a34, 0x120f08, 0.6);
+    scene.add(hemi);
+    var key = new THREE.DirectionalLight(0xbfa05a, 1.3);
+    key.position.set(5, 8, 4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = 25;
+    key.shadow.camera.left = -11;
+    key.shadow.camera.right = 11;
+    key.shadow.camera.top = 7;
+    key.shadow.camera.bottom = -7;
+    key.shadow.bias = -0.0015;
+    key.shadow.radius = 2;
+    scene.add(key);
+    var rim = new THREE.DirectionalLight(PAL.toxic, 0.4);
+    rim.position.set(-6, 3, -4);
+    scene.add(rim);
+
+    var radTex = makeIconTexture(drawRadiationIcon);
+    var skullTex = makeIconTexture(drawSkullIcon);
+
+    buildNavetta(skullTex);
+    buildHotels(radTex);
+    buildSaltafila(skullTex);
+    scene.add(navetta.group, hotelScene.group, saltafila.group);
+    setActiveScene('navetta');
+
+    if (typeof THREE.EffectComposer !== 'undefined' && typeof THREE.UnrealBloomPass !== 'undefined' && typeof THREE.ShaderPass !== 'undefined') {
+      bloomLayer = new THREE.Layers();
+      bloomLayer.set(BLOOM_LAYER);
+      darkMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+      var size0 = new THREE.Vector2(stageEl.clientWidth || 1, stageEl.clientHeight || 1);
+      var renderScenePass = new THREE.RenderPass(scene, camera);
+
+      bloomPass = new THREE.UnrealBloomPass(size0, 1.15, 0.4, 0.08);
+      bloomComposer = new THREE.EffectComposer(renderer);
+      bloomComposer.renderToScreen = false;
+      bloomComposer.addPass(renderScenePass);
+      bloomComposer.addPass(bloomPass);
+
+      mixPass = new THREE.ShaderPass(new THREE.ShaderMaterial({
+        uniforms: {
+          baseTexture: { value: null },
+          bloomTexture: { value: bloomComposer.readBuffer.texture }
+        },
+        vertexShader: 'varying vec2 vUv;\nvoid main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+        fragmentShader: 'uniform sampler2D baseTexture;\nuniform sampler2D bloomTexture;\nvarying vec2 vUv;\nvoid main(){ gl_FragColor = texture2D(baseTexture, vUv) + vec4(1.0) * texture2D(bloomTexture, vUv); }',
+        defines: {}
+      }), 'baseTexture');
+      mixPass.needsSwap = true;
+
+      composer = new THREE.EffectComposer(renderer);
+      composer.addPass(renderScenePass);
+      composer.addPass(mixPass);
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    computeCameraTarget();
+    state.camCurrentPos.copy(state.camTargetPos);
+    state.camCurrentLook.copy(state.camTargetLook);
+
+    if (loadingEl) loadingEl.classList.add('is-hidden');
+    clock.start();
+    requestAnimationFrame(animate);
+  }
+
+  function resize(){
+    W = stageEl.clientWidth || 1;
+    H = stageEl.clientHeight || 1;
+    renderer.setSize(W, H, false);
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+    if (composer) composer.setSize(W, H);
+    if (bloomComposer) bloomComposer.setSize(W, H);
+  }
+
+  function darkenNonBloomed(obj){
+    if (obj.isMesh && bloomLayer.test(obj.layers) === false) {
+      bloomDarkenedMats[obj.uuid] = obj.material;
+      obj.material = darkMaterial;
+    }
+  }
+  function restoreBloomedMaterial(obj){
+    if (bloomDarkenedMats[obj.uuid]) {
+      obj.material = bloomDarkenedMats[obj.uuid];
+      delete bloomDarkenedMats[obj.uuid];
+    }
+  }
+
+  function setActiveScene(name){
+    state.activeScene = name;
+    navetta.group.visible = (name === 'navetta');
+    hotelScene.group.visible = (name === 'hotel');
+    saltafila.group.visible = (name === 'saltafila');
+    document.querySelectorAll('.l3-tab').forEach(function(t){
+      t.classList.toggle('is-active', t.dataset.goto === name);
+    });
+  }
+
+  /* ───────── NAVETTA: bus blindato a tema apocalisse zombie ───────── */
+  function buildNavetta(skullTex){
+    var g = new THREE.Group();
+    var stopPositions = [
+      new THREE.Vector3(-4.6, 0, 1.1),
+      new THREE.Vector3(-2.6, 0, -1.1),
+      new THREE.Vector3(-0.4, 0, 1.3),
+      new THREE.Vector3(1.9, 0, -0.8),
+      new THREE.Vector3(3.9, 0, 0.9),
+      new THREE.Vector3(5.6, 0, -0.4)
+    ];
+    navetta.curve = new THREE.CatmullRomCurve3(stopPositions);
+    navetta.markerPositions = stopPositions.slice(0, 5);
+
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x120f09, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    ground.receiveShadow = true;
+    g.add(ground);
+    addRuinSkyline(g, -5.2, -7, 7, 7);
+
+    var tubeGeo = new THREE.TubeGeometry(navetta.curve, 100, 0.045, 8, false);
+    var tubeMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, emissive: 0x3a2c0a, roughness: 0.45 });
+    g.add(new THREE.Mesh(tubeGeo, tubeMat));
+
+    navetta.markerPositions.forEach(function(p){
+      var poleMat = new THREE.MeshStandardMaterial({ color: PAL.rustDark, emissive: 0x0e0802 });
+      var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.7, 8), poleMat);
+      pole.position.set(p.x, 0.35, p.z);
+      g.add(pole);
+      var ballMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.9 });
+      var ball = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), ballMat);
+      ball.position.set(p.x, 0.72, p.z);
+      ball.layers.enable(BLOOM_LAYER);
+      g.add(ball);
+    });
+
+    var van = new THREE.Group();
+    /* chassis: a low solid shell — kept short on purpose so the seats
+       (added below) sit visibly ABOVE its top face rather than sealed
+       inside a closed box, otherwise lifting the roof reveals nothing */
+    var bodyMat = new THREE.MeshStandardMaterial({ color: PAL.rustDark, roughness: 0.75 });
+    var body = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.20, 0.34), bodyMat);
+    body.position.y = 0.12;
+    van.add(body);
+    /* hazard stripe trim along the flank, like improvised armor plating */
+    var stripeMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, roughness: 0.6 });
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(0.63, 0.035, 0.345), stripeMat);
+    stripe.position.y = 0.09;
+    van.add(stripe);
+    var roof = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.07, 0.32), new THREE.MeshStandardMaterial({ color: PAL.concreteDark }));
+    roof.position.y = 0.34;
+    van.add(roof);
+    navetta.roof = roof;
+    navetta.roofRestY = 0.34;
+    var glassMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, roughness: 0.25 });
+    var windshield = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.13, 0.27), glassMat);
+    windshield.position.set(0.31, 0.19, 0);
+    windshield.layers.enable(BLOOM_LAYER);
+    van.add(windshield);
+    /* side-window row along both flanks, between the stripe and the roofline */
+    var sideGlassMat = new THREE.MeshStandardMaterial({ color: 0x1c2a14, emissive: PAL.toxicGlow, emissiveIntensity: 0.3, roughness: 0.3 });
+    [0.171, -0.171].forEach(function(z){
+      [-0.18, -0.03, 0.12].forEach(function(x){
+        var sw = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.07, 0.012), sideGlassMat);
+        sw.position.set(x, 0.19, z);
+        sw.layers.enable(BLOOM_LAYER);
+        van.add(sw);
+      });
+    });
+    /* front bumper/grille — a scavenged ram-plate look */
+    var grilleMat = new THREE.MeshStandardMaterial({ color: 0x1c1a14, roughness: 0.55, metalness: 0.2 });
+    var grille = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.1, 0.32), grilleMat);
+    grille.position.set(0.33, 0.1, 0);
+    van.add(grille);
+    /* side mirrors */
+    [1, -1].forEach(function(side){
+      var arm = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.05, 5), grilleMat);
+      arm.rotation.z = Math.PI / 2;
+      arm.position.set(0.26, 0.22, side * 0.2);
+      van.add(arm);
+      var mirror = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.035, 0.045), grilleMat);
+      mirror.position.set(0.26, 0.22, side * 0.225);
+      van.add(mirror);
+    });
+    /* roof rack — two bars for strapped-down supplies */
+    [-0.18, 0.1].forEach(function(x){
+      var bar = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.32, 6), grilleMat);
+      bar.rotation.x = Math.PI / 2;
+      bar.position.set(x, 0.385, 0);
+      van.add(bar);
+    });
+    /* biohazard-ish decal on the flank, painted on by the survivors */
+    var decal = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), new THREE.MeshBasicMaterial({ map: skullTex, transparent: true }));
+    decal.position.set(0, 0.17, 0.171);
+    van.add(decal);
+    var decal2 = decal.clone();
+    decal2.position.z = -0.171;
+    decal2.rotation.y = Math.PI;
+    van.add(decal2);
+    var wheelMat = new THREE.MeshStandardMaterial({ color: 0x0E0A05 });
+    var rimMat = new THREE.MeshStandardMaterial({ color: 0x6b6558, roughness: 0.4, metalness: 0.5 });
+    [[0.21, 0.07, 0.19], [0.21, 0.07, -0.19], [-0.21, 0.07, 0.19], [-0.21, 0.07, -0.19]].forEach(function(pos){
+      var wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.05, 14), wheelMat);
+      wheel.rotation.x = Math.PI / 2;
+      wheel.position.set(pos[0], pos[1], pos[2]);
+      van.add(wheel);
+      var rim = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.053, 10), rimMat);
+      rim.rotation.x = Math.PI / 2;
+      rim.position.set(pos[0], pos[1], pos[2]);
+      van.add(rim);
+    });
+    var lightMat = new THREE.MeshStandardMaterial({ color: 0xFFEFC2, emissive: 0xFFEFC2, emissiveIntensity: 1 });
+    [0.1, -0.1].forEach(function(z){
+      var hl = new THREE.Mesh(new THREE.SphereGeometry(0.02, 8, 8), lightMat);
+      hl.position.set(0.335, 0.1, z);
+      hl.layers.enable(BLOOM_LAYER);
+      van.add(hl);
+    });
+    var tailMat = new THREE.MeshStandardMaterial({ color: 0xC23B3B, emissive: 0xC23B3B, emissiveIntensity: 0.9 });
+    [0.12, -0.12].forEach(function(z){
+      var tl = new THREE.Mesh(new THREE.BoxGeometry(0.015, 0.04, 0.03), tailMat);
+      tl.position.set(-0.315, 0.12, z);
+      tl.layers.enable(BLOOM_LAYER);
+      van.add(tl);
+    });
+
+    /* seats become mini zombie passengers once the roof lifts off */
+    var seatsGroup = new THREE.Group();
+    for (var r = 0; r < 10; r++){
+      for (var c = 0; c < 3; c++){
+        var passenger = buildZombie(0.42);
+        passenger.rotation.x = -0.3; /* seated: undo the standing hunch so it reads as sitting */
+        passenger.rotation.y = Math.PI / 2 * (c - 1) * 0.3 + (Math.random() - 0.5) * 0.3;
+        passenger.position.set(-0.24 + r * 0.052, 0.21, -0.11 + c * 0.11);
+        seatsGroup.add(passenger);
+      }
+    }
+    seatsGroup.visible = false;
+    van.add(seatsGroup);
+    navetta.seatsGroup = seatsGroup;
+    navetta.van = van;
+    van.traverse(function(o){ if (o.isMesh) o.castShadow = true; });
+    g.add(van);
+
+    navetta.group = g;
+  }
+
+  function updateNavetta(dt){
+    var s = navetta.state;
+    var k = 1 - Math.pow(0.0008, dt);
+    s.t += (s.targetT - s.t) * k;
+    s.explode += (s.targetExplode - s.explode) * k;
+    var tc = Math.min(Math.max(s.t, 0.001), 0.999);
+    var p = navetta.curve.getPointAt(tc);
+    var tangent = navetta.curve.getTangentAt(tc);
+    navetta.van.position.set(p.x, 0, p.z);
+    if (tangent.lengthSq() > 0.0001){
+      /* van's front faces local +X; align it with the direction of travel
+         (lookAt would orient local -Z instead, which is the wrong axis here) */
+      navetta.van.rotation.y = Math.atan2(-tangent.z, tangent.x);
+    }
+    navetta.roof.position.y = navetta.roofRestY + s.explode * 0.5;
+    navetta.seatsGroup.visible = s.explode > 0.04;
+    navetta.seatsGroup.scale.setScalar(0.3 + s.explode * 0.7);
+  }
+
+  /* ───────── DOVE DORMIRE: bunker post-apocalittici ───────── */
+  function buildHotels(radTex){
+    var g = new THREE.Group();
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(18, 11), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    ground.receiveShadow = true;
+    g.add(ground);
+    addRuinSkyline(g, -4.6, -8, 8, 6);
+
+    var names = ['Hotel Ancora', 'Villa Belvedere', 'Villa Cavallo', 'B&B Calypso'];
+    var floorsCount = [6, 4, 4, 3];
+    var blockedFloors = [2, 2, 1, 1];
+    var xPositions = [-4.8, -1.6, 1.6, 4.8];
+
+    var winGeo = new THREE.BoxGeometry(0.1, 0.1, 0.02);
+    var winDarkMat = new THREE.MeshStandardMaterial({ color: 0x0a0906, roughness: 0.9 });
+    var winLitMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, emissive: 0x5a3f10, emissiveIntensity: 0.6, roughness: 0.4 });
+    var winRadMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 1.1, roughness: 0.4 });
+    var balconyMat = new THREE.MeshStandardMaterial({ color: PAL.rustDark, roughness: 0.75 });
+    var doorMat = new THREE.MeshStandardMaterial({ color: 0x1c1a12, roughness: 0.6 });
+    var debrisMat = new THREE.MeshStandardMaterial({ color: PAL.concreteDark, roughness: 1 });
+
+    names.forEach(function(name, i){
+      var group = new THREE.Group();
+      group.position.set(xPositions[i], 0, (i % 2 === 0 ? -0.5 : 0.5));
+      var floors = floorsCount[i];
+      var floorH = 0.26, gap = 0.035;
+      for (var f = 0; f < floors; f++){
+        var isBlocked = f >= floors - blockedFloors[i];
+        var mat = new THREE.MeshStandardMaterial({
+          color: isBlocked ? PAL.toxic : (f % 2 === 0 ? PAL.concrete : PAL.concreteDark),
+          emissive: isBlocked ? PAL.toxicGlow : 0x000000,
+          emissiveIntensity: isBlocked ? 0.9 : 0,
+          roughness: 0.75
+        });
+        var slab = new THREE.Mesh(new THREE.BoxGeometry(1.0, floorH, 0.75), mat);
+        if (isBlocked) slab.layers.enable(BLOOM_LAYER);
+        var restY = 0.13 + f * (floorH + gap);
+        slab.position.y = restY;
+        slab.userData.restY = restY;
+        slab.userData.explodedY = restY + f * 0.075;
+        slab.castShadow = true;
+        slab.receiveShadow = true;
+        group.add(slab);
+
+        /* window grid on the front face, parented to the slab so it travels
+           with it during the exploded-view animation — toxic glow on
+           blocked/event floors, a mix of dark and lit-warm panes elsewhere */
+        if (f === 0){
+          var door = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.19, 0.02), doorMat);
+          door.position.set(0, -floorH / 2 + 0.095, 0.386);
+          slab.add(door);
+        }
+        var winXs = f === 0 ? [-0.32, 0.32] : [-0.32, 0, 0.32];
+        winXs.forEach(function(wx){
+          var wm = isBlocked ? winRadMat : (Math.random() > 0.72 ? winLitMat : winDarkMat);
+          var win = new THREE.Mesh(winGeo, wm);
+          win.position.set(wx, 0, 0.386);
+          if (wm === winRadMat) win.layers.enable(BLOOM_LAYER);
+          slab.add(win);
+        });
+        if (f > 0 && f % 2 === 1){
+          var balcony = new THREE.Mesh(new THREE.BoxGeometry(1.04, 0.02, 0.1), balconyMat);
+          balcony.position.set(0, -floorH / 2, 0.42);
+          slab.add(balcony);
+        }
+      }
+      var topY = 0.13 + floors * (floorH + gap);
+      /* rusted flat bunker roof + antenna, swapped for the old gable cone */
+      var roof = new THREE.Mesh(new THREE.BoxGeometry(1.08, 0.06, 0.82), new THREE.MeshStandardMaterial({ color: PAL.rust, roughness: 0.7 }));
+      roof.position.y = topY + 0.03;
+      roof.castShadow = true;
+      roof.receiveShadow = true;
+      group.add(roof);
+      var antenna = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
+      antenna.position.set(0.3, topY + 0.21, 0.2);
+      group.add(antenna);
+      /* radiation barrels + loose rubble at the base */
+      var barrel1 = buildBarrel(radTex);
+      barrel1.position.set(-0.62, 0, 0.42);
+      group.add(barrel1);
+      var barrel2 = buildBarrel(radTex);
+      barrel2.scale.setScalar(0.85);
+      barrel2.position.set(-0.48, 0, 0.5);
+      group.add(barrel2);
+      for (var d = 0; d < 3; d++){
+        var chunk = new THREE.Mesh(new THREE.BoxGeometry(0.05 + Math.random() * 0.06, 0.03 + Math.random() * 0.05, 0.05 + Math.random() * 0.06), debrisMat);
+        chunk.position.set(0.3 + Math.random() * 0.4, 0.02, 0.35 + Math.random() * 0.25);
+        chunk.rotation.y = Math.random() * Math.PI;
+        group.add(chunk);
+      }
+      hotels.push({ name: name, group: group, floors: floors, topY: topY, explode: 0, targetExplode: 0, pos: group.position.clone() });
+      g.add(group);
+    });
+
+    hotelScene.group = g;
+  }
+
+  function updateHotels(dt){
+    var k = 1 - Math.pow(0.0008, dt);
+    hotels.forEach(function(h){
+      h.explode += (h.targetExplode - h.explode) * k;
+      h.group.children.forEach(function(slab){
+        if (slab.userData.restY != null){
+          slab.position.y = slab.userData.restY + (slab.userData.explodedY - slab.userData.restY) * h.explode;
+        }
+      });
+    });
+  }
+
+  /* ───────── SALTAFILA: coda di zombie verso il bancone ───────── */
+  function buildSaltafila(skullTex){
+    var g = new THREE.Group();
+    var ground = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({ color: 0x100e07, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    ground.receiveShadow = true;
+    g.add(ground);
+    addRuinSkyline(g, -3.6, -3.5, 4, 5);
+
+    for (var i = 0; i < 8; i++){
+      var person = buildZombie(1);
+      person.position.set(-1.9 + i * 0.26, 0, -0.55);
+      person.rotation.y = (Math.random() - 0.5) * 0.6;
+      g.add(person);
+    }
+
+    var laneMat = new THREE.MeshStandardMaterial({ color: PAL.hazardYellow, emissive: 0x3a2c0a, roughness: 0.3 });
+    var lane = new THREE.Mesh(new THREE.BoxGeometry(4.1, 0.025, 0.3), laneMat);
+    lane.position.set(0, 0.01, 0.55);
+    g.add(lane);
+
+    var gateMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.8 });
+    var gateL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.55, 8), gateMat);
+    gateL.position.set(1.95, 0.27, 0.42);
+    gateL.layers.enable(BLOOM_LAYER);
+    g.add(gateL);
+    var gateR = gateL.clone();
+    gateR.position.z = 0.68;
+    g.add(gateR);
+
+    /* destination: a scavenged bar counter the fast-lane zombie heads toward */
+    var bar = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.22, 0.22), new THREE.MeshStandardMaterial({ color: PAL.rust, roughness: 0.65 }));
+    bar.position.set(2.5, 0.11, 0.55);
+    g.add(bar);
+    var barTop = new THREE.Mesh(new THREE.BoxGeometry(0.54, 0.02, 0.26), new THREE.MeshStandardMaterial({ color: PAL.concreteDark, roughness: 0.4 }));
+    barTop.position.set(2.5, 0.23, 0.55);
+    g.add(barTop);
+    var bottleMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, emissiveIntensity: 0.7, roughness: 0.3 });
+    for (var b = 0; b < 3; b++){
+      var bottle = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.018, 0.09, 8), bottleMat);
+      bottle.position.set(2.35 + b * 0.12, 0.29, 0.52);
+      bottle.layers.enable(BLOOM_LAYER);
+      g.add(bottle);
+    }
+    var flagPole = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.01, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x2a2a22 }));
+    flagPole.position.set(2.68, 0.4, 0.55);
+    g.add(flagPole);
+    var flagSign = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), new THREE.MeshBasicMaterial({ map: skullTex, transparent: true }));
+    flagSign.position.set(2.68, 0.5, 0.551);
+    g.add(flagSign);
+    saltafila.barX = 2.3;
+
+    var walker = buildZombie(1.1, true);
+    g.add(walker);
+    saltafila.walker = walker;
+    saltafila.startX = -1.9;
+
+    saltafila.group = g;
+  }
+
+  function updateSaltafila(dt, active){
+    if (!active) return;
+    saltafila.phase = (saltafila.phase + dt * 0.22) % 1;
+    var p = saltafila.phase;
+    var reach = Math.min(p, 0.88) / 0.88;
+    var x = saltafila.startX + reach * (saltafila.barX - saltafila.startX);
+    saltafila.walker.position.set(x, 0, 0.55);
+    saltafila.walker.visible = p < 0.92; /* slips behind the bar counter for a moment before looping back */
+  }
+
+  /* ───────── BEATS ───────── */
+  function applyBeat(beat){
+    var sceneName = beat.dataset.scene;
+    setActiveScene(sceneName);
+    if (sceneName === 'navetta'){
+      var stop = beat.dataset.stop;
+      var explode = beat.dataset.explode === 'true';
+      navetta.state.targetExplode = explode ? 1 : 0;
+      if (stop !== undefined && stop !== ''){
+        navetta.activeStop = parseInt(stop, 10);
+        navetta.state.targetT = navetta.activeStop / 5;
+      } else if (explode){
+        navetta.activeStop = -1;
+        navetta.state.targetT = 1;
+      } else {
+        navetta.activeStop = -1;
+        navetta.state.targetT = 0.09;
+      }
+    } else if (sceneName === 'hotel'){
+      var hi = beat.dataset.hotel;
+      hotelScene.activeIndex = (hi !== undefined && hi !== '') ? parseInt(hi, 10) : -1;
+      hotels.forEach(function(h, idx){ h.targetExplode = (hotelScene.activeIndex === idx) ? 1 : 0; });
+    }
+  }
+
+  function computeCameraTarget(){
+    if (state.activeScene === 'navetta'){
+      var tc = Math.min(Math.max(navetta.state.t, 0.001), 0.999);
+      var p = navetta.curve.getPointAt(tc);
+      if (navetta.state.targetExplode > 0.5){
+        state.camTargetPos.set(p.x + 0.5, 1.5, p.z + 1.9);
+        state.camTargetLook.set(p.x, 0.35, p.z);
+      } else {
+        state.camTargetPos.set(p.x - 1.9, 1.7, p.z + 2.6);
+        state.camTargetLook.set(p.x + 0.4, 0.15, p.z);
+      }
+    } else if (state.activeScene === 'hotel'){
+      var idx = hotelScene.activeIndex;
+      if (idx < 0){
+        state.camTargetPos.set(0, 2.6, 6.4);
+        state.camTargetLook.set(0, 0.9, 0);
+      } else {
+        var h = hotels[idx];
+        state.camTargetPos.set(h.pos.x + 2.3, 1.6, 3.2);
+        state.camTargetLook.set(h.pos.x, h.topY * 0.5, h.pos.z);
+      }
+    } else if (state.activeScene === 'saltafila'){
+      state.camTargetPos.set(0.9, 2.7, 4.3);
+      state.camTargetLook.set(0.8, 0.22, 0.15);
+    }
+  }
+
+  function worldToScreen(vec3, targetEl){
+    var v = vec3.clone().project(camera);
+    var x = (v.x * 0.5 + 0.5) * W;
+    var y = (-v.y * 0.5 + 0.5) * H;
+    targetEl.style.left = x + 'px';
+    targetEl.style.top = y + 'px';
+    return v.z < 1;
+  }
+
+  function updatePinPositions(){
+    var i;
+    if (state.activeScene === 'navetta' && navetta.state.targetExplode < 0.5){
+      navetta.markerPositions.forEach(function(pos, idx){
+        var el = l3PinEls['navetta-' + idx];
+        var top = pos.clone(); top.y = 0.78;
+        var visible = worldToScreen(top, el);
+        el.classList.toggle('is-visible', visible);
+        el.classList.toggle('is-active', navetta.activeStop === idx);
+      });
+      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+    } else if (state.activeScene === 'hotel'){
+      hotels.forEach(function(h, idx){
+        var el = l3PinEls['hotel-' + idx];
+        var top = h.pos.clone(); top.y = h.topY + 0.25;
+        var visible = worldToScreen(top, el);
+        el.classList.toggle('is-visible', visible);
+        el.classList.toggle('is-active', hotelScene.activeIndex === idx);
+      });
+      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+    } else {
+      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+    }
+  }
+
+  function animate(){
+    requestAnimationFrame(animate);
+    var dt = Math.min(clock.getDelta(), 0.1);
+    updateNavetta(dt);
+    updateHotels(dt);
+    updateSaltafila(dt, state.activeScene === 'saltafila');
+    computeCameraTarget();
+    var lerpK = 1 - Math.pow(0.001, dt);
+    state.camCurrentPos.lerp(state.camTargetPos, lerpK);
+    state.camCurrentLook.lerp(state.camTargetLook, lerpK);
+    camera.position.copy(state.camCurrentPos);
+    camera.lookAt(state.camCurrentLook);
+    updatePinPositions();
+    if (composer && bloomComposer) {
+      scene.traverse(darkenNonBloomed);
+      bloomComposer.render();
+      scene.traverse(restoreBloomedMaterial);
+      composer.render();
+    } else if (composer) {
+      composer.render();
+    } else {
+      renderer.render(scene, camera);
+    }
+  }
+
+  document.querySelectorAll('.l3-tab').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var first = document.querySelector('.l3-beat[data-scene="' + btn.dataset.goto + '"]');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  var l3Beats = document.querySelectorAll('.l3-beat');
+  var l3Observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (!entry.isIntersecting) return;
+      applyBeat(entry.target);
+    });
+  }, { rootMargin: '-48% 0px -48% 0px', threshold: 0 });
+  l3Beats.forEach(function(b){ l3Observer.observe(b); });
+
+  try {
+    initThree();
+  } catch (e){
+    if (loadingEl){
+      loadingEl.textContent = 'Scena 3D non disponibile in questo browser.';
+      loadingEl.classList.remove('is-hidden');
+    }
+  }
+});
+</script>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── NAV BAR: scroll to 3D scene beats + scrollspy ── */
+  var navPills = document.querySelectorAll('.hw-nav-pill');
+  navPills.forEach(function(p){
+    var scene = p.dataset.scrollScene;
+    if (!scene) return;
+    p.addEventListener('click', function(){
+      var first = document.querySelector('.l3-beat[data-scene="' + scene + '"]');
+      if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+  });
+
+  var navSpyTargets = [
+    { id:'info', nav:'info' },
+    { id:'planimetria', nav:'planimetria' },
+    { id:'prezzi', nav:'prezzi' }
+  ];
+  var spyEls = [];
+  navSpyTargets.forEach(function(t){
+    var el = document.getElementById(t.id);
+    if (el) spyEls.push({ el: el, nav: t.nav });
+  });
+  document.querySelectorAll('.l3-beat[data-scene]').forEach(function(beat){
+    spyEls.push({ el: beat, nav: beat.dataset.scene === 'hotel' ? 'hotel' : beat.dataset.scene });
+  });
+
+  function setActiveNav(nav){
+    navPills.forEach(function(p){ p.classList.toggle('is-active', p.dataset.nav === nav); });
+  }
+
+  /* Scroll-driven (not IntersectionObserver) so it tracks reliably even with
+     many stacked narrow beats: on every scroll frame, pick whichever
+     section's box spans the vertical center line of the viewport. */
+  function updateSpy(){
+    var line = window.innerHeight * 0.5;
+    var current = null, bestDist = Infinity;
+    spyEls.forEach(function(s){
+      var r = s.el.getBoundingClientRect();
+      if (r.top <= line && r.bottom >= line){
+        current = s.nav; bestDist = 0;
+      } else if (bestDist !== 0){
+        var d = Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
+        if (d < bestDist){ bestDist = d; current = s.nav; }
+      }
+    });
+    if (current) setActiveNav(current);
+  }
+  if (spyEls.length){
+    var spyTicking = false;
+    window.addEventListener('scroll', function(){
+      if (!spyTicking){
+        spyTicking = true;
+        requestAnimationFrame(function(){ updateSpy(); spyTicking = false; });
+      }
+    }, { passive: true });
+    updateSpy();
+  }
+
+  /* ── COUNTDOWN: 31 Ottobre 2026, 23:00 (Europe/Rome, UTC+1) ── */
+  var EVENT_DATE = new Date('2026-10-31T23:00:00+01:00');
+  var cdDays = document.getElementById('cdDays');
+  var cdHours = document.getElementById('cdHours');
+  var cdMin = document.getElementById('cdMin');
+  var cdSec = document.getElementById('cdSec');
+  var cdPending = document.getElementById('countdownPending');
+  var cdLive = document.getElementById('countdownLive');
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function tickCountdown(){
+    var diff = EVENT_DATE.getTime() - Date.now();
+    if (diff <= 0){
+      if (cdPending) cdPending.style.display = 'none';
+      if (cdLive) cdLive.style.display = 'block';
+      return;
+    }
+    var totalSec = Math.floor(diff / 1000);
+    var days = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var mins = Math.floor((totalSec % 3600) / 60);
+    var secs = totalSec % 60;
+    if (cdDays) cdDays.textContent = pad(days);
+    if (cdHours) cdHours.textContent = pad(hours);
+    if (cdMin) cdMin.textContent = pad(mins);
+    if (cdSec) cdSec.textContent = pad(secs);
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+})();
+</script>
+</body>
+</html>
