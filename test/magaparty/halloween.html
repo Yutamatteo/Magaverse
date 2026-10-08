@@ -15,6 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/storymap.css">
 <script src="../../assets/storymap.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" defer></script>
@@ -88,6 +89,7 @@ img{max-width:100%;}
 .legend .dot.avail{background:var(--moss); box-shadow:0 0 0 3px var(--moss-soft);}
 .legend .dot.occ{background:#5B5468;}
 .legend .dot.info{background:var(--gold); opacity:0.8;}
+.legend .dot.stage{background:var(--ember);}
 
 .hw-storymap{ display:grid; grid-template-columns: 1fr; grid-template-areas: "stack"; padding-block: 20px 60px; }
 .hw-narrative{grid-area:stack; padding-top:min(68vw,420px); position:relative; z-index:1;}
@@ -125,6 +127,7 @@ img{max-width:100%;}
 .hw-pin.pin--camera{width:20px; height:20px;}
 .hw-pin.pin--camera.is-available{background:var(--moss); box-shadow:0 0 0 6px var(--moss-soft); animation:pinPulse 2.2s ease-in-out infinite;}
 .hw-pin.pin--camera.is-occupied{background:#5B5468; opacity:0.9;}
+.hw-pin.pin--stage{width:20px; height:20px; background:var(--ember); box-shadow:0 0 0 6px var(--ember-soft);}
 @keyframes pinPulse{ 0%,100%{box-shadow:0 0 0 5px var(--moss-soft);} 50%{box-shadow:0 0 0 9px transparent;} }
 .hw-pin.spotlight{transform:translate(-50%,-50%) scale(1.35); z-index:4;}
 
@@ -135,6 +138,7 @@ img{max-width:100%;}
 .hw-card .kind.avail{color:var(--moss);}
 .hw-card .kind.occ{color:var(--muted);}
 .hw-card .kind.info{color:var(--gold);}
+.hw-card .kind.stage{color:var(--ember);}
 .hw-card h4{font-size:17px; font-weight:600; margin-top:4px; color:var(--bone);}
 .hw-card p{font-size:12.5px; line-height:1.6; color:var(--muted); margin-top:8px;}
 .hw-card .note{font-size:10px; color:var(--muted); opacity:0.6; margin-top:10px;}
@@ -207,6 +211,95 @@ img{max-width:100%;}
 .l3-chip{font-size:10px; letter-spacing:0.06em; padding:6px 11px; border-radius:999px; border:1px solid var(--line); color:var(--gold);}
 .l3-loading{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:var(--surface); transition:opacity .5s ease; text-align:center; padding:20px;}
 .l3-loading.is-hidden{opacity:0; pointer-events:none;}
+
+/* ── NAV BAR (sticky, sezioni di pagina) ── */
+.hw-nav{ position:sticky; top:0; z-index:30; background:rgba(14,10,20,0.86); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+.hw-nav-inner{ display:flex; align-items:center; gap:8px; overflow-x:auto; padding:12px 20px; max-width:1180px; margin:0 auto; scrollbar-width:none; }
+.hw-nav-inner::-webkit-scrollbar{ display:none; }
+.hw-nav-pill{ flex:none; font-family:inherit; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--muted); cursor:pointer; transition:all .2s ease; text-decoration:none; white-space:nowrap; }
+.hw-nav-pill.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
+.hw-nav-pill:hover:not(.is-active){ border-color:var(--gold); color:var(--bone); }
+
+/* ── COUNTDOWN ── */
+.countdown-strip{ padding-block:0 56px; }
+.countdown-card{ max-width:560px; margin:0 auto; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:26px 22px; text-align:center; box-shadow:0 30px 60px -30px rgba(255,122,51,0.25); }
+.countdown-label{ font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:18px; display:block; }
+.countdown-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; padding-top:16px; border-top:1px solid var(--line); }
+.countdown-grid .num{ display:block; font-family:'Fraunces', Georgia, serif; font-size:28px; font-weight:600; color:var(--gold); }
+.countdown-grid .unit{ font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); opacity:0.7; }
+.countdown-live{ display:none; }
+.countdown-live .pulse-dot{ display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ember); animation:pinPulse 1.6s ease-in-out infinite; margin-right:8px; }
+.countdown-live p{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+/* ── PREZZI ── */
+.prezzi-head{padding-block:64px 8px; text-align:center;}
+.prezzi-grid{display:grid; grid-template-columns:1fr; gap:16px; padding-block:32px 70px;}
+@media (min-width:760px){ .prezzi-grid{grid-template-columns:repeat(2,1fr);} }
+.prezzi-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px 22px; display:flex; flex-direction:column; gap:8px; position:relative; }
+.prezzi-card h4{font-size:16px; font-weight:600; color:var(--bone); display:flex; align-items:center; justify-content:space-between; gap:10px;}
+.prezzi-card .price{ font-family:'Fraunces', Georgia, serif; font-size:26px; font-weight:600; color:var(--gold); }
+.prezzi-card .price .tbd{ font-size:13px; font-family:'Work Sans', sans-serif; color:var(--muted); font-weight:500; }
+.prezzi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
+.tbd-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--ember-soft); color:var(--ember); width:fit-content; }
+
+/* ── BIGLIETTI / RICHIESTE (biglietti, saltafila, navetta, alloggi) ── */
+.prezzi-subhead{ text-align:center; padding-block:52px 6px; }
+.prezzi-subhead .section-label{ display:block; margin-bottom:6px; }
+.prezzi-subhead h3{ font-family:'Fraunces', Georgia, serif; font-size:clamp(1.1rem,2vw,1.5rem); font-weight:600; color:var(--bone); }
+.prezzi-subhead p{ margin-top:8px; font-size:13px; line-height:1.7; color:var(--muted); max-width:56ch; margin-inline:auto; }
+.state-chip{ display:none; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid; width:fit-content; flex:none; }
+.state-chip.chip-open{ border-color:var(--moss-soft); color:var(--moss); }
+.state-chip.chip-sold{ border-color:rgba(255,255,255,0.18); color:var(--muted); }
+.state-chip.chip-locked{ border-color:var(--ember-soft); color:var(--ember); }
+.state-chip.chip-waitlist{ border-color:rgba(255,255,255,0.18); color:var(--muted); }
+.ticket-card[data-state="open"] .chip-open,
+.ticket-card[data-state="sold"] .chip-sold,
+.ticket-card[data-state="locked"] .chip-locked,
+.ticket-card[data-state="waitlist"] .chip-waitlist{ display:inline-flex; }
+.ticket-card[data-state="sold"] .ticket-cta,
+.ticket-card[data-state="sold"] .ticket-form,
+.ticket-card[data-state="sold"] .ticket-buy,
+.ticket-card[data-state="sold"] .ticket-success,
+.ticket-card[data-state="sold"] .ticket-progress,
+.ticket-card[data-state="sold"] .ticket-progress-label,
+.ticket-card[data-state="locked"] .ticket-cta,
+.ticket-card[data-state="locked"] .ticket-form,
+.ticket-card[data-state="locked"] .ticket-buy,
+.ticket-card[data-state="locked"] .ticket-success,
+.ticket-card[data-state="locked"] .ticket-progress,
+.ticket-card[data-state="locked"] .ticket-progress-label{ display:none !important; }
+.ticket-card[data-state="waitlist"] .ticket-progress,
+.ticket-card[data-state="waitlist"] .ticket-progress-label,
+.ticket-card[data-state="waitlist"] .ticket-buy{ display:none !important; }
+.ticket-card[data-state="sold"],
+.ticket-card[data-state="locked"]{ opacity:0.6; }
+.ticket-card[data-state="waitlist"] .price{ color:var(--muted); text-decoration:line-through; opacity:0.7; }
+.ticket-progress{ height:6px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; }
+.ticket-progress-bar{ height:100%; background:linear-gradient(90deg, var(--ember), var(--gold)); border-radius:999px; }
+.ticket-progress-label{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); opacity:0.8; }
+.ticket-cta{ font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:11px 16px; border-radius:10px; border:1px solid var(--ember); background:var(--ember); color:#20120A; cursor:pointer; text-align:center; text-decoration:none; display:inline-block; margin-top:6px; transition:all .2s ease; }
+.ticket-cta:hover{ background:var(--gold); border-color:var(--gold); }
+.ticket-form{ display:grid; grid-template-columns:1fr; gap:8px; margin-top:6px; }
+@media (min-width:460px){ .ticket-form{ grid-template-columns:1fr 1fr; } }
+.ticket-form[hidden], .ticket-cta[hidden]{ display:none; }
+.ticket-form .full-w{ grid-column:1 / -1; }
+.ticket-form input{ font-family:inherit; font-size:13px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; width:100%; box-sizing:border-box; }
+.ticket-form input:focus{ border-color:var(--ember); }
+.ticket-form label{ display:block; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+.ticket-success{ font-size:12.5px; color:var(--moss); line-height:1.6; margin-top:6px; }
+.ticket-error{ font-size:12px; color:var(--ember); line-height:1.5; margin:2px 0 0; }
+.terms-check{ grid-column:1 / -1; display:flex; align-items:flex-start; gap:8px; font-size:11.5px; line-height:1.5; color:var(--muted); cursor:pointer; }
+.terms-check input[type="checkbox"]{ flex:none; width:16px; height:16px; margin-top:1px; accent-color:var(--ember); cursor:pointer; }
+.terms-check a{ color:var(--gold); text-decoration:underline; }
+.terms-list{ list-style:none; counter-reset:terms; margin:28px 0 0; padding:0; display:flex; flex-direction:column; gap:16px; max-width:70ch; margin-inline:auto; }
+.terms-list li{ counter-increment:terms; font-size:13.5px; line-height:1.7; color:var(--muted); padding-left:34px; position:relative; }
+.terms-list li::before{ content:counter(terms); position:absolute; left:0; top:0; width:22px; height:22px; border-radius:50%; border:1px solid var(--gold); color:var(--gold); font-family:'JetBrains Mono', monospace; font-size:11px; display:flex; align-items:center; justify-content:center; }
+.terms-list strong{ color:var(--bone); font-weight:600; }
+.prezzi-card .includes{ list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:3px; }
+.prezzi-card .includes li{ font-size:12px; color:var(--muted); padding-left:14px; position:relative; }
+.prezzi-card .includes li::before{ content:'✓'; position:absolute; left:0; color:var(--moss); }
+.prezzi-card .price .was{ font-size:13px; text-decoration:line-through; color:var(--muted); font-weight:500; margin-right:4px; }
+.prezzi-card .price-note{ display:block; font-size:10px; letter-spacing:0.04em; text-transform:none; color:var(--muted); font-family:'Work Sans', sans-serif; font-weight:500; margin-top:2px; }
 </style>
 </head>
 <body>
@@ -216,7 +309,18 @@ img{max-width:100%;}
   <a href="../../index.html">Magaverse</a>
 </div>
 
-<section class="hero">
+<nav class="hw-nav" aria-label="Sezioni della pagina">
+  <div class="hw-nav-inner" id="hwNavInner">
+    <a href="#info" class="hw-nav-pill" data-nav="info">Info</a>
+    <a href="#planimetria" class="hw-nav-pill" data-nav="planimetria">Planimetria</a>
+    <button type="button" class="hw-nav-pill" data-nav="navetta" data-scroll-scene="navetta">Navetta</button>
+    <button type="button" class="hw-nav-pill" data-nav="hotel" data-scroll-scene="hotel">Dove dormire</button>
+    <button type="button" class="hw-nav-pill" data-nav="saltafila" data-scroll-scene="saltafila">Saltafila</button>
+    <a href="#prezzi" class="hw-nav-pill" data-nav="prezzi">Prezzi</a>
+  </div>
+</nav>
+
+<section class="hero" id="info">
   <div class="ember-field" aria-hidden="true">
     <span style="left:8%; --drift:14px; animation-delay:0s;"></span>
     <span style="left:18%; --drift:-10px; animation-delay:1.1s;"></span>
@@ -237,6 +341,24 @@ img{max-width:100%;}
   </div>
 </section>
 
+<section class="countdown-strip wrap">
+  <div class="countdown-card">
+    <div id="countdownPending">
+      <span class="countdown-label">Halloween in Villa tra</span>
+      <div class="countdown-grid">
+        <div><span class="num" id="cdDays">00</span><span class="unit">Giorni</span></div>
+        <div><span class="num" id="cdHours">00</span><span class="unit">Ore</span></div>
+        <div><span class="num" id="cdMin">00</span><span class="unit">Min</span></div>
+        <div><span class="num" id="cdSec">00</span><span class="unit">Sec</span></div>
+      </div>
+    </div>
+    <div id="countdownLive" class="countdown-live">
+      <span class="pulse-dot"></span><span class="eyebrow" style="margin:0;display:inline;">La villa è viva, stanotte</span>
+      <p>31 Ottobre — l'evento è in corso.</p>
+    </div>
+  </div>
+</section>
+
 <section class="intro">
   <div class="wrap intro-grid">
     <h2>Non è solo una mappa. È la villa che parla.</h2>
@@ -253,13 +375,12 @@ img{max-width:100%;}
   </div>
 </section>
 
-<section class="storymap-head wrap">
+<section class="storymap-head wrap" id="planimetria">
   <span class="section-label">Planimetria interattiva</span>
   <h2>Esplora la villa, piano per piano</h2>
-  <p>Ogni stanza ha un pin. I pin ambra segnano gli spazi comuni della festa; i pin verdi o grigi segnano le camere — disponibili o già affittate per questa edizione.</p>
+  <p>Ogni pin apre la scheda con il dettaglio dello spazio. I pin arancioni segnano i due stage della serata, quelli ambra tutti gli altri spazi.</p>
   <div class="legend">
-    <span><i class="dot avail"></i>Camera disponibile</span>
-    <span><i class="dot occ"></i>Camera occupata</span>
+    <span><i class="dot stage"></i>Stage</span>
     <span><i class="dot info"></i>Spazio comune</span>
   </div>
 </section>
@@ -270,90 +391,122 @@ img{max-width:100%;}
 
     <article class="hw-beat" data-level="terra">
       <span class="section-label">Piano Terra</span>
-      <h3>Il cancello si apre sul buio del giardino</h3>
-      <p>Dentro, la villa è già viva: luci calde alle finestre, musica che filtra dalle porte, zucche accese lungo il viale. Il piano terra è il cuore della festa — ingresso, salone, cucina, terrazza: tutto lo spazio comune si muove su questo livello.</p>
+      <h3>Il cuore della festa è qui</h3>
+      <p>Il piano terra è tutta la festa: due bagni, il bar, la sala DJ con il Maledictio Stage, il terrazzino e persino una stanza per il calcetto. Da qui si sale al primo piano per il secondo stage, o si scende in giardino.</p>
     </article>
 
-    <article class="hw-beat" data-level="terra" data-focus-x="15.0" data-focus-y="23.6" data-pin="pin-ingresso">
+    <article class="hw-beat" data-level="terra" data-focus-x="60.0" data-focus-y="10.0" data-pin="pin-ingresso-terra">
       <span class="section-label">01 · Ingresso</span>
       <h3>Si entra da qui</h3>
       <p>Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva.</p>
     </article>
 
-    <article class="hw-beat" data-level="terra" data-focus-x="45.5" data-focus-y="23.6" data-pin="pin-salone">
-      <span class="section-label">02 · Salone Principale</span>
-      <h3>Il centro gravitazionale della serata</h3>
-      <p>Dj set, luci basse, la pista che non si vuota mai del tutto. Qualunque sia il piano della serata, prima o poi si torna sempre qui.</p>
+    <article class="hw-beat" data-level="terra" data-focus-x="67.5" data-focus-y="37.9" data-pin="pin-saladj">
+      <span class="section-label">02 · Sala DJ</span>
+      <h3>Il cuore pulsante della serata</h3>
+      <p>Dj set, luci basse, la pista che non si vuota mai del tutto: il centro gravitazionale del piano terra.</p>
     </article>
 
-    <article class="hw-beat" data-level="terra" data-focus-x="23.5" data-focus-y="66.4" data-pin="pin-cucina">
-      <span class="section-label">04 · Cucina &amp; Sala da Pranzo</span>
-      <h3>Il buffet di Ognissanti</h3>
-      <p>Dalla cucina esce il necessario — zucca, vino caldo, dolci a forma di cosa-non-si-sa. La sala da pranzo accoglie chi preferisce sedersi un momento prima di tornare in pista.</p>
+    <article class="hw-beat" data-level="terra" data-focus-x="67.5" data-focus-y="77.9" data-pin="pin-maledictio">
+      <span class="section-label">03 · Maledictio Stage</span>
+      <h3>Il primo dei due stage</h3>
+      <p>Il Maledictio Stage anima il piano terra per tutta la notte, a due passi dalla pista e dalle scale che portano al Damnatio Stage, al primo piano.</p>
     </article>
 
-    <article class="hw-beat" data-level="terra" data-focus-x="80.5" data-focus-y="23.6" data-pin="pin-terrazza">
-      <span class="section-label">03 · Terrazza Coperta</span>
-      <h3>Dove si prende aria</h3>
-      <p>La terrazza guarda il giardino: il posto giusto per una pausa, una sigaretta, o una conversazione lontano dalle casse.</p>
+    <article class="hw-beat" data-level="terra" data-focus-x="35.0" data-focus-y="42.1" data-pin="pin-bar">
+      <span class="section-label">04 · Bar</span>
+      <h3>Il primo bicchiere, e poi gli altri</h3>
+      <p>Open bar fino alle 06:00: da qui parte ogni giro della serata.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="12.5" data-focus-y="50.0" data-pin="pin-terrazzino-terra">
+      <span class="section-label">05 · Terrazzino</span>
+      <h3>Un po' d'aria, senza lasciare la festa</h3>
+      <p>Una striscia di terrazza che corre lungo tutto il piano terra: il posto giusto per una pausa lontano dalle casse.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="35.0" data-focus-y="75.0" data-pin="pin-calcetto">
+      <span class="section-label">06 · Room Calcetto</span>
+      <h3>L'unica stanza senza musica</h3>
+      <p>Un calcetto vero, per chi vuole sfidare qualcuno invece di ballare — anche solo per cinque minuti.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="27.5" data-focus-y="17.1" data-pin="pin-wc-donne">
+      <span class="section-label">07 · WC Donne</span>
+      <h3>Bagni, piano terra</h3>
+      <p>Il primo dei due bagni del piano terra, accanto all'ingresso.</p>
+    </article>
+
+    <article class="hw-beat" data-level="terra" data-focus-x="42.5" data-focus-y="17.1" data-pin="pin-wc-uomini">
+      <span class="section-label">08 · WC Uomini</span>
+      <h3>Bagni, piano terra</h3>
+      <p>Il secondo bagno del piano terra, specchio del primo.</p>
     </article>
 
     <article class="hw-beat" data-level="primo">
       <span class="section-label">Primo Piano</span>
-      <h3>Si sale, e la festa cambia forma</h3>
-      <p>Il primo piano è dove la villa smette di essere solo festa e diventa anche un posto per restare — le camere da cui, domani, si guarderà il giardino ancora addormentato. Queste sono le stanze pensate per essere affittate per la notte.</p>
+      <h3>Si sale, e la festa continua</h3>
+      <p>Il primo piano ospita il secondo stage della serata — il Damnatio Stage — più un'area living, i bagni del piano e il terrazzino chill per chi vuole stare un po' più tranquillo.</p>
     </article>
 
-    <article class="hw-beat" data-level="primo" data-focus-x="24.0" data-focus-y="27.9" data-pin="pin-suite">
-      <span class="section-label">01 · Suite Padronale</span>
-      <h3>La più grande del piano</h3>
-      <p>Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso. Per questa edizione è già stata prenotata.</p>
-      <span class="status-chip occ">Occupata</span>
+    <article class="hw-beat" data-level="primo" data-focus-x="40.0" data-focus-y="28.6" data-pin="pin-damnatio">
+      <span class="section-label">01 · Damnatio Stage</span>
+      <h3>Il secondo stage della notte</h3>
+      <p>Dove cambia la musica, cambia l'atmosfera: il Damnatio Stage prende il posto del Maledictio Stage come centro della serata al primo piano.</p>
     </article>
 
-    <article class="hw-beat" data-level="primo" data-focus-x="56.5" data-focus-y="27.9" data-pin="pin-camerablu">
-      <span class="section-label">02 · Camera Blu</span>
-      <h3>Due posti, toni notturni</h3>
-      <p>Finestra sul retro della villa, lontana dal salone. Ancora libera per chi arriva da fuori e vuole restare fino a mattina.</p>
-      <span class="status-chip avail">Disponibile</span>
+    <article class="hw-beat" data-level="primo" data-focus-x="52.5" data-focus-y="71.4" data-pin="pin-sala-primo">
+      <span class="section-label">02 · Area Living</span>
+      <h3>Lo spazio per tirare il fiato</h3>
+      <p>Tra un set e l'altro, l'area living del primo piano è il posto per sedersi un momento senza perdere la festa di vista.</p>
     </article>
 
-    <article class="hw-beat" data-level="primo" data-focus-x="82.5" data-focus-y="27.9" data-pin="pin-cameraverde">
-      <span class="section-label">03 · Camera Verde</span>
-      <h3>Specchio della Camera Blu</h3>
-      <p>Stessa quiete, sull'altro lato del corridoio: vista sul giardino invece che sul vialetto.</p>
-      <span class="status-chip avail">Disponibile</span>
+    <article class="hw-beat" data-level="primo" data-focus-x="17.5" data-focus-y="71.4" data-pin="pin-wc-primo">
+      <span class="section-label">03 · WC</span>
+      <h3>Bagni, primo piano</h3>
+      <p>Il bagno del primo piano, a servizio dello stage e dell'area living.</p>
     </article>
 
-    <article class="hw-beat" data-level="primo" data-focus-x="65.0" data-focus-y="70.7" data-pin="pin-terrazzino">
-      <span class="section-label">05 · Terrazzino</span>
-      <h3>Metà camera, metà balcone</h3>
-      <p>La stanza più particolare del piano: pensata per chi vuole dormire quasi all'aperto, sotto la luna di fine ottobre.</p>
-      <span class="status-chip avail">Disponibile</span>
+    <article class="hw-beat" data-level="primo" data-focus-x="85.0" data-focus-y="50.0" data-pin="pin-terrazzino-chill">
+      <span class="section-label">04 · Terrazzino Chill</span>
+      <h3>Il terrazzino per rallentare</h3>
+      <p>Più raccolto del terrazzino al piano terra: la vista giusta per una pausa più lunga.</p>
     </article>
 
     <article class="hw-beat" data-level="giardino">
-      <span class="section-label">Giardino &amp; Piscina</span>
+      <span class="section-label">Giardino</span>
       <h3>Si torna giù, ma non dentro</h3>
-      <p>Il giardino è il terzo livello della villa — quello senza soffitto: piscina, gazebo, un falò per chi non ha ancora sonno.</p>
+      <p>Il giardino è il primo spazio che si incontra arrivando: cancello d'ingresso, biglietteria, infermeria — e le due aree più movimentate della serata, il beer pong e lo stage food.</p>
     </article>
 
-    <article class="hw-beat" data-level="giardino" data-focus-x="31.0" data-focus-y="30.7" data-pin="pin-piscina">
-      <span class="section-label">01 · Piscina</span>
-      <h3>Più scenografia che bagno</h3>
-      <p>Illuminata di notte, è il punto fermo delle foto — ma qualcuno, ogni anno, ci finisce dentro vestito.</p>
+    <article class="hw-beat" data-level="giardino" data-focus-x="67.5" data-focus-y="14.3" data-pin="pin-cancello">
+      <span class="section-label">01 · Cancello d'Ingresso</span>
+      <h3>Da qui si entra</h3>
+      <p>Il cancello d'ingresso al giardino: il primo punto della serata per chi arriva a piedi o scende dalla navetta.</p>
     </article>
 
-    <article class="hw-beat" data-level="giardino" data-focus-x="76.0" data-focus-y="30.7" data-pin="pin-gazebo">
-      <span class="section-label">02 · Gazebo &amp; Falò</span>
-      <h3>Per chi vuole stare fermo</h3>
-      <p>Una chiacchierata, un bicchiere, il fuoco che sostituisce la musica per un po'.</p>
+    <article class="hw-beat" data-level="giardino" data-focus-x="49.0" data-focus-y="35.7" data-pin="pin-biglietteria">
+      <span class="section-label">02 · Biglietteria</span>
+      <h3>Il check-in della serata</h3>
+      <p>Biglietto o richiesta confermata: da qui si passa prima di entrare.</p>
     </article>
 
-    <article class="hw-beat" data-level="giardino" data-focus-x="80.0" data-focus-y="73.6" data-pin="pin-parcheggio">
-      <span class="section-label">04 · Parcheggio</span>
-      <h3>L'unica stanza senza storia</h3>
-      <p>Ma è lì che la notte, per qualcuno, finisce — o comincia, se arriva solo adesso.</p>
+    <article class="hw-beat" data-level="giardino" data-focus-x="76.5" data-focus-y="35.7" data-pin="pin-infermeria">
+      <span class="section-label">03 · Infermeria</span>
+      <h3>Presidio sanitario per tutta la notte</h3>
+      <p>Un punto di primo soccorso attivo per l'intera serata, a disposizione di chi ne ha bisogno.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="54.0" data-focus-y="71.4" data-pin="pin-beerpong">
+      <span class="section-label">04 · Beer Pong</span>
+      <h3>Per chi vuole giocare prima di ballare</h3>
+      <p>Tavoli di beer pong in giardino: la sfida informale della serata, prima che si torni in pista.</p>
+    </article>
+
+    <article class="hw-beat" data-level="giardino" data-focus-x="81.5" data-focus-y="71.4" data-pin="pin-stagefood">
+      <span class="section-label">05 · Stage Food</span>
+      <h3>Il terzo stage, quello del cibo</h3>
+      <p>Lo stage food del giardino tiene tutti al proprio posto tra un ballo e l'altro.</p>
     </article>
 
   </div>
@@ -371,21 +524,32 @@ img{max-width:100%;}
       <div class="floor-layer is-active" data-layer="terra">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
-          <rect class="room-rect" x="50" y="50" width="200" height="230"></rect>
-          <text class="room-code mono" x="64" y="76">01</text>
-          <text class="room-label" x="150" y="175">Ingresso</text>
-          <rect class="room-rect" x="250" y="50" width="410" height="230"></rect>
-          <text class="room-code mono" x="264" y="76">02</text>
-          <text class="room-label" x="455" y="175">Salone Principale</text>
-          <rect class="room-rect" x="660" y="50" width="290" height="230"></rect>
-          <text class="room-code mono" x="674" y="76">03</text>
-          <text class="room-label" x="805" y="175">Terrazza Coperta</text>
-          <rect class="room-rect" x="50" y="280" width="370" height="370"></rect>
-          <text class="room-code mono" x="64" y="306">04</text>
-          <text class="room-label" x="235" y="475">Cucina</text>
-          <rect class="room-rect" x="420" y="280" width="530" height="370"></rect>
-          <text class="room-code mono" x="434" y="306">05</text>
-          <text class="room-label" x="685" y="475">Sala da Pranzo</text>
+          <rect class="room-rect" x="50" y="50" width="150" height="600"></rect>
+          <text class="room-code mono" x="64" y="76">05</text>
+          <text class="room-label" x="125" y="350" transform="rotate(-90 125 350)">Terrazzino</text>
+          <rect class="room-rect" x="200" y="50" width="150" height="140"></rect>
+          <text class="room-code mono" x="214" y="76">07</text>
+          <text class="room-label" x="275" y="130">WC Donne</text>
+          <rect class="room-rect" x="350" y="50" width="150" height="140"></rect>
+          <text class="room-code mono" x="364" y="76">08</text>
+          <text class="room-label" x="425" y="130">WC Uomini</text>
+          <rect class="room-rect" x="200" y="190" width="300" height="210"></rect>
+          <text class="room-code mono" x="214" y="216">04</text>
+          <text class="room-label" x="350" y="300">Bar</text>
+          <rect class="room-rect" x="200" y="400" width="300" height="250"></rect>
+          <text class="room-code mono" x="214" y="426">06</text>
+          <text class="room-label" x="350" y="530">Room Calcetto</text>
+          <rect class="room-rect" x="500" y="50" width="200" height="40"></rect>
+          <text class="room-code mono" x="514" y="76">01</text>
+          <text class="room-label" x="600" y="76" font-size="12">Ingresso</text>
+          <rect class="room-rect" x="500" y="90" width="350" height="350"></rect>
+          <text class="room-code mono" x="514" y="116">02</text>
+          <text class="room-label" x="675" y="270">Sala DJ</text>
+          <rect class="room-rect is-camera" x="500" y="440" width="350" height="210"></rect>
+          <text class="room-code mono" x="514" y="466">03</text>
+          <text class="room-label" x="675" y="550">Maledictio Stage</text>
+          <rect class="room-rect" x="850" y="440" width="100" height="210"></rect>
+          <text class="room-label" x="900" y="545" font-size="12" transform="rotate(-90 900 545)">Scale ↑</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -399,11 +563,14 @@ img{max-width:100%;}
           </g>
         </svg>
         <div class="pins">
-          <button class="hw-pin pin--info" id="pin-ingresso" style="left:15.0%; top:23.6%" data-kind="info" data-name="Ingresso" data-desc="Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva." aria-label="Ingresso"></button>
-          <button class="hw-pin pin--info" id="pin-salone" style="left:45.5%; top:23.6%" data-kind="info" data-name="Salone Principale" data-desc="Dj set, luci basse: il centro gravitazionale della serata, dove tutti tornano prima o poi." aria-label="Salone Principale"></button>
-          <button class="hw-pin pin--info" id="pin-terrazza" style="left:80.5%; top:23.6%" data-kind="info" data-name="Terrazza Coperta" data-desc="Guarda il giardino: il posto giusto per prendere aria lontano dalle casse." aria-label="Terrazza Coperta"></button>
-          <button class="hw-pin pin--info" id="pin-cucina" style="left:23.5%; top:66.4%" data-kind="info" data-name="Cucina" data-desc="Da qui esce il buffet di Ognissanti: zucca, vino caldo, dolci a forma di cosa-non-si-sa." aria-label="Cucina"></button>
-          <button class="hw-pin pin--info" id="pin-salapranzo" style="left:68.5%; top:66.4%" data-kind="info" data-name="Sala da Pranzo" data-desc="Per chi preferisce sedersi un momento prima di tornare in pista." aria-label="Sala da Pranzo"></button>
+          <button class="hw-pin pin--info" id="pin-ingresso-terra" style="left:60.0%; top:10.0%" data-kind="info" data-name="Ingresso" data-desc="Il portone intaglia la notte in una striscia di luce ambrata, tra zucche scolpite e il primo bicchiere offerto a chi arriva." aria-label="Ingresso"></button>
+          <button class="hw-pin pin--info" id="pin-saladj" style="left:67.5%; top:37.9%" data-kind="info" data-name="Sala DJ" data-desc="Dj set, luci basse, la pista che non si vuota mai del tutto: il centro gravitazionale del piano terra." aria-label="Sala DJ"></button>
+          <button class="hw-pin pin--stage" id="pin-maledictio" style="left:67.5%; top:77.9%" data-kind="stage" data-name="Maledictio Stage" data-desc="Il Maledictio Stage anima il piano terra per tutta la notte, a due passi dalla pista e dalle scale che portano al Damnatio Stage, al primo piano." aria-label="Maledictio Stage"></button>
+          <button class="hw-pin pin--info" id="pin-bar" style="left:35.0%; top:42.1%" data-kind="info" data-name="Bar" data-desc="Open bar fino alle 06:00: da qui parte ogni giro della serata." aria-label="Bar"></button>
+          <button class="hw-pin pin--info" id="pin-terrazzino-terra" style="left:12.5%; top:50.0%" data-kind="info" data-name="Terrazzino" data-desc="Una striscia di terrazza che corre lungo tutto il piano terra: il posto giusto per una pausa lontano dalle casse." aria-label="Terrazzino"></button>
+          <button class="hw-pin pin--info" id="pin-calcetto" style="left:35.0%; top:75.0%" data-kind="info" data-name="Room Calcetto" data-desc="Un calcetto vero, per chi vuole sfidare qualcuno invece di ballare — anche solo per cinque minuti." aria-label="Room Calcetto"></button>
+          <button class="hw-pin pin--info" id="pin-wc-donne" style="left:27.5%; top:17.1%" data-kind="info" data-name="WC Donne" data-desc="Il primo dei due bagni del piano terra, accanto all'ingresso." aria-label="WC Donne"></button>
+          <button class="hw-pin pin--info" id="pin-wc-uomini" style="left:42.5%; top:17.1%" data-kind="info" data-name="WC Uomini" data-desc="Il secondo bagno del piano terra, specchio del primo." aria-label="WC Uomini"></button>
         </div>
       </div>
 
@@ -411,21 +578,18 @@ img{max-width:100%;}
       <div class="floor-layer" data-layer="primo">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
-          <rect class="room-rect is-camera" x="50" y="50" width="380" height="290"></rect>
+          <rect class="room-rect is-camera" x="50" y="50" width="700" height="300"></rect>
           <text class="room-code mono" x="64" y="76">01</text>
-          <text class="room-label" x="240" y="200">Suite Padronale</text>
-          <rect class="room-rect is-camera" x="430" y="50" width="270" height="290"></rect>
-          <text class="room-code mono" x="444" y="76">02</text>
-          <text class="room-label" x="565" y="200">Camera Blu</text>
-          <rect class="room-rect is-camera" x="700" y="50" width="250" height="290"></rect>
-          <text class="room-code mono" x="714" y="76">03</text>
-          <text class="room-label" x="825" y="200">Camera Verde</text>
-          <rect class="room-rect" x="50" y="340" width="300" height="310"></rect>
-          <text class="room-code mono" x="64" y="366">04</text>
-          <text class="room-label" x="200" y="500">Bagno Comune</text>
-          <rect class="room-rect is-camera" x="350" y="340" width="600" height="310"></rect>
-          <text class="room-code mono" x="364" y="366">05</text>
-          <text class="room-label" x="650" y="500">Terrazzino</text>
+          <text class="room-label" x="400" y="200">Damnatio Stage</text>
+          <rect class="room-rect" x="50" y="350" width="250" height="300"></rect>
+          <text class="room-code mono" x="64" y="376">03</text>
+          <text class="room-label" x="175" y="500">WC</text>
+          <rect class="room-rect" x="300" y="350" width="450" height="300"></rect>
+          <text class="room-code mono" x="314" y="376">02</text>
+          <text class="room-label" x="525" y="500">Area Living</text>
+          <rect class="room-rect" x="750" y="50" width="200" height="600"></rect>
+          <text class="room-code mono" x="764" y="76">04</text>
+          <text class="room-label" x="850" y="350" transform="rotate(-90 850 350)">Terrazzino Chill</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -439,11 +603,10 @@ img{max-width:100%;}
           </g>
         </svg>
         <div class="pins">
-          <button class="hw-pin pin--camera is-occupied" id="pin-suite" style="left:24.0%; top:27.9%" data-kind="occ" data-name="Suite Padronale" data-desc="Letto matrimoniale, bagno privato, vista sul vialetto d'ingresso." aria-label="Suite Padronale, occupata"></button>
-          <button class="hw-pin pin--camera is-available" id="pin-camerablu" style="left:56.5%; top:27.9%" data-kind="avail" data-name="Camera Blu" data-desc="Due posti letto, toni notturni, finestra sul retro della villa." aria-label="Camera Blu, disponibile"></button>
-          <button class="hw-pin pin--camera is-available" id="pin-cameraverde" style="left:82.5%; top:27.9%" data-kind="avail" data-name="Camera Verde" data-desc="Stessa quiete della Camera Blu, vista sul giardino." aria-label="Camera Verde, disponibile"></button>
-          <button class="hw-pin pin--info" id="pin-bagno" style="left:20.0%; top:70.7%" data-kind="info" data-name="Bagno Comune" data-desc="A servizio delle camere del piano." aria-label="Bagno Comune"></button>
-          <button class="hw-pin pin--camera is-available" id="pin-terrazzino" style="left:65.0%; top:70.7%" data-kind="avail" data-name="Terrazzino" data-desc="Metà camera, metà balcone coperto: per dormire quasi all'aperto." aria-label="Terrazzino, disponibile"></button>
+          <button class="hw-pin pin--stage" id="pin-damnatio" style="left:40.0%; top:28.6%" data-kind="stage" data-name="Damnatio Stage" data-desc="Dove cambia la musica, cambia l'atmosfera: il Damnatio Stage prende il posto del Maledictio Stage come centro della serata al primo piano." aria-label="Damnatio Stage"></button>
+          <button class="hw-pin pin--info" id="pin-sala-primo" style="left:52.5%; top:71.4%" data-kind="info" data-name="Area Living" data-desc="Tra un set e l'altro, l'area living del primo piano è il posto per sedersi un momento senza perdere la festa di vista." aria-label="Area Living"></button>
+          <button class="hw-pin pin--info" id="pin-wc-primo" style="left:17.5%; top:71.4%" data-kind="info" data-name="WC" data-desc="Il bagno del primo piano, a servizio dello stage e dell'area living." aria-label="WC"></button>
+          <button class="hw-pin pin--info" id="pin-terrazzino-chill" style="left:85.0%; top:50.0%" data-kind="info" data-name="Terrazzino Chill" data-desc="Più raccolto del terrazzino al piano terra: la vista giusta per una pausa più lunga." aria-label="Terrazzino Chill"></button>
         </div>
       </div>
 
@@ -451,18 +614,23 @@ img{max-width:100%;}
       <div class="floor-layer" data-layer="giardino">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
-          <rect class="room-rect" x="50" y="50" width="520" height="330"></rect>
-          <text class="room-code mono" x="64" y="76">01</text>
-          <text class="room-label" x="310" y="220">Piscina</text>
-          <rect class="room-rect" x="570" y="50" width="380" height="330"></rect>
-          <text class="room-code mono" x="584" y="76">02</text>
-          <text class="room-label" x="760" y="220">Gazebo</text>
-          <rect class="room-rect" x="50" y="380" width="600" height="270"></rect>
-          <text class="room-code mono" x="64" y="406">03</text>
-          <text class="room-label" x="350" y="520">Prato &amp; Falò</text>
-          <rect class="room-rect" x="650" y="380" width="300" height="270"></rect>
-          <text class="room-code mono" x="664" y="406">04</text>
-          <text class="room-label" x="800" y="520">Parcheggio</text>
+          <rect class="room-rect" x="50" y="50" width="350" height="600"></rect>
+          <text class="room-label" x="225" y="350">Villa</text>
+          <rect class="room-rect" x="400" y="50" width="550" height="100"></rect>
+          <text class="room-code mono" x="414" y="76">01</text>
+          <text class="room-label" x="675" y="105" font-size="12">Cancello d'Ingresso</text>
+          <rect class="room-rect" x="400" y="150" width="180" height="200"></rect>
+          <text class="room-code mono" x="414" y="176">02</text>
+          <text class="room-label" x="490" y="255" font-size="13">Biglietteria</text>
+          <rect class="room-rect" x="580" y="150" width="370" height="200"></rect>
+          <text class="room-code mono" x="594" y="176">03</text>
+          <text class="room-label" x="765" y="255" font-size="13">Infermeria</text>
+          <rect class="room-rect" x="400" y="350" width="280" height="300"></rect>
+          <text class="room-code mono" x="414" y="376">04</text>
+          <text class="room-label" x="540" y="500">Beer Pong</text>
+          <rect class="room-rect" x="680" y="350" width="270" height="300"></rect>
+          <text class="room-code mono" x="694" y="376">05</text>
+          <text class="room-label" x="815" y="500">Stage Food</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -476,10 +644,11 @@ img{max-width:100%;}
           </g>
         </svg>
         <div class="pins">
-          <button class="hw-pin pin--info" id="pin-piscina" style="left:31.0%; top:30.7%" data-kind="info" data-name="Piscina" data-desc="Illuminata di notte, più scenografia che bagno — ma qualcuno ci finisce dentro vestito." aria-label="Piscina"></button>
-          <button class="hw-pin pin--info" id="pin-gazebo" style="left:76.0%; top:30.7%" data-kind="info" data-name="Gazebo" data-desc="Per chi vuole stare fermo con una chiacchierata e un bicchiere." aria-label="Gazebo"></button>
-          <button class="hw-pin pin--info" id="pin-pratofalo" style="left:35.0%; top:73.6%" data-kind="info" data-name="Prato &amp; Falò" data-desc="Il fuoco che sostituisce la musica per un po'." aria-label="Prato e Falò"></button>
-          <button class="hw-pin pin--info" id="pin-parcheggio" style="left:80.0%; top:73.6%" data-kind="info" data-name="Parcheggio" data-desc="Dove la notte, per qualcuno, finisce o comincia." aria-label="Parcheggio"></button>
+          <button class="hw-pin pin--info" id="pin-cancello" style="left:67.5%; top:14.3%" data-kind="info" data-name="Cancello d'Ingresso" data-desc="Il cancello d'ingresso al giardino: il primo punto della serata per chi arriva a piedi o scende dalla navetta." aria-label="Cancello d'Ingresso"></button>
+          <button class="hw-pin pin--info" id="pin-biglietteria" style="left:49.0%; top:35.7%" data-kind="info" data-name="Biglietteria" data-desc="Biglietto o richiesta confermata: da qui si passa prima di entrare." aria-label="Biglietteria"></button>
+          <button class="hw-pin pin--info" id="pin-infermeria" style="left:76.5%; top:35.7%" data-kind="info" data-name="Infermeria" data-desc="Un punto di primo soccorso attivo per l'intera serata, a disposizione di chi ne ha bisogno." aria-label="Infermeria"></button>
+          <button class="hw-pin pin--info" id="pin-beerpong" style="left:54.0%; top:71.4%" data-kind="info" data-name="Beer Pong" data-desc="Tavoli di beer pong in giardino: la sfida informale della serata, prima che si torni in pista." aria-label="Beer Pong"></button>
+          <button class="hw-pin pin--info" id="pin-stagefood" style="left:81.5%; top:71.4%" data-kind="info" data-name="Stage Food" data-desc="Lo stage food del giardino tiene tutti al proprio posto tra un ballo e l'altro." aria-label="Stage Food"></button>
         </div>
       </div>
 
@@ -501,7 +670,7 @@ img{max-width:100%;}
 <section class="wrap logi-head reveal">
   <span class="section-label">Come arrivare, dove dormire, come entrare</span>
   <h2>Oltre la villa: la serata pensata fino in fondo</h2>
-  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica — tutte da confermare in fase di prenotazione. Scorri per seguire la navetta, girare tra le strutture partner e vedere come funziona il saltafila.</p>
+  <p>Tre opzioni pensate per chi viene da fuori o non vuole pensare alla logistica. Scorri per seguire la navetta, girare tra le soluzioni per dormire e vedere come funziona il saltafila.</p>
 </section>
 
 <section class="l3-storymap wrap">
@@ -511,83 +680,65 @@ img{max-width:100%;}
     <article class="l3-beat" data-scene="navetta">
       <span class="section-label">La navetta</span>
       <h3>Non serve l'auto per arrivare</h3>
-      <p>Per questa edizione la navetta è ufficiale: un mezzo da 30 posti che fa la spola dai punti di ritrovo principali fino al cancello della villa. Si sale, ci si siede, si arriva.</p>
-      <div class="l3-chips"><span class="l3-chip">30 posti</span><span class="l3-chip">5 fermate</span><span class="l3-chip">Mezzo unico</span></div>
+      <p>Per questa edizione la navetta è ufficiale: fa la spola tra i punti di ritrovo e il cancello della villa, andata e ritorno. Si sale, ci si siede, si arriva.</p>
+      <div class="l3-chips"><span class="l3-chip">3 fermate</span><span class="l3-chip">Andata e ritorno</span><span class="l3-chip">Partenza 00:00 da Salerno</span></div>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="0">
-      <span class="section-label">Fermata 1 · Baronissi</span>
-      <h3>Si parte da Baronissi</h3>
-      <p>Primo punto di ritrovo della serata: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
+      <span class="section-label">Fermata 1 · Salerno</span>
+      <h3>Si parte da Salerno</h3>
+      <p>Primo punto di ritrovo della serata, partenza ore 00:00: chi arriva da qui sale per primo, il mezzo riparte appena tutti sono a bordo.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="1">
-      <span class="section-label">Fermata 2 · Fisciano</span>
-      <h3>Si passa da Fisciano</h3>
-      <p>La navetta prosegue verso Fisciano, un altro gruppo sale a bordo — comodo per chi viene dall'università.</p>
+      <span class="section-label">Fermata 2 · Pontecagnano</span>
+      <h3>Si passa da Pontecagnano</h3>
+      <p>La navetta prosegue verso Pontecagnano, un altro gruppo sale a bordo.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-stop="2">
-      <span class="section-label">Fermata 3 · Salerno Centro</span>
-      <h3>Il cuore della città</h3>
-      <p>La fermata più centrale, pensata per chi arriva da fuori Salerno o preferisce non guidare fino in villa.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="navetta" data-stop="3">
-      <span class="section-label">Fermata 4 · Pastena</span>
-      <h3>Si continua verso Pastena</h3>
-      <p>Penultima tappa prima della villa: la navetta è ormai quasi al completo.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="navetta" data-stop="4">
-      <span class="section-label">Fermata 5 · Torrione</span>
-      <h3>Ultima fermata: Torrione</h3>
-      <p>L'ultimo gruppo sale a bordo. Da qui, dritti in villa.</p>
+      <span class="section-label">Fermata 3 · Magazzeno</span>
+      <h3>Ultima fermata: Magazzeno</h3>
+      <p>L'ultimo gruppo sale a bordo, a due passi dalla villa. Da qui, dritti al cancello.</p>
     </article>
 
     <article class="l3-beat" data-scene="navetta" data-explode="true">
       <span class="section-label">A bordo</span>
-      <h3>Trenta posti, un solo viaggio</h3>
-      <p>Il mezzo arriva in villa: trenta posti a sedere, nessuno lasciato alla fermata.</p>
-      <div class="l3-chips"><span class="l3-chip">30/30 posti confermati</span></div>
+      <h3>Andata e ritorno, un solo biglietto</h3>
+      <p>Il mezzo arriva in villa. Il ritorno segue lo stesso percorso al contrario — Magazzeno, Pontecagnano, Salerno — con partenza alle 5 del mattino. È andata e ritorno con lo stesso biglietto, ma la partenza del ritorno è fissa: chi non è alla fermata in orario dovrà rientrare con mezzi propri.</p>
+      <div class="l3-chips"><span class="l3-chip">Ritorno ore 5:00</span></div>
     </article>
 
     <article class="l3-beat" data-scene="hotel">
       <span class="section-label">Dove dormire</span>
       <h3>Il check-in non è un problema</h3>
-      <p>Per chi non vuole guidare dopo la festa, alcune strutture partner tengono delle camere bloccate per gli ospiti dell'evento. Il check-in resta a carico della struttura scelta — a voi resta solo scegliere dove svegliarvi.</p>
-      <div class="l3-chips"><span class="l3-chip">4 strutture partner</span><span class="l3-chip">Camere bloccate</span></div>
+      <p>Per chi non vuole guidare dopo la festa, tre soluzioni tengono posti bloccati per gli ospiti dell'evento — dall'appartamento privato dentro la villa alla camera d'hotel. Ingresso e open bar fino alle 06:00 sempre inclusi.</p>
+      <div class="l3-chips"><span class="l3-chip">3 soluzioni</span><span class="l3-chip">Posti bloccati</span></div>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="0">
-      <span class="section-label">Partner 1</span>
-      <h3>Hotel Ancora</h3>
-      <p>Camere riservate agli ospiti Magaparty per questa edizione, check-in gestito direttamente dalla struttura.</p>
+      <span class="section-label">Soluzione 1</span>
+      <h3>Appartamenti VIP</h3>
+      <p>Dentro la villa: 2 appartamenti (4 e 5 posti), si vendono interi, minimo 4 persone. Entri e esci quando vuoi, a fine serata non ti sposti di un metro.</p>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="1">
-      <span class="section-label">Partner 2</span>
+      <span class="section-label">Soluzione 2</span>
       <h3>Villa Belvedere</h3>
-      <p>Un'altra struttura con camere bloccate per chi partecipa alla serata e vuole fermarsi a dormire.</p>
+      <p>Hotel con bagno privato in camera: matrimoniale, tripla o quadrupla, minimo 2 persone. Festa e hotel in un'unica soluzione.</p>
     </article>
 
     <article class="l3-beat" data-scene="hotel" data-hotel="2">
-      <span class="section-label">Partner 3</span>
-      <h3>Villa Cavallo</h3>
-      <p>Stesso meccanismo: posti riservati, nessuna pratica da sbrigare con Magaparty.</p>
-    </article>
-
-    <article class="l3-beat" data-scene="hotel" data-hotel="3">
-      <span class="section-label">Partner 4</span>
-      <h3>B&amp;B Calypso</h3>
-      <p>L'ultima struttura partner della lista, stesse condizioni delle altre.</p>
+      <span class="section-label">Soluzione 3</span>
+      <h3>Lido Azzurro</h3>
+      <p>Sei camere doppie, bagno in comune, minimo 2 persone. La soluzione più semplice per chi vuole solo un letto comodo.</p>
     </article>
 
     <article class="l3-beat" data-scene="saltafila">
       <span class="section-label">Saltafila</span>
       <h3>Chi non vuole aspettare in fila</h3>
       <p>Un ingresso prioritario per chi preferisce evitare la coda principale: si salta la fila d'ingresso e si entra subito.</p>
-      <div class="l3-chips"><span class="l3-chip">Dettagli e costo in arrivo con le prenotazioni</span></div>
+      <div class="l3-chips"><span class="l3-chip">€15 fino al 22/10, poi €25</span><span class="l3-chip">Posti limitati</span></div>
     </article>
 
   </div>
@@ -602,20 +753,276 @@ img{max-width:100%;}
     <div class="l3-stage" id="l3Stage">
       <canvas id="l3Canvas"></canvas>
       <div class="l3-pins" id="l3Pins">
-        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Baronissi</span></div>
-        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Fisciano</span></div>
-        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Salerno Centro</span></div>
-        <div class="l3-pin" data-pin="navetta-3"><span class="dot"></span><span class="label">Pastena</span></div>
-        <div class="l3-pin" data-pin="navetta-4"><span class="dot"></span><span class="label">Torrione</span></div>
-        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Hotel Ancora</span></div>
+        <div class="l3-pin" data-pin="navetta-0"><span class="dot"></span><span class="label">Salerno</span></div>
+        <div class="l3-pin" data-pin="navetta-1"><span class="dot"></span><span class="label">Pontecagnano</span></div>
+        <div class="l3-pin" data-pin="navetta-2"><span class="dot"></span><span class="label">Magazzeno</span></div>
+        <div class="l3-pin" data-pin="hotel-0"><span class="dot"></span><span class="label">Appartamenti VIP</span></div>
         <div class="l3-pin" data-pin="hotel-1"><span class="dot"></span><span class="label">Villa Belvedere</span></div>
-        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Villa Cavallo</span></div>
-        <div class="l3-pin" data-pin="hotel-3"><span class="dot"></span><span class="label">B&amp;B Calypso</span></div>
+        <div class="l3-pin" data-pin="hotel-2"><span class="dot"></span><span class="label">Lido Azzurro</span></div>
       </div>
       <div class="l3-loading" id="l3Loading">Carico la scena 3D…</div>
     </div>
   </div>
 
+</section>
+
+<section class="wrap prezzi-head" id="prezzi">
+  <span class="section-label">Quanto costa</span>
+  <h2>Prezzi</h2>
+  <p>Vendita a fasce, posti limitati: compila il form per prenotare. I prezzi segnati con una freccia aumentano dal 22 ottobre.</p>
+</section>
+
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Biglietti</span>
+  <h3>Vendita a release</h3>
+</div>
+
+<section class="wrap prezzi-grid" id="ticketGrid">
+  <div class="prezzi-card ticket-card" data-tier="community" data-tier-label="Biglietto Community" data-state="open">
+    <h4>Biglietto Community <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+    <span class="price">€40</span>
+    <div class="ticket-progress"><div class="ticket-progress-bar" style="width:20%"></div></div>
+    <span class="ticket-progress-label">Richieste in arrivo</span>
+    <p>Tariffa riservata alla community, posti limitati. Compila il form: ti ricontattiamo noi su WhatsApp per confermare.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-state="waitlist">
+    <h4>Biglietto Prima Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span><span class="state-chip chip-waitlist">Lista d'attesa</span></h4>
+    <span class="price">€45</span>
+    <div class="ticket-progress"><div class="ticket-progress-bar" style="width:15%"></div></div>
+    <span class="ticket-progress-label">Appena aperte</span>
+    <p>La Prima Release non è ancora aperta alla vendita. Compila il form per iscriverti alla lista d'attesa: appena si apre ti ricontattiamo noi per primo.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Iscriviti alla lista d'attesa</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Iscrivimi alla lista d'attesa</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta inviata — sei in lista d'attesa, ti ricontattiamo appena si apre la vendita. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="seconda" data-tier-label="Biglietto Seconda Release" data-state="locked">
+    <h4>Biglietto Seconda Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+    <span class="price">€50</span>
+    <p>Si apre automaticamente a esaurimento della Prima Release.</p>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo a breve per confermare. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="terza" data-tier-label="Biglietto Terza Release" data-state="locked">
+    <h4>Biglietto Terza Release <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span><span class="state-chip chip-locked">In arrivo</span></h4>
+    <span class="price">€55</span>
+    <p>Ultima fascia. Si apre automaticamente a esaurimento della Seconda Release.</p>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo a breve per confermare. ✅</p>
+  </div>
+</section>
+
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Extra</span>
+  <h3>Saltafila &amp; navetta</h3>
+</div>
+
+<section class="wrap prezzi-grid">
+  <div class="prezzi-card ticket-card" data-tier="saltafila" data-tier-label="Bracciale saltafila" data-state="open">
+    <h4>Bracciale saltafila <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price">€15 <span class="price-note">€25 dal 22 ottobre · posti limitati</span></span>
+    <p>Upgrade opzionale: salti la fila principale ed entri subito. Compila il form, ti ricontattiamo noi per confermare.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il saltafila</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="navetta" data-tier-label="Navetta + Ingresso omaggio" data-state="open">
+    <h4>Navetta + Ingresso omaggio <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price">€60 <span class="price-note">€70 dal 22 ottobre</span></span>
+    <p>Andata e ritorno in navetta più ingresso incluso. Vedi orari e fermate nella sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a>.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il posto</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+</section>
+
+<div class="wrap prezzi-subhead">
+  <span class="section-label">Dove dormire</span>
+  <h3>Tre soluzioni, tutte con ingresso e open bar inclusi</h3>
+  <p>Open bar fino alle 06:00 incluso in ogni soluzione. Prezzo a persona, minimo gruppo indicato per ciascuna.</p>
+</div>
+
+<section class="wrap prezzi-grid">
+  <div class="prezzi-card ticket-card" data-tier="appartamenti-vip" data-tier-label="Appartamenti VIP (dentro la villa)" data-state="open">
+    <h4>Appartamenti VIP <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€90</span>€100 <span class="price-note">dal 22 ottobre (min. 4 persone, a persona)</span></span>
+    <p>La festa è casa vostra. Un appartamento privato dentro la villa, solo per il tuo gruppo: entri e esci quando vuoi, e a fine serata non ti sposti di un metro. 2 appartamenti disponibili (4 e 5 posti), si vendono interi.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+      <li>Appartamento privato dentro la villa per tutta la notte</li>
+      <li>Posti letto per tutto il gruppo (2 posti letto + divano letto, oppure singolo + matrimoniale + divano letto)</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi l'appartamento</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="villa-belvedere" data-tier-label="Villa Belvedere (hotel, bagno privato)" data-state="open">
+    <h4>Villa Belvedere <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€80</span>€90 <span class="price-note">dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <p>Festa e hotel in un'unica soluzione. Camera con bagno privato, ingresso e open bar inclusi: tu pensa solo a ballare. 3 tipologie di stanza: matrimoniale, tripla, quadrupla.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+      <li>Notte in hotel con bagno privato in camera</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="lido-azzurro" data-tier-label="Lido Azzurro (camere doppie)" data-state="open">
+    <h4>Lido Azzurro <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
+    <span class="price"><span class="was">€70</span>€80 <span class="price-note">dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <p>La soluzione più semplice: un letto comodo e il resto della notte libero per la festa. 6 camere doppie, bagno in comune.</p>
+    <ul class="includes">
+      <li>Ingresso alla festa</li>
+      <li>Open bar fino alle 06:00</li>
+    </ul>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="text" name="instagram" placeholder="Instagram (@username)">
+      <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
+      <label class="terms-check">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
+      </label>
+      <button type="submit" class="ticket-cta full-w">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+</section>
+
+<section class="wrap prezzi-head" id="termini-e-condizioni">
+  <span class="section-label">Da leggere prima di prenotare</span>
+  <h2>Termini e condizioni</h2>
+  <ol class="terms-list">
+    <li><strong>Accesso riservato ai maggiorenni.</strong> L'evento è aperto esclusivamente a chi ha compiuto 18 anni alla data della festa (31 ottobre 2026). Un documento d'identità valido può essere richiesto all'ingresso.</li>
+    <li><strong>La richiesta non è un acquisto concluso.</strong> Compilare uno dei form di questa pagina invia una richiesta di prenotazione: lo staff Magaparty ricontatta chi la invia per confermare disponibilità e modalità di pagamento.</li>
+    <li><strong>Dati personali.</strong> I dati inseriti nei form (nome, cognome, email, telefono, data di nascita, Instagram, invitato da) sono trattati da Magaparty al solo scopo di gestire la richiesta, ricontattare chi la invia e organizzare l'accesso alla serata. Non vengono ceduti a terzi per finalità commerciali.</li>
+    <li><strong>Navetta.</strong> Il servizio è andata e ritorno secondo gli orari e le fermate indicati nella sezione dedicata. È responsabilità di chi viaggia presentarsi in orario alla fermata di ritorno (partenza ore 5:00): in caso contrario l'organizzazione non è responsabile per il rientro a casa.</li>
+    <li><strong>Regole in villa.</strong> Sono vietati comportamenti molesti, pericolosi o l'uso di sostanze illecite. L'organizzazione si riserva il diritto di allontanare chi non rispetta queste regole, senza rimborso.</li>
+    <li><strong>Modifiche al programma.</strong> Orari, lineup e dettagli logistici possono subire variazioni per cause organizzative o di forza maggiore; eventuali aggiornamenti vengono comunicati sui canali social di Magaparty.</li>
+  </ol>
 </section>
 
 <section class="closing wrap">
@@ -669,7 +1076,7 @@ img{max-width:100%;}
 
   function openCard(btn){
     var kind = btn.dataset.kind;
-    cardKind.textContent = kind === 'avail' ? 'Camera disponibile' : kind === 'occ' ? 'Camera occupata' : 'Spazio comune';
+    cardKind.textContent = kind === 'stage' ? 'Stage' : kind === 'avail' ? 'Camera disponibile' : kind === 'occ' ? 'Camera occupata' : 'Spazio comune';
     cardKind.className = 'kind ' + kind;
     cardName.textContent = btn.dataset.name;
     cardDesc.textContent = btn.dataset.desc;
@@ -818,6 +1225,36 @@ window.addEventListener('DOMContentLoaded', function(){
     ctx.beginPath(); ctx.moveTo(64, 64); ctx.lineTo(58, 75); ctx.lineTo(70, 75); ctx.closePath(); ctx.fill();
     ctx.fillStyle = '#e9ecdf';
     for (var i = 0; i < 5; i++) ctx.fillRect(44 + i * 8, 79, 6, 10);
+  }
+
+  /* ───────── livrea navetta: logo Magaparty (wordmark "MAGA" + onda) ───────── */
+  function makeLogoTexture(){
+    var c = document.createElement('canvas');
+    c.width = 256; c.height = 128;
+    var ctx = c.getContext('2d');
+    ctx.clearRect(0, 0, 256, 128);
+    ctx.save();
+    ctx.translate(128, 64);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = '900 56px Georgia, "Times New Roman", serif';
+    ctx.fillStyle = '#ECE6DD';
+    ctx.fillText('MAGA', -6, -8);
+    /* onda/spirale che chiude la "A" finale, nel verde tossico del tema */
+    ctx.strokeStyle = '#8FD13F';
+    ctx.lineCap = 'round';
+    ctx.lineWidth = 11;
+    ctx.beginPath();
+    ctx.moveTo(44, 26);
+    ctx.lineTo(84, 26);
+    ctx.quadraticCurveTo(104, 26, 104, 8);
+    ctx.quadraticCurveTo(104, -8, 88, -8);
+    ctx.quadraticCurveTo(76, -8, 76, 4);
+    ctx.stroke();
+    ctx.restore();
+    var tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
   }
 
   /* ───────── reusable zombie figure ───────── */
@@ -1010,8 +1447,9 @@ window.addEventListener('DOMContentLoaded', function(){
 
     var radTex = makeIconTexture(drawRadiationIcon);
     var skullTex = makeIconTexture(drawSkullIcon);
+    var logoTex = makeLogoTexture();
 
-    buildNavetta(skullTex);
+    buildNavetta(skullTex, logoTex);
     buildHotels(radTex);
     buildSaltafila(skullTex);
     scene.add(navetta.group, hotelScene.group, saltafila.group);
@@ -1092,18 +1530,19 @@ window.addEventListener('DOMContentLoaded', function(){
   }
 
   /* ───────── NAVETTA: bus blindato a tema apocalisse zombie ───────── */
-  function buildNavetta(skullTex){
+  function buildNavetta(skullTex, logoTex){
     var g = new THREE.Group();
     var stopPositions = [
       new THREE.Vector3(-4.6, 0, 1.1),
       new THREE.Vector3(-2.6, 0, -1.1),
-      new THREE.Vector3(-0.4, 0, 1.3),
-      new THREE.Vector3(1.9, 0, -0.8),
-      new THREE.Vector3(3.9, 0, 0.9),
-      new THREE.Vector3(5.6, 0, -0.4)
+      new THREE.Vector3(-0.4, 0, 1.3)
     ];
-    navetta.curve = new THREE.CatmullRomCurve3(stopPositions);
-    navetta.markerPositions = stopPositions.slice(0, 5);
+    /* il percorso reale ha solo 3 fermate (Salerno, Pontecagnano,
+       Magazzeno): la curva usa SOLO questi 3 punti, altrimenti il
+       mezzo continua a muoversi oltre l'ultima fermata lungo i punti
+       residui della vecchia rotta a 6 tappe */
+    navetta.markerPositions = stopPositions.slice(0, 3);
+    navetta.curve = new THREE.CatmullRomCurve3(navetta.markerPositions);
 
     var ground = new THREE.Mesh(new THREE.PlaneGeometry(20, 12), new THREE.MeshStandardMaterial({ color: 0x120f09, roughness: 1 }));
     ground.rotation.x = -Math.PI / 2;
@@ -1146,6 +1585,17 @@ window.addEventListener('DOMContentLoaded', function(){
     van.add(roof);
     navetta.roof = roof;
     navetta.roofRestY = 0.34;
+    /* logo Magaparty dipinto sul tetto: in alto e senza nulla sopra,
+       così resta sempre leggibile invece di finire coperto dal corpo
+       centrale del mezzo come capitava con il decal sul fianco */
+    var roofLogo = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.46, 0.23),
+      new THREE.MeshBasicMaterial({ map: logoTex, transparent: true })
+    );
+    roofLogo.rotation.x = -Math.PI / 2;
+    roofLogo.position.y = 0.036 + 0.001;
+    roofLogo.layers.enable(BLOOM_LAYER);
+    roof.add(roofLogo);
     var glassMat = new THREE.MeshStandardMaterial({ color: PAL.toxic, emissive: PAL.toxicGlow, roughness: 0.25 });
     var windshield = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.13, 0.27), glassMat);
     windshield.position.set(0.31, 0.19, 0);
@@ -1268,10 +1718,10 @@ window.addEventListener('DOMContentLoaded', function(){
     g.add(ground);
     addRuinSkyline(g, -4.6, -8, 8, 6);
 
-    var names = ['Hotel Ancora', 'Villa Belvedere', 'Villa Cavallo', 'B&B Calypso'];
-    var floorsCount = [6, 4, 4, 3];
-    var blockedFloors = [2, 2, 1, 1];
-    var xPositions = [-4.8, -1.6, 1.6, 4.8];
+    var names = ['Appartamenti VIP', 'Villa Belvedere', 'Lido Azzurro'];
+    var floorsCount = [3, 4, 6];
+    var blockedFloors = [1, 2, 2];
+    var xPositions = [-3.6, 0, 3.6];
 
     var winGeo = new THREE.BoxGeometry(0.1, 0.1, 0.02);
     var winDarkMat = new THREE.MeshStandardMaterial({ color: 0x0a0906, roughness: 0.9 });
@@ -1450,7 +1900,7 @@ window.addEventListener('DOMContentLoaded', function(){
       navetta.state.targetExplode = explode ? 1 : 0;
       if (stop !== undefined && stop !== ''){
         navetta.activeStop = parseInt(stop, 10);
-        navetta.state.targetT = navetta.activeStop / 5;
+        navetta.state.targetT = navetta.activeStop / (navetta.markerPositions.length - 1);
       } else if (explode){
         navetta.activeStop = -1;
         navetta.state.targetT = 1;
@@ -1511,7 +1961,7 @@ window.addEventListener('DOMContentLoaded', function(){
         el.classList.toggle('is-visible', visible);
         el.classList.toggle('is-active', navetta.activeStop === idx);
       });
-      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
     } else if (state.activeScene === 'hotel'){
       hotels.forEach(function(h, idx){
         var el = l3PinEls['hotel-' + idx];
@@ -1520,10 +1970,10 @@ window.addEventListener('DOMContentLoaded', function(){
         el.classList.toggle('is-visible', visible);
         el.classList.toggle('is-active', hotelScene.activeIndex === idx);
       });
-      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
     } else {
-      for (i = 0; i < 5; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
-      for (i = 0; i < 4; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['navetta-' + i].classList.remove('is-visible');
+      for (i = 0; i < 3; i++) l3PinEls['hotel-' + i].classList.remove('is-visible');
     }
   }
 
@@ -1577,6 +2027,220 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   }
 });
+</script>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── NAV BAR: scroll to 3D scene beats + scrollspy ── */
+  var navPills = document.querySelectorAll('.hw-nav-pill');
+  navPills.forEach(function(p){
+    var scene = p.dataset.scrollScene;
+    if (!scene) return;
+    p.addEventListener('click', function(){
+      var first = document.querySelector('.l3-beat[data-scene="' + scene + '"]');
+      if (first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    });
+  });
+
+  var navSpyTargets = [
+    { id:'info', nav:'info' },
+    { id:'planimetria', nav:'planimetria' },
+    { id:'prezzi', nav:'prezzi' }
+  ];
+  var spyEls = [];
+  navSpyTargets.forEach(function(t){
+    var el = document.getElementById(t.id);
+    if (el) spyEls.push({ el: el, nav: t.nav });
+  });
+  document.querySelectorAll('.l3-beat[data-scene]').forEach(function(beat){
+    spyEls.push({ el: beat, nav: beat.dataset.scene === 'hotel' ? 'hotel' : beat.dataset.scene });
+  });
+
+  function setActiveNav(nav){
+    navPills.forEach(function(p){ p.classList.toggle('is-active', p.dataset.nav === nav); });
+  }
+
+  /* Scroll-driven (not IntersectionObserver) so it tracks reliably even with
+     many stacked narrow beats: on every scroll frame, pick whichever
+     section's box spans the vertical center line of the viewport. */
+  function updateSpy(){
+    var line = window.innerHeight * 0.5;
+    var current = null, bestDist = Infinity;
+    spyEls.forEach(function(s){
+      var r = s.el.getBoundingClientRect();
+      if (r.top <= line && r.bottom >= line){
+        current = s.nav; bestDist = 0;
+      } else if (bestDist !== 0){
+        var d = Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
+        if (d < bestDist){ bestDist = d; current = s.nav; }
+      }
+    });
+    if (current) setActiveNav(current);
+  }
+  if (spyEls.length){
+    var spyTicking = false;
+    window.addEventListener('scroll', function(){
+      if (!spyTicking){
+        spyTicking = true;
+        requestAnimationFrame(function(){ updateSpy(); spyTicking = false; });
+      }
+    }, { passive: true });
+    updateSpy();
+  }
+
+  /* ── COUNTDOWN: 31 Ottobre 2026, 23:00 (Europe/Rome, UTC+1) ── */
+  var EVENT_DATE = new Date('2026-10-31T23:00:00+01:00');
+  var cdDays = document.getElementById('cdDays');
+  var cdHours = document.getElementById('cdHours');
+  var cdMin = document.getElementById('cdMin');
+  var cdSec = document.getElementById('cdSec');
+  var cdPending = document.getElementById('countdownPending');
+  var cdLive = document.getElementById('countdownLive');
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function tickCountdown(){
+    var diff = EVENT_DATE.getTime() - Date.now();
+    if (diff <= 0){
+      if (cdPending) cdPending.style.display = 'none';
+      if (cdLive) cdLive.style.display = 'block';
+      return;
+    }
+    var totalSec = Math.floor(diff / 1000);
+    var days = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var mins = Math.floor((totalSec % 3600) / 60);
+    var secs = totalSec % 60;
+    if (cdDays) cdDays.textContent = pad(days);
+    if (cdHours) cdHours.textContent = pad(hours);
+    if (cdMin) cdMin.textContent = pad(mins);
+    if (cdSec) cdSec.textContent = pad(secs);
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+  /* ── RICHIESTE: biglietti, saltafila, navetta, alloggi ──
+     Ogni invio salva una riga nella tabella Supabase
+     "halloween_richieste"; da lì un Database Webhook manda una mail
+     di notifica allo staff. Il link esterno per le release biglietti
+     si collega qui quando disponibile. */
+  var SUPABASE_URL = 'https://dkzzmxsreaegjagqbdnh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  var TICKET_LINKS = {
+    prima: ''
+  };
+
+  /* Evento: 31 ottobre 2026 — l'età minima si valuta a questa data,
+     non a oggi, così chi compie 18 anni a ridosso della festa non
+     viene bloccato ingiustamente. */
+  var EVENT_DATE = new Date('2026-10-31T23:59:59');
+  function computeAge(dobStr, atDate){
+    var dob = new Date(dobStr + 'T00:00:00');
+    if (isNaN(dob.getTime())) return -1;
+    var age = atDate.getFullYear() - dob.getFullYear();
+    var m = atDate.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && atDate.getDate() < dob.getDate())) age--;
+    return age;
+  }
+
+  document.querySelectorAll('.ticket-card').forEach(function(card){
+    var tier = card.dataset.tier;
+    var toggleBtn = card.querySelector('[data-action="toggle-form"]');
+    var form = card.querySelector('.ticket-form');
+    var success = card.querySelector('.ticket-success');
+    var buyLink = card.querySelector('.ticket-buy');
+    var submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+    var submitLabel = submitBtn ? submitBtn.textContent : '';
+    var errorEl = form ? form.querySelector('.ticket-error') : null;
+    if (form && !errorEl){
+      errorEl = document.createElement('p');
+      errorEl.className = 'ticket-error full-w';
+      errorEl.hidden = true;
+      form.appendChild(errorEl);
+    }
+
+    if (toggleBtn && form){
+      toggleBtn.addEventListener('click', function(){
+        form.hidden = false;
+        toggleBtn.hidden = true;
+      });
+    }
+    if (form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        function val(name){
+          var el = form.querySelector('[name="' + name + '"]');
+          return el ? el.value.trim() : '';
+        }
+        var nome = val('nome'), cognome = val('cognome'), email = val('email'),
+            telefono = val('telefono'), nascita = val('nascita'),
+            instagram = val('instagram'), invitatoDa = val('invitato_da');
+        if (!nome || !cognome || !email || !telefono || !nascita) return;
+
+        if (errorEl) errorEl.hidden = true;
+
+        var age = computeAge(nascita, EVENT_DATE);
+        if (age < 0 || age < 18){
+          if (errorEl){ errorEl.textContent = 'L\'evento è riservato ai maggiorenni: devi avere almeno 18 anni alla data della festa.'; errorEl.hidden = false; }
+          return;
+        }
+        var terminiBox = form.querySelector('[name="accetta_termini"]');
+        if (!terminiBox || !terminiBox.checked){
+          if (errorEl){ errorEl.textContent = 'Devi accettare i termini e condizioni per inviare la richiesta.'; errorEl.hidden = false; }
+          return;
+        }
+
+        if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Invio…'; }
+
+        if (!sb){
+          if (errorEl){ errorEl.textContent = 'Errore di connessione, riprova tra poco.'; errorEl.hidden = false; }
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          return;
+        }
+
+        var payload = {
+          tipo: tier,
+          nome: nome,
+          cognome: cognome,
+          email: email,
+          telefono: telefono,
+          data_nascita: nascita,
+          instagram: instagram || null,
+          invitato_da: invitatoDa || null,
+          termini_accettati: true
+        };
+
+        sb.from('halloween_richieste').insert(payload).then(function(res){
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          if (res && res.error){
+            if (errorEl){ errorEl.textContent = 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
+            return;
+          }
+          form.hidden = true;
+          var externalUrl = TICKET_LINKS[tier];
+          if (externalUrl && buyLink){
+            buyLink.href = externalUrl;
+            buyLink.hidden = false;
+          } else if (success){
+            success.hidden = false;
+          }
+        }, function(){
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          if (errorEl){ errorEl.textContent = 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
+        });
+      });
+    }
+  });
+})();
 </script>
 </body>
 </html>
