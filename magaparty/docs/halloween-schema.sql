@@ -31,10 +31,16 @@ create table if not exists halloween_richieste (
   data_nascita date not null,
   instagram text,
   invitato_da text,
+  termini_accettati boolean not null default false,
   stato text not null default 'nuova'
     check (stato in ('nuova', 'contattata', 'confermata', 'annullata')),
   created_at timestamptz not null default now()
 );
+
+-- Se la tabella esisteva già da un'esecuzione precedente di questo
+-- script, questa riga aggiunge la colonna mancante senza toccare i
+-- dati già salvati (idempotente: non fa nulla se la colonna c'è già).
+alter table halloween_richieste add column if not exists termini_accettati boolean not null default false;
 
 create index if not exists idx_halloween_tipo on halloween_richieste (tipo);
 create index if not exists idx_halloween_stato on halloween_richieste (stato);
@@ -47,7 +53,7 @@ drop policy if exists "pubblico crea richiesta halloween" on halloween_richieste
 create policy "pubblico crea richiesta halloween"
   on halloween_richieste for insert
   to anon
-  with check (stato = 'nuova');
+  with check (stato = 'nuova' and termini_accettati = true);
 
 -- ============================================================
 -- 2. Ruolo utente — riusa la stessa funzione già creata per
