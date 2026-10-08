@@ -237,6 +237,29 @@ img{max-width:100%;}
 .prezzi-card .price .tbd{ font-size:13px; font-family:'Work Sans', sans-serif; color:var(--muted); font-weight:500; }
 .prezzi-card p{font-size:12.5px; line-height:1.7; color:var(--muted);}
 .tbd-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--ember-soft); color:var(--ember); width:fit-content; }
+
+/* ── BIGLIETTI (vendita a release) ── */
+.release-chip{ display:inline-flex; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid var(--moss-soft); color:var(--moss); width:fit-content; }
+.soldout-chip{ display:none; align-items:center; gap:6px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; border:1px solid rgba(255,255,255,0.18); color:var(--muted); width:fit-content; }
+.ticket-progress{ height:6px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:6px; }
+.ticket-progress-bar{ height:100%; background:linear-gradient(90deg, var(--ember), var(--gold)); border-radius:999px; }
+.ticket-progress-label{ font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); opacity:0.8; }
+.ticket-cta{ font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:11px 16px; border-radius:10px; border:1px solid var(--ember); background:var(--ember); color:#20120A; cursor:pointer; text-align:center; text-decoration:none; display:inline-block; margin-top:6px; transition:all .2s ease; }
+.ticket-cta:hover{ background:var(--gold); border-color:var(--gold); }
+.ticket-form{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+.ticket-form[hidden], .ticket-cta[hidden]{ display:none; }
+.ticket-form input{ font-family:inherit; font-size:13px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; }
+.ticket-form input:focus{ border-color:var(--ember); }
+.ticket-success{ font-size:12.5px; color:var(--moss); line-height:1.6; margin-top:6px; }
+.ticket-card[data-sold="true"] .ticket-cta,
+.ticket-card[data-sold="true"] .ticket-form,
+.ticket-card[data-sold="true"] .ticket-buy,
+.ticket-card[data-sold="true"] .ticket-success,
+.ticket-card[data-sold="true"] .ticket-progress,
+.ticket-card[data-sold="true"] .ticket-progress-label,
+.ticket-card[data-sold="true"] .release-chip{ display:none !important; }
+.ticket-card[data-sold="true"] .soldout-chip{ display:inline-flex; }
+.ticket-card[data-sold="true"]{ opacity:0.55; }
 </style>
 </head>
 <body>
@@ -646,7 +669,7 @@ img{max-width:100%;}
       <span class="section-label">Saltafila</span>
       <h3>Chi non vuole aspettare in fila</h3>
       <p>Un ingresso prioritario per chi preferisce evitare la coda principale: si salta la fila d'ingresso e si entra subito.</p>
-      <div class="l3-chips"><span class="l3-chip">Dettagli e costo in arrivo con le prenotazioni</span></div>
+      <div class="l3-chips"><span class="l3-chip">€15 · bracciale saltafila</span></div>
     </article>
 
   </div>
@@ -680,18 +703,46 @@ img{max-width:100%;}
 <section class="wrap prezzi-head" id="prezzi">
   <span class="section-label">Quanto costa</span>
   <h2>Prezzi</h2>
-  <p>I numeri definitivi arrivano con l'apertura delle prenotazioni — qui sotto trovi lo schema aggiornato in tempo reale.</p>
+  <p>Vendita a fasce, posti limitati: compila il form per prenotare il tuo biglietto.</p>
+</section>
+
+<section class="wrap prezzi-grid" id="ticketGrid">
+  <div class="prezzi-card ticket-card" data-tier="community" data-tier-label="Biglietto Community" data-sold="false">
+    <h4>Biglietto Community <span class="release-chip">Aperto</span><span class="soldout-chip">Esaurito</span></h4>
+    <span class="price">€40</span>
+    <div class="ticket-progress"><div class="ticket-progress-bar" style="width:20%"></div></div>
+    <span class="ticket-progress-label">Richieste in arrivo</span>
+    <p>Tariffa riservata alla community, posti limitati. Compila il form: ti ricontattiamo noi su WhatsApp per confermare.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome e cognome" autocomplete="name" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <button type="submit" class="ticket-cta">Invia richiesta</button>
+    </form>
+    <p class="ticket-success" hidden>Richiesta inviata — ti ricontattiamo su WhatsApp a breve. ✅</p>
+  </div>
+
+  <div class="prezzi-card ticket-card" data-tier="prima" data-tier-label="Biglietto Prima Release" data-sold="false">
+    <h4>Biglietto Prima Release <span class="release-chip">Aperto</span><span class="soldout-chip">Esaurito</span></h4>
+    <span class="price">€45</span>
+    <div class="ticket-progress"><div class="ticket-progress-bar" style="width:15%"></div></div>
+    <span class="ticket-progress-label">Appena aperte</span>
+    <p>Posti a questo prezzo limitati. Compila il form, poi completa l'acquisto su posto riservato.</p>
+    <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il biglietto</button>
+    <form class="ticket-form" hidden>
+      <input type="text" name="nome" placeholder="Nome e cognome" autocomplete="name" required>
+      <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
+      <button type="submit" class="ticket-cta">Continua</button>
+    </form>
+    <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener" hidden>Vai all'acquisto →</a>
+    <p class="ticket-success" hidden>Richiesta registrata — ti mandiamo noi il link per completare l'acquisto. ✅</p>
+  </div>
 </section>
 
 <section class="wrap prezzi-grid">
   <div class="prezzi-card">
-    <h4>Biglietto base <span class="tbd-chip">Da confermare</span></h4>
-    <span class="price"><span class="tbd">—</span></span>
-    <p>L'ingresso alla festa. Acquistabile online, senza bisogno di registrarti alla piattaforma.</p>
-  </div>
-  <div class="prezzi-card">
-    <h4>Bracciale saltafila <span class="tbd-chip">Da confermare</span></h4>
-    <span class="price"><span class="tbd">—</span></span>
+    <h4>Bracciale saltafila</h4>
+    <span class="price">€15</span>
     <p>Upgrade opzionale: salti la fila principale ed entri subito. Vedi la sezione <a href="#saltafila" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;saltafila&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Saltafila</a>.</p>
   </div>
   <div class="prezzi-card">
@@ -1756,6 +1807,56 @@ window.addEventListener('DOMContentLoaded', function(){
   }
   tickCountdown();
   setInterval(tickCountdown, 1000);
+})();
+</script>
+
+<script>
+(function(){
+  'use strict';
+  /* ── BIGLIETTI: form di richiesta + flusso verso Posto Riservato ──
+     Il link esterno per ogni release si collega qui quando disponibile;
+     finché è vuoto, il form si limita a registrare la richiesta. */
+  var TICKET_LINKS = {
+    prima: ''
+  };
+  var WA_NUMBER = '393454237269';
+
+  document.querySelectorAll('.ticket-card').forEach(function(card){
+    var tier = card.dataset.tier;
+    var label = card.dataset.tierLabel || '';
+    var toggleBtn = card.querySelector('[data-action="toggle-form"]');
+    var form = card.querySelector('.ticket-form');
+    var success = card.querySelector('.ticket-success');
+    var buyLink = card.querySelector('.ticket-buy');
+
+    if (toggleBtn && form){
+      toggleBtn.addEventListener('click', function(){
+        form.hidden = false;
+        toggleBtn.hidden = true;
+      });
+    }
+    if (form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        var nomeEl = form.querySelector('[name="nome"]');
+        var telEl = form.querySelector('[name="telefono"]');
+        var nome = nomeEl ? nomeEl.value.trim() : '';
+        var tel = telEl ? telEl.value.trim() : '';
+        if (!nome || !tel) return;
+        var text = 'Ciao! Vorrei prenotare: ' + label + ' (Halloween in Villa, 31 Ottobre). Nome: ' + nome + ' - Telefono: ' + tel;
+        var waUrl = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(text);
+        window.open(waUrl, '_blank', 'noopener');
+        form.hidden = true;
+        var externalUrl = TICKET_LINKS[tier];
+        if (externalUrl && buyLink){
+          buyLink.href = externalUrl;
+          buyLink.hidden = false;
+        } else if (success){
+          success.hidden = false;
+        }
+      });
+    }
+  });
 })();
 </script>
 </body>
