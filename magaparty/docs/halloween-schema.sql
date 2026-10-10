@@ -34,16 +34,29 @@ create table if not exists halloween_richieste (
   termini_accettati boolean not null default false,
   stato text not null default 'nuova'
     check (stato in ('nuova', 'contattata', 'confermata', 'annullata')),
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  -- Pagamento online SumUp (navetta + le 3 soluzioni "dove dormire").
+  sumup_checkout_id text,
+  pagato_il timestamptz,
+  -- Solo per i tier "a persona" con minimo di gruppo (appartamenti-vip,
+  -- villa-belvedere, lido-azzurro): numero di persone pagate, usato per
+  -- calcolare l'importo del checkout SumUp.
+  numero_persone integer
 );
 
 -- Se la tabella esisteva già da un'esecuzione precedente di questo
--- script, questa riga aggiunge la colonna mancante senza toccare i
--- dati già salvati (idempotente: non fa nulla se la colonna c'è già).
+-- script, queste righe aggiungono le colonne mancanti senza toccare i
+-- dati già salvati (idempotente: non fanno nulla se la colonna c'è già).
 alter table halloween_richieste add column if not exists termini_accettati boolean not null default false;
+alter table halloween_richieste add column if not exists sumup_checkout_id text;
+alter table halloween_richieste add column if not exists pagato_il timestamptz;
+alter table halloween_richieste add column if not exists numero_persone integer;
 
 create index if not exists idx_halloween_tipo on halloween_richieste (tipo);
 create index if not exists idx_halloween_stato on halloween_richieste (stato);
+create unique index if not exists idx_halloween_sumup_checkout_id
+  on halloween_richieste (sumup_checkout_id)
+  where sumup_checkout_id is not null;
 
 alter table halloween_richieste enable row level security;
 
@@ -94,4 +107,14 @@ create policy "staff aggiorna richieste halloween"
 --      evento: Insert
 --      tipo: HTTP Request -> URL della funzione deployata
 --      header custom: x-webhook-secret = <lo stesso valore di WEBHOOK_SECRET>
+--
+-- c) Pagamento online SumUp (navetta + alloggi): deploya anche
+--      supabase functions deploy crea-pagamento-sumup --no-verify-jwt
+--      supabase functions deploy sumup-webhook --no-verify-jwt
+--    e imposta il secret SUMUP_API_KEY (Project Settings > Edge
+--    Functions > Secrets) con la chiave segreta SumUp (sup_sk_...).
+--    crea-pagamento-sumup crea la richiesta (service role, bypassa
+--    RLS) e un checkout SumUp hosted; sumup-webhook è la return_url
+--    del checkout e verifica sempre lo stato reale via API SumUp
+--    prima di segnare la richiesta "confermata".
 -- ============================================================
