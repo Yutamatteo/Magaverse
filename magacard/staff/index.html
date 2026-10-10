@@ -40,12 +40,12 @@
     background: rgba(255,255,255,0.04); border:1px solid var(--mc-border); color: var(--mc-text); }
   .points-picker button.selected { border-color: var(--mc-gold); color: var(--mc-gold); }
 
-  /* Tabs (solo admin/superadmin) */
-  .tabs { display:flex; gap:8px; margin-bottom: 18px; position:relative; z-index:1; }
+  /* Tabs (solo admin/superadmin/ingresso) */
+  .tabs { display:flex; gap:6px; margin-bottom: 18px; position:relative; z-index:1; flex-wrap: wrap; }
   .tab-btn {
-    width:auto; margin:0; flex:1; padding:11px 10px;
+    width:auto; margin:0; flex:1 1 30%; min-width: 70px; padding:10px 6px;
     background: rgba(255,255,255,0.04); border:1px solid var(--mc-border); color: var(--mc-muted);
-    font-size: 12px;
+    font-size: 11px;
   }
   .tab-btn.active { border-color: var(--mc-magenta); color: var(--mc-text); background: var(--mc-magenta-soft); }
 
@@ -67,6 +67,17 @@
     background:#0F0A17; color:var(--mc-text); font-size:15px; font-family:inherit;
     margin-bottom:12px; appearance:none; -webkit-appearance:none;
   }
+  .mc-filtro-piccolo { width:auto; flex: 0 0 150px; margin-bottom:12px; }
+
+  .chip-stato {
+    display:inline-block; padding:3px 10px; border-radius:999px; font-size:10px; font-weight:700;
+    letter-spacing:0.05em; text-transform:uppercase; margin-left:8px; vertical-align:middle;
+  }
+  .chip-stato.da-leggere { background: var(--mc-gold-soft); color: var(--mc-gold); }
+  .chip-stato.letto { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
+
+  .mc-row .azioni { display:flex; gap:8px; }
+  .mc-row .azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; }
 </style>
 </head>
 <body>
@@ -112,6 +123,8 @@
       <button class="tab-btn active" id="tab-scanner">Scanner</button>
       <button class="tab-btn" id="tab-gestione">Gestione</button>
       <button class="tab-btn hidden" id="tab-prenotazioni">Prenotazioni</button>
+      <button class="tab-btn hidden" id="tab-smistamento">Richieste</button>
+      <button class="tab-btn hidden" id="tab-registro">Registro</button>
     </div>
 
     <!-- VISTA SCANNER -->
@@ -176,6 +189,32 @@
       <p class="mc-sub" id="prenotazioni-count" style="margin:12px 0 0;"></p>
       <div id="lista-prenotazioni" style="margin-top:12px;"></div>
     </div>
+
+    <!-- VISTA SMISTAMENTO (admin/superadmin/ingresso): richieste da contattare -->
+    <div id="vista-smistamento" class="hidden">
+      <label for="select-evento-richieste">Evento</label>
+      <select class="mc-select-evento" id="select-evento-richieste"></select>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input class="mc-search" type="text" id="search-richieste" placeholder="Cerca per nome, telefono o email..." style="flex:1; margin-bottom:0;">
+        <select class="mc-select-evento mc-filtro-piccolo" id="filtro-stato-richieste" style="margin-bottom:0;">
+          <option value="tutte">Tutte</option>
+          <option value="da_leggere">Da leggere</option>
+          <option value="letto">Letto</option>
+        </select>
+      </div>
+      <p class="mc-sub" id="richieste-count" style="margin:12px 0 0;"></p>
+      <div id="lista-richieste" style="margin-top:12px;"></div>
+    </div>
+
+    <!-- VISTA REGISTRO (solo superadmin): chi ha contattato cosa e quando -->
+    <div id="vista-registro" class="hidden">
+      <label for="select-evento-registro">Evento</label>
+      <select class="mc-select-evento" id="select-evento-registro">
+        <option value="tutti">Tutti gli eventi</option>
+      </select>
+      <p class="mc-sub" id="registro-count" style="margin:12px 0 0;"></p>
+      <div id="lista-registro" style="margin-top:12px;"></div>
+    </div>
   </div>
 </div>
 
@@ -191,6 +230,8 @@
   let richieste = [];
   let html5QrCode = null;
   let scansioneAttiva = false;
+  let currentUserEmail = null;
+  let currentUserNome = null;
 
   const loginBox = document.getElementById('login-box');
   const modePicker = document.getElementById('mode-picker');
@@ -203,9 +244,16 @@
   const vistaScanner = document.getElementById('vista-scanner');
   const vistaGestione = document.getElementById('vista-gestione');
   const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
+  const vistaSmistamento = document.getElementById('vista-smistamento');
+  const vistaRegistro = document.getElementById('vista-registro');
   let prenotazioniCorrenti = [];
   let prenotazioniEventoTutte = [];
   let dataPrenotazioniAttiva = null;
+  let richiesteSmistamentoTutte = [];
+  let richiesteSmistamentoById = {};
+  let contattiEvento = new Set();
+  let registroLogTutto = [];
+  let registroNomiMap = {};
 
   // ============================== LOGIN ==============================
   document.getElementById('btn-login').addEventListener('click', async () => {
@@ -226,6 +274,8 @@
     }
 
     loginMsg.textContent = '';
+    currentUserEmail = data.user.email;
+    currentUserNome = data.user.user_metadata?.nome || data.user.email;
     document.getElementById('staff-name').textContent = data.user.email;
     roleBadge.textContent = ruolo;
     roleBadge.className = 'role-badge ' + ruolo;
@@ -237,12 +287,14 @@
       panel.classList.remove('hidden');
       avviaScanner();
     } else if (ruolo === 'ingresso') {
-      // Account dedicato all'ingresso: dritto allo scanner, ma con accesso alla scheda Prenotazioni.
+      // Account dedicato all'ingresso: dritto allo scanner, ma con accesso alle
+      // schede Prenotazioni e Richieste (smistamento).
       modalitaScanner = ruolo;
       panel.classList.remove('hidden');
       tabs.classList.remove('hidden');
       document.getElementById('tab-gestione').classList.add('hidden');
       document.getElementById('tab-prenotazioni').classList.remove('hidden');
+      document.getElementById('tab-smistamento').classList.remove('hidden');
       avviaScanner();
     } else {
       // admin / superadmin: mostra la scelta postazione prima dello scanner
@@ -259,9 +311,11 @@
       document.getElementById('btn-cambia-postazione').classList.remove('hidden');
       if (ruolo === 'superadmin') {
         document.getElementById('sezione-livelli').classList.remove('hidden');
+        document.getElementById('tab-registro').classList.remove('hidden');
       }
       if (ruolo === 'superadmin' || ruolo === 'admin') {
         document.getElementById('tab-prenotazioni').classList.remove('hidden');
+        document.getElementById('tab-smistamento').classList.remove('hidden');
       }
       avviaScanner();
     });
@@ -273,10 +327,14 @@
     tabs.classList.add('hidden');
     vistaGestione.classList.add('hidden');
     vistaPrenotazioni.classList.add('hidden');
+    vistaSmistamento.classList.add('hidden');
+    vistaRegistro.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
     document.getElementById('tab-gestione').classList.remove('active');
     document.getElementById('tab-prenotazioni').classList.remove('active');
+    document.getElementById('tab-smistamento').classList.remove('active');
+    document.getElementById('tab-registro').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
     modePicker.classList.remove('hidden');
@@ -293,36 +351,55 @@
   });
 
   // ============================== TABS (solo admin/superadmin) ==============================
-  document.getElementById('tab-scanner').addEventListener('click', () => {
-    document.getElementById('tab-scanner').classList.add('active');
-    document.getElementById('tab-gestione').classList.remove('active');
-    document.getElementById('tab-prenotazioni').classList.remove('active');
-    vistaScanner.classList.remove('hidden');
+  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-registro'];
+  function attivaSoloTab(idAttivo) {
+    TUTTI_TAB_BTN.forEach(id => document.getElementById(id).classList.toggle('active', id === idAttivo));
+  }
+  function nascondiTutteLeViste() {
+    vistaScanner.classList.add('hidden');
     vistaGestione.classList.add('hidden');
     vistaPrenotazioni.classList.add('hidden');
+    vistaSmistamento.classList.add('hidden');
+    vistaRegistro.classList.add('hidden');
+  }
+
+  document.getElementById('tab-scanner').addEventListener('click', () => {
+    attivaSoloTab('tab-scanner');
+    nascondiTutteLeViste();
+    vistaScanner.classList.remove('hidden');
     if (!scansioneAttiva) avviaScanner();
   });
 
   document.getElementById('tab-gestione').addEventListener('click', async () => {
-    document.getElementById('tab-gestione').classList.add('active');
-    document.getElementById('tab-scanner').classList.remove('active');
-    document.getElementById('tab-prenotazioni').classList.remove('active');
-    vistaScanner.classList.add('hidden');
+    attivaSoloTab('tab-gestione');
+    nascondiTutteLeViste();
     vistaGestione.classList.remove('hidden');
-    vistaPrenotazioni.classList.add('hidden');
     await fermaScanner();
     caricaRichieste();
   });
 
   document.getElementById('tab-prenotazioni').addEventListener('click', async () => {
-    document.getElementById('tab-prenotazioni').classList.add('active');
-    document.getElementById('tab-scanner').classList.remove('active');
-    document.getElementById('tab-gestione').classList.remove('active');
-    vistaScanner.classList.add('hidden');
-    vistaGestione.classList.add('hidden');
+    attivaSoloTab('tab-prenotazioni');
+    nascondiTutteLeViste();
     vistaPrenotazioni.classList.remove('hidden');
     await fermaScanner();
     caricaPrenotazioni();
+  });
+
+  document.getElementById('tab-smistamento').addEventListener('click', async () => {
+    attivaSoloTab('tab-smistamento');
+    nascondiTutteLeViste();
+    vistaSmistamento.classList.remove('hidden');
+    await fermaScanner();
+    caricaRichiesteSmistamento();
+  });
+
+  document.getElementById('tab-registro').addEventListener('click', async () => {
+    attivaSoloTab('tab-registro');
+    nascondiTutteLeViste();
+    vistaRegistro.classList.remove('hidden');
+    await fermaScanner();
+    caricaRegistro();
   });
 
   // ============================== SCANNER ==============================
@@ -900,6 +977,294 @@
     XLSX.utils.book_append_sheet(wb, ws, cfg.label);
     XLSX.writeFile(wb, `${eventoPrenotazioniAttivo}-prenotazioni-${new Date().toISOString().slice(0, 10)}.xlsx`);
   });
+
+  // ============================== SMISTAMENTO RICHIESTE (admin/superadmin/ingresso) ==============================
+  // Pannello di triage: elenca le richieste di ciascun evento che necessitano
+  // di una risposta via WhatsApp/Instagram, con un messaggio precompilato.
+  // Lo stato "da leggere"/"letto" non è un flag manuale: diventa "letto" in
+  // automatico quando un operatore clicca davvero su uno dei link di
+  // contatto (staff_contatti_log), altrimenti resta "da leggere".
+  // Chi ha contattato cosa e quando è visibile SOLO al superadmin (tab Registro),
+  // protetto anche a livello di RLS sul database, non solo di interfaccia.
+
+  const HALLOWEEN_TIPO_LABEL = {
+    community: 'Community', prima: '1ª data', seconda: '2ª data', terza: '3ª data',
+    saltafila: 'Saltafila', navetta: 'Navetta', 'appartamenti-vip': 'Appartamenti VIP',
+    'villa-belvedere': 'Villa Belvedere', 'lido-azzurro': 'Lido Azzurro',
+  };
+
+  // Messaggio ufficiale fornito da Matteo, convertito per WhatsApp:
+  // "**bold**" -> "*bold*", "* " (elenco) -> "• ", link "#prezzi/" -> "#prezzi".
+  const MESSAGGIO_HALLOWEEN_TEMPLATE = `Ciao [nome] 🎃 Hai bussato alla porta giusta!
+
+*American Halloween Atto 3* è sabato 31 ottobre: house party in villa a Magazzeno (Pontecagnano), proprio come nei film americani. 🇺🇸
+
+🍸 *Open bar fino alle 06:00*, incluso nel biglietto
+🎶 *Due stage con musica diversa:* Maledictio al piano terra, Damnatio al primo piano
+🏓 In giardino beer pong e stage food, dentro calcetto e terrazzini per staccare
+🎭 *Contest costumi con premio:* sfoggia il tuo outfit più spaventoso!
+🩺 Infermeria attiva tutta la notte
+
+🎟️ *BIGLIETTI (a fasce, posti limitati)*
+
+• Community: 40€ ← fascia attuale
+• Prima release: 45€
+• Seconda release: 50€
+• Terza e ultima: 55€
+
+⚡ Se acquisti ora, risparmi fino a 15€ rispetto all'ultima fascia!
+
+⚠️ *Attenzione:* il prezzo Community è riservato a chi risulta effettivamente parte della Community. Se non risulti tra i membri, verrai inserito/a in waiting list per la fascia da 45€ e ricontattato/a su WhatsApp.
+
+Venite in gruppo? Gira questo messaggio agli altri: acquistando nella stessa fascia, pagherete tutti lo stesso prezzo!
+
+🚐 *NAVETTA + INGRESSO: 60€*
+Partenza alle 00:00 da Salerno, con fermate a Pontecagnano e Magazzeno. Ritorno alle 05:00 sullo stesso percorso. Orari fissi, non perderla!
+
+🛏️ *DORMI VICINO ALLA VILLA*
+Ingresso e open bar inclusi. Prezzi a persona:
+
+• 🏡 Appartamenti VIP dentro la villa: 90€ (min. 4 persone)
+• 🌊 Lido Azzurro, doppie con bagno in comune: 70€ (80€ dal 22/10), min. 2 persone
+• 🏨 Villa Belvedere, hotel con bagno privato: 80€ (90€ dal 22/10), min. 2 persone
+
+⚡ *SALTAFILA: 15€*
+Entra subito senza fare la coda all'ingresso. Posti limitati!
+
+🔞 Evento riservato ai maggiorenni. Porta con te un documento valido.
+
+👉 *Compila il form e ti ricontatteremo su WhatsApp per confermare:*
+https://www.magaverse.it/magaparty/halloween.html#prezzi
+
+Lì trovi anche la planimetria della villa, piano per piano.
+
+👀 *P.S.* Lunedì qualcuno busserà alla villa... Tieni d'occhio il profilo!`;
+
+  function costruisciMessaggioHalloween(r) {
+    return MESSAGGIO_HALLOWEEN_TEMPLATE.replace(/\[nome\]/g, r.nome || '');
+  }
+
+  // Config per evento: oggi solo Halloween ha una tabella di "richieste" in
+  // attesa di un contatto staff (le prenotazioni di Tardeo/Marea/Battigia/
+  // Ultima Onda sono invece già confermate al momento dell'invio del form,
+  // quindi non richiedono smistamento). La struttura è pensata per poter
+  // aggiungere in futuro altri eventi con lo stesso meccanismo.
+  const EVENTI_RICHIESTE = {
+    halloween: {
+      label: 'Halloween',
+      tabella: 'halloween_richieste',
+      colonne: 'id, tipo, nome, cognome, email, telefono, instagram, invitato_da, stato, created_at',
+      nomeDisplay: (r) => `${r.nome} ${r.cognome}`,
+      dettagliLabel: (r) => {
+        const parti = [
+          HALLOWEEN_TIPO_LABEL[r.tipo] || r.tipo,
+          r.invitato_da ? `Invitato da: ${r.invitato_da}` : null,
+          r.instagram ? `IG: ${r.instagram}` : null,
+        ];
+        return parti.filter(Boolean).join(' · ');
+      },
+      messaggio: costruisciMessaggioHalloween,
+    },
+  };
+
+  let eventoRichiesteAttivo = Object.keys(EVENTI_RICHIESTE)[0];
+
+  const selectEventoRichieste = document.getElementById('select-evento-richieste');
+  const selectFiltroStatoRichieste = document.getElementById('filtro-stato-richieste');
+  selectEventoRichieste.innerHTML = Object.entries(EVENTI_RICHIESTE)
+    .map(([key, cfg]) => `<option value="${key}">${cfg.label}</option>`).join('');
+  selectEventoRichieste.value = eventoRichiesteAttivo;
+  selectEventoRichieste.addEventListener('change', () => {
+    eventoRichiesteAttivo = selectEventoRichieste.value;
+    document.getElementById('search-richieste').value = '';
+    caricaRichiesteSmistamento();
+  });
+  selectFiltroStatoRichieste.addEventListener('change', applicaFiltroRichieste);
+  document.getElementById('search-richieste').addEventListener('input', applicaFiltroRichieste);
+
+  function normalizzaTelefono(tel) {
+    let t = (tel || '').replace(/[^\d+]/g, '');
+    if (t.startsWith('00')) t = '+' + t.slice(2);
+    if (!t.startsWith('+')) t = '+39' + t.replace(/^0+/, '');
+    return t.replace(/^\+/, '');
+  }
+  function linkWhatsapp(telefono, messaggio) {
+    return `https://wa.me/${normalizzaTelefono(telefono)}?text=${encodeURIComponent(messaggio)}`;
+  }
+  function linkInstagram(handle) {
+    const h = (handle || '').trim().replace(/^@/, '');
+    return `https://instagram.com/${encodeURIComponent(h)}`;
+  }
+
+  async function caricaContattiEvento(evento) {
+    const { data, error } = await sb.rpc('richieste_contattate', { p_evento: evento });
+    contattiEvento = new Set(error || !data ? [] : data);
+  }
+
+  async function caricaRichiesteSmistamento() {
+    const lista = document.getElementById('lista-richieste');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const cfg = EVENTI_RICHIESTE[eventoRichiesteAttivo];
+    const { data, error } = await sb
+      .from(cfg.tabella)
+      .select(cfg.colonne)
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    await caricaContattiEvento(eventoRichiesteAttivo);
+    richiesteSmistamentoTutte = data;
+    richiesteSmistamentoById = {};
+    data.forEach(r => { richiesteSmistamentoById[r.id] = r; });
+    applicaFiltroRichieste();
+  }
+
+  function applicaFiltroRichieste() {
+    const cfg = EVENTI_RICHIESTE[eventoRichiesteAttivo];
+    const q = document.getElementById('search-richieste').value.trim().toLowerCase();
+    const filtroStato = selectFiltroStatoRichieste.value;
+    const filtrate = richiesteSmistamentoTutte.filter(r => {
+      const testo = `${cfg.nomeDisplay(r)} ${r.telefono || ''} ${r.email || ''}`.toLowerCase();
+      if (q && !testo.includes(q)) return false;
+      const contattata = contattiEvento.has(r.id);
+      if (filtroStato === 'da_leggere' && contattata) return false;
+      if (filtroStato === 'letto' && !contattata) return false;
+      return true;
+    });
+    disegnaRichiesteSmistamento(filtrate);
+  }
+
+  function disegnaRichiesteSmistamento(items) {
+    const lista = document.getElementById('lista-richieste');
+    document.getElementById('richieste-count').textContent =
+      `${items.length} richiest${items.length === 1 ? 'a' : 'e'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna richiesta trovata.</div>';
+      return;
+    }
+    const cfg = EVENTI_RICHIESTE[eventoRichiesteAttivo];
+    lista.innerHTML = items.map(r => {
+      const contattata = contattiEvento.has(r.id);
+      const chip = contattata
+        ? '<span class="chip-stato letto">Letto</span>'
+        : '<span class="chip-stato da-leggere">Da leggere</span>';
+      return `
+        <div class="mc-row" data-id="${r.id}">
+          <div class="info">
+            <b>${cfg.nomeDisplay(r)}</b>${chip}
+            <span>${r.telefono || '—'} · ${r.email || '—'}</span>
+            <span>${cfg.dettagliLabel(r)}</span>
+          </div>
+          <div class="azioni">
+            ${r.telefono ? `<button class="btn-confirm" onclick="apriContatto('${r.id}','whatsapp')">WhatsApp</button>` : ''}
+            ${r.instagram ? `<button class="btn-ghost" onclick="apriContatto('${r.id}','instagram')">Instagram</button>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.apriContatto = async (id, canale) => {
+    const r = richiesteSmistamentoById[id];
+    if (!r) return;
+    const cfg = EVENTI_RICHIESTE[eventoRichiesteAttivo];
+    let url;
+    if (canale === 'whatsapp') {
+      if (!r.telefono) return;
+      url = linkWhatsapp(r.telefono, cfg.messaggio(r));
+    } else {
+      if (!r.instagram) return;
+      url = linkInstagram(r.instagram);
+    }
+    window.open(url, '_blank');
+    await registraContatto(eventoRichiesteAttivo, id, canale);
+    applicaFiltroRichieste();
+  };
+
+  async function registraContatto(evento, richiestaId, canale) {
+    contattiEvento.add(richiestaId); // aggiornamento ottimistico del badge
+    const { error } = await sb.from('staff_contatti_log').insert({
+      evento,
+      richiesta_id: richiestaId,
+      operatore_email: currentUserEmail,
+      operatore_nome: currentUserNome,
+      canale,
+    });
+    if (error) console.error('Errore registrazione contatto:', error.message);
+  }
+
+  // ============================== REGISTRO CONTATTI (solo superadmin) ==============================
+  const selectEventoRegistro = document.getElementById('select-evento-registro');
+  Object.entries(EVENTI_RICHIESTE).forEach(([key, cfg]) => {
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = cfg.label;
+    selectEventoRegistro.appendChild(opt);
+  });
+  selectEventoRegistro.addEventListener('change', applicaFiltroRegistro);
+
+  async function caricaRegistro() {
+    const lista = document.getElementById('lista-registro');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data: log, error } = await sb
+      .from('staff_contatti_log')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+
+    // Arricchisce ogni riga del log con il nome del cliente, recuperandolo
+    // dalla tabella richieste dell'evento corrispondente.
+    const idsPerEvento = {};
+    log.forEach(l => {
+      (idsPerEvento[l.evento] = idsPerEvento[l.evento] || new Set()).add(l.richiesta_id);
+    });
+    const nomiMap = {};
+    for (const [evento, idsSet] of Object.entries(idsPerEvento)) {
+      const cfg = EVENTI_RICHIESTE[evento];
+      if (!cfg) continue;
+      const { data: righe } = await sb.from(cfg.tabella).select(cfg.colonne).in('id', [...idsSet]);
+      (righe || []).forEach(r => { nomiMap[`${evento}:${r.id}`] = cfg.nomeDisplay(r); });
+    }
+
+    registroLogTutto = log;
+    registroNomiMap = nomiMap;
+    applicaFiltroRegistro();
+  }
+
+  function applicaFiltroRegistro() {
+    const evento = selectEventoRegistro.value;
+    const filtrato = evento === 'tutti' ? registroLogTutto : registroLogTutto.filter(l => l.evento === evento);
+    disegnaRegistro(filtrato);
+  }
+
+  function disegnaRegistro(log) {
+    const lista = document.getElementById('lista-registro');
+    document.getElementById('registro-count').textContent =
+      `${log.length} contatt${log.length === 1 ? 'o' : 'i'} registrat${log.length === 1 ? 'o' : 'i'}`;
+    if (log.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessun contatto registrato.</div>';
+      return;
+    }
+    lista.innerHTML = log.map(l => {
+      const cfg = EVENTI_RICHIESTE[l.evento];
+      const cliente = registroNomiMap[`${l.evento}:${l.richiesta_id}`] || l.richiesta_id.slice(0, 8);
+      const quando = new Date(l.created_at).toLocaleString('it-IT');
+      const canaleLabel = l.canale === 'whatsapp' ? 'WhatsApp' : 'Instagram';
+      return `
+        <div class="mc-row">
+          <div class="info">
+            <b>${cliente}</b>
+            <span>${cfg ? cfg.label : l.evento} · ${canaleLabel}</span>
+            <span>${quando} · ${l.operatore_nome || l.operatore_email}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
 </script>
 </body>
 </html>
