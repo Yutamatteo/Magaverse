@@ -76,6 +76,11 @@
   .chip-stato.da-leggere { background: var(--mc-gold-soft); color: var(--mc-gold); }
   .chip-stato.letto { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
 
+  .mc-row .info span.chip-pacchetto {
+    display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700;
+    background: var(--mc-violet-soft); color: var(--mc-violet); margin: 4px 0 2px;
+  }
+
   .mc-row .azioni { display:flex; gap:8px; }
   .mc-row .azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; }
 </style>
@@ -1040,8 +1045,29 @@ Lì trovi anche la planimetria della villa, piano per piano.
 
 👀 *P.S.* Lunedì qualcuno busserà alla villa... Tieni d'occhio il profilo!`;
 
+  // Nel template l'indicatore "← fascia attuale" è scritto sulla riga
+  // Community. Se la richiesta è per un'altra fascia (prima/seconda/terza
+  // release), lo spostiamo sulla riga corrispondente, così chi ha scelto
+  // una fascia diversa vede la freccia sul prezzo che ha davvero selezionato.
+  // Per i "tipo" che non sono una fascia di prezzo (saltafila, navetta,
+  // appartamenti-vip, villa-belvedere, lido-azzurro) la freccia resta sulla
+  // riga Community, come nel messaggio originale.
+  const FASCIA_ARROW = ' ← fascia attuale';
+  const FASCIA_RIGHE = {
+    community: '• Community: 40€',
+    prima: '• Prima release: 45€',
+    seconda: '• Seconda release: 50€',
+    terza: '• Terza e ultima: 55€',
+  };
+
   function costruisciMessaggioHalloween(r) {
-    return MESSAGGIO_HALLOWEEN_TEMPLATE.replace(/\[nome\]/g, r.nome || '');
+    let msg = MESSAGGIO_HALLOWEEN_TEMPLATE.replace(/\[nome\]/g, r.nome || '');
+    const rigaSelezionata = FASCIA_RIGHE[r.tipo];
+    if (rigaSelezionata && rigaSelezionata !== FASCIA_RIGHE.community) {
+      msg = msg.replace(`${FASCIA_RIGHE.community}${FASCIA_ARROW}`, FASCIA_RIGHE.community);
+      msg = msg.replace(rigaSelezionata, `${rigaSelezionata}${FASCIA_ARROW}`);
+    }
+    return msg;
   }
 
   // Config per evento: oggi solo Halloween ha una tabella di "richieste" in
@@ -1053,11 +1079,14 @@ Lì trovi anche la planimetria della villa, piano per piano.
     halloween: {
       label: 'Halloween',
       tabella: 'halloween_richieste',
-      colonne: 'id, tipo, nome, cognome, email, telefono, instagram, invitato_da, stato, created_at',
+      colonne: 'id, tipo, nome, cognome, email, telefono, instagram, invitato_da, stato, numero_persone, created_at',
       nomeDisplay: (r) => `${r.nome} ${r.cognome}`,
+      pacchettoLabel: (r) => {
+        const base = HALLOWEEN_TIPO_LABEL[r.tipo] || r.tipo;
+        return r.numero_persone ? `${base} · ${r.numero_persone} persone` : base;
+      },
       dettagliLabel: (r) => {
         const parti = [
-          HALLOWEEN_TIPO_LABEL[r.tipo] || r.tipo,
           r.invitato_da ? `Invitato da: ${r.invitato_da}` : null,
           r.instagram ? `IG: ${r.instagram}` : null,
         ];
@@ -1149,12 +1178,14 @@ Lì trovi anche la planimetria della villa, piano per piano.
       const chip = contattata
         ? '<span class="chip-stato letto">Letto</span>'
         : '<span class="chip-stato da-leggere">Da leggere</span>';
+      const dettagli = cfg.dettagliLabel(r);
       return `
         <div class="mc-row" data-id="${r.id}">
           <div class="info">
             <b>${cfg.nomeDisplay(r)}</b>${chip}
+            ${cfg.pacchettoLabel ? `<span class="chip-pacchetto">${cfg.pacchettoLabel(r)}</span>` : ''}
             <span>${r.telefono || '—'} · ${r.email || '—'}</span>
-            <span>${cfg.dettagliLabel(r)}</span>
+            ${dettagli ? `<span>${dettagli}</span>` : ''}
           </div>
           <div class="azioni">
             ${r.telefono ? `<button class="btn-confirm" onclick="apriContatto('${r.id}','whatsapp')">WhatsApp</button>` : ''}
@@ -1261,10 +1292,35 @@ Lì trovi anche la planimetria della villa, piano per piano.
             <span>${cfg ? cfg.label : l.evento} · ${canaleLabel}</span>
             <span>${quando} · ${l.operatore_nome || l.operatore_email}</span>
           </div>
+          <div class="azioni">
+            <button class="btn-ghost" onclick="eliminaContatto('${l.evento}','${l.richiesta_id}')">Elimina</button>
+          </div>
         </div>
       `;
     }).join('');
   }
+
+  // Corregge un "letto" segnato per errore: elimina la/le registrazioni di
+  // contatto per questa richiesta, che torna così "da leggere" nella scheda
+  // Richieste. Visibile solo qui (Registro = solo superadmin); il server
+  // verifica comunque il ruolo dal token della sessione.
+  window.eliminaContatto = async (evento, richiestaId) => {
+    if (!confirm('Eliminare questa registrazione di contatto? La richiesta tornerà "da leggere".')) return;
+    const { data: sessionData } = await sb.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) { alert('Sessione non valida, effettua di nuovo il login.'); return; }
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/elimina-contatto-staff`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ evento, richiesta_id: richiestaId }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert('Errore: ' + (err.error || res.status));
+      return;
+    }
+    caricaRegistro();
+  };
 </script>
 </body>
 </html>
