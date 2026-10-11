@@ -2135,8 +2135,36 @@ window.addEventListener('DOMContentLoaded', function(){
     ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
     : null;
 
+  /* Cambio fascia automatico: dal 12 ottobre 2026 la fascia Community
+     si considera esaurita e la Prima Release passa in vendita diretta,
+     con pagamento esterno su Postoriservato (stesso link già in uso).
+     Le card si comportano come normali fasce aperte/esaurite: nessuna
+     indicazione visibile che si tratti di un cambiamento. */
+  var PRIMA_RELEASE_FROM = new Date('2026-10-12T00:00:00+02:00');
+  var primaReleaseAttiva = Date.now() >= PRIMA_RELEASE_FROM.getTime();
+
+  var communityCard = document.querySelector('.ticket-card[data-tier="community"]');
+  var primaCard = document.querySelector('.ticket-card[data-tier="prima"]');
+
+  if (primaReleaseAttiva){
+    if (communityCard){
+      communityCard.dataset.state = 'sold';
+      var communityDesc = communityCard.querySelector('p');
+      if (communityDesc) communityDesc.textContent = 'Fascia Community esaurita.';
+    }
+    if (primaCard){
+      primaCard.dataset.state = 'open';
+      var primaDesc = primaCard.querySelector('p');
+      if (primaDesc) primaDesc.textContent = 'Posti limitati. Compila il form: si procede subito al pagamento online.';
+      var primaToggle = primaCard.querySelector('[data-action="toggle-form"]');
+      if (primaToggle) primaToggle.textContent = 'Richiedi il biglietto';
+      var primaSubmit = primaCard.querySelector('form.ticket-form button[type="submit"]');
+      if (primaSubmit) primaSubmit.textContent = 'Invia richiesta';
+    }
+  }
+
   var TICKET_LINKS = {
-    prima: ''
+    prima: primaReleaseAttiva ? 'https://www.postoriservato.it/biglietti/american-halloween-zombie-apocalypse-31-ottobre-2026-magazzeno-pontecagnano-pontecagnano-34106.html' : ''
   };
 
   /* Evento: 31 ottobre 2026 — l'età minima si valuta a questa data,
