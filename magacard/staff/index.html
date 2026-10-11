@@ -257,6 +257,7 @@
   let richiesteSmistamentoTutte = [];
   let richiesteSmistamentoById = {};
   let contattiEvento = new Set();
+  let richiesteDuplicatiNascosti = [];
   let registroLogTutto = [];
   let registroNomiMap = {};
 
@@ -998,6 +999,14 @@
     'villa-belvedere': 'Villa Belvedere', 'lido-azzurro': 'Lido Azzurro',
   };
 
+  // Capita che la stessa persona compili il form più volte (es. prima
+  // Community e poi, per sicurezza, anche 1ª data). Tra le richieste
+  // doppie diamo priorità alla fascia più conveniente per il cliente:
+  // Community prima di tutto, poi le fasce a prezzo crescente; le altre
+  // "tipo" (saltafila/navetta/alloggi) non sono fasce di prezzo quindi le
+  // trattiamo come meno prioritarie delle fasce vere e proprie.
+  const HALLOWEEN_PRIORITA_TIPO = { community: 0, prima: 1, seconda: 2, terza: 3 };
+
   // Messaggio ufficiale fornito da Matteo, convertito per WhatsApp:
   // "**bold**" -> "*bold*", "* " (elenco) -> "• ".
   // Testo per chi prende il biglietto Community; per le altre fasce di
@@ -1096,6 +1105,17 @@ Lì trovi anche la planimetria della villa, piano per piano.
         return parti.filter(Boolean).join(' · ');
       },
       messaggio: costruisciMessaggioHalloween,
+      // Chiave per riconoscere la stessa persona su più richieste: nome +
+      // cognome + telefono normalizzato + email, senza distinguere
+      // maiuscole/minuscole o spazi. Le richieste che condividono questa
+      // chiave vengono trattate come duplicati nella scheda Richieste.
+      chiaveDuplicato: (r) => [
+        (r.nome || '').trim().toLowerCase(),
+        (r.cognome || '').trim().toLowerCase(),
+        normalizzaTelefono(r.telefono),
+        (r.email || '').trim().toLowerCase(),
+      ].join('|'),
+      prioritaDuplicato: (r) => HALLOWEEN_PRIORITA_TIPO[r.tipo] ?? 99,
     },
   };
 
@@ -1133,6 +1153,36 @@ Lì trovi anche la planimetria della villa, piano per piano.
     contattiEvento = new Set(error || !data ? [] : data);
   }
 
+  // Raggruppa le richieste con la stessa cfg.chiaveDuplicato (stessa persona
+  // che ha compilato il form più volte) e tiene visibile solo quella con
+  // priorità più alta secondo cfg.prioritaDuplicato (a parità di priorità,
+  // la più vecchia). Le altre non spariscono dal database: restano
+  // consultabili ma non compaiono più tra le richieste da contattare, così
+  // lo staff contatta la persona una sola volta con la fascia giusta.
+  function deduplicaRichieste(righe, cfg) {
+    if (!cfg.chiaveDuplicato) return { visibili: righe, nascoste: [] };
+    const gruppi = new Map();
+    righe.forEach(r => {
+      const chiave = cfg.chiaveDuplicato(r);
+      if (!gruppi.has(chiave)) gruppi.set(chiave, []);
+      gruppi.get(chiave).push(r);
+    });
+    const visibili = [];
+    const nascoste = [];
+    gruppi.forEach(gruppo => {
+      if (gruppo.length === 1) { visibili.push(gruppo[0]); return; }
+      const ordinate = [...gruppo].sort((a, b) => {
+        const pa = cfg.prioritaDuplicato ? cfg.prioritaDuplicato(a) : 0;
+        const pb = cfg.prioritaDuplicato ? cfg.prioritaDuplicato(b) : 0;
+        if (pa !== pb) return pa - pb;
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+      visibili.push(ordinate[0]);
+      nascoste.push(...ordinate.slice(1));
+    });
+    return { visibili, nascoste };
+  }
+
   async function caricaRichiesteSmistamento() {
     const lista = document.getElementById('lista-richieste');
     lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
@@ -1146,9 +1196,11 @@ Lì trovi anche la planimetria della villa, piano per piano.
       return;
     }
     await caricaContattiEvento(eventoRichiesteAttivo);
-    richiesteSmistamentoTutte = data;
     richiesteSmistamentoById = {};
     data.forEach(r => { richiesteSmistamentoById[r.id] = r; });
+    const { visibili, nascoste } = deduplicaRichieste(data, cfg);
+    richiesteSmistamentoTutte = visibili;
+    richiesteDuplicatiNascosti = nascoste;
     applicaFiltroRichieste();
   }
 
@@ -1169,8 +1221,12 @@ Lì trovi anche la planimetria della villa, piano per piano.
 
   function disegnaRichiesteSmistamento(items) {
     const lista = document.getElementById('lista-richieste');
+    const nDup = richiesteDuplicatiNascosti.length;
+    const notaDuplicati = nDup
+      ? ` · ${nDup} duplicat${nDup === 1 ? 'o' : 'i'} nascost${nDup === 1 ? 'o' : 'i'} (stessa persona, già mostrata la fascia migliore)`
+      : '';
     document.getElementById('richieste-count').textContent =
-      `${items.length} richiest${items.length === 1 ? 'a' : 'e'}`;
+      `${items.length} richiest${items.length === 1 ? 'a' : 'e'}${notaDuplicati}`;
     if (items.length === 0) {
       lista.innerHTML = '<div class="mc-empty">Nessuna richiesta trovata.</div>';
       return;
