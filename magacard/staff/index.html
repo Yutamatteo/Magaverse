@@ -999,14 +999,6 @@
     'villa-belvedere': 'Villa Belvedere', 'lido-azzurro': 'Lido Azzurro',
   };
 
-  // Capita che la stessa persona compili il form più volte (es. prima
-  // Community e poi, per sicurezza, anche 1ª data). Tra le richieste
-  // doppie diamo priorità alla fascia più conveniente per il cliente:
-  // Community prima di tutto, poi le fasce a prezzo crescente; le altre
-  // "tipo" (saltafila/navetta/alloggi) non sono fasce di prezzo quindi le
-  // trattiamo come meno prioritarie delle fasce vere e proprie.
-  const HALLOWEEN_PRIORITA_TIPO = { community: 0, prima: 1, seconda: 2, terza: 3 };
-
   // Messaggio ufficiale fornito da Matteo, convertito per WhatsApp:
   // "**bold**" -> "*bold*", "* " (elenco) -> "• ".
   // Testo per chi prende il biglietto Community; per le altre fasce di
@@ -1115,7 +1107,14 @@ Lì trovi anche la planimetria della villa, piano per piano.
         normalizzaTelefono(r.telefono),
         (r.email || '').trim().toLowerCase(),
       ].join('|'),
-      prioritaDuplicato: (r) => HALLOWEEN_PRIORITA_TIPO[r.tipo] ?? 99,
+      // NIENT'AFFATTO priorità alla fascia Community: chi manda più
+      // richieste (es. prima "prima" e poi, sperando passi, "community")
+      // non è automaticamente un membro della Community solo perché lo
+      // dichiara — anzi, mandare più richieste è di per sé un campanello
+      // d'allarme. La richiesta valida resta quella originale, cioè la
+      // più vecchia; le successive (qualunque fascia dichiarino) vengono
+      // nascoste. Il default di deduplicaRichieste ordina già per
+      // created_at crescente, quindi qui non serve altro.
     },
   };
 
@@ -1223,7 +1222,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
     const lista = document.getElementById('lista-richieste');
     const nDup = richiesteDuplicatiNascosti.length;
     const notaDuplicati = nDup
-      ? ` · ${nDup} duplicat${nDup === 1 ? 'o' : 'i'} nascost${nDup === 1 ? 'o' : 'i'} (stessa persona, già mostrata la fascia migliore)`
+      ? ` · ${nDup} duplicat${nDup === 1 ? 'o' : 'i'} nascost${nDup === 1 ? 'o' : 'i'} (stessa persona, mostrata solo la richiesta più vecchia)`
       : '';
     document.getElementById('richieste-count').textContent =
       `${items.length} richiest${items.length === 1 ? 'a' : 'e'}${notaDuplicati}`;
