@@ -1,13 +1,15 @@
 // Supabase Edge Function — scattata non appena una riga viene inserita in
 // pagamenti_contanti (form "paga in contanti", condiviso manualmente in
-// chat, non linkato sul sito). Invia DUE email:
-//   1) al cliente: il QR d'ingresso, con l'avviso che non è ancora attivo
-//      finché lo staff non conferma il pagamento in contanti;
-//   2) allo staff: avviso che c'è una nuova richiesta da gestire (impostare
-//      il prezzo e confermare il pagamento dal pannello).
+// chat, non linkato sul sito). Invia UNA sola email, al cliente: il QR
+// d'ingresso, con l'avviso che non è ancora attivo finché lo staff non
+// conferma il pagamento in contanti.
 // Il QR è identico a quello usato per Marea/Battigia/ecc. (qrserver.com),
 // ma diventa scansionabile solo quando lo staff conferma il pagamento dal
 // pannello (vedi valida_ingresso_contanti lato database).
+//
+// Nota: niente più email di notifica allo staff ad ogni richiesta (per
+// risparmiare quota Resend) — le nuove richieste si vedono dal pannello
+// staff, scheda "Biglietti in contanti".
 //
 // Deploy:
 //   supabase functions deploy invia-email-pagamento-contanti --no-verify-jwt
@@ -23,12 +25,6 @@
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET")!;
 const FROM_EMAIL = "Magaparty <noreply@magaverse.it>"; // dominio verificato su Resend
-const STAFF_EMAIL = "matteo.finizio@magaverse.it";
-
-function formatData(dataIso: string): string {
-  const d = new Date(dataIso + "T12:00:00");
-  return d.toLocaleDateString("it-IT", { day: "numeric", month: "long", year: "numeric" });
-}
 
 async function inviaEmail(to: string, subject: string, html: string) {
   return await fetch("https://api.resend.com/emails", {
@@ -86,37 +82,6 @@ Deno.serve(async (req: Request) => {
   if (!resCliente.ok) {
     const errText = await resCliente.text();
     return new Response(`resend error (cliente): ${errText}`, { status: 500 });
-  }
-
-  // Email staff: avviso nuova richiesta da gestire (impostare prezzo + confermare).
-  const htmlStaff = `
-  <div style="font-family:Arial,Helvetica,sans-serif;max-width:480px;margin:0 auto;background:#17101F;color:#ECE6DD;padding:32px 24px;border-radius:20px">
-    <p style="text-transform:uppercase;letter-spacing:3px;font-size:11px;color:#D8B66B;margin:0 0 6px">Halloween in Villa · Contanti</p>
-    <h1 style="font-size:22px;margin:0 0 18px;color:#fff">Nuova richiesta pagamento in contanti</h1>
-
-    <div style="background:#1F1730;border:1px solid rgba(255,255,255,0.09);border-radius:14px;padding:18px 20px">
-      <p style="font-size:14px;margin:0 0 8px"><strong>${row.nome} ${row.cognome}</strong></p>
-      <p style="font-size:13px;margin:0 0 4px;color:#9A91A8">Email: <span style="color:#ECE6DD">${row.email}</span></p>
-      <p style="font-size:13px;margin:0 0 4px;color:#9A91A8">Telefono: <span style="color:#ECE6DD">${row.telefono}</span></p>
-      <p style="font-size:13px;margin:0 0 4px;color:#9A91A8">Data di nascita: <span style="color:#ECE6DD">${formatData(row.data_nascita)}</span></p>
-      ${row.instagram ? `<p style="font-size:13px;margin:0;color:#9A91A8">Instagram: <span style="color:#ECE6DD">${row.instagram}</span></p>` : ""}
-    </div>
-
-    <p style="font-size:11px;color:#9A91A8;line-height:1.6;margin:20px 0 0">
-      Il QR è già stato inviato al cliente ma non è ancora scansionabile. Vai nel pannello staff, scheda
-      "Biglietti in contanti", imposta il prezzo accordato e conferma il pagamento: solo allora il QR
-      diventerà valido all'ingresso.
-    </p>
-  </div>`;
-
-  const resStaff = await inviaEmail(
-    STAFF_EMAIL,
-    `Nuova richiesta contanti — ${row.nome} ${row.cognome}`,
-    htmlStaff,
-  );
-  if (!resStaff.ok) {
-    const errText = await resStaff.text();
-    return new Response(`resend error (staff): ${errText}`, { status: 500 });
   }
 
   return new Response("ok", { status: 200 });
