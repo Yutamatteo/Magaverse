@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Pagamento in contanti · Halloween in Villa</title>
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{background:var(--ink); color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+h1{font-family:'Fraunces', Georgia, serif; margin:0 0 6px; font-size:24px; color:#fff;}
+p{margin:0;}
+a{color:var(--gold);}
+.wrap{max-width:420px; width:100%;}
+.eyebrow{text-transform:uppercase; letter-spacing:3px; font-size:11px; color:var(--gold); margin:0 0 8px;}
+.sub{font-size:13.5px; line-height:1.6; color:var(--muted); margin:0 0 24px;}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:24px 22px;}
+form{display:grid; grid-template-columns:1fr; gap:10px;}
+form .full-w{grid-column:1 / -1;}
+form input{font-family:inherit; font-size:14px; padding:12px 13px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; width:100%;}
+form input:focus{border-color:var(--ember);}
+form label{display:block; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+.terms-check{display:flex; align-items:flex-start; gap:8px; font-size:11.5px; line-height:1.5; color:var(--muted); cursor:pointer; margin-top:4px;}
+.terms-check input[type="checkbox"]{flex:none; width:16px; height:16px; margin-top:1px; accent-color:var(--ember); cursor:pointer;}
+.cta{font-family:inherit; font-size:13px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:13px 16px; border-radius:10px; border:1px solid var(--ember); background:var(--ember); color:#20120A; cursor:pointer; text-align:center; width:100%; margin-top:4px;}
+.cta:hover{background:var(--gold); border-color:var(--gold);}
+.cta:disabled{opacity:0.6; cursor:default;}
+.msg-error{font-size:12.5px; color:var(--ember); line-height:1.5; margin-top:2px; display:none;}
+.msg-error.show{display:block;}
+.success{display:none; text-align:center; padding:8px 0;}
+.success.show{display:block;}
+.success .check{font-size:38px; margin-bottom:10px;}
+.success h1{font-size:20px;}
+.success p{font-size:13.5px; line-height:1.65; color:var(--muted); margin-top:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Halloween in Villa · 31 ottobre</p>
+  <h1>Richiesta ingresso — pagamento in contanti</h1>
+  <p class="sub">Compila i tuoi dati: ti invieremo via email il QR d'ingresso. Il prezzo e le modalità di pagamento in contanti te li confermiamo noi, poi attiveremo il QR per l'ingresso.</p>
+
+  <div class="card">
+    <form id="form-contanti">
+      <div class="full-w">
+        <label for="f-nome">Nome</label>
+        <input type="text" id="f-nome" name="nome" autocomplete="given-name" required>
+      </div>
+      <div class="full-w">
+        <label for="f-cognome">Cognome</label>
+        <input type="text" id="f-cognome" name="cognome" autocomplete="family-name" required>
+      </div>
+      <div class="full-w">
+        <label for="f-email">Email</label>
+        <input type="email" id="f-email" name="email" autocomplete="email" required>
+      </div>
+      <div class="full-w">
+        <label for="f-telefono">Telefono (WhatsApp)</label>
+        <input type="tel" id="f-telefono" name="telefono" autocomplete="tel" required>
+      </div>
+      <div class="full-w">
+        <label for="f-nascita">Data di nascita</label>
+        <input type="date" id="f-nascita" name="nascita" required>
+      </div>
+      <div class="full-w">
+        <label for="f-instagram">Instagram (opzionale)</label>
+        <input type="text" id="f-instagram" name="instagram" placeholder="@username">
+      </div>
+      <label class="terms-check full-w">
+        <input type="checkbox" name="accetta_termini" required>
+        <span>Dichiaro di avere almeno 18 anni e accetto che i miei dati vengano usati per gestire l'ingresso all'evento.</span>
+      </label>
+      <p class="msg-error full-w" id="msg-error"></p>
+      <button type="submit" class="cta full-w" id="btn-submit">Invia richiesta</button>
+    </form>
+
+    <div class="success" id="success">
+      <div class="check">✅</div>
+      <h1>Richiesta inviata</h1>
+      <p>Controlla la tua email: trovi il QR d'ingresso. Non è ancora attivo — ti ricontattiamo a breve per il pagamento in contanti, poi lo attiviamo per l'ingresso.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SUPABASE_URL = 'https://dkzzmxsreaegjagqbdnh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  // Evento: 31 ottobre 2026 — l'età minima si valuta a questa data.
+  var EVENT_DATE = new Date('2026-10-31T23:59:59');
+  function computeAge(dobStr, atDate){
+    var dob = new Date(dobStr + 'T00:00:00');
+    if (isNaN(dob.getTime())) return -1;
+    var age = atDate.getFullYear() - dob.getFullYear();
+    var m = atDate.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && atDate.getDate() < dob.getDate())) age--;
+    return age;
+  }
+
+  var form = document.getElementById('form-contanti');
+  var success = document.getElementById('success');
+  var errorEl = document.getElementById('msg-error');
+  var submitBtn = document.getElementById('btn-submit');
+  var submitLabel = submitBtn.textContent;
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    function val(name){
+      var el = form.querySelector('[name="' + name + '"]');
+      return el ? el.value.trim() : '';
+    }
+    var nome = val('nome'), cognome = val('cognome'), email = val('email'),
+        telefono = val('telefono'), nascita = val('nascita'), instagram = val('instagram');
+
+    errorEl.classList.remove('show');
+    if (!nome || !cognome || !email || !telefono || !nascita) return;
+
+    var age = computeAge(nascita, EVENT_DATE);
+    if (age < 0 || age < 18){
+      errorEl.textContent = 'L\'evento è riservato ai maggiorenni: devi avere almeno 18 anni alla data della festa.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    var terminiBox = form.querySelector('[name="accetta_termini"]');
+    if (!terminiBox || !terminiBox.checked){
+      errorEl.textContent = 'Devi accettare la casella qui sopra per inviare la richiesta.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    if (!sb){
+      errorEl.textContent = 'Errore di connessione, riprova tra poco.';
+      errorEl.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Invio…';
+
+    var payload = {
+      nome: nome,
+      cognome: cognome,
+      email: email,
+      telefono: telefono,
+      data_nascita: nascita,
+      instagram: instagram || null,
+      termini_accettati: true
+    };
+
+    sb.from('pagamenti_contanti').insert(payload).then(function(res){
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitLabel;
+      if (res && res.error){
+        errorEl.textContent = 'Si è verificato un errore, riprova tra poco.';
+        errorEl.classList.add('show');
+        return;
+      }
+      form.hidden = true;
+      success.classList.add('show');
+    }, function(){
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitLabel;
+      errorEl.textContent = 'Si è verificato un errore, riprova tra poco.';
+      errorEl.classList.add('show');
+    });
+  });
+})();
+</script>
+</body>
+</html>
