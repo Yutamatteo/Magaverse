@@ -219,11 +219,12 @@
       <div id="lista-richieste" style="margin-top:12px;"></div>
     </div>
 
-    <!-- VISTA CONTANTI (admin/superadmin): anagrafica di chi ha compilato il
-         form "paga in contanti" (link condiviso manualmente in chat, non
-         presente sul sito). Qui si imposta il prezzo accordato col cliente
-         e si conferma il pagamento: solo allora il QR già inviato via email
-         diventa scansionabile all'ingresso. -->
+    <!-- VISTA CONTANTI (ingresso/admin/superadmin): anagrafica di chi ha
+         compilato il form "paga in contanti" (link condiviso manualmente in
+         chat, non presente sul sito), visibile a tutto lo staff con questa
+         scheda. Solo admin/superadmin impostano il prezzo accordato col
+         cliente e confermano il pagamento: solo allora il QR già inviato
+         via email diventa scansionabile all'ingresso. -->
     <div id="vista-contanti" class="hidden">
       <input class="mc-search" type="text" id="search-contanti" placeholder="Cerca per nome, cognome o telefono...">
       <p class="mc-sub" id="contanti-count" style="margin:12px 0 0;"></p>
@@ -321,6 +322,7 @@
       document.getElementById('tab-gestione').classList.add('hidden');
       document.getElementById('tab-prenotazioni').classList.remove('hidden');
       document.getElementById('tab-smistamento').classList.remove('hidden');
+      document.getElementById('tab-contanti').classList.remove('hidden');
       avviaScanner();
     } else {
       // admin / superadmin: mostra la scelta postazione prima dello scanner
@@ -1343,10 +1345,12 @@ Lì trovi anche la planimetria della villa, piano per piano.
     if (error) console.error('Errore registrazione contatto:', error.message);
   }
 
-  // ============================== CONTANTI (admin/superadmin) ==============================
+  // ============================== CONTANTI (ingresso/admin/superadmin) ==============================
   // Anagrafica di chi ha compilato il form "paga in contanti" (link condiviso
-  // a mano in chat, non presente sul sito). Il prezzo non viene chiesto nel
-  // form: lo impostano qui admin/superadmin quando si accordano col cliente.
+  // a mano in chat, non presente sul sito): visibile a tutto lo staff con
+  // questa scheda. Il prezzo non viene chiesto nel form: lo impostano admin/
+  // superadmin quando si accordano col cliente (anche lato RLS, l'UPDATE
+  // resta riservato a loro — ingresso vede l'elenco in sola lettura).
   // Confermando il pagamento, il QR già inviato via email (stato iniziale
   // "in_attesa") diventa scansionabile all'ingresso (stato "confermato").
   let contantiTutti = [];
@@ -1394,17 +1398,23 @@ Lì trovi anche la planimetria della villa, piano per piano.
       lista.innerHTML = '<div class="mc-empty">Nessuna richiesta trovata.</div>';
       return;
     }
+    // Tutto lo staff con questa scheda (ingresso/admin/superadmin) vede
+    // l'elenco e il prezzo; solo admin/superadmin possono impostarlo e
+    // confermare il pagamento (anche lato RLS, non solo qui in UI).
+    const puoModificare = ruolo === 'admin' || ruolo === 'superadmin';
     lista.innerHTML = items.map(r => `
       <div class="mc-row" data-id="${r.id}">
         <div class="info">
           <b>${r.nome} ${r.cognome}</b>${statoChipContanti(r.stato)}
           <span>${r.telefono || '—'} · ${r.email || '—'}</span>
           <span>Nata/o il ${formatDataContanti(r.data_nascita)}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
+          ${!puoModificare && r.prezzo != null ? `<span>Prezzo: €${r.prezzo}</span>` : ''}
         </div>
+        ${puoModificare ? `
         <div class="contanti-azioni">
           <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${r.id}" value="${r.prezzo != null ? r.prezzo : ''}">
           <button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Conferma pagamento' : 'Aggiorna prezzo'}</button>
-        </div>
+        </div>` : ''}
       </div>
     `).join('');
   }
