@@ -79,9 +79,9 @@
   .chip-stato.confermato { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
   .chip-stato.usato { background: var(--mc-violet-soft); color: var(--mc-violet); }
 
-  .contanti-azioni { display:flex; gap:8px; align-items:center; }
+  .contanti-azioni { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   .contanti-azioni input { width:84px; margin:0; padding:9px 10px; font-size:12px; }
-  .contanti-azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; }
+  .contanti-azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; white-space:nowrap; }
 
   .mc-row .info span.chip-pacchetto {
     display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700;
@@ -1413,7 +1413,8 @@ Lì trovi anche la planimetria della villa, piano per piano.
         ${puoModificare ? `
         <div class="contanti-azioni">
           <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${r.id}" value="${r.prezzo != null ? r.prezzo : ''}">
-          <button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Conferma pagamento' : 'Aggiorna prezzo'}</button>
+          <button class="btn-ghost" onclick="salvaPrezzoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Salva prezzo' : 'Aggiorna prezzo'}</button>
+          ${r.stato === 'in_attesa' ? `<button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">Conferma pagamento</button>` : ''}
         </div>` : ''}
       </div>
     `).join('');
@@ -1421,6 +1422,26 @@ Lì trovi anche la planimetria della villa, piano per piano.
 
   document.getElementById('search-contanti').addEventListener('input', applicaFiltroContanti);
 
+  // Salva solo il prezzo, senza toccare lo stato: utile per fissare/
+  // correggere l'importo accordato col cliente prima di confermare
+  // effettivamente il pagamento (che invece abilita il QR).
+  window.salvaPrezzoContanti = async (id) => {
+    const input = document.getElementById(`prezzo-contanti-${id}`);
+    const prezzo = parseFloat((input.value || '').trim().replace(',', '.'));
+    if (!prezzo || isNaN(prezzo) || prezzo <= 0) {
+      alert('Inserisci un prezzo valido.');
+      return;
+    }
+    const { error } = await sb.from('pagamenti_contanti').update({ prezzo }).eq('id', id);
+    if (error) {
+      alert('Errore nel salvataggio del prezzo: ' + error.message);
+      return;
+    }
+    caricaContanti();
+  };
+
+  // Prezzo + conferma pagamento: abilita subito il QR per la scansione
+  // all'ingresso. Mostrato solo per le richieste ancora "in attesa".
   window.confermaPagamentoContanti = async (id) => {
     const input = document.getElementById(`prezzo-contanti-${id}`);
     const prezzo = parseFloat((input.value || '').trim().replace(',', '.'));
@@ -1428,13 +1449,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       alert('Inserisci un prezzo valido.');
       return;
     }
-    const riga = contantiTutti.find(r => r.id === id);
-    const aggiornamento = { prezzo };
-    // Non "retrocede" una richiesta già scansionata all'ingresso: aggiorna
-    // solo il prezzo. Per chi è ancora in attesa, confermare il pagamento
-    // abilita subito il QR per la scansione.
-    if (riga && riga.stato === 'in_attesa') aggiornamento.stato = 'confermato';
-    const { error } = await sb.from('pagamenti_contanti').update(aggiornamento).eq('id', id);
+    const { error } = await sb.from('pagamenti_contanti').update({ prezzo, stato: 'confermato' }).eq('id', id);
     if (error) {
       alert('Errore nella conferma: ' + error.message);
       return;
