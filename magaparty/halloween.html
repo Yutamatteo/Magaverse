@@ -769,7 +769,7 @@ img{max-width:100%;}
 <section class="wrap prezzi-head" id="prezzi">
   <span class="section-label">Quanto costa</span>
   <h2>Prezzi</h2>
-  <p>Vendita a fasce, posti limitati: compila il form per prenotare. I prezzi segnati con una freccia aumentano dal 22 ottobre.</p>
+  <p>Vendita a fasce, posti limitati: compila il form per prenotare.</p>
 </section>
 
 <div class="wrap prezzi-subhead">
@@ -880,7 +880,7 @@ img{max-width:100%;}
 <section class="wrap prezzi-grid">
   <div class="prezzi-card ticket-card" data-tier="saltafila" data-tier-label="Bracciale saltafila" data-state="open">
     <h4>Bracciale saltafila <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€15 <span class="price-note">€25 dal 22 ottobre · posti limitati</span></span>
+    <span class="price">€15 <span class="price-note">posti limitati</span></span>
     <p>Upgrade opzionale: salti la fila principale ed entri subito. Compila il form, ti ricontattiamo noi per confermare.</p>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il saltafila</button>
     <form class="ticket-form" hidden>
@@ -902,7 +902,7 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="navetta" data-tier-label="Navetta + Ingresso omaggio" data-state="open">
     <h4>Navetta + Ingresso omaggio <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€60 <span class="price-note">€70 dal 22 ottobre</span></span>
+    <span class="price">€60</span>
     <p>Andata e ritorno in navetta più ingresso incluso. Vedi orari e fermate nella sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a>.</p>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il posto</button>
     <form class="ticket-form" hidden>
@@ -932,7 +932,7 @@ img{max-width:100%;}
 <section class="wrap prezzi-grid">
   <div class="prezzi-card ticket-card" data-tier="appartamenti-vip" data-tier-label="Appartamenti VIP (dentro la villa)" data-state="open">
     <h4>Appartamenti VIP <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€90 <span class="price-note">€100 dal 22 ottobre (min. 4 persone, a persona)</span></span>
+    <span class="price">€90 <span class="price-note">min. 4 persone, a persona</span></span>
     <p>La festa è casa vostra. Un appartamento privato dentro la villa, solo per il tuo gruppo: entri e esci quando vuoi, e a fine serata non ti sposti di un metro. 2 appartamenti disponibili (4 e 5 posti), si vendono interi.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
@@ -960,7 +960,7 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="villa-belvedere" data-tier-label="Villa Belvedere (hotel, bagno privato)" data-state="open">
     <h4>Villa Belvedere <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€80 <span class="price-note">€90 dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <span class="price">€80 <span class="price-note">min. 2 persone, a persona</span></span>
     <p>Festa e hotel in un'unica soluzione. Camera con bagno privato, ingresso e open bar inclusi: tu pensa solo a ballare. 3 tipologie di stanza: matrimoniale, tripla, quadrupla.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
@@ -987,7 +987,7 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="lido-azzurro" data-tier-label="Lido Azzurro (camere doppie)" data-state="open">
     <h4>Lido Azzurro <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€70 <span class="price-note">€80 dal 22 ottobre (min. 2 persone, a persona)</span></span>
+    <span class="price">€70 <span class="price-note">min. 2 persone, a persona</span></span>
     <p>La soluzione più semplice: un letto comodo e il resto della notte libero per la festa. 6 camere doppie, bagno in comune.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
@@ -2166,6 +2166,28 @@ window.addEventListener('DOMContentLoaded', function(){
   var TICKET_LINKS = {
     prima: primaReleaseAttiva ? 'https://www.postoriservato.it/biglietti/american-halloween-zombie-apocalypse-31-ottobre-2026-magazzeno-pontecagnano-pontecagnano-34106.html' : ''
   };
+
+  /* Cambio prezzi automatico dal 22 ottobre 2026 per saltafila, navetta
+     e le 3 soluzioni "dove dormire": nessuna indicazione visibile che
+     si tratti di un aumento, il prezzo in pagina cambia e basta. */
+  var EXTRA_PREZZI_FROM = new Date('2026-10-22T00:00:00+02:00');
+  if (Date.now() >= EXTRA_PREZZI_FROM.getTime()){
+    var EXTRA_PREZZI = {
+      saltafila: '€25',
+      navetta: '€70',
+      'appartamenti-vip': '€100',
+      'villa-belvedere': '€90',
+      'lido-azzurro': '€80'
+    };
+    Object.keys(EXTRA_PREZZI).forEach(function(tier){
+      var card = document.querySelector('.ticket-card[data-tier="' + tier + '"]');
+      var priceEl = card ? card.querySelector('.price') : null;
+      if (!priceEl) return;
+      var note = priceEl.querySelector('.price-note');
+      priceEl.textContent = EXTRA_PREZZI[tier] + ' ';
+      if (note) priceEl.appendChild(note);
+    });
+  }
 
   /* Evento: 31 ottobre 2026 — l'età minima si valuta a questa data,
      non a oggi, così chi compie 18 anni a ridosso della festa non
