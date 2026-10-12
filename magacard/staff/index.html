@@ -1145,16 +1145,25 @@ Lì trovi anche la planimetria della villa, piano per piano.
     halloween: {
       label: 'Halloween',
       tabella: 'halloween_richieste',
-      colonne: 'id, tipo, nome, cognome, email, telefono, instagram, invitato_da, stato, numero_persone, created_at',
+      colonne: 'id, tipo, nome, cognome, email, telefono, instagram, invitato_da, stato, numero_persone, punto_partenza, punto_partenza_altro, created_at',
       nomeDisplay: (r) => `${r.nome} ${r.cognome}`,
       pacchettoLabel: (r) => {
         const base = HALLOWEEN_TIPO_LABEL[r.tipo] || r.tipo;
         return r.numero_persone ? `${base} · ${r.numero_persone} persone` : base;
       },
       dettagliLabel: (r) => {
+        // Punto di partenza navetta: se "altro", mostra la città scritta
+        // a mano dal cliente — serve a capire se aggiungere altre fermate.
+        const PUNTO_PARTENZA_LABEL = { salerno: 'Salerno', pontecagnano: 'Pontecagnano' };
+        const puntoPartenza = r.punto_partenza
+          ? (r.punto_partenza === 'altro'
+              ? `Partenza: ${r.punto_partenza_altro || 'altro (non specificato)'}`
+              : `Partenza: ${PUNTO_PARTENZA_LABEL[r.punto_partenza] || r.punto_partenza}`)
+          : null;
         const parti = [
           r.invitato_da ? `Invitato da: ${r.invitato_da}` : null,
           r.instagram ? `IG: ${r.instagram}` : null,
+          puntoPartenza,
         ];
         return parti.filter(Boolean).join(' · ');
       },
