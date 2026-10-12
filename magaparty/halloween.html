@@ -300,6 +300,14 @@ img{max-width:100%;}
 .prezzi-card .includes li::before{ content:'✓'; position:absolute; left:0; color:var(--moss); }
 .prezzi-card .price .was{ font-size:13px; text-decoration:line-through; color:var(--muted); font-weight:500; margin-right:4px; }
 .prezzi-card .price-note{ display:block; font-size:10px; letter-spacing:0.04em; text-transform:none; color:var(--muted); font-family:'Work Sans', sans-serif; font-weight:500; margin-top:2px; }
+.ticket-form select{ font-family:inherit; font-size:13px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none; width:100%; box-sizing:border-box; }
+.ticket-form select:focus{ border-color:var(--ember); }
+.persone-extra{ display:grid; grid-template-columns:1fr; gap:8px; grid-column:1 / -1; }
+@media (min-width:460px){ .persone-extra{ grid-template-columns:1fr 1fr; } }
+.persona-extra-label{ grid-column:1 / -1; font-size:9.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:2px; }
+.room-gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:2px 0 4px; }
+.room-gallery a{ display:block; aspect-ratio:1; overflow:hidden; border-radius:10px; border:1px solid var(--line); }
+.room-gallery img{ width:100%; height:100%; object-fit:cover; display:block; }
 </style>
 </head>
 <body>
@@ -902,7 +910,7 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="navetta" data-tier-label="Navetta + Ingresso omaggio" data-state="open">
     <h4>Navetta + Ingresso omaggio <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€60</span>
+    <span class="price">€60 <span class="price-note">a persona, biglietto di ingresso incluso</span></span>
     <p>Andata e ritorno in navetta più ingresso incluso. Vedi orari e fermate nella sezione <a href="#" style="color:var(--gold); text-decoration:underline;" onclick="document.querySelector('.l3-beat[data-scene=&quot;navetta&quot;]').scrollIntoView({behavior:'smooth', block:'center'}); return false;">Navetta</a>.</p>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi il posto</button>
     <form class="ticket-form" hidden>
@@ -911,6 +919,11 @@ img{max-width:100%;}
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
       <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <select name="punto_partenza" class="full-w" required>
+        <option value="" disabled selected>Punto di partenza navetta</option>
+        <option value="salerno">Salerno</option>
+        <option value="pontecagnano">Pontecagnano</option>
+      </select>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
       <label class="terms-check">
@@ -960,8 +973,13 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="villa-belvedere" data-tier-label="Villa Belvedere (hotel, bagno privato)" data-state="open">
     <h4>Villa Belvedere <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€80 <span class="price-note">min. 2 persone, a persona</span></span>
-    <p>Festa e hotel in un'unica soluzione. Camera con bagno privato, ingresso e open bar inclusi: tu pensa solo a ballare. 3 tipologie di stanza: matrimoniale, tripla, quadrupla.</p>
+    <span class="price">€80 <span class="price-note">a posto letto, min. persone secondo camera</span></span>
+    <div class="room-gallery">
+      <a href="assets/img/alloggi/belvedere-1.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/belvedere-1.jpg" alt="Villa Belvedere — camera" loading="lazy"></a>
+      <a href="assets/img/alloggi/belvedere-2.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/belvedere-2.jpg" alt="Villa Belvedere — camera" loading="lazy"></a>
+      <a href="assets/img/alloggi/belvedere-3.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/belvedere-3.jpg" alt="Villa Belvedere — camera" loading="lazy"></a>
+    </div>
+    <p>Festa e hotel in un'unica soluzione. Camera con bagno privato, ingresso e open bar inclusi: tu pensa solo a ballare. 1 camera doppia, 1 camera tripla, 1 camera quadrupla.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
       <li>Open bar fino alle 06:00</li>
@@ -969,11 +987,19 @@ img{max-width:100%;}
     </ul>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
-      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="text" name="nome" placeholder="Nome (persona 1)" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome (persona 1)" autocomplete="family-name" required>
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="date" name="nascita" placeholder="Data di nascita (persona 1)" required>
+      <select name="camera_tipo" class="full-w" required>
+        <option value="" disabled selected>Tipo di camera</option>
+        <option value="doppia">Doppia — min. 2 persone</option>
+        <option value="tripla">Tripla — min. 3 persone</option>
+        <option value="quadrupla">Quadrupla — min. 4 persone</option>
+      </select>
+      <input type="number" name="numero_persone" placeholder="Numero persone" class="full-w" required>
+      <div class="persone-extra"></div>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
       <label class="terms-check">
@@ -987,7 +1013,12 @@ img{max-width:100%;}
 
   <div class="prezzi-card ticket-card" data-tier="lido-azzurro" data-tier-label="Lido Azzurro (camere doppie)" data-state="open">
     <h4>Lido Azzurro <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€70 <span class="price-note">min. 2 persone, a persona</span></span>
+    <span class="price">€70 <span class="price-note">a posto letto, min. 2 persone</span></span>
+    <div class="room-gallery">
+      <a href="assets/img/alloggi/lido-azzurro-1.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/lido-azzurro-1.jpg" alt="Lido Azzurro — camera doppia" loading="lazy"></a>
+      <a href="assets/img/alloggi/lido-azzurro-2.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/lido-azzurro-2.jpg" alt="Lido Azzurro — camera doppia" loading="lazy"></a>
+      <a href="assets/img/alloggi/lido-azzurro-4.jpg" target="_blank" rel="noopener"><img src="assets/img/alloggi/lido-azzurro-4.jpg" alt="Lido Azzurro — camera doppia" loading="lazy"></a>
+    </div>
     <p>La soluzione più semplice: un letto comodo e il resto della notte libero per la festa. 6 camere doppie, bagno in comune.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
@@ -995,11 +1026,13 @@ img{max-width:100%;}
     </ul>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
-      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="text" name="nome" placeholder="Nome (persona 1)" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome (persona 1)" autocomplete="family-name" required>
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="date" name="nascita" placeholder="Data di nascita (persona 1)" required>
+      <input type="number" name="numero_persone" placeholder="Numero persone (min. 2)" min="2" value="2" class="full-w" required>
+      <div class="persone-extra"></div>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
       <label class="terms-check">
@@ -2224,6 +2257,43 @@ window.addEventListener('DOMContentLoaded', function(){
         toggleBtn.hidden = true;
       });
     }
+
+    /* Camere con ospiti multipli (Lido Azzurro, Villa Belvedere): oltre
+       alla persona 1 (contatto di riferimento) vanno raccolti nome,
+       cognome e data di nascita di ogni altro ospite, obbligatori. */
+    var numeroPersoneInput = form ? form.querySelector('[name="numero_persone"]') : null;
+    var cameraTipoSelect = form ? form.querySelector('[name="camera_tipo"]') : null;
+    var personeExtraBox = form ? form.querySelector('.persone-extra') : null;
+    var MIN_PERSONE_PER_CAMERA = { doppia: 2, tripla: 3, quadrupla: 4 };
+
+    function syncPersoneExtra(){
+      if (!numeroPersoneInput || !personeExtraBox) return;
+      var min = parseInt(numeroPersoneInput.min, 10) || 1;
+      var n = parseInt(numeroPersoneInput.value, 10);
+      if (!n || n < min) n = min;
+      var html = '';
+      for (var i = 2; i <= n; i++){
+        html += '<p class="persona-extra-label">Persona ' + i + '</p>' +
+          '<input type="text" name="persona_' + i + '_nome" placeholder="Nome" required>' +
+          '<input type="text" name="persona_' + i + '_cognome" placeholder="Cognome" required>' +
+          '<input type="date" name="persona_' + i + '_nascita" placeholder="Data di nascita" required class="full-w">';
+      }
+      personeExtraBox.innerHTML = html;
+    }
+
+    if (numeroPersoneInput){
+      numeroPersoneInput.addEventListener('input', syncPersoneExtra);
+    }
+    if (cameraTipoSelect && numeroPersoneInput){
+      cameraTipoSelect.addEventListener('change', function(){
+        var min = MIN_PERSONE_PER_CAMERA[cameraTipoSelect.value] || 2;
+        numeroPersoneInput.min = min;
+        numeroPersoneInput.value = min;
+        syncPersoneExtra();
+      });
+    }
+    syncPersoneExtra();
+
     if (form){
       form.addEventListener('submit', function(e){
         e.preventDefault();
@@ -2233,7 +2303,8 @@ window.addEventListener('DOMContentLoaded', function(){
         }
         var nome = val('nome'), cognome = val('cognome'), email = val('email'),
             telefono = val('telefono'), nascita = val('nascita'),
-            instagram = val('instagram'), invitatoDa = val('invitato_da');
+            instagram = val('instagram'), invitatoDa = val('invitato_da'),
+            puntoPartenza = val('punto_partenza'), cameraTipo = val('camera_tipo');
         if (!nome || !cognome || !email || !telefono || !nascita) return;
 
         if (errorEl) errorEl.hidden = true;
@@ -2243,6 +2314,41 @@ window.addEventListener('DOMContentLoaded', function(){
           if (errorEl){ errorEl.textContent = 'L\'evento è riservato ai maggiorenni: devi avere almeno 18 anni alla data della festa.'; errorEl.hidden = false; }
           return;
         }
+
+        if (cameraTipoSelect && !cameraTipo){
+          if (errorEl){ errorEl.textContent = 'Seleziona il tipo di camera.'; errorEl.hidden = false; }
+          return;
+        }
+        if (card.querySelector('[name="punto_partenza"]') && !puntoPartenza){
+          if (errorEl){ errorEl.textContent = 'Seleziona il punto di partenza della navetta.'; errorEl.hidden = false; }
+          return;
+        }
+
+        var numeroPersone = null, altriOspiti = [];
+        if (numeroPersoneInput){
+          numeroPersone = parseInt(val('numero_persone'), 10);
+          var minPersone = parseInt(numeroPersoneInput.min, 10) || 1;
+          if (!numeroPersone || isNaN(numeroPersone) || numeroPersone < minPersone){
+            if (errorEl){ errorEl.textContent = 'Minimo ' + minPersone + ' persone per questa soluzione.'; errorEl.hidden = false; }
+            return;
+          }
+          for (var i = 2; i <= numeroPersone; i++){
+            var pNome = val('persona_' + i + '_nome'),
+                pCognome = val('persona_' + i + '_cognome'),
+                pNascita = val('persona_' + i + '_nascita');
+            if (!pNome || !pCognome || !pNascita){
+              if (errorEl){ errorEl.textContent = 'Compila nome, cognome e data di nascita per ogni persona del gruppo.'; errorEl.hidden = false; }
+              return;
+            }
+            var pAge = computeAge(pNascita, EVENT_DATE);
+            if (pAge < 0 || pAge < 18){
+              if (errorEl){ errorEl.textContent = 'Tutte le persone del gruppo devono avere almeno 18 anni alla data della festa.'; errorEl.hidden = false; }
+              return;
+            }
+            altriOspiti.push({ nome: pNome, cognome: pCognome, data_nascita: pNascita });
+          }
+        }
+
         var terminiBox = form.querySelector('[name="accetta_termini"]');
         if (!terminiBox || !terminiBox.checked){
           if (errorEl){ errorEl.textContent = 'Devi accettare i termini e condizioni per inviare la richiesta.'; errorEl.hidden = false; }
@@ -2268,6 +2374,10 @@ window.addEventListener('DOMContentLoaded', function(){
           invitato_da: invitatoDa || null,
           termini_accettati: true
         };
+        if (numeroPersone) payload.numero_persone = numeroPersone;
+        if (cameraTipo) payload.camera_tipo = cameraTipo;
+        if (puntoPartenza) payload.punto_partenza = puntoPartenza;
+        if (altriOspiti.length) payload.altri_ospiti = altriOspiti;
 
         sb.from('halloween_richieste').insert(payload).then(function(res){
           if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
