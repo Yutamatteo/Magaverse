@@ -2258,6 +2258,7 @@ window.addEventListener('DOMContentLoaded', function(){
           if (externalUrl && buyLink){
             buyLink.href = externalUrl;
             buyLink.hidden = false;
+            window.location.href = externalUrl;
           } else if (success){
             success.hidden = false;
           }
