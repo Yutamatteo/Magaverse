@@ -923,7 +923,9 @@ img{max-width:100%;}
         <option value="" disabled selected>Punto di partenza navetta</option>
         <option value="salerno">Salerno</option>
         <option value="pontecagnano">Pontecagnano</option>
+        <option value="altro">Altro (specifica città)</option>
       </select>
+      <input type="text" name="punto_partenza_altro" class="full-w" placeholder="Da quale città?" hidden>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
       <label class="terms-check">
@@ -2294,6 +2296,22 @@ window.addEventListener('DOMContentLoaded', function(){
     }
     syncPersoneExtra();
 
+    /* Navetta: punto di partenza "Altro" rivela un campo libero per la
+       città, così capiamo da dove arriva chi non parte da Salerno/
+       Pontecagnano e valutiamo se aggiungere altre fermate. */
+    var puntoPartenzaSelect = form ? form.querySelector('[name="punto_partenza"]') : null;
+    var puntoPartenzaAltroInput = form ? form.querySelector('[name="punto_partenza_altro"]') : null;
+    function syncPuntoPartenzaAltro(){
+      if (!puntoPartenzaSelect || !puntoPartenzaAltroInput) return;
+      var isAltro = puntoPartenzaSelect.value === 'altro';
+      puntoPartenzaAltroInput.hidden = !isAltro;
+      if (!isAltro) puntoPartenzaAltroInput.value = '';
+    }
+    if (puntoPartenzaSelect && puntoPartenzaAltroInput){
+      puntoPartenzaSelect.addEventListener('change', syncPuntoPartenzaAltro);
+      syncPuntoPartenzaAltro();
+    }
+
     if (form){
       form.addEventListener('submit', function(e){
         e.preventDefault();
@@ -2304,7 +2322,8 @@ window.addEventListener('DOMContentLoaded', function(){
         var nome = val('nome'), cognome = val('cognome'), email = val('email'),
             telefono = val('telefono'), nascita = val('nascita'),
             instagram = val('instagram'), invitatoDa = val('invitato_da'),
-            puntoPartenza = val('punto_partenza'), cameraTipo = val('camera_tipo');
+            puntoPartenza = val('punto_partenza'), puntoPartenzaAltro = val('punto_partenza_altro'),
+            cameraTipo = val('camera_tipo');
         if (!nome || !cognome || !email || !telefono || !nascita) return;
 
         if (errorEl) errorEl.hidden = true;
@@ -2321,6 +2340,10 @@ window.addEventListener('DOMContentLoaded', function(){
         }
         if (card.querySelector('[name="punto_partenza"]') && !puntoPartenza){
           if (errorEl){ errorEl.textContent = 'Seleziona il punto di partenza della navetta.'; errorEl.hidden = false; }
+          return;
+        }
+        if (puntoPartenza === 'altro' && !puntoPartenzaAltro){
+          if (errorEl){ errorEl.textContent = 'Specifica da quale città parti.'; errorEl.hidden = false; }
           return;
         }
 
@@ -2377,6 +2400,7 @@ window.addEventListener('DOMContentLoaded', function(){
         if (numeroPersone) payload.numero_persone = numeroPersone;
         if (cameraTipo) payload.camera_tipo = cameraTipo;
         if (puntoPartenza) payload.punto_partenza = puntoPartenza;
+        if (puntoPartenza === 'altro' && puntoPartenzaAltro) payload.punto_partenza_altro = puntoPartenzaAltro;
         if (altriOspiti.length) payload.altri_ospiti = altriOspiti;
 
         sb.from('halloween_richieste').insert(payload).then(function(res){
