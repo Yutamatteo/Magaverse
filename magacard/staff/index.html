@@ -75,6 +75,13 @@
   }
   .chip-stato.da-leggere { background: var(--mc-gold-soft); color: var(--mc-gold); }
   .chip-stato.letto { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
+  .chip-stato.in-attesa { background: var(--mc-gold-soft); color: var(--mc-gold); }
+  .chip-stato.confermato { background: var(--mc-cyan-soft); color: var(--mc-cyan); }
+  .chip-stato.usato { background: var(--mc-violet-soft); color: var(--mc-violet); }
+
+  .contanti-azioni { display:flex; gap:8px; align-items:center; }
+  .contanti-azioni input { width:84px; margin:0; padding:9px 10px; font-size:12px; }
+  .contanti-azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; }
 
   .mc-row .info span.chip-pacchetto {
     display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700;
@@ -129,6 +136,7 @@
       <button class="tab-btn" id="tab-gestione">Gestione</button>
       <button class="tab-btn hidden" id="tab-prenotazioni">Prenotazioni</button>
       <button class="tab-btn hidden" id="tab-smistamento">Richieste</button>
+      <button class="tab-btn hidden" id="tab-contanti">Contanti</button>
       <button class="tab-btn hidden" id="tab-registro">Registro</button>
     </div>
 
@@ -211,6 +219,17 @@
       <div id="lista-richieste" style="margin-top:12px;"></div>
     </div>
 
+    <!-- VISTA CONTANTI (admin/superadmin): anagrafica di chi ha compilato il
+         form "paga in contanti" (link condiviso manualmente in chat, non
+         presente sul sito). Qui si imposta il prezzo accordato col cliente
+         e si conferma il pagamento: solo allora il QR già inviato via email
+         diventa scansionabile all'ingresso. -->
+    <div id="vista-contanti" class="hidden">
+      <input class="mc-search" type="text" id="search-contanti" placeholder="Cerca per nome, cognome o telefono...">
+      <p class="mc-sub" id="contanti-count" style="margin:12px 0 0;"></p>
+      <div id="lista-contanti" style="margin-top:12px;"></div>
+    </div>
+
     <!-- VISTA REGISTRO (solo superadmin): chi ha contattato cosa e quando -->
     <div id="vista-registro" class="hidden">
       <label for="select-evento-registro">Evento</label>
@@ -250,6 +269,7 @@
   const vistaGestione = document.getElementById('vista-gestione');
   const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
   const vistaSmistamento = document.getElementById('vista-smistamento');
+  const vistaContanti = document.getElementById('vista-contanti');
   const vistaRegistro = document.getElementById('vista-registro');
   let prenotazioniCorrenti = [];
   let prenotazioniEventoTutte = [];
@@ -322,6 +342,7 @@
       if (ruolo === 'superadmin' || ruolo === 'admin') {
         document.getElementById('tab-prenotazioni').classList.remove('hidden');
         document.getElementById('tab-smistamento').classList.remove('hidden');
+        document.getElementById('tab-contanti').classList.remove('hidden');
       }
       avviaScanner();
     });
@@ -334,12 +355,14 @@
     vistaGestione.classList.add('hidden');
     vistaPrenotazioni.classList.add('hidden');
     vistaSmistamento.classList.add('hidden');
+    vistaContanti.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
     document.getElementById('tab-gestione').classList.remove('active');
     document.getElementById('tab-prenotazioni').classList.remove('active');
     document.getElementById('tab-smistamento').classList.remove('active');
+    document.getElementById('tab-contanti').classList.remove('active');
     document.getElementById('tab-registro').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
@@ -357,7 +380,7 @@
   });
 
   // ============================== TABS (solo admin/superadmin) ==============================
-  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-registro'];
+  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-registro'];
   function attivaSoloTab(idAttivo) {
     TUTTI_TAB_BTN.forEach(id => document.getElementById(id).classList.toggle('active', id === idAttivo));
   }
@@ -366,6 +389,7 @@
     vistaGestione.classList.add('hidden');
     vistaPrenotazioni.classList.add('hidden');
     vistaSmistamento.classList.add('hidden');
+    vistaContanti.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
   }
 
@@ -398,6 +422,14 @@
     vistaSmistamento.classList.remove('hidden');
     await fermaScanner();
     caricaRichiesteSmistamento();
+  });
+
+  document.getElementById('tab-contanti').addEventListener('click', async () => {
+    attivaSoloTab('tab-contanti');
+    nascondiTutteLeViste();
+    vistaContanti.classList.remove('hidden');
+    await fermaScanner();
+    caricaContanti();
   });
 
   document.getElementById('tab-registro').addEventListener('click', async () => {
@@ -573,7 +605,35 @@
       return;
     }
 
-    // 5) Non è né Marea, né Ultima Onda, né Tardeo, né Battigia (o non trovato): prova come MagaCard (timbro)
+    // 5) Non è né Marea, né Ultima Onda, né Tardeo, né Battigia (o non trovato): prova come QR pagamento in contanti
+    const contanti = await sb.rpc('valida_ingresso_contanti', { p_qr_token: codice });
+    const cEsito = contanti.data?.[0]?.esito;
+
+    if (!contanti.error && cEsito && cEsito !== 'non_trovato') {
+      let html = '';
+      if (cEsito === 'ok') {
+        const r = contanti.data[0];
+        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+                <div class="esito ok">✓ Accesso consentito (pagamento in contanti)</div>
+                ${r.prezzo != null ? `<p style="margin-top:8px; font-size:14px;">Prezzo pagato: €${r.prezzo}</p>` : ''}`;
+      } else if (cEsito === 'gia_usato') {
+        const r = contanti.data[0];
+        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+                <div class="esito errore">⚠️ QR già utilizzato — accesso già avvenuto.</div>`;
+      } else if (cEsito === 'non_pagato') {
+        const r = contanti.data[0];
+        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+                <div class="esito errore">⚠️ Pagamento non ancora confermato dallo staff — non far entrare, avvisa un responsabile.</div>`;
+      } else if (cEsito === 'non_autorizzato') {
+        html = `<div class="esito errore">Il tuo account non può scansionare ingressi in contanti.</div>`;
+      }
+      resultArea.innerHTML = `<div class="result-card">${html}</div>
+        <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
+      document.getElementById('btn-prossima').addEventListener('click', prossimaScan);
+      return;
+    }
+
+    // 6) Non è né Marea, né Ultima Onda, né Tardeo, né Battigia, né Contanti (o non trovato): prova come MagaCard (timbro)
     const { data, error } = await sb.rpc('aggiungi_timbro', { p_card_code: codice });
     const esito = data?.[0]?.esito;
 
@@ -581,7 +641,7 @@
     if (error || !esito) {
       html = `<div class="esito errore">Errore di connessione, riprova.</div>`;
     } else if (esito === 'card_non_trovata') {
-      html = `<div class="esito errore">Codice non riconosciuto (né Marea, né Ultima Onda, né Tardeo, né Battigia, né MagaCard).</div>`;
+      html = `<div class="esito errore">Codice non riconosciuto (né Marea, né Ultima Onda, né Tardeo, né Battigia, né Contanti, né MagaCard).</div>`;
     } else if (esito === 'gia_timbrato_oggi') {
       html = `<div class="esito errore">Timbro già assegnato oggi per questa card.</div>`;
     } else {
@@ -1282,6 +1342,95 @@ Lì trovi anche la planimetria della villa, piano per piano.
     });
     if (error) console.error('Errore registrazione contatto:', error.message);
   }
+
+  // ============================== CONTANTI (admin/superadmin) ==============================
+  // Anagrafica di chi ha compilato il form "paga in contanti" (link condiviso
+  // a mano in chat, non presente sul sito). Il prezzo non viene chiesto nel
+  // form: lo impostano qui admin/superadmin quando si accordano col cliente.
+  // Confermando il pagamento, il QR già inviato via email (stato iniziale
+  // "in_attesa") diventa scansionabile all'ingresso (stato "confermato").
+  let contantiTutti = [];
+
+  function formatDataContanti(dataIso) {
+    if (!dataIso) return '—';
+    const d = new Date(dataIso + 'T12:00:00');
+    return d.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  function statoChipContanti(stato) {
+    if (stato === 'confermato') return '<span class="chip-stato confermato">Pagato · QR attivo</span>';
+    if (stato === 'usato') return '<span class="chip-stato usato">Ingresso effettuato</span>';
+    return '<span class="chip-stato in-attesa">In attesa di pagamento</span>';
+  }
+
+  async function caricaContanti() {
+    const lista = document.getElementById('lista-contanti');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data, error } = await sb
+      .from('pagamenti_contanti')
+      .select('id, nome, cognome, email, telefono, data_nascita, instagram, prezzo, stato, created_at')
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    contantiTutti = data;
+    applicaFiltroContanti();
+  }
+
+  function applicaFiltroContanti() {
+    const q = document.getElementById('search-contanti').value.trim().toLowerCase();
+    const filtrati = q
+      ? contantiTutti.filter(r => `${r.nome} ${r.cognome} ${r.telefono}`.toLowerCase().includes(q))
+      : contantiTutti;
+    disegnaContanti(filtrati);
+  }
+
+  function disegnaContanti(items) {
+    const lista = document.getElementById('lista-contanti');
+    document.getElementById('contanti-count').textContent =
+      `${items.length} richiest${items.length === 1 ? 'a' : 'e'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna richiesta trovata.</div>';
+      return;
+    }
+    lista.innerHTML = items.map(r => `
+      <div class="mc-row" data-id="${r.id}">
+        <div class="info">
+          <b>${r.nome} ${r.cognome}</b>${statoChipContanti(r.stato)}
+          <span>${r.telefono || '—'} · ${r.email || '—'}</span>
+          <span>Nata/o il ${formatDataContanti(r.data_nascita)}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
+        </div>
+        <div class="contanti-azioni">
+          <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${r.id}" value="${r.prezzo != null ? r.prezzo : ''}">
+          <button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Conferma pagamento' : 'Aggiorna prezzo'}</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('search-contanti').addEventListener('input', applicaFiltroContanti);
+
+  window.confermaPagamentoContanti = async (id) => {
+    const input = document.getElementById(`prezzo-contanti-${id}`);
+    const prezzo = parseFloat((input.value || '').trim().replace(',', '.'));
+    if (!prezzo || isNaN(prezzo) || prezzo <= 0) {
+      alert('Inserisci un prezzo valido.');
+      return;
+    }
+    const riga = contantiTutti.find(r => r.id === id);
+    const aggiornamento = { prezzo };
+    // Non "retrocede" una richiesta già scansionata all'ingresso: aggiorna
+    // solo il prezzo. Per chi è ancora in attesa, confermare il pagamento
+    // abilita subito il QR per la scansione.
+    if (riga && riga.stato === 'in_attesa') aggiornamento.stato = 'confermato';
+    const { error } = await sb.from('pagamenti_contanti').update(aggiornamento).eq('id', id);
+    if (error) {
+      alert('Errore nella conferma: ' + error.message);
+      return;
+    }
+    caricaContanti();
+  };
 
   // ============================== REGISTRO CONTATTI (solo superadmin) ==============================
   const selectEventoRegistro = document.getElementById('select-evento-registro');
