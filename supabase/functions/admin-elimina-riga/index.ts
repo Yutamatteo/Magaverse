@@ -29,6 +29,7 @@ const TABELLE_CONSENTITE = [
   "marea_prenotazioni",
   "battigia_prenotazioni",
   "ultima_onda_prenotazioni",
+  "pagamenti_contanti",
 ];
 
 function json(body: unknown, status = 200) {
