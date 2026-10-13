@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="../assets/storymap.css">
+    <script src="../assets/storymap.js" defer></script>
     <style>
         /* ═══ Palette Magaparty core — teal/ciano ispirata al logo ═══ */
         :root {
@@ -31,6 +33,12 @@
             --night-surface: #141414;
             --night-border:  #262626;
             --night-border-soft: rgba(255,255,255,0.08);
+
+            /* storymap system vars — allineate alla palette teal di questa pagina */
+            --sm-accent: var(--sunset-orange);
+            --sm-accent-2: var(--sunset-gold);
+            --sm-good: var(--sunset-amber);
+            --sm-line: var(--night-border-soft);
         }
 
         body { max-width: none !important; border: none !important; padding-bottom: 40px !important; }
@@ -40,7 +48,7 @@
 </head>
 <body data-page="galleria">
 
-<div class="s-top">
+<div class="s-top reveal">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
     <div style="display:flex;gap:14px">
         <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
@@ -51,12 +59,12 @@
 
 <div class="s-wrap" style="padding-top:20px">
     <div class="animate-fade-in" data-testid="page-galleria">
-        <div class="text-center mb-8">
+        <div class="text-center mb-8 reveal">
             <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
             <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Carica i tuoi scatti della serata</p>
         </div>
         <div class="desktop-2col">
-            <div id="dropZone" data-testid="drop-zone" class="glass-card p-6 border-2 border-dashed text-center cursor-pointer transition-all duration-300 desktop-full"
+            <div id="dropZone" data-testid="drop-zone" class="glass-card p-6 border-2 border-dashed text-center cursor-pointer transition-all duration-300 desktop-full reveal"
                  style="border-color:rgba(154,216,47,0.3); background:rgba(154,216,47,0.03)"
                  onclick="document.getElementById('fileInput').click()"
                  ondragover="handleDragOver(event)"
@@ -95,7 +103,7 @@
                 </h4>
                 <div id="resultsList" class="space-y-2"></div>
             </div>
-            <div class="glass-card p-4 border border-white/10 desktop-full">
+            <div class="glass-card p-4 border border-white/10 desktop-full reveal">
                 <div class="flex items-start gap-3">
                     <div class="mt-1" style="color:var(--sunset-orange)"><i class="fa-solid fa-circle-exclamation"></i></div>
                     <div>

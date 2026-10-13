@@ -17,6 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="../assets/storymap.css">
+    <script src="../assets/storymap.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -103,7 +105,7 @@
         </div>
 
         <!-- Location -->
-        <div class="glass-card overflow-hidden">
+        <div class="glass-card overflow-hidden reveal">
             <div class="p-5">
                 <h3 class="brutalist text-xl mb-1 sunset-title">NELLO OCEAN BEACH</h3>
                 <p class="text-[11px] text-gray-400 leading-relaxed mb-4">Magazzeno, Salerno</p>
@@ -122,7 +124,7 @@
         </div>
 
         <!-- Lista obbligatoria -->
-        <div class="urgency-banner">
+        <div class="urgency-banner reveal">
             <p class="brutalist text-sm" style="color:var(--sunset-coral)">LISTA OBBLIGATORIA</p>
             <p class="text-[11px] text-gray-300 mt-2 leading-relaxed">
                 L'ingresso è <strong class="text-white">GRATUITO</strong>, ma per accedere
@@ -141,15 +143,15 @@
 
 <!-- ═══════════════════════ ATTIVITÀ ═══════════════════════ -->
 <section id="attivita" class="section-anchor animate-fade-in" data-testid="page-attivita">
-    <div class="text-center mb-8">
+    <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
         <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Il mercoledì chill</p>
     </div>
-    <p class="text-[11px] text-gray-400 text-center mb-6" style="max-width:480px;margin:0 auto 24px">
+    <p class="text-[11px] text-gray-400 text-center mb-6 reveal" style="max-width:480px;margin:0 auto 24px">
         Dalle 20:00 in riva al mare: musica chill, drink e la Social Arena sulla sabbia.
     </p>
-    <div class="activity-grid">
+    <div class="activity-grid reveal">
         <div class="activity-chip"><span class="em">🍻</span>Beer Pong<br><span class="text-gray-500">(sfide a ignoranza)</span></div>
         <div class="activity-chip"><span class="em">⚽️</span>Calcio Balilla</div>
         <div class="activity-chip"><span class="em">🏓</span>Racchettoni</div>
@@ -162,7 +164,7 @@
 
 <!-- ═══════════════════════ LINE UP ═══════════════════════ -->
 <section id="lineup" class="section-anchor animate-fade-in" data-testid="page-lineup">
-    <div class="text-center mb-6">
+    <div class="text-center mb-6 reveal">
         <span class="section-label">Sezione</span>
         <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 20:00</p>
@@ -208,7 +210,7 @@
 
 <!-- ═══════════════════════ PREZZI ═══════════════════════ -->
 <section id="prezzi" class="section-anchor animate-fade-in" data-testid="page-prezzi">
-    <div class="text-center mb-8">
+    <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
         <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Ingresso gratuito · lista obbligatoria</p>
@@ -245,7 +247,7 @@
 <div class="section-divider"></div>
 
 <section id="bar" class="section-anchor animate-fade-in" data-testid="page-bar">
-        <div class="text-center mb-4">
+        <div class="text-center mb-4 reveal">
             <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>

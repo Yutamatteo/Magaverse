@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="../assets/storymap.css">
+    <script src="../assets/storymap.js" defer></script>
     <style>
         /* ═══ Palette Magaparty core — teal/ciano ispirata al logo ═══ */
         :root {
@@ -31,6 +33,12 @@
             --night-surface: #141414;
             --night-border:  #262626;
             --night-border-soft: rgba(255,255,255,0.08);
+
+            /* storymap system vars — allineate alla palette teal di questa pagina */
+            --sm-accent: var(--sunset-orange);
+            --sm-accent-2: var(--sunset-gold);
+            --sm-good: var(--sunset-amber);
+            --sm-line: var(--night-border-soft);
         }
 
         body { max-width: none !important; border: none !important; padding-bottom: 40px !important; }
@@ -40,7 +48,7 @@
 </head>
 <body data-page="bar">
 
-<div class="s-top">
+<div class="s-top reveal">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
     <div style="display:flex;gap:14px">
         <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
@@ -51,13 +59,13 @@
 
 <div class="s-wrap" style="padding-top:20px">
     <div class="animate-fade-in" data-testid="page-bar">
-        <div class="text-center mb-4">
+        <div class="text-center mb-4 reveal">
             <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>
 
         <!-- Switch fra Day e Night menu -->
-        <div class="flex justify-center gap-2 mb-6">
+        <div class="flex justify-center gap-2 mb-6 reveal">
             <button type="button" data-testid="bar-tab-day" data-tab="day"
                     class="pill-tab active-tab"><i class="fa-solid fa-sun mr-1"></i> 16–18</button>
             <button type="button" data-testid="bar-tab-night" data-tab="night"
@@ -65,7 +73,7 @@
         </div>
 
         <!-- DAY notice -->
-        <div id="bar-notice-day" class="glass-card p-4 mb-6 text-center" style="border:1px solid rgba(255,71,87,0.25); background:rgba(255,71,87,0.05)">
+        <div id="bar-notice-day" class="glass-card p-4 mb-6 text-center reveal" style="border:1px solid rgba(255,71,87,0.25); background:rgba(255,71,87,0.05)">
             <p class="text-[11px] text-gray-300 leading-relaxed">
                 <i class="fa-solid fa-circle-info mr-1" style="color:var(--sunset-coral)"></i>
                 Menu <strong style="color:var(--sunset-coral)">aperitivo</strong> valido <strong class="text-white">fino alle 18:00</strong>.
@@ -81,7 +89,7 @@
 
         <!-- Menu cards (uguali per day/night nel listino base, ma struttura predisposta a future differenze) -->
         <div class="desktop-3col menu-grid">
-            <div class="glass-card overflow-hidden" style="border-color:rgba(224,25,53,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(224,25,53,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(224,25,53,0.1); border-color:rgba(224,25,53,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-teal)">Maga Buckets</h3>
                 </div>
@@ -92,7 +100,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(154,216,47,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(154,216,47,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(154,216,47,0.1); border-color:rgba(154,216,47,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-orange)">Spritz &amp; Classici</h3>
                 </div>
@@ -107,7 +115,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(255,71,87,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(255,71,87,0.3)">
                 <div class="bg-white/5 px-4 py-3 border-b border-white/10">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-coral)">Long Drink</h3>
                 </div>
@@ -126,7 +134,7 @@
             </div>
 
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(154,216,47,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(154,216,47,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(154,216,47,0.1); border-color:rgba(154,216,47,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-orange)">Premium</h3>
                 </div>
@@ -138,8 +146,8 @@
                 </div>
             </div>
 
-        
-            <div class="glass-card overflow-hidden" style="border-color:rgba(123,198,45,0.3)">
+
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(123,198,45,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(123,198,45,0.1); border-color:rgba(123,198,45,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-amber)">Special &amp; Sour</h3>
                 </div>
@@ -152,7 +160,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(224,25,53,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(224,25,53,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(224,25,53,0.1); border-color:rgba(224,25,53,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-teal)">Shots &amp; Bombs</h3>
                 </div>
@@ -166,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(198,232,107,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(198,232,107,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(198,232,107,0.1); border-color:rgba(198,232,107,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-gold)">Birre</h3>
                 </div>
@@ -176,7 +184,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(255,71,87,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(255,71,87,0.3)">
                 <div class="bg-white/5 px-4 py-3 border-b border-white/10">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-coral)">Analcolici</h3>
                 </div>
@@ -212,7 +220,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(123,198,45,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(123,198,45,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(123,198,45,0.1); border-color:rgba(123,198,45,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-amber)">Snacks</h3>
                 </div>
@@ -227,7 +235,7 @@
                 </div>
             </div>
 
-            <div class="glass-card overflow-hidden" style="border-color:rgba(198,232,107,0.3)">
+            <div class="glass-card overflow-hidden reveal" style="border-color:rgba(198,232,107,0.3)">
                 <div class="px-4 py-3 border-b" style="background:rgba(198,232,107,0.1); border-color:rgba(198,232,107,0.2)">
                     <h3 class="text-[11px] uppercase tracking-widest font-bold" style="color:var(--sunset-gold)">Stand Salato</h3>
                 </div>
