@@ -12,6 +12,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
+    <link rel="stylesheet" href="../assets/storymap.css" />
+    <script src="../assets/storymap.js" defer></script>
+    <style>
+        :root{
+            --sm-accent: var(--accent);
+            --sm-accent-2: var(--primary);
+            --sm-good: #8FB88A;
+            --sm-bg: var(--bg);
+            --sm-surface: var(--white);
+            --sm-surface-2: var(--muted);
+            --sm-line: var(--border);
+            --sm-text: var(--fg);
+            --sm-muted: var(--muted-fg);
+            --sm-font-display: 'Playfair Display', Georgia, serif;
+            --sm-font-body: 'Outfit', system-ui, sans-serif;
+            --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+        }
+    </style>
 </head>
 <body data-page="about">
 
@@ -54,7 +72,7 @@
     </div>
 </header>
 
-<section class="with-nav">
+<section class="with-nav reveal">
     <div class="container">
         <span class="kicker">Chi siamo</span>
         <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Nello Ocean Beach, il tuo pezzo di Mediterraneo.</h1>
@@ -62,13 +80,13 @@
     </div>
 </section>
 
-<section style="padding-top:0;">
+<section class="reveal" style="padding-top:0;">
     <div class="container">
         <div class="split-img"><img src="/assets/img/nello lido.jpeg" alt="Nello Ocean Beach" style="height:480px;" /></div>
     </div>
 </section>
 
-<section>
+<section class="reveal">
     <div class="container">
         <div class="grid-3">
             <div class="value-card"><div class="value-icon">&#128106;</div><h3>Famiglie</h3><p>Spazi sicuri, file di ombrelloni in piano e personale sempre disponibile per le piccole esigenze.</p></div>
@@ -78,7 +96,7 @@
     </div>
 </section>
 
-<section class="muted">
+<section class="muted reveal">
     <div class="container" style="max-width: 880px; text-align:center;">
         <h2 class="h2">Una struttura nuova, un'accoglienza di sempre.</h2>
         <p class="lead" style="margin-left:auto;margin-right:auto;">Quest'anno abbiamo rinfrescato lo stabilimento: nuove tinte beige, marrone e bianco, materiali curati e un layout pensato per ridurre il chiasso e amplificare il relax. Ma lo spirito è lo stesso: ospitalità autentica, attenzione ai dettagli, mare protagonista.</p>

@@ -12,6 +12,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
+    <link rel="stylesheet" href="../assets/storymap.css" />
+    <script src="../assets/storymap.js" defer></script>
+    <style>
+        :root{
+            --sm-accent: var(--accent);
+            --sm-accent-2: var(--primary);
+            --sm-good: #8FB88A;
+            --sm-bg: var(--bg);
+            --sm-surface: var(--white);
+            --sm-surface-2: var(--muted);
+            --sm-line: var(--border);
+            --sm-text: var(--fg);
+            --sm-muted: var(--muted-fg);
+            --sm-font-display: 'Playfair Display', Georgia, serif;
+            --sm-font-body: 'Outfit', system-ui, sans-serif;
+            --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+        }
+    </style>
 </head>
 <body data-page="services">
 
@@ -54,7 +72,7 @@
     </div>
 </header>
 
-<section class="with-nav">
+<section class="with-nav reveal">
     <div class="container">
         <span class="kicker">Servizi</span>
         <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Comfort e mare, in perfetto equilibrio.</h1>
@@ -62,7 +80,7 @@
     </div>
 </section>
 
-<section>
+<section class="reveal">
     <div class="container">
         <div class="grid-3">
             <div class="svc-card"><div class="svc-icon">&#127753;</div><h3 class="svc-title">Noleggio Canoe</h3><p class="svc-desc">Canoe singole e doppie disponibili a ore. Ideali per esplorare la costa, prendere il largo e tornare con qualche fotografia in più. Briefing di sicurezza incluso.</p></div>
