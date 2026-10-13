@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="../../magaparty/assets/img/logo-teal.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/storymap.css">
 <script src="../../assets/storymap.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -105,7 +105,9 @@ img{max-width:100%;}
 .level-pill{ font-family:inherit; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; transition:all .2s ease; }
 .level-pill.is-active{ background:var(--ember); color:#20120A; border-color:var(--ember); }
 
-.hw-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden; background:var(--surface); border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
+.hw-stage{ position:relative; width:100%; aspect-ratio:10/7; border-radius:18px; overflow:hidden;
+  background: radial-gradient(ellipse 65% 55% at 88% 12%, rgba(255,122,51,0.08), transparent 62%), var(--surface);
+  border:1px solid var(--line); box-shadow:0 30px 60px -20px rgba(0,0,0,0.6); }
 .badge-demo{ position:absolute; top:10px; left:10px; z-index:5; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); background:rgba(14,10,20,0.7); border:1px solid var(--line); border-radius:999px; padding:5px 10px; backdrop-filter:blur(4px); }
 
 .floor-layer{ position:absolute; inset:0; opacity:0; pointer-events:none; transform-origin:50% 50%; transition:opacity .6s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
@@ -114,13 +116,24 @@ img{max-width:100%;}
 
 .floor-layer svg{position:absolute; inset:0; width:100%; height:100%; display:block;}
 .room-rect{fill:var(--surface-2); stroke:var(--line); stroke-width:1.5;}
-.room-rect.is-camera{fill:var(--ember-soft); stroke:var(--gold); stroke-opacity:0.55;}
+.room-rect.is-camera{fill:var(--ember-soft); stroke:var(--gold); stroke-opacity:0.6; filter:url(#stageGlow);}
+.room-rect.type-wet{fill:rgba(143,170,184,0.09); stroke:rgba(143,170,184,0.32);}
+.room-rect.type-bar{fill:rgba(216,182,107,0.10); stroke:var(--gold); stroke-opacity:0.4;}
+.room-rect.type-outdoor{fill:var(--moss-soft); stroke:var(--moss); stroke-opacity:0.4;}
+.room-rect.type-service{fill:rgba(216,182,107,0.07); stroke:var(--gold); stroke-opacity:0.3;}
+.room-rect.type-utility{fill:rgba(154,145,168,0.10); stroke:var(--line);}
 .room-code{fill:var(--gold); font-size:13px; opacity:0.75;}
 .room-label{fill:var(--bone); font-size:15px; text-anchor:middle; opacity:0.9;}
+.room-label.is-stage{ font-family:'UnifrakturCook', 'Fraunces', serif; font-size:21px; fill:var(--ember); opacity:1; letter-spacing:0.01em; }
+.room-label.is-entrance{fill:var(--gold); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; opacity:0.85;}
 .plan-outline{fill:none; stroke:var(--gold); stroke-width:2; stroke-opacity:0.4;}
+.plan-ground{opacity:0.55;}
+.door-swing{fill:none; stroke:var(--gold); stroke-width:1.3; stroke-opacity:0.55;}
+.door-leaf{stroke:var(--gold); stroke-width:1.6; stroke-opacity:0.7;}
 .compass{opacity:0.5;}
 .scalebar line{stroke:var(--muted); stroke-width:1.5;}
 .scalebar text{fill:var(--muted); font-size:11px;}
+#roomCardName.is-stage{font-family:'UnifrakturCook', 'Fraunces', serif; font-size:20px; color:var(--ember); letter-spacing:0.01em;}
 
 .hw-pin{ position:absolute; transform:translate(-50%,-50%); width:16px; height:16px; border-radius:50%; border:none; padding:0; cursor:pointer; background:var(--gold); opacity:0.85; transition:transform .25s ease, box-shadow .25s ease; }
 .hw-pin:hover{transform:translate(-50%,-50%) scale(1.2);}
@@ -528,36 +541,54 @@ img{max-width:100%;}
 
     <div class="hw-stage" id="stage">
 
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <filter id="stageGlow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"></feGaussianBlur>
+            <feMerge>
+              <feMergeNode in="blur"></feMergeNode>
+              <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+          </filter>
+          <pattern id="grassHatch" width="10" height="10" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="var(--moss-soft)"></rect>
+            <line x1="0" y1="0" x2="0" y2="10" stroke="var(--moss)" stroke-opacity="0.22" stroke-width="1"></line>
+          </pattern>
+        </defs>
+      </svg>
+
       <!-- PIANO TERRA -->
       <div class="floor-layer is-active" data-layer="terra">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
-          <rect class="room-rect" x="50" y="50" width="150" height="600"></rect>
+          <rect class="room-rect type-outdoor" x="50" y="50" width="150" height="600"></rect>
           <text class="room-code mono" x="64" y="76">05</text>
-          <text class="room-label" x="125" y="350" transform="rotate(-90 125 350)">Terrazzino</text>
-          <rect class="room-rect" x="200" y="50" width="150" height="140"></rect>
+          <text class="room-label" x="125" y="140" transform="rotate(-90 125 140)">Terrazzino</text>
+          <rect class="room-rect type-wet" x="200" y="50" width="150" height="140"></rect>
           <text class="room-code mono" x="214" y="76">07</text>
-          <text class="room-label" x="275" y="130">WC Donne</text>
-          <rect class="room-rect" x="350" y="50" width="150" height="140"></rect>
+          <text class="room-label" x="275" y="178">WC Donne</text>
+          <rect class="room-rect type-wet" x="350" y="50" width="150" height="140"></rect>
           <text class="room-code mono" x="364" y="76">08</text>
-          <text class="room-label" x="425" y="130">WC Uomini</text>
-          <rect class="room-rect" x="200" y="190" width="300" height="210"></rect>
+          <text class="room-label" x="425" y="178">WC Uomini</text>
+          <rect class="room-rect type-bar" x="200" y="190" width="300" height="210"></rect>
           <text class="room-code mono" x="214" y="216">04</text>
-          <text class="room-label" x="350" y="300">Bar</text>
-          <rect class="room-rect" x="200" y="400" width="300" height="250"></rect>
+          <text class="room-label" x="350" y="230">Bar</text>
+          <rect class="room-rect type-utility" x="200" y="400" width="300" height="250"></rect>
           <text class="room-code mono" x="214" y="426">06</text>
-          <text class="room-label" x="350" y="530">Room Calcetto</text>
+          <text class="room-label" x="350" y="450">Room Calcetto</text>
           <rect class="room-rect" x="500" y="50" width="200" height="40"></rect>
           <text class="room-code mono" x="514" y="76">01</text>
-          <text class="room-label" x="600" y="76" font-size="12">Ingresso</text>
+          <text class="room-label is-entrance" x="600" y="38">Ingresso</text>
+          <path class="door-swing" d="M 596 90 A 24 24 0 0 1 572 66"></path>
+          <line class="door-leaf" x1="596" y1="90" x2="572" y2="66"></line>
           <rect class="room-rect" x="500" y="90" width="350" height="350"></rect>
           <text class="room-code mono" x="514" y="116">02</text>
-          <text class="room-label" x="675" y="270">Sala DJ</text>
+          <text class="room-label" x="675" y="150">Sala DJ</text>
           <rect class="room-rect is-camera" x="500" y="440" width="350" height="210"></rect>
           <text class="room-code mono" x="514" y="466">03</text>
-          <text class="room-label" x="675" y="550">Maledictio Stage</text>
-          <rect class="room-rect" x="850" y="440" width="100" height="210"></rect>
-          <text class="room-label" x="900" y="545" font-size="12" transform="rotate(-90 900 545)">Scale ↑</text>
+          <text class="room-label is-stage" x="675" y="486">Maledictio Stage</text>
+          <rect class="room-rect type-utility" x="850" y="440" width="100" height="210"></rect>
+          <text class="room-label" x="900" y="480" font-size="12" transform="rotate(-90 900 480)">Scale ↑</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -588,16 +619,16 @@ img{max-width:100%;}
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
           <rect class="room-rect is-camera" x="50" y="50" width="700" height="300"></rect>
           <text class="room-code mono" x="64" y="76">01</text>
-          <text class="room-label" x="400" y="200">Damnatio Stage</text>
-          <rect class="room-rect" x="50" y="350" width="250" height="300"></rect>
+          <text class="room-label is-stage" x="400" y="110">Damnatio Stage</text>
+          <rect class="room-rect type-wet" x="50" y="350" width="250" height="300"></rect>
           <text class="room-code mono" x="64" y="376">03</text>
-          <text class="room-label" x="175" y="500">WC</text>
+          <text class="room-label" x="175" y="400">WC</text>
           <rect class="room-rect" x="300" y="350" width="450" height="300"></rect>
           <text class="room-code mono" x="314" y="376">02</text>
-          <text class="room-label" x="525" y="500">Area Living</text>
-          <rect class="room-rect" x="750" y="50" width="200" height="600"></rect>
+          <text class="room-label" x="525" y="400">Area Living</text>
+          <rect class="room-rect type-outdoor" x="750" y="50" width="200" height="600"></rect>
           <text class="room-code mono" x="764" y="76">04</text>
-          <text class="room-label" x="850" y="350" transform="rotate(-90 850 350)">Terrazzino Chill</text>
+          <text class="room-label" x="850" y="140" transform="rotate(-90 850 140)">Terrazzino Chill</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -622,23 +653,26 @@ img{max-width:100%;}
       <div class="floor-layer" data-layer="giardino">
         <svg viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
           <rect class="plan-outline" x="50" y="50" width="900" height="600" rx="4"></rect>
+          <rect class="plan-ground" x="400" y="50" width="550" height="600" fill="url(#grassHatch)"></rect>
           <rect class="room-rect" x="50" y="50" width="350" height="600"></rect>
-          <text class="room-label" x="225" y="350">Villa</text>
-          <rect class="room-rect" x="400" y="50" width="550" height="100"></rect>
+          <text class="room-label" x="225" y="100">Villa</text>
+          <rect class="room-rect type-service" x="400" y="50" width="550" height="100"></rect>
           <text class="room-code mono" x="414" y="76">01</text>
-          <text class="room-label" x="675" y="105" font-size="12">Cancello d'Ingresso</text>
-          <rect class="room-rect" x="400" y="150" width="180" height="200"></rect>
+          <text class="room-label is-entrance" x="675" y="38">Cancello d'Ingresso</text>
+          <path class="door-swing" d="M 660 150 A 26 26 0 0 0 686 124"></path>
+          <line class="door-leaf" x1="660" y1="150" x2="686" y2="124"></line>
+          <rect class="room-rect type-service" x="400" y="150" width="180" height="200"></rect>
           <text class="room-code mono" x="414" y="176">02</text>
-          <text class="room-label" x="490" y="255" font-size="13">Biglietteria</text>
-          <rect class="room-rect" x="580" y="150" width="370" height="200"></rect>
+          <text class="room-label" x="490" y="315" font-size="13">Biglietteria</text>
+          <rect class="room-rect type-service" x="580" y="150" width="370" height="200"></rect>
           <text class="room-code mono" x="594" y="176">03</text>
-          <text class="room-label" x="765" y="255" font-size="13">Infermeria</text>
-          <rect class="room-rect" x="400" y="350" width="280" height="300"></rect>
+          <text class="room-label" x="765" y="315" font-size="13">Infermeria</text>
+          <rect class="room-rect type-outdoor" x="400" y="350" width="280" height="300"></rect>
           <text class="room-code mono" x="414" y="376">04</text>
-          <text class="room-label" x="540" y="500">Beer Pong</text>
-          <rect class="room-rect" x="680" y="350" width="270" height="300"></rect>
+          <text class="room-label" x="540" y="400">Beer Pong</text>
+          <rect class="room-rect type-outdoor" x="680" y="350" width="270" height="300"></rect>
           <text class="room-code mono" x="694" y="376">05</text>
-          <text class="room-label" x="815" y="500">Stage Food</text>
+          <text class="room-label" x="815" y="400">Stage Food</text>
           <g class="compass" transform="translate(905,90)">
             <circle r="22" fill="none" stroke="var(--gold)" stroke-width="1.3"></circle>
             <line x1="0" y1="10" x2="0" y2="-14" stroke="var(--gold)" stroke-width="1.3"></line>
@@ -1115,6 +1149,7 @@ img{max-width:100%;}
     cardKind.textContent = kind === 'stage' ? 'Stage' : kind === 'avail' ? 'Camera disponibile' : kind === 'occ' ? 'Camera occupata' : 'Spazio comune';
     cardKind.className = 'kind ' + kind;
     cardName.textContent = btn.dataset.name;
+    cardName.classList.toggle('is-stage', kind === 'stage');
     cardDesc.textContent = btn.dataset.desc;
     card.classList.add('is-open');
     openPinId = btn.id;
