@@ -9,11 +9,28 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/styles.css">
+<link rel="stylesheet" href="../../assets/storymap.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="../../assets/storymap.js" defer></script>
+<style>
+  :root{
+    --sm-accent: #FF2E92;
+    --sm-accent-2: #FFC145;
+    --sm-good: #22D3EE;
+    --sm-bg: #0B0712;
+    --sm-surface: #17101F;
+    --sm-surface-2: #1E1628;
+    --sm-line: rgba(255,240,250,0.08);
+    --sm-text: #F5F0FA;
+    --sm-muted: #9C90AE;
+    --sm-font-display: 'Archivo Black', serif;
+    --sm-font-body: 'Outfit', system-ui, sans-serif;
+  }
+</style>
 </head>
 <body>
-<div class="mc-wrap">
+<div class="mc-wrap reveal">
   <div id="app"><div class="mc-empty">Caricamento della tua MagaCard...</div></div>
 </div>
 
