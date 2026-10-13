@@ -982,8 +982,8 @@ img{max-width:100%;}
 <section class="wrap prezzi-grid">
   <div class="prezzi-card ticket-card" data-tier="appartamenti-vip" data-tier-label="Appartamenti VIP (dentro la villa)" data-state="open">
     <h4>Appartamenti VIP <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
-    <span class="price">€90 <span class="price-note">min. 4 persone, a persona</span></span>
-    <p>La festa è casa vostra. Un appartamento privato dentro la villa, solo per il tuo gruppo: entri e esci quando vuoi, e a fine serata non ti sposti di un metro. 2 appartamenti disponibili (4 e 5 posti), si vendono interi.</p>
+    <span class="price">€90 <span class="price-note">min. 4 persone, a posto letto</span></span>
+    <p>La festa è casa vostra. Un appartamento privato dentro la villa, solo per il tuo gruppo: entri e esci quando vuoi, e a fine serata non ti sposti di un metro. 2 appartamenti disponibili (4 e 5 posti), si vendono interi — prezzo a posto letto, moltiplicato per le persone del gruppo.</p>
     <ul class="includes">
       <li>Ingresso alla festa</li>
       <li>Open bar fino alle 06:00</li>
@@ -992,14 +992,20 @@ img{max-width:100%;}
     </ul>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi l'appartamento</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome" autocomplete="given-name" required>
-      <input type="text" name="cognome" placeholder="Cognome" autocomplete="family-name" required>
+      <input type="text" name="nome" placeholder="Nome (persona 1)" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome (persona 1)" autocomplete="family-name" required>
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <input type="date" name="nascita" placeholder="Data di nascita" required>
+      <input type="date" name="nascita" placeholder="Data di nascita (persona 1)" required>
+      <select name="camera_tipo" class="full-w" required>
+        <option value="" disabled selected>Quale appartamento?</option>
+        <option value="appartamento-4">Appartamento da 4 posti letto</option>
+        <option value="appartamento-5">Appartamento da 5 posti letto</option>
+      </select>
+      <input type="hidden" name="numero_persone" value="">
+      <div class="persone-extra"></div>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
-      <input type="number" name="numero_persone" placeholder="Numero persone" min="4" value="4" step="1" class="full-w" required>
       <label class="terms-check">
         <input type="checkbox" name="accetta_termini" required>
         <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
@@ -1032,11 +1038,11 @@ img{max-width:100%;}
       <input type="date" name="nascita" placeholder="Data di nascita (persona 1)" required>
       <select name="camera_tipo" class="full-w" required>
         <option value="" disabled selected>Tipo di camera</option>
-        <option value="doppia">Doppia — min. 2 persone</option>
-        <option value="tripla">Tripla — min. 3 persone</option>
-        <option value="quadrupla">Quadrupla — min. 4 persone</option>
+        <option value="doppia">Doppia — 2 persone</option>
+        <option value="tripla">Tripla — 3 persone</option>
+        <option value="quadrupla">Quadrupla — 4 persone</option>
       </select>
-      <input type="number" name="numero_persone" placeholder="Numero persone" class="full-w" required>
+      <input type="hidden" name="numero_persone" value="">
       <div class="persone-extra"></div>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
@@ -1064,12 +1070,21 @@ img{max-width:100%;}
     </ul>
     <button type="button" class="ticket-cta" data-action="toggle-form">Richiedi la camera</button>
     <form class="ticket-form" hidden>
-      <input type="text" name="nome" placeholder="Nome (persona 1)" autocomplete="given-name" required>
-      <input type="text" name="cognome" placeholder="Cognome (persona 1)" autocomplete="family-name" required>
+      <input type="text" name="nome" placeholder="Nome (Camera 1 — persona 1)" autocomplete="given-name" required>
+      <input type="text" name="cognome" placeholder="Cognome (Camera 1 — persona 1)" autocomplete="family-name" required>
       <input type="email" name="email" placeholder="Email" autocomplete="email" required>
       <input type="tel" name="telefono" placeholder="Telefono (WhatsApp)" autocomplete="tel" required>
-      <input type="date" name="nascita" placeholder="Data di nascita (persona 1)" required>
-      <input type="number" name="numero_persone" placeholder="Numero persone (min. 2)" min="2" value="2" class="full-w" required>
+      <input type="date" name="nascita" placeholder="Data di nascita (Camera 1 — persona 1)" required>
+      <select name="numero_camere" class="full-w" required>
+        <option value="" disabled selected>Quante camere?</option>
+        <option value="1">1 camera (2 persone)</option>
+        <option value="2">2 camere (4 persone)</option>
+        <option value="3">3 camere (6 persone)</option>
+        <option value="4">4 camere (8 persone)</option>
+        <option value="5">5 camere (10 persone)</option>
+        <option value="6">6 camere (12 persone)</option>
+      </select>
+      <input type="hidden" name="numero_persone" value="">
       <div class="persone-extra"></div>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
@@ -2323,22 +2338,32 @@ window.addEventListener('DOMContentLoaded', function(){
       });
     }
 
-    /* Camere con ospiti multipli (Lido Azzurro, Villa Belvedere): oltre
-       alla persona 1 (contatto di riferimento) vanno raccolti nome,
-       cognome e data di nascita di ogni altro ospite, obbligatori. */
+    /* Camere con ospiti multipli (Appartamenti VIP, Villa Belvedere,
+       Lido Azzurro): oltre alla persona 1 (contatto di riferimento)
+       vanno raccolti nome, cognome e data di nascita di ogni altro
+       ospite, obbligatori. Il numero di persone NON è più libero: è
+       sempre ricavato dalla scelta della camera/appartamento (o dal
+       numero di camere per Lido Azzurro, 2 persone fisse a camera),
+       con un campo nascosto — niente più "48 persone" in una doppia. */
     var numeroPersoneInput = form ? form.querySelector('[name="numero_persone"]') : null;
     var cameraTipoSelect = form ? form.querySelector('[name="camera_tipo"]') : null;
+    var numeroCamereSelect = form ? form.querySelector('[name="numero_camere"]') : null;
     var personeExtraBox = form ? form.querySelector('.persone-extra') : null;
-    var MIN_PERSONE_PER_CAMERA = { doppia: 2, tripla: 3, quadrupla: 4 };
+    var EXACT_PERSONE_PER_CAMERA = { doppia: 2, tripla: 3, quadrupla: 4, 'appartamento-4': 4, 'appartamento-5': 5 };
+    var PERSONE_PER_CAMERA_LIDO = 2;
 
     function syncPersoneExtra(){
       if (!numeroPersoneInput || !personeExtraBox) return;
-      var min = parseInt(numeroPersoneInput.min, 10) || 1;
-      var n = parseInt(numeroPersoneInput.value, 10);
-      if (!n || n < min) n = min;
+      var n = parseInt(numeroPersoneInput.value, 10) || 0;
       var html = '';
       for (var i = 2; i <= n; i++){
-        html += '<p class="persona-extra-label">Persona ' + i + '</p>' +
+        var label = 'Persona ' + i;
+        if (numeroCamereSelect){
+          var roomIndex = Math.ceil(i / PERSONE_PER_CAMERA_LIDO);
+          var posInRoom = ((i - 1) % PERSONE_PER_CAMERA_LIDO) + 1;
+          label = 'Camera ' + roomIndex + ' — Persona ' + posInRoom;
+        }
+        html += '<p class="persona-extra-label">' + label + '</p>' +
           '<input type="text" name="persona_' + i + '_nome" placeholder="Nome" required>' +
           '<input type="text" name="persona_' + i + '_cognome" placeholder="Cognome" required>' +
           '<input type="date" name="persona_' + i + '_nascita" placeholder="Data di nascita" required class="full-w">';
@@ -2346,15 +2371,23 @@ window.addEventListener('DOMContentLoaded', function(){
       personeExtraBox.innerHTML = html;
     }
 
-    if (numeroPersoneInput){
-      numeroPersoneInput.addEventListener('input', syncPersoneExtra);
+    function setNumeroPersoneEsatto(n){
+      if (!numeroPersoneInput) return;
+      numeroPersoneInput.min = n;
+      numeroPersoneInput.max = n;
+      numeroPersoneInput.value = n;
+      syncPersoneExtra();
     }
+
     if (cameraTipoSelect && numeroPersoneInput){
       cameraTipoSelect.addEventListener('change', function(){
-        var min = MIN_PERSONE_PER_CAMERA[cameraTipoSelect.value] || 2;
-        numeroPersoneInput.min = min;
-        numeroPersoneInput.value = min;
-        syncPersoneExtra();
+        setNumeroPersoneEsatto(EXACT_PERSONE_PER_CAMERA[cameraTipoSelect.value] || 0);
+      });
+    }
+    if (numeroCamereSelect && numeroPersoneInput){
+      numeroCamereSelect.addEventListener('change', function(){
+        var camere = parseInt(numeroCamereSelect.value, 10) || 0;
+        setNumeroPersoneEsatto(camere * PERSONE_PER_CAMERA_LIDO);
       });
     }
     syncPersoneExtra();
@@ -2381,7 +2414,12 @@ window.addEventListener('DOMContentLoaded', function(){
         }
 
         if (cameraTipoSelect && !cameraTipo){
-          if (errorEl){ errorEl.textContent = 'Seleziona il tipo di camera.'; errorEl.hidden = false; }
+          if (errorEl){ errorEl.textContent = card.dataset.tier === 'appartamenti-vip' ? 'Seleziona l\'appartamento.' : 'Seleziona il tipo di camera.'; errorEl.hidden = false; }
+          return;
+        }
+        var numeroCamere = val('numero_camere');
+        if (numeroCamereSelect && !numeroCamere){
+          if (errorEl){ errorEl.textContent = 'Seleziona quante camere prenotare.'; errorEl.hidden = false; }
           return;
         }
         if (card.querySelector('[name="punto_partenza"]') && !puntoPartenza){
@@ -2392,9 +2430,9 @@ window.addEventListener('DOMContentLoaded', function(){
         var numeroPersone = null, altriOspiti = [];
         if (numeroPersoneInput){
           numeroPersone = parseInt(val('numero_persone'), 10);
-          var minPersone = parseInt(numeroPersoneInput.min, 10) || 1;
-          if (!numeroPersone || isNaN(numeroPersone) || numeroPersone < minPersone){
-            if (errorEl){ errorEl.textContent = 'Minimo ' + minPersone + ' persone per questa soluzione.'; errorEl.hidden = false; }
+          var personeEsatte = parseInt(numeroPersoneInput.max, 10) || parseInt(numeroPersoneInput.min, 10) || 0;
+          if (!numeroPersone || isNaN(numeroPersone) || numeroPersone !== personeEsatte){
+            if (errorEl){ errorEl.textContent = 'Questa soluzione richiede esattamente ' + personeEsatte + ' person' + (personeEsatte === 1 ? 'a' : 'e') + '.'; errorEl.hidden = false; }
             return;
           }
           for (var i = 2; i <= numeroPersone; i++){
