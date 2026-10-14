@@ -1496,10 +1496,16 @@ Lì trovi anche la planimetria della villa, piano per piano.
   // ============================== POSTO RISERVATO (ingresso/admin/superadmin) ==============================
   // Anagrafica di chi ha acquistato il biglietto online su Posto Riservato.
   // Non c'è un form sul sito: Matteo scarica l'elenco dal pannello organizer
-  // di Posto Riservato e lo fa importare da Claude su clienti_magaparty
-  // (come_conosciuto = "Postoriservato (biglietto online)"), un'anagrafica
-  // per volta man mano che arrivano nuove vendite. Qui lo staff la vede in
-  // sola lettura, con ricerca per nome/email/telefono.
+  // di Posto Riservato e lo fa importare da Claude su clienti_magaparty, un
+  // ordine per volta man mano che arrivano nuove vendite. Qui lo staff la
+  // vede in sola lettura, con ricerca per nome/email/telefono.
+  //
+  // Il filtro è sulla nota ("Ordine Posto Riservato #...", scritta da Claude
+  // a ogni importazione), non su come_conosciuto: quel campo vale
+  // "Postoriservato (biglietto online)" anche per centinaia di clienti
+  // storici già in anagrafica da prima di questa scheda (senza telefono/
+  // email, alcuni con nome corrotto), che altrimenti finirebbero mescolati
+  // qui dentro.
   let postoRiservatoTutti = [];
 
   async function caricaPostoRiservato() {
@@ -1508,7 +1514,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
     const { data, error } = await sb
       .from('clienti_magaparty')
       .select('id, nome, telefono, email, note, created_at')
-      .ilike('come_conosciuto', 'Postoriservato%')
+      .ilike('note', 'Ordine Posto Riservato%')
       .order('created_at', { ascending: false });
     if (error) {
       lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
