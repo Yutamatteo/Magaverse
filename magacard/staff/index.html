@@ -137,6 +137,7 @@
       <button class="tab-btn hidden" id="tab-prenotazioni">Prenotazioni</button>
       <button class="tab-btn hidden" id="tab-smistamento">Richieste</button>
       <button class="tab-btn hidden" id="tab-contanti">Contanti</button>
+      <button class="tab-btn hidden" id="tab-postoriservato">Posto Riservato</button>
       <button class="tab-btn hidden" id="tab-registro">Registro</button>
     </div>
 
@@ -231,6 +232,18 @@
       <div id="lista-contanti" style="margin-top:12px;"></div>
     </div>
 
+    <!-- VISTA POSTO RISERVATO (ingresso/admin/superadmin): anagrafica di chi
+         ha acquistato il biglietto online su Posto Riservato. Matteo carica
+         i dati a mano dal pannello organizer di Posto Riservato man mano che
+         arrivano nuove vendite; vengono salvati su clienti_magaparty (stesso
+         cliente riconosciuto per email/telefono, senza duplicati) e mostrati
+         qui in sola lettura per tutto lo staff con questa scheda. -->
+    <div id="vista-postoriservato" class="hidden">
+      <input class="mc-search" type="text" id="search-postoriservato" placeholder="Cerca per nome, email o telefono...">
+      <p class="mc-sub" id="postoriservato-count" style="margin:12px 0 0;"></p>
+      <div id="lista-postoriservato" style="margin-top:12px;"></div>
+    </div>
+
     <!-- VISTA REGISTRO (solo superadmin): chi ha contattato cosa e quando -->
     <div id="vista-registro" class="hidden">
       <label for="select-evento-registro">Evento</label>
@@ -271,6 +284,7 @@
   const vistaPrenotazioni = document.getElementById('vista-prenotazioni');
   const vistaSmistamento = document.getElementById('vista-smistamento');
   const vistaContanti = document.getElementById('vista-contanti');
+  const vistaPostoRiservato = document.getElementById('vista-postoriservato');
   const vistaRegistro = document.getElementById('vista-registro');
   let prenotazioniCorrenti = [];
   let prenotazioniEventoTutte = [];
@@ -323,6 +337,7 @@
       document.getElementById('tab-prenotazioni').classList.remove('hidden');
       document.getElementById('tab-smistamento').classList.remove('hidden');
       document.getElementById('tab-contanti').classList.remove('hidden');
+      document.getElementById('tab-postoriservato').classList.remove('hidden');
       avviaScanner();
     } else {
       // admin / superadmin: mostra la scelta postazione prima dello scanner
@@ -345,6 +360,7 @@
         document.getElementById('tab-prenotazioni').classList.remove('hidden');
         document.getElementById('tab-smistamento').classList.remove('hidden');
         document.getElementById('tab-contanti').classList.remove('hidden');
+        document.getElementById('tab-postoriservato').classList.remove('hidden');
       }
       avviaScanner();
     });
@@ -358,6 +374,7 @@
     vistaPrenotazioni.classList.add('hidden');
     vistaSmistamento.classList.add('hidden');
     vistaContanti.classList.add('hidden');
+    vistaPostoRiservato.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
@@ -365,6 +382,7 @@
     document.getElementById('tab-prenotazioni').classList.remove('active');
     document.getElementById('tab-smistamento').classList.remove('active');
     document.getElementById('tab-contanti').classList.remove('active');
+    document.getElementById('tab-postoriservato').classList.remove('active');
     document.getElementById('tab-registro').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
@@ -382,7 +400,7 @@
   });
 
   // ============================== TABS (solo admin/superadmin) ==============================
-  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-registro'];
+  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-postoriservato', 'tab-registro'];
   function attivaSoloTab(idAttivo) {
     TUTTI_TAB_BTN.forEach(id => document.getElementById(id).classList.toggle('active', id === idAttivo));
   }
@@ -392,6 +410,7 @@
     vistaPrenotazioni.classList.add('hidden');
     vistaSmistamento.classList.add('hidden');
     vistaContanti.classList.add('hidden');
+    vistaPostoRiservato.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
   }
 
@@ -432,6 +451,14 @@
     vistaContanti.classList.remove('hidden');
     await fermaScanner();
     caricaContanti();
+  });
+
+  document.getElementById('tab-postoriservato').addEventListener('click', async () => {
+    attivaSoloTab('tab-postoriservato');
+    nascondiTutteLeViste();
+    vistaPostoRiservato.classList.remove('hidden');
+    await fermaScanner();
+    caricaPostoRiservato();
   });
 
   document.getElementById('tab-registro').addEventListener('click', async () => {
@@ -1465,6 +1492,60 @@ Lì trovi anche la planimetria della villa, piano per piano.
     }
     caricaContanti();
   };
+
+  // ============================== POSTO RISERVATO (ingresso/admin/superadmin) ==============================
+  // Anagrafica di chi ha acquistato il biglietto online su Posto Riservato.
+  // Non c'è un form sul sito: Matteo scarica l'elenco dal pannello organizer
+  // di Posto Riservato e lo fa importare da Claude su clienti_magaparty
+  // (come_conosciuto = "Postoriservato (biglietto online)"), un'anagrafica
+  // per volta man mano che arrivano nuove vendite. Qui lo staff la vede in
+  // sola lettura, con ricerca per nome/email/telefono.
+  let postoRiservatoTutti = [];
+
+  async function caricaPostoRiservato() {
+    const lista = document.getElementById('lista-postoriservato');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data, error } = await sb
+      .from('clienti_magaparty')
+      .select('id, nome, telefono, email, note, created_at')
+      .ilike('come_conosciuto', 'Postoriservato%')
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    postoRiservatoTutti = data;
+    applicaFiltroPostoRiservato();
+  }
+
+  function applicaFiltroPostoRiservato() {
+    const q = document.getElementById('search-postoriservato').value.trim().toLowerCase();
+    const filtrati = q
+      ? postoRiservatoTutti.filter(r => `${r.nome} ${r.telefono} ${r.email}`.toLowerCase().includes(q))
+      : postoRiservatoTutti;
+    disegnaPostoRiservato(filtrati);
+  }
+
+  function disegnaPostoRiservato(items) {
+    const lista = document.getElementById('lista-postoriservato');
+    document.getElementById('postoriservato-count').textContent =
+      `${items.length} client${items.length === 1 ? 'e' : 'i'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessun cliente trovato.</div>';
+      return;
+    }
+    lista.innerHTML = items.map(r => `
+      <div class="mc-row">
+        <div class="info">
+          <b>${r.nome}</b>
+          <span>${r.telefono || '—'} · ${r.email || '—'}</span>
+          ${r.note ? `<span>${r.note}</span>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('search-postoriservato').addEventListener('input', applicaFiltroPostoRiservato);
 
   // ============================== REGISTRO CONTATTI (solo superadmin) ==============================
   const selectEventoRegistro = document.getElementById('select-evento-registro');
