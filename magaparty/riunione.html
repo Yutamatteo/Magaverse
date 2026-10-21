@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Riepilogo riunione · Halloween in Villa · Magaparty</title>
+<meta name="description" content="Riepilogo vendite e richieste per Halloween in Villa, estratto dal pannello staff per la riunione Magaparty.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B; --gold-soft:rgba(216,182,107,0.14);
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{background:var(--ink); color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+p{margin:0;}
+a{color:inherit;}
+.wrap{max-width:1040px; margin:0 auto; padding-inline:20px;}
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1040px; margin:0 auto; }
+.topbar a{ font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted); text-decoration:none; }
+.topbar a:hover{ color:var(--gold); }
+
+.hero{ padding-block:40px 36px; border-bottom:1px solid var(--line);
+  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,122,51,0.12), transparent 60%), var(--ink); }
+.eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:18px; }
+.eyebrow::before, .eyebrow::after{content:""; width:22px; height:1px; background:var(--ember); opacity:0.5;}
+.hero h1{ font-size:clamp(1.9rem, 4.6vw, 3.1rem); font-weight:600; line-height:1.1; letter-spacing:-0.01em; color:var(--bone); text-wrap:balance; }
+.hero h1 em{font-style:italic; color:var(--ember); font-weight:500;}
+.hero-sub{ max-width:60ch; margin-top:16px; font-size:15px; line-height:1.65; color:var(--muted); }
+.hero-meta{ margin-top:22px; display:flex; flex-wrap:wrap; gap:18px; font-size:11px; color:var(--muted); }
+.hero-meta span{ display:inline-flex; align-items:center; gap:7px; }
+.hero-meta .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);}
+
+section{ padding-block:44px; border-bottom:1px solid var(--line); }
+.section-label{ display:block; font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; }
+section h2{ font-size:clamp(1.4rem,2.6vw,1.9rem); font-weight:600; margin-bottom:6px; }
+section > .section-sub{ color:var(--muted); font-size:14px; line-height:1.6; max-width:68ch; margin-top:6px; }
+
+/* KPI */
+.kpi-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:28px; }
+@media (min-width:760px){ .kpi-grid{ grid-template-columns:repeat(4,1fr); } }
+.kpi{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 20px; }
+.kpi .num{ font-family:'Fraunces',serif; font-size:clamp(1.8rem,4vw,2.4rem); font-weight:600; color:var(--bone); line-height:1; }
+.kpi .num .unit{ font-size:0.4em; color:var(--muted); font-weight:500; margin-left:4px; }
+.kpi .lbl{ margin-top:8px; font-size:12px; color:var(--muted); line-height:1.4; }
+.kpi .tag{ display:inline-block; margin-top:10px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:4px 9px; border-radius:999px; }
+.kpi.conf .num{ color:var(--moss); }
+.kpi.conf .tag{ background:var(--moss-soft); color:var(--moss); }
+.kpi.pend .tag{ background:var(--gold-soft); color:var(--gold); }
+.kpi.int .tag{ background:var(--ember-soft); color:var(--ember); }
+.kpi.tot{ background:var(--surface-2); }
+
+/* progress bar (stesso stile della pagina Halloween) */
+.progress-block{ margin-top:30px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px; }
+.progress-block .row{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.progress-block h4{ font-family:'Work Sans'; font-size:14px; font-weight:600; color:var(--bone); }
+.progress-block .pct{ font-family:'JetBrains Mono'; font-size:13px; color:var(--gold); }
+.ticket-progress{ height:7px; border-radius:999px; background:rgba(255,255,255,0.08); overflow:hidden; margin-top:12px; }
+.ticket-progress-bar{ height:100%; background:linear-gradient(90deg, var(--ember), var(--gold)); border-radius:999px; }
+.ticket-progress-label{ display:block; margin-top:8px; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); }
+
+/* breakdown bars */
+.bars{ margin-top:26px; display:flex; flex-direction:column; gap:14px; }
+.bar-row{ display:grid; grid-template-columns:140px 1fr 44px; align-items:center; gap:14px; }
+.bar-row .name{ font-size:13px; color:var(--bone); }
+.bar-track{ height:10px; border-radius:999px; background:rgba(255,255,255,0.06); overflow:hidden; }
+.bar-fill{ height:100%; border-radius:999px; background:var(--ember); }
+.bar-row .val{ font-family:'JetBrains Mono'; font-size:13px; color:var(--muted); text-align:right; }
+
+/* tabella semplice */
+table.simple{ width:100%; border-collapse:collapse; margin-top:24px; font-size:13.5px; }
+table.simple th{ text-align:left; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); font-weight:600; padding:8px 10px; border-bottom:1px solid var(--line); }
+table.simple td{ padding:10px 10px; border-bottom:1px solid var(--line); color:var(--bone); }
+table.simple tr:last-child td{ border-bottom:none; }
+table.simple td.num, table.simple th.num{ text-align:right; font-family:'JetBrains Mono'; }
+
+/* note / avviso */
+.notes{ margin-top:24px; display:flex; flex-direction:column; gap:12px; }
+.note{ display:flex; gap:12px; padding:14px 16px; border-radius:12px; background:var(--surface); border:1px solid var(--line); font-size:13px; line-height:1.55; color:var(--muted); }
+.note .ico{ flex-shrink:0; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+.note.warn .ico{ background:var(--gold-soft); color:var(--gold); }
+.note.info .ico{ background:var(--moss-soft); color:var(--moss); }
+.note b{ color:var(--bone); }
+
+/* punti riunione */
+.agenda{ margin-top:26px; display:flex; flex-direction:column; gap:10px; }
+.agenda-item{ display:flex; gap:14px; align-items:flex-start; padding:14px 16px; border-radius:12px; background:var(--surface-2); border:1px solid var(--line); }
+.agenda-item .n{ font-family:'JetBrains Mono'; font-size:12px; color:var(--ember); flex-shrink:0; padding-top:1px; }
+.agenda-item p{ font-size:13.5px; line-height:1.55; color:var(--bone); }
+.agenda-item p .sub{ display:block; margin-top:3px; color:var(--muted); font-size:12.5px; }
+
+footer{ padding-block:32px; text-align:center; }
+footer p{ font-size:11px; color:var(--muted); letter-spacing:0.02em; }
+footer a{ color:var(--gold); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="halloween.html">&larr; Halloween in Villa</a>
+  <a href="../magacard/staff/index.html">Pannello staff</a>
+</div>
+
+<section class="hero" style="border-bottom:1px solid var(--line); padding-top:12px;">
+  <div class="wrap">
+    <div class="eyebrow">Riunione Magaparty</div>
+    <h1>Halloween in Villa — <em>riepilogo vendite &amp; richieste</em></h1>
+    <p class="hero-sub">Tutto ciò che è visibile oggi nel pannello staff (Posto Riservato, Contanti, Richieste), in un'unica pagina pensata per la riunione di oggi. Il dettaglio riga per riga è nel foglio Excel condiviso in chat.</p>
+    <div class="hero-meta">
+      <span><span class="dot"></span> Dati estratti dal pannello staff il 21/10/2026</span>
+      <span class="mono">magaverse.it/magacard/staff/</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="section-label">Colpo d'occhio</span>
+    <h2>I numeri di oggi</h2>
+    <p class="section-sub">Tre canali diversi, tre livelli di certezza: pagato e confermato, in attesa di conferma, e semplice interesse.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi conf">
+        <div class="num">27 <span class="unit">persone</span></div>
+        <div class="lbl">Posto Riservato — biglietto online pagato</div>
+        <span class="tag">Confermato</span>
+      </div>
+      <div class="kpi pend">
+        <div class="num">14 <span class="unit">persone</span></div>
+        <div class="lbl">Contanti — richieste in attesa di conferma (nette)</div>
+        <span class="tag">In attesa</span>
+      </div>
+      <div class="kpi int">
+        <div class="num">34 <span class="unit">persone</span></div>
+        <div class="lbl">Richieste dal sito — interesse, deduplicate</div>
+        <span class="tag">Interesse</span>
+      </div>
+      <div class="kpi tot">
+        <div class="num">75</div>
+        <div class="lbl">Persone totali raggiunte nei 3 canali (nette)</div>
+      </div>
+    </div>
+
+    <div class="progress-block">
+      <div class="row">
+        <h4>Biglietto Prima Release — €45</h4>
+        <span class="pct">50%</span>
+      </div>
+      <div class="ticket-progress"><div class="ticket-progress-bar" style="width:50%"></div></div>
+      <span class="ticket-progress-label">Vendita in corso — stato live sulla pagina Halloween in Villa</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="section-label">Posto Riservato</span>
+    <h2>21 ordini pagati online → 27 persone</h2>
+    <p class="section-sub">Tutti gli ordini finora sono biglietto "Ridotto Prevendita". Nessun'altra fascia venduta su Posto Riservato al momento.</p>
+    <table class="simple">
+      <tr><th>Biglietto</th><th class="num">Ordini</th><th class="num">Persone</th></tr>
+      <tr><td>Ridotto Prevendita</td><td class="num">21</td><td class="num">27</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="section-label">Contanti</span>
+    <h2>16 richieste ricevute → 14 reali in attesa</h2>
+    <p class="section-sub">Nessuna di queste è ancora uno stato "confermato" — serve una verifica dello staff prima di contarle come vendita.</p>
+    <table class="simple">
+      <tr><th>Voce</th><th class="num">Righe</th></tr>
+      <tr><td>Richieste ricevute (totale righe nel pannello)</td><td class="num">16</td></tr>
+      <tr><td>— di cui: duplicato (stessa persona inviata 2 volte)</td><td class="num">1</td></tr>
+      <tr><td>— di cui: voce di test di Matteo ("prova prova")</td><td class="num">1</td></tr>
+      <tr><td><b>Richieste reali e distinte</b></td><td class="num"><b>14</b></td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="section-label">Richieste dal sito</span>
+    <h2>34 richieste distinte (su 50 ricevute, deduplicate)</h2>
+    <p class="section-sub">Sono manifestazioni di interesse dal form del sito, non acquisti: 16 righe erano duplicati della stessa persona e non sono contate due volte.</p>
+    <div class="bars">
+      <div class="bar-row"><span class="name">1ª data</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="val">18</span></div>
+      <div class="bar-row"><span class="name">Community</span><div class="bar-track"><div class="bar-fill" style="width:66.7%"></div></div><span class="val">12</span></div>
+      <div class="bar-row"><span class="name">Navetta</span><div class="bar-track"><div class="bar-fill" style="width:16.7%"></div></div><span class="val">3</span></div>
+      <div class="bar-row"><span class="name">Saltafila</span><div class="bar-track"><div class="bar-fill" style="width:5.6%"></div></div><span class="val">1</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="section-label">Da sapere prima di discuterne</span>
+    <h2>Note</h2>
+    <div class="notes">
+      <div class="note info"><span class="ico">i</span><p><b>Posto Riservato</b> è l'unico canale con pagamento confermato: è la cifra su cui si può contare con certezza.</p></div>
+      <div class="note warn"><span class="ico">!</span><p><b>Contanti</b> non è ancora una vendita: resta "in attesa" finché lo staff non conferma lo stato di ogni riga.</p></div>
+      <div class="note info"><span class="ico">i</span><p><b>Richieste dal sito</b> sono interesse puro — utile per stimare la domanda, ma non vanno sommate alle vendite confermate.</p></div>
+      <div class="note warn"><span class="ico">!</span><p>Nel foglio Excel la riga di test ("prova prova") e il duplicato di Contanti sono lasciati visibili ma evidenziati in giallo, come richiesto — non sono stati rimossi dal database.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none;">
+  <div class="wrap">
+    <span class="section-label">Per la riunione</span>
+    <h2>Punti da decidere oggi</h2>
+    <div class="agenda">
+      <div class="agenda-item"><span class="n">01</span><p>Confermare o rifiutare le 14 richieste Contanti in attesa, così da sapere quante diventano vendite reali.<span class="sub">Si fa dal pannello staff → sezione Contanti.</span></p></div>
+      <div class="agenda-item"><span class="n">02</span><p>Decidere la capienza di riferimento per la villa, per poter calcolare correttamente la % di posti venduti sulla barra del sito.<span class="sub">Finché non c'è un numero deciso, la barra resta impostata manualmente.</span></p></div>
+      <div class="agenda-item"><span class="n">03</span><p>Valutare se e quando aprire le fasce "2ª data" e "3ª data", vista la domanda già raccolta su Richieste.</p></div>
+      <div class="agenda-item"><span class="n">04</span><p>Il foglio Excel allegato in chat ha il dettaglio riga per riga di tutti e tre i canali, per chi vuole controllare i singoli nominativi durante la riunione.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Magaparty · Halloween in Villa — pagina generata per uso interno, dati aggiornati al 21/10/2026 · <a href="halloween.html">torna alla pagina dell'evento</a></p>
+</footer>
+
+</body>
+</html>
