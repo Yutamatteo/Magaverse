@@ -143,7 +143,8 @@ footer a{ color:var(--gold); text-decoration:none; }
     <h2>Iscrivi il tuo costume</h2>
     <p class="section-sub">Carica una foto del costume: dopo una rapida revisione dello staff, la scheda va online e diventa votabile.</p>
 
-    <form id="iscrizione-form" class="form-card" novalidate>
+    <div class="form-card">
+    <form id="iscrizione-form" novalidate>
       <div class="field">
         <label for="f-nome">Nome (o nome del duo / gruppo)</label>
         <input type="text" id="f-nome" name="nome_partecipante" placeholder="Es. Mario Rossi, oppure “Le Streghe del Villaggio”" required>
@@ -197,12 +198,13 @@ footer a{ color:var(--gold); text-decoration:none; }
       </label>
 
       <div class="form-msg error" id="iscr-error"></div>
-      <div class="form-msg success" id="iscr-success">Iscrizione ricevuta! La scheda sarà online a breve, dopo la revisione dello staff.</div>
 
       <div class="submit-row">
         <button type="submit" class="btn primary" id="iscr-submit">Invia l'iscrizione</button>
       </div>
     </form>
+    <div class="form-msg success" id="iscr-success">Iscrizione ricevuta! La scheda sarà online a breve, dopo la revisione dello staff.</div>
+    </div>
   </div>
 </section>
 
