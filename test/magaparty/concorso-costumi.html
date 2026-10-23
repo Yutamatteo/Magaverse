@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Contest Costumi · Halloween in Villa · Magaparty</title>
+<meta name="description" content="Iscriviti al contest dei migliori costumi di Halloween in Villa e vota i tuoi preferiti: singolo, coppia o gruppo.">
+<meta property="og:title" content="Contest Costumi · Halloween in Villa">
+<meta property="og:description" content="Iscriviti e vota i migliori costumi della festa: singolo, coppia, gruppo.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B; --gold-soft:rgba(216,182,107,0.14);
+  --danger:#E8716A; --danger-soft:rgba(232,113,106,0.14);
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+body{background:var(--ink); color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0; -webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+p{margin:0;}
+a{color:inherit;}
+img{max-width:100%; display:block;}
+.wrap{max-width:1080px; margin:0 auto; padding-inline:20px;}
+button{font-family:inherit;}
+input,select,textarea{font-family:inherit; font-size:15px;}
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; max-width:1080px; margin:0 auto; }
+.topbar a{ font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted); text-decoration:none; }
+.topbar a:hover{ color:var(--gold); }
+
+.hero{ padding-block:44px 36px; border-bottom:1px solid var(--line); text-align:center;
+  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,122,51,0.14), transparent 60%), var(--ink); }
+.eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:18px; }
+.eyebrow::before, .eyebrow::after{content:""; width:22px; height:1px; background:var(--ember); opacity:0.5;}
+.hero h1{ font-size:clamp(2rem, 5.4vw, 3.4rem); font-weight:600; line-height:1.08; letter-spacing:-0.01em; color:var(--bone); text-wrap:balance; }
+.hero h1 em{font-style:italic; color:var(--ember); font-weight:500;}
+.hero-sub{ max-width:52ch; margin:18px auto 0; font-size:15px; line-height:1.65; color:var(--muted); }
+.hero-cta{ margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; letter-spacing:0.01em; padding:13px 24px; border-radius:999px; border:1px solid var(--line); text-decoration:none; cursor:pointer; background:var(--surface); color:var(--bone); transition:transform .15s ease, border-color .15s ease; }
+.btn:hover{ border-color:var(--gold); }
+.btn.primary{ background:linear-gradient(90deg, var(--ember), var(--gold)); color:#20120A; border-color:transparent; }
+.btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+section{ padding-block:48px; border-bottom:1px solid var(--line); }
+.section-label{ display:block; font-size:10.5px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:10px; text-align:center;}
+section h2{ font-size:clamp(1.5rem,3vw,2.1rem); font-weight:600; text-align:center; }
+.section-sub{ color:var(--muted); font-size:14px; line-height:1.6; max-width:56ch; margin:10px auto 0; text-align:center; }
+
+/* ---- FORM ISCRIZIONE ---- */
+.form-card{ max-width:560px; margin:32px auto 0; background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:28px 24px; }
+.field{ margin-bottom:18px; }
+.field label{ display:block; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+.field .hint{ font-size:11.5px; color:var(--muted); margin-top:6px; opacity:0.85; }
+.field input[type="text"], .field input[type="email"], .field input[type="tel"], .field select, .field textarea{
+  width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); color:var(--bone); outline:none;
+}
+.field textarea{ resize:vertical; min-height:70px; }
+.field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--gold); }
+.field-row{ display:grid; grid-template-columns:1fr; gap:18px; }
+@media (min-width:560px){ .field-row.two{ grid-template-columns:1fr 1fr; } }
+
+.photo-drop{ border:1.5px dashed var(--line); border-radius:14px; padding:18px; text-align:center; cursor:pointer; background:var(--surface-2); }
+.photo-drop:hover{ border-color:var(--gold); }
+.photo-drop input{ display:none; }
+.photo-drop .ph-label{ font-size:13px; color:var(--muted); }
+.photo-preview{ margin-top:12px; border-radius:12px; overflow:hidden; display:none; max-height:260px; }
+.photo-preview img{ width:100%; object-fit:cover; }
+
+.checkbox-row{ display:flex; align-items:flex-start; gap:10px; font-size:12.5px; color:var(--muted); line-height:1.5; }
+.checkbox-row input{ margin-top:3px; flex-shrink:0; }
+
+.form-msg{ margin-top:16px; font-size:13px; padding:12px 14px; border-radius:10px; display:none; }
+.form-msg.error{ background:var(--danger-soft); color:var(--danger); }
+.form-msg.success{ background:var(--moss-soft); color:var(--moss); }
+
+.submit-row{ margin-top:22px; }
+.submit-row button{ width:100%; justify-content:center; padding:14px; font-size:14px; }
+
+/* ---- GALLERIA / VOTO ---- */
+.filters{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:28px 0 30px; }
+.filter-pill{ font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; padding:9px 16px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; }
+.filter-pill.is-active{ background:var(--ember); border-color:var(--ember); color:#20120A; font-weight:600; }
+
+.gallery-state{ text-align:center; color:var(--muted); font-size:13.5px; padding:30px 0; }
+
+.gallery-grid{ display:grid; grid-template-columns:1fr; gap:18px; }
+@media (min-width:620px){ .gallery-grid{ grid-template-columns:1fr 1fr; } }
+@media (min-width:920px){ .gallery-grid{ grid-template-columns:1fr 1fr 1fr; } }
+
+.costume-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column; }
+.costume-photo{ aspect-ratio:4/5; background:var(--surface-2); overflow:hidden; position:relative; }
+.costume-photo img{ width:100%; height:100%; object-fit:cover; }
+.costume-cat-badge{ position:absolute; top:10px; left:10px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:rgba(14,10,20,0.75); color:var(--gold); backdrop-filter:blur(4px); border:1px solid var(--line); }
+.costume-body{ padding:16px 16px 18px; display:flex; flex-direction:column; gap:10px; flex:1; }
+.costume-body h3{ font-size:16px; font-weight:600; color:var(--bone); }
+.costume-body .descr{ font-size:12.5px; color:var(--muted); line-height:1.55; }
+.costume-body .ig{ font-size:11.5px; color:var(--gold); text-decoration:none; }
+.costume-foot{ margin-top:auto; display:flex; align-items:center; justify-content:space-between; gap:10px; padding-top:6px; }
+.vote-count{ font-family:'JetBrains Mono'; font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+.vote-count b{ color:var(--bone); font-size:16px; }
+.vote-btn{ font-size:12px; font-weight:600; padding:10px 18px; border-radius:999px; border:1px solid var(--ember); background:transparent; color:var(--ember); cursor:pointer; transition:all .15s ease; }
+.vote-btn:hover{ background:var(--ember-soft); }
+.vote-btn.voted{ background:var(--moss); border-color:var(--moss); color:#15241A; cursor:default; }
+.vote-btn:disabled{ opacity:0.7; }
+
+footer{ padding-block:32px; text-align:center; }
+footer p{ font-size:11px; color:var(--muted); letter-spacing:0.02em; }
+footer a{ color:var(--gold); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="halloween.html">&larr; Halloween in Villa</a>
+  <a href="#vota">Vai al voto &darr;</a>
+</div>
+
+<section class="hero" style="border-top:none;">
+  <div class="wrap">
+    <div class="eyebrow">Contest Halloween in Villa</div>
+    <h1>Vesti il tuo <em>miglior costume</em>, vinci il titolo</h1>
+    <p class="hero-sub">Tre categorie — singolo, coppia e gruppo. Iscriviti con una foto del tuo costume, poi la sera della festa si vota dal vivo scansionando il QR: il pubblico decide i vincitori.</p>
+    <div class="hero-cta">
+      <a href="#iscrizione" class="btn primary">Iscrivi il tuo costume</a>
+      <a href="#vota" class="btn">Vota i costumi</a>
+    </div>
+  </div>
+</section>
+
+<section id="iscrizione">
+  <div class="wrap">
+    <span class="section-label">Partecipa</span>
+    <h2>Iscrivi il tuo costume</h2>
+    <p class="section-sub">Carica una foto del costume: dopo una rapida revisione dello staff, la scheda va online e diventa votabile.</p>
+
+    <form id="iscrizione-form" class="form-card" novalidate>
+      <div class="field">
+        <label for="f-nome">Nome (o nome del duo / gruppo)</label>
+        <input type="text" id="f-nome" name="nome_partecipante" placeholder="Es. Mario Rossi, oppure “Le Streghe del Villaggio”" required>
+      </div>
+
+      <div class="field-row two">
+        <div class="field">
+          <label for="f-categoria">Categoria</label>
+          <select id="f-categoria" name="categoria" required>
+            <option value="" disabled selected>Scegli…</option>
+            <option value="singolo">Singolo</option>
+            <option value="coppia">Coppia</option>
+            <option value="gruppo">Gruppo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-instagram">Instagram (facoltativo)</label>
+          <input type="text" id="f-instagram" name="instagram" placeholder="@tuonome">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-descrizione">Racconta il costume (facoltativo)</label>
+        <textarea id="f-descrizione" name="descrizione" maxlength="280" placeholder="Di cosa è ispirato, chi lo indossa, qualche dettaglio..."></textarea>
+      </div>
+
+      <div class="field-row two">
+        <div class="field">
+          <label for="f-telefono">Telefono (facoltativo)</label>
+          <input type="tel" id="f-telefono" name="telefono" placeholder="Solo per contattarti se serve">
+        </div>
+        <div class="field">
+          <label for="f-email">Email (facoltativo)</label>
+          <input type="email" id="f-email" name="email" placeholder="nome@esempio.it">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Foto del costume</label>
+        <label class="photo-drop" id="photo-drop">
+          <span class="ph-label" id="photo-label">Tocca per scegliere una foto</span>
+          <input type="file" accept="image/*" id="f-foto" name="foto" required>
+        </label>
+        <div class="photo-preview" id="photo-preview"><img id="photo-preview-img" alt=""></div>
+        <p class="hint">Si comprime automaticamente prima dell'invio — anche le foto scattate con il telefono vanno bene.</p>
+      </div>
+
+      <label class="checkbox-row">
+        <input type="checkbox" id="f-termini" name="termini_accettati" required>
+        <span>Accetto che il nome e la foto del costume vengano pubblicati su questa pagina e votati pubblicamente durante la festa.</span>
+      </label>
+
+      <div class="form-msg error" id="iscr-error"></div>
+      <div class="form-msg success" id="iscr-success">Iscrizione ricevuta! La scheda sarà online a breve, dopo la revisione dello staff.</div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn primary" id="iscr-submit">Invia l'iscrizione</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section id="vota" style="border-bottom:none;">
+  <div class="wrap">
+    <span class="section-label">31 ottobre, si vota dal vivo</span>
+    <h2>Vota i costumi</h2>
+    <p class="section-sub">Un voto per costume da questo dispositivo — puoi votare quanti costumi vuoi, anche più di uno nella stessa categoria.</p>
+
+    <div class="filters" id="filters">
+      <button class="filter-pill is-active" data-cat="tutti">Tutti</button>
+      <button class="filter-pill" data-cat="singolo">Singolo</button>
+      <button class="filter-pill" data-cat="coppia">Coppia</button>
+      <button class="filter-pill" data-cat="gruppo">Gruppo</button>
+    </div>
+
+    <div class="gallery-state" id="gallery-state">Caricamento costumi…</div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <p>Magaparty · Halloween in Villa — i voti si aggiornano in automatico · <a href="halloween.html">torna alla pagina dell'evento</a></p>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var SUPABASE_URL = 'https://dkzzmxsreaegjagqbdnh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+
+  var BUCKET = 'contest-costumi';
+
+  /* ===================== DEVICE TOKEN ===================== */
+  function getDeviceToken(){
+    try{
+      var t = localStorage.getItem('contest_device_token');
+      if (!t){
+        t = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+          ('dev-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        localStorage.setItem('contest_device_token', t);
+      }
+      return t;
+    }catch(e){
+      return 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    }
+  }
+  function getVotedSet(){
+    try{
+      var raw = localStorage.getItem('contest_voted_ids');
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function markVoted(id){
+    try{
+      var voted = getVotedSet();
+      if (voted.indexOf(id) === -1){
+        voted.push(id);
+        localStorage.setItem('contest_voted_ids', JSON.stringify(voted));
+      }
+    }catch(e){}
+  }
+
+  /* ===================== FORM ISCRIZIONE ===================== */
+  var form = document.getElementById('iscrizione-form');
+  var errorEl = document.getElementById('iscr-error');
+  var successEl = document.getElementById('iscr-success');
+  var submitBtn = document.getElementById('iscr-submit');
+  var fotoInput = document.getElementById('f-foto');
+  var photoLabel = document.getElementById('photo-label');
+  var photoPreview = document.getElementById('photo-preview');
+  var photoPreviewImg = document.getElementById('photo-preview-img');
+  var compressedBlob = null;
+
+  function comprimiImmagine(file, maxDim, quality){
+    return new Promise(function(resolve, reject){
+      var img = new Image();
+      var url = URL.createObjectURL(file);
+      img.onload = function(){
+        var w = img.width, h = img.height;
+        var scale = Math.min(1, maxDim / Math.max(w, h));
+        var cw = Math.round(w * scale), ch = Math.round(h * scale);
+        var canvas = document.createElement('canvas');
+        canvas.width = cw; canvas.height = ch;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, cw, ch);
+        URL.revokeObjectURL(url);
+        canvas.toBlob(function(blob){
+          if (blob) resolve(blob); else reject(new Error('Compressione fallita'));
+        }, 'image/jpeg', quality || 0.82);
+      };
+      img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error('Immagine non valida')); };
+      img.src = url;
+    });
+  }
+
+  if (fotoInput){
+    fotoInput.addEventListener('change', function(){
+      var file = fotoInput.files && fotoInput.files[0];
+      compressedBlob = null;
+      if (!file) return;
+      photoLabel.textContent = 'Comprimo l\'immagine…';
+      comprimiImmagine(file, 1280, 0.82).then(function(blob){
+        compressedBlob = blob;
+        photoLabel.textContent = file.name + ' — pronta';
+        var reader = new FileReader();
+        reader.onload = function(e){
+          photoPreviewImg.src = e.target.result;
+          photoPreview.style.display = 'block';
+        };
+        reader.readAsDataURL(blob);
+      }).catch(function(){
+        photoLabel.textContent = 'Errore nella lettura della foto, riprova';
+      });
+    });
+  }
+
+  function showFormError(msg){
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
+    successEl.style.display = 'none';
+  }
+
+  if (form){
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      errorEl.style.display = 'none';
+      successEl.style.display = 'none';
+
+      var nome = document.getElementById('f-nome').value.trim();
+      var categoria = document.getElementById('f-categoria').value;
+      var instagram = document.getElementById('f-instagram').value.trim();
+      var descrizione = document.getElementById('f-descrizione').value.trim();
+      var telefono = document.getElementById('f-telefono').value.trim();
+      var email = document.getElementById('f-email').value.trim();
+      var termini = document.getElementById('f-termini').checked;
+
+      if (!nome){ showFormError('Inserisci un nome per il costume.'); return; }
+      if (!categoria){ showFormError('Scegli una categoria.'); return; }
+      if (!compressedBlob){ showFormError('Carica una foto del costume.'); return; }
+      if (!termini){ showFormError('Devi accettare la pubblicazione della foto per iscriverti.'); return; }
+      if (!sb){ showFormError('Errore di connessione, riprova tra poco.'); return; }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Invio…';
+
+      var path = 'costumi/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+
+      sb.storage.from(BUCKET).upload(path, compressedBlob, { contentType: 'image/jpeg' })
+        .then(function(uploadRes){
+          if (uploadRes.error) throw uploadRes.error;
+          var payload = {
+            nome_partecipante: nome,
+            categoria: categoria,
+            foto_path: path,
+            instagram: instagram || null,
+            descrizione: descrizione || null,
+            telefono: telefono || null,
+            email: email || null,
+            termini_accettati: true
+          };
+          return sb.from('contest_costumi').insert(payload);
+        })
+        .then(function(res){
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Invia l'iscrizione";
+          if (res && res.error){
+            showFormError('Si è verificato un errore, riprova tra poco.');
+            return;
+          }
+          form.hidden = true;
+          successEl.style.display = 'block';
+        })
+        .catch(function(){
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Invia l'iscrizione";
+          showFormError('Si è verificato un errore, riprova tra poco.');
+        });
+    });
+  }
+
+  /* ===================== GALLERIA / VOTO ===================== */
+  var grid = document.getElementById('gallery-grid');
+  var stateEl = document.getElementById('gallery-state');
+  var filters = document.getElementById('filters');
+  var currentFilter = 'tutti';
+  var currentData = [];
+
+  function fotoUrl(path){
+    if (!sb) return '';
+    var r = sb.storage.from(BUCKET).getPublicUrl(path);
+    return (r && r.data && r.data.publicUrl) || '';
+  }
+
+  var CAT_LABEL = { singolo: 'Singolo', coppia: 'Coppia', gruppo: 'Gruppo' };
+
+  function render(){
+    var voted = getVotedSet();
+    var items = currentFilter === 'tutti' ? currentData : currentData.filter(function(c){ return c.categoria === currentFilter; });
+    if (!items.length){
+      stateEl.style.display = 'block';
+      stateEl.textContent = currentData.length ? 'Nessun costume in questa categoria, per ora.' : 'Ancora nessun costume approvato: torna a dare un\'occhiata più tardi!';
+      grid.innerHTML = '';
+      return;
+    }
+    stateEl.style.display = 'none';
+    items.sort(function(a, b){ return (b.voti || 0) - (a.voti || 0); });
+    grid.innerHTML = items.map(function(c){
+      var isVoted = voted.indexOf(c.id) !== -1;
+      var igHtml = c.instagram ? '<a class="ig" href="https://instagram.com/' + String(c.instagram).replace('@','') + '" target="_blank" rel="noopener">@' + String(c.instagram).replace('@','') + '</a>' : '';
+      var descrHtml = c.descrizione ? '<p class="descr">' + escapeHtml(c.descrizione) + '</p>' : '';
+      return '' +
+        '<div class="costume-card" data-id="' + c.id + '">' +
+          '<div class="costume-photo">' +
+            '<span class="costume-cat-badge">' + CAT_LABEL[c.categoria] + '</span>' +
+            '<img src="' + fotoUrl(c.foto_path) + '" alt="Costume di ' + escapeHtml(c.nome_partecipante) + '" loading="lazy">' +
+          '</div>' +
+          '<div class="costume-body">' +
+            '<h3>' + escapeHtml(c.nome_partecipante) + '</h3>' +
+            descrHtml +
+            igHtml +
+            '<div class="costume-foot">' +
+              '<span class="vote-count"><b>' + (c.voti || 0) + '</b> voti</span>' +
+              '<button class="vote-btn' + (isVoted ? ' voted' : '') + '" data-id="' + c.id + '"' + (isVoted ? ' disabled' : '') + '>' + (isVoted ? 'Votato ✓' : 'Vota') + '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  function caricaRisultati(){
+    if (!sb) return;
+    sb.from('contest_risultati').select('*').then(function(res){
+      if (res.error){
+        stateEl.style.display = 'block';
+        stateEl.textContent = 'Errore nel caricamento, riprova tra poco.';
+        return;
+      }
+      currentData = res.data || [];
+      render();
+    });
+  }
+
+  if (filters){
+    filters.addEventListener('click', function(ev){
+      var btn = ev.target.closest('.filter-pill');
+      if (!btn) return;
+      filters.querySelectorAll('.filter-pill').forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      currentFilter = btn.dataset.cat;
+      render();
+    });
+  }
+
+  if (grid){
+    grid.addEventListener('click', function(ev){
+      var btn = ev.target.closest('.vote-btn');
+      if (!btn || btn.disabled) return;
+      var id = btn.dataset.id;
+      if (!sb) return;
+      btn.disabled = true;
+      sb.from('contest_voti').insert({ costume_id: id, device_token: getDeviceToken() }).then(function(res){
+        if (res.error){
+          // Conflitto (già votato da questo dispositivo) o riga non più approvata:
+          // in entrambi i casi segniamo come votato per coerenza con la UI.
+          markVoted(id);
+          btn.textContent = 'Votato ✓';
+          btn.classList.add('voted');
+          return;
+        }
+        markVoted(id);
+        btn.textContent = 'Votato ✓';
+        btn.classList.add('voted');
+        var item = currentData.find(function(c){ return c.id === id; });
+        if (item) item.voti = (item.voti || 0) + 1;
+        render();
+      });
+    });
+  }
+
+  caricaRisultati();
+  setInterval(caricaRisultati, 15000);
+
+  if (window.location.hash === '#vota'){
+    setTimeout(function(){
+      var el = document.getElementById('vota');
+      if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }, 50);
+  }
+})();
+</script>
+
+</body>
+</html>

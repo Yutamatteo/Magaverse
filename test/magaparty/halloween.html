@@ -8,14 +8,14 @@
 <meta property="og:title" content="Halloween in Villa · Magaparty">
 <meta property="og:description" content="Planimetria interattiva multi-livello per la festa di Halloween in villa.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="../../magaparty/assets/img/halloween-locandina.jpg">
+<meta property="og:image" content="assets/img/halloween-locandina.jpg">
 <meta property="og:locale" content="it_IT">
-<link rel="icon" type="image/png" href="../../magaparty/assets/img/logo-teal.png">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/storymap.css">
-<script src="../../assets/storymap.js" defer></script>
+<link rel="stylesheet" href="../assets/storymap.css">
+<script src="../assets/storymap.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" defer></script>
@@ -327,8 +327,8 @@ img{max-width:100%;}
 <body>
 
 <div class="topbar">
-  <a href="../../magaparty/index.html">← Magaparty</a>
-  <a href="../../index.html">Magaverse</a>
+  <a href="index.html">← Magaparty</a>
+  <a href="../index.html">Magaverse</a>
 </div>
 
 <nav class="hw-nav" aria-label="Sezioni della pagina">
@@ -339,6 +339,7 @@ img{max-width:100%;}
     <button type="button" class="hw-nav-pill" data-nav="hotel" data-scroll-scene="hotel">Dove dormire</button>
     <button type="button" class="hw-nav-pill" data-nav="saltafila" data-scroll-scene="saltafila">Saltafila</button>
     <a href="#prezzi" class="hw-nav-pill" data-nav="prezzi">Prezzi</a>
+    <a href="concorso-costumi.html" class="hw-nav-pill">Contest Costumi</a>
   </div>
 </nav>
 
@@ -836,7 +837,6 @@ img{max-width:100%;}
       <input type="date" name="nascita" placeholder="Data di nascita" required>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
-      <input type="number" name="numero_persone" placeholder="Numero persone" min="2" value="2" step="1" class="full-w" required>
       <label class="terms-check">
         <input type="checkbox" name="accetta_termini" required>
         <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
@@ -935,7 +935,6 @@ img{max-width:100%;}
       <input type="date" name="nascita" placeholder="Data di nascita" required>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
-      <input type="number" name="numero_persone" placeholder="Numero persone" min="2" value="2" step="1" class="full-w" required>
       <label class="terms-check">
         <input type="checkbox" name="accetta_termini" required>
         <span>Dichiaro di avere almeno 18 anni e di aver letto e accettato i <a href="#termini-e-condizioni">termini e condizioni</a>.</span>
@@ -960,7 +959,9 @@ img{max-width:100%;}
         <option value="" disabled selected>Punto di partenza navetta</option>
         <option value="salerno">Salerno</option>
         <option value="pontecagnano">Pontecagnano</option>
+        <option value="altro">Altro (specifica città)</option>
       </select>
+      <input type="text" name="punto_partenza_altro" class="full-w" placeholder="Da quale città?" hidden>
       <input type="text" name="instagram" placeholder="Instagram (@username)">
       <input type="text" name="invitato_da" placeholder="Invitato da" class="full-w">
       <label class="terms-check">
@@ -1128,7 +1129,7 @@ img{max-width:100%;}
   <p>Planimetria, navetta, alloggi e saltafila — tutto quello che ti serve per organizzare la notte è qui sopra. Scorri pure da capo, o torna alla pagina dell'evento per i dettagli.</p>
   <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
     <button class="ghost-btn" id="restartBtn">Torna all'inizio ↑</button>
-    <a class="ghost-link" href="../../magaparty/index.html">← Torna a Magaparty</a>
+    <a class="ghost-link" href="index.html">← Torna a Magaparty</a>
   </div>
   <div class="foot-note">Magaverse · Halloween in Villa</div>
 </section>
@@ -2288,16 +2289,6 @@ window.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  /* Tier con pagamento online SumUp (navetta + le 3 soluzioni "dove
-     dormire"): invece di inserire direttamente su Supabase, il form
-     chiamerebbe la edge function crea-pagamento-sumup, che crea la
-     richiesta e un checkout SumUp, poi reindirizza al pagamento.
-     SumUp non è ancora abilitato ("lo abilitiamo dopo"): PAYMENT_TIERS
-     resta vuoto così tutte le richieste passano dal semplice insert
-     su Supabase, come in produzione. Per riattivarlo in futuro basta
-     ripopolare questo oggetto con i tier e i relativi minPersone. */
-  var PAYMENT_TIERS = {};
-
   /* Evento: 31 ottobre 2026 — l'età minima si valuta a questa data,
      non a oggi, così chi compie 18 anni a ridosso della festa non
      viene bloccato ingiustamente. */
@@ -2310,22 +2301,6 @@ window.addEventListener('DOMContentLoaded', function(){
     if (m < 0 || (m === 0 && atDate.getDate() < dob.getDate())) age--;
     return age;
   }
-
-  /* Se torniamo qui dal redirect post-pagamento SumUp, mostriamo una
-     conferma. Lo stato reale viene comunque confermato lato server
-     dal webhook sumup-webhook, indipendentemente da questo redirect. */
-  (function showPagamentoOkBanner(){
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('pagamento') !== 'ok') return;
-    var banner = document.createElement('div');
-    banner.className = 'ticket-success';
-    banner.style.cssText = 'max-width:640px;margin:24px auto;text-align:center;font-size:15px;';
-    banner.textContent = 'Pagamento completato — grazie! Ti contattiamo su WhatsApp a breve per i dettagli. ✅';
-    var prezziSection = document.getElementById('prezzi');
-    if (prezziSection && prezziSection.parentNode){
-      prezziSection.parentNode.insertBefore(banner, prezziSection.nextSibling);
-    }
-  })();
 
   document.querySelectorAll('.ticket-card').forEach(function(card){
     var tier = card.dataset.tier;
@@ -2404,6 +2379,22 @@ window.addEventListener('DOMContentLoaded', function(){
     }
     syncPersoneExtra();
 
+    /* Navetta: punto di partenza "Altro" rivela un campo libero per la
+       città, così capiamo da dove arriva chi non parte da Salerno/
+       Pontecagnano e valutiamo se aggiungere altre fermate. */
+    var puntoPartenzaSelect = form ? form.querySelector('[name="punto_partenza"]') : null;
+    var puntoPartenzaAltroInput = form ? form.querySelector('[name="punto_partenza_altro"]') : null;
+    function syncPuntoPartenzaAltro(){
+      if (!puntoPartenzaSelect || !puntoPartenzaAltroInput) return;
+      var isAltro = puntoPartenzaSelect.value === 'altro';
+      puntoPartenzaAltroInput.hidden = !isAltro;
+      if (!isAltro) puntoPartenzaAltroInput.value = '';
+    }
+    if (puntoPartenzaSelect && puntoPartenzaAltroInput){
+      puntoPartenzaSelect.addEventListener('change', syncPuntoPartenzaAltro);
+      syncPuntoPartenzaAltro();
+    }
+
     if (form){
       form.addEventListener('submit', function(e){
         e.preventDefault();
@@ -2414,7 +2405,8 @@ window.addEventListener('DOMContentLoaded', function(){
         var nome = val('nome'), cognome = val('cognome'), email = val('email'),
             telefono = val('telefono'), nascita = val('nascita'),
             instagram = val('instagram'), invitatoDa = val('invitato_da'),
-            puntoPartenza = val('punto_partenza'), cameraTipo = val('camera_tipo');
+            puntoPartenza = val('punto_partenza'), puntoPartenzaAltro = val('punto_partenza_altro'),
+            cameraTipo = val('camera_tipo');
         if (!nome || !cognome || !email || !telefono || !nascita) return;
 
         if (errorEl) errorEl.hidden = true;
@@ -2436,6 +2428,10 @@ window.addEventListener('DOMContentLoaded', function(){
         }
         if (card.querySelector('[name="punto_partenza"]') && !puntoPartenza){
           if (errorEl){ errorEl.textContent = 'Seleziona il punto di partenza della navetta.'; errorEl.hidden = false; }
+          return;
+        }
+        if (puntoPartenza === 'altro' && !puntoPartenzaAltro){
+          if (errorEl){ errorEl.textContent = 'Specifica da quale città parti.'; errorEl.hidden = false; }
           return;
         }
 
@@ -2470,9 +2466,13 @@ window.addEventListener('DOMContentLoaded', function(){
           return;
         }
 
-        var pagamento = PAYMENT_TIERS[tier];
+        if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = 'Invio…'; }
 
-        if (submitBtn){ submitBtn.disabled = true; submitBtn.textContent = pagamento ? 'Reindirizzo al pagamento…' : 'Invio…'; }
+        if (!sb){
+          if (errorEl){ errorEl.textContent = 'Errore di connessione, riprova tra poco.'; errorEl.hidden = false; }
+          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
+          return;
+        }
 
         var payload = {
           tipo: tier,
@@ -2488,34 +2488,8 @@ window.addEventListener('DOMContentLoaded', function(){
         if (numeroPersone) payload.numero_persone = numeroPersone;
         if (cameraTipo) payload.camera_tipo = cameraTipo;
         if (puntoPartenza) payload.punto_partenza = puntoPartenza;
+        if (puntoPartenza === 'altro' && puntoPartenzaAltro) payload.punto_partenza_altro = puntoPartenzaAltro;
         if (altriOspiti.length) payload.altri_ospiti = altriOspiti;
-
-        if (pagamento){
-          fetch(SUPABASE_URL + '/functions/v1/crea-pagamento-sumup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
-            body: JSON.stringify(payload)
-          }).then(function(res){
-            return res.json().then(function(data){ return { ok: res.ok, data: data }; });
-          }).then(function(result){
-            if (!result.ok || !result.data || !result.data.hosted_checkout_url){
-              if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
-              if (errorEl){ errorEl.textContent = (result.data && result.data.error) || 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
-              return;
-            }
-            window.location.href = result.data.hosted_checkout_url;
-          }, function(){
-            if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
-            if (errorEl){ errorEl.textContent = 'Si è verificato un errore, riprova tra poco.'; errorEl.hidden = false; }
-          });
-          return;
-        }
-
-        if (!sb){
-          if (errorEl){ errorEl.textContent = 'Errore di connessione, riprova tra poco.'; errorEl.hidden = false; }
-          if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }
-          return;
-        }
 
         sb.from('halloween_richieste').insert(payload).then(function(res){
           if (submitBtn){ submitBtn.disabled = false; submitBtn.textContent = submitLabel; }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Vota i costumi — QR · Halloween in Villa</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E0A14; --surface:#17101F; --line:rgba(255,255,255,0.09);
+  --ember:#FF7A33; --gold:#D8B66B; --bone:#ECE6DD; --muted:#9A91A8;
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  background:radial-gradient(ellipse 70% 60% at 50% 0%, rgba(255,122,51,0.16), transparent 60%), var(--ink);
+  color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; margin:0;
+  display:flex; align-items:center; justify-content:center; min-height:100vh; padding:32px 20px;
+  -webkit-font-smoothing:antialiased;
+}
+.card{ max-width:460px; width:100%; text-align:center; }
+.eyebrow{ font-size:12px; letter-spacing:0.26em; text-transform:uppercase; color:var(--ember); margin-bottom:16px; }
+h1{ font-family:'Fraunces', Georgia, serif; font-weight:600; font-size:clamp(1.8rem,5vw,2.6rem); line-height:1.15; margin:0 0 14px; color:var(--bone); text-wrap:balance; }
+h1 em{ font-style:italic; color:var(--ember); }
+.sub{ font-size:14.5px; color:var(--muted); line-height:1.6; max-width:38ch; margin:0 auto 32px; }
+.qr-box{ background:#fff; display:inline-block; padding:18px; border-radius:20px; box-shadow:0 30px 70px -25px rgba(0,0,0,0.6); }
+.qr-box img{ display:block; width:min(320px, 60vw); height:auto; }
+.link{ margin-top:26px; font-family:'JetBrains Mono'; font-size:12.5px; color:var(--gold); word-break:break-all; }
+.cats{ margin-top:30px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+.cats span{ font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:7px 14px; border:1px solid var(--line); border-radius:999px; color:var(--muted); }
+@media print{
+  body{ background:#fff; color:#000; }
+  .eyebrow, .sub, .link, .cats span{ color:#444 !important; }
+  h1 em{ color:#000; }
+  .qr-box{ box-shadow:none; border:1px solid #ccc; }
+}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">Contest Costumi</div>
+    <h1>Inquadra e <em>vota</em> il tuo costume preferito</h1>
+    <p class="sub">Singolo, coppia o gruppo — scansiona il QR, scegli i costumi che ti piacciono di più e vota direttamente dal telefono.</p>
+    <div class="qr-box">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=0&data=https%3A%2F%2Fwww.magaverse.it%2Fmagaparty%2Fconcorso-costumi.html%23vota" alt="QR code per votare i costumi">
+    </div>
+    <p class="link">magaverse.it/magaparty/concorso-costumi.html</p>
+    <div class="cats"><span>Singolo</span><span>Coppia</span><span>Gruppo</span></div>
+  </div>
+</body>
+</html>
