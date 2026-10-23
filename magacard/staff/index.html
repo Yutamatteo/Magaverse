@@ -138,6 +138,7 @@
       <button class="tab-btn hidden" id="tab-smistamento">Richieste</button>
       <button class="tab-btn hidden" id="tab-contanti">Contanti</button>
       <button class="tab-btn hidden" id="tab-postoriservato">Posto Riservato</button>
+      <button class="tab-btn hidden" id="tab-costumi">Concorso Costumi</button>
       <button class="tab-btn hidden" id="tab-registro">Registro</button>
     </div>
 
@@ -244,6 +245,25 @@
       <div id="lista-postoriservato" style="margin-top:12px;"></div>
     </div>
 
+    <!-- VISTA CONCORSO COSTUMI (ingresso/admin/superadmin): iscrizioni al
+         contest costumi Halloween (magaparty/concorso-costumi.html). Chi si
+         iscrive dal sito finisce qui "in attesa"; solo admin/superadmin
+         approvano o rifiutano (anche lato RLS) — solo dopo l'approvazione
+         la scheda appare pubblicamente ed è votabile. -->
+    <div id="vista-costumi" class="hidden">
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input class="mc-search" type="text" id="search-costumi" placeholder="Cerca per nome..." style="flex:1; margin-bottom:0;">
+        <select class="mc-select-evento mc-filtro-piccolo" id="filtro-stato-costumi" style="margin-bottom:0;">
+          <option value="in_attesa">Da approvare</option>
+          <option value="approvato">Approvati</option>
+          <option value="rifiutato">Rifiutati</option>
+          <option value="tutti">Tutti</option>
+        </select>
+      </div>
+      <p class="mc-sub" id="costumi-count" style="margin:12px 0 0;"></p>
+      <div id="lista-costumi" style="margin-top:12px;"></div>
+    </div>
+
     <!-- VISTA REGISTRO (solo superadmin): chi ha contattato cosa e quando -->
     <div id="vista-registro" class="hidden">
       <label for="select-evento-registro">Evento</label>
@@ -285,6 +305,7 @@
   const vistaSmistamento = document.getElementById('vista-smistamento');
   const vistaContanti = document.getElementById('vista-contanti');
   const vistaPostoRiservato = document.getElementById('vista-postoriservato');
+  const vistaCostumi = document.getElementById('vista-costumi');
   const vistaRegistro = document.getElementById('vista-registro');
   let prenotazioniCorrenti = [];
   let prenotazioniEventoTutte = [];
@@ -338,6 +359,7 @@
       document.getElementById('tab-smistamento').classList.remove('hidden');
       document.getElementById('tab-contanti').classList.remove('hidden');
       document.getElementById('tab-postoriservato').classList.remove('hidden');
+      document.getElementById('tab-costumi').classList.remove('hidden');
       avviaScanner();
     } else {
       // admin / superadmin: mostra la scelta postazione prima dello scanner
@@ -361,6 +383,7 @@
         document.getElementById('tab-smistamento').classList.remove('hidden');
         document.getElementById('tab-contanti').classList.remove('hidden');
         document.getElementById('tab-postoriservato').classList.remove('hidden');
+        document.getElementById('tab-costumi').classList.remove('hidden');
       }
       avviaScanner();
     });
@@ -375,6 +398,7 @@
     vistaSmistamento.classList.add('hidden');
     vistaContanti.classList.add('hidden');
     vistaPostoRiservato.classList.add('hidden');
+    vistaCostumi.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
@@ -383,6 +407,7 @@
     document.getElementById('tab-smistamento').classList.remove('active');
     document.getElementById('tab-contanti').classList.remove('active');
     document.getElementById('tab-postoriservato').classList.remove('active');
+    document.getElementById('tab-costumi').classList.remove('active');
     document.getElementById('tab-registro').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
@@ -400,7 +425,7 @@
   });
 
   // ============================== TABS (solo admin/superadmin) ==============================
-  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-postoriservato', 'tab-registro'];
+  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-postoriservato', 'tab-costumi', 'tab-registro'];
   function attivaSoloTab(idAttivo) {
     TUTTI_TAB_BTN.forEach(id => document.getElementById(id).classList.toggle('active', id === idAttivo));
   }
@@ -411,6 +436,7 @@
     vistaSmistamento.classList.add('hidden');
     vistaContanti.classList.add('hidden');
     vistaPostoRiservato.classList.add('hidden');
+    vistaCostumi.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
   }
 
@@ -459,6 +485,14 @@
     vistaPostoRiservato.classList.remove('hidden');
     await fermaScanner();
     caricaPostoRiservato();
+  });
+
+  document.getElementById('tab-costumi').addEventListener('click', async () => {
+    attivaSoloTab('tab-costumi');
+    nascondiTutteLeViste();
+    vistaCostumi.classList.remove('hidden');
+    await fermaScanner();
+    caricaCostumi();
   });
 
   document.getElementById('tab-registro').addEventListener('click', async () => {
@@ -1552,6 +1586,93 @@ Lì trovi anche la planimetria della villa, piano per piano.
   }
 
   document.getElementById('search-postoriservato').addEventListener('input', applicaFiltroPostoRiservato);
+
+  // ============================== CONCORSO COSTUMI (ingresso/admin/superadmin) ==============================
+  // Iscrizioni dal form pubblico (magaparty/concorso-costumi.html): ogni
+  // scheda nasce "in_attesa". Tutto lo staff con questa scheda vede
+  // l'elenco (comprese le foto, per controllare prima che vadano online);
+  // solo admin/superadmin possono approvare/rifiutare (anche lato RLS).
+  // Il voto pubblico è visibile solo per le schede "approvato".
+  const STORAGE_COSTUMI_URL = SUPABASE_URL + '/storage/v1/object/public/contest-costumi/';
+  let costumiTutti = [];
+
+  async function caricaCostumi() {
+    const lista = document.getElementById('lista-costumi');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data, error } = await sb
+      .from('contest_costumi')
+      .select('id, nome_partecipante, categoria, descrizione, instagram, telefono, email, foto_path, stato, created_at, contest_voti(count)')
+      .order('created_at', { ascending: false });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    costumiTutti = data;
+    applicaFiltroCostumi();
+  }
+
+  function applicaFiltroCostumi() {
+    const q = document.getElementById('search-costumi').value.trim().toLowerCase();
+    const filtroStato = document.getElementById('filtro-stato-costumi').value;
+    let filtrati = filtroStato === 'tutti' ? costumiTutti : costumiTutti.filter(r => r.stato === filtroStato);
+    if (q) filtrati = filtrati.filter(r => `${r.nome_partecipante}`.toLowerCase().includes(q));
+    disegnaCostumi(filtrati);
+  }
+
+  function statoChipCostumi(stato) {
+    if (stato === 'approvato') return '<span class="chip-stato confermato">Approvato · online</span>';
+    if (stato === 'rifiutato') return '<span class="chip-stato" style="background:rgba(255,122,147,0.14); color:#FF7A93;">Rifiutato</span>';
+    return '<span class="chip-stato in-attesa">Da approvare</span>';
+  }
+
+  const CATEGORIA_LABEL_COSTUMI = { singolo: 'Singolo', coppia: 'Coppia', gruppo: 'Gruppo' };
+
+  function disegnaCostumi(items) {
+    const lista = document.getElementById('lista-costumi');
+    document.getElementById('costumi-count').textContent =
+      `${items.length} iscrizion${items.length === 1 ? 'e' : 'i'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessuna iscrizione trovata.</div>';
+      return;
+    }
+    const puoModerare = ruolo === 'admin' || ruolo === 'superadmin';
+    lista.innerHTML = items.map(r => {
+      const voti = (r.contest_voti && r.contest_voti[0] && r.contest_voti[0].count) || 0;
+      return `
+      <div class="mc-row" data-id="${r.id}" style="align-items:flex-start;">
+        <img src="${STORAGE_COSTUMI_URL}${r.foto_path}" alt="" loading="lazy"
+          style="width:56px; height:56px; border-radius:10px; object-fit:cover; flex-shrink:0; margin-right:12px; background:rgba(255,255,255,0.05);">
+        <div class="info">
+          <b>${r.nome_partecipante}</b>${statoChipCostumi(r.stato)}
+          <span>${CATEGORIA_LABEL_COSTUMI[r.categoria] || r.categoria} · ${voti} vot${voti === 1 ? 'o' : 'i'}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
+          ${r.descrizione ? `<span>${r.descrizione}</span>` : ''}
+          ${(r.telefono || r.email) ? `<span>${r.telefono || '—'} · ${r.email || '—'}</span>` : ''}
+        </div>
+        ${puoModerare ? `
+        <div class="contanti-azioni">
+          ${r.stato !== 'approvato' ? `<button class="btn-confirm" onclick="approvaCostume('${r.id}')">Approva</button>` : ''}
+          ${r.stato !== 'rifiutato' ? `<button class="btn-ghost" onclick="rifiutaCostume('${r.id}')">Rifiuta</button>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+    }).join('');
+  }
+
+  document.getElementById('search-costumi').addEventListener('input', applicaFiltroCostumi);
+  document.getElementById('filtro-stato-costumi').addEventListener('change', applicaFiltroCostumi);
+
+  window.approvaCostume = async (id) => {
+    const { error } = await sb.from('contest_costumi').update({ stato: 'approvato', moderato_il: new Date().toISOString() }).eq('id', id);
+    if (error) { alert('Errore: ' + error.message); return; }
+    caricaCostumi();
+  };
+
+  window.rifiutaCostume = async (id) => {
+    if (!confirm('Rifiutare questa iscrizione? Non apparirà più pubblicamente.')) return;
+    const { error } = await sb.from('contest_costumi').update({ stato: 'rifiutato', moderato_il: new Date().toISOString() }).eq('id', id);
+    if (error) { alert('Errore: ' + error.message); return; }
+    caricaCostumi();
+  };
 
   // ============================== REGISTRO CONTATTI (solo superadmin) ==============================
   const selectEventoRegistro = document.getElementById('select-evento-registro');
