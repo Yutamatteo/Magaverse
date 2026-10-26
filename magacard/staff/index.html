@@ -90,6 +90,14 @@
 
   .mc-row .azioni { display:flex; gap:8px; }
   .mc-row .azioni button { width:auto; margin:0; padding:9px 14px; font-size:12px; }
+
+  #vista-messaggi textarea, #vista-messaggi input[type=text] {
+    width:100%; box-sizing:border-box; padding:13px 14px; border-radius:12px; border:1px solid var(--mc-border);
+    background:#0F0A17; color:var(--mc-text); font-size:14px; font-family:inherit; margin-bottom:10px;
+  }
+  #vista-messaggi textarea { resize:vertical; line-height:1.5; }
+  #vista-messaggi textarea:focus, #vista-messaggi input[type=text]:focus { outline:none; border-color: var(--mc-magenta); }
+  #vista-messaggi .mc-hint-piccolo { color: var(--mc-muted); font-size:12px; line-height:1.5; margin:-4px 0 14px; }
 </style>
 </head>
 <body>
@@ -139,6 +147,7 @@
       <button class="tab-btn hidden" id="tab-contanti">Contanti</button>
       <button class="tab-btn hidden" id="tab-postoriservato">Posto Riservato</button>
       <button class="tab-btn hidden" id="tab-costumi">Concorso Costumi</button>
+      <button class="tab-btn hidden" id="tab-messaggi">Messaggi</button>
       <button class="tab-btn hidden" id="tab-registro">Registro</button>
     </div>
 
@@ -264,6 +273,27 @@
       <div id="lista-costumi" style="margin-top:12px;"></div>
     </div>
 
+    <!-- VISTA MESSAGGI (admin/superadmin): messaggi personalizzati a tutti i
+         clienti storici di clienti_magaparty (non solo Halloween), via
+         WhatsApp o email. Nessun invio automatico e nessun servizio terzo
+         (Resend ecc.): ogni pulsante apre WhatsApp o il client di posta
+         già con il testo compilato, pronto per essere rivisto e inviato
+         manualmente dallo staff. -->
+    <div id="vista-messaggi" class="hidden">
+      <div class="sezione" style="margin-top:0; padding-top:0; border-top:none;">
+        <h2>Messaggio</h2>
+        <input type="text" id="messaggi-oggetto" placeholder="Oggetto email (facoltativo, solo per email)">
+        <textarea id="messaggi-testo" rows="5" placeholder="Es: Ciao {nome}! Ti scriviamo da Magaparty..."></textarea>
+        <p class="mc-hint-piccolo">Usa <b>{nome}</b> nel testo per inserire il nome del cliente. Nessun invio automatico: i pulsanti aprono WhatsApp o l'app email già compilati, da rivedere e inviare tu.</p>
+      </div>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <input class="mc-search" type="text" id="search-messaggi" placeholder="Cerca per nome, email, telefono o gruppo..." style="flex:1; margin-bottom:0;">
+        <button class="btn-ghost" id="btn-esporta-excel-clienti" style="width:auto; margin:0; padding:12px 16px; white-space:nowrap;">Esporta Excel</button>
+      </div>
+      <p class="mc-sub" id="messaggi-count" style="margin:12px 0 0;"></p>
+      <div id="lista-messaggi" style="margin-top:12px;"></div>
+    </div>
+
     <!-- VISTA REGISTRO (solo superadmin): chi ha contattato cosa e quando -->
     <div id="vista-registro" class="hidden">
       <label for="select-evento-registro">Evento</label>
@@ -306,6 +336,7 @@
   const vistaContanti = document.getElementById('vista-contanti');
   const vistaPostoRiservato = document.getElementById('vista-postoriservato');
   const vistaCostumi = document.getElementById('vista-costumi');
+  const vistaMessaggi = document.getElementById('vista-messaggi');
   const vistaRegistro = document.getElementById('vista-registro');
   let prenotazioniCorrenti = [];
   let prenotazioniEventoTutte = [];
@@ -384,6 +415,7 @@
         document.getElementById('tab-contanti').classList.remove('hidden');
         document.getElementById('tab-postoriservato').classList.remove('hidden');
         document.getElementById('tab-costumi').classList.remove('hidden');
+        document.getElementById('tab-messaggi').classList.remove('hidden');
       }
       avviaScanner();
     });
@@ -399,6 +431,7 @@
     vistaContanti.classList.add('hidden');
     vistaPostoRiservato.classList.add('hidden');
     vistaCostumi.classList.add('hidden');
+    vistaMessaggi.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
     vistaScanner.classList.remove('hidden');
     document.getElementById('tab-scanner').classList.add('active');
@@ -408,6 +441,7 @@
     document.getElementById('tab-contanti').classList.remove('active');
     document.getElementById('tab-postoriservato').classList.remove('active');
     document.getElementById('tab-costumi').classList.remove('active');
+    document.getElementById('tab-messaggi').classList.remove('active');
     document.getElementById('tab-registro').classList.remove('active');
     resultArea.classList.add('hidden');
     scanArea.classList.remove('hidden');
@@ -425,7 +459,7 @@
   });
 
   // ============================== TABS (solo admin/superadmin) ==============================
-  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-postoriservato', 'tab-costumi', 'tab-registro'];
+  const TUTTI_TAB_BTN = ['tab-scanner', 'tab-gestione', 'tab-prenotazioni', 'tab-smistamento', 'tab-contanti', 'tab-postoriservato', 'tab-costumi', 'tab-messaggi', 'tab-registro'];
   function attivaSoloTab(idAttivo) {
     TUTTI_TAB_BTN.forEach(id => document.getElementById(id).classList.toggle('active', id === idAttivo));
   }
@@ -437,6 +471,7 @@
     vistaContanti.classList.add('hidden');
     vistaPostoRiservato.classList.add('hidden');
     vistaCostumi.classList.add('hidden');
+    vistaMessaggi.classList.add('hidden');
     vistaRegistro.classList.add('hidden');
   }
 
@@ -493,6 +528,14 @@
     vistaCostumi.classList.remove('hidden');
     await fermaScanner();
     caricaCostumi();
+  });
+
+  document.getElementById('tab-messaggi').addEventListener('click', async () => {
+    attivaSoloTab('tab-messaggi');
+    nascondiTutteLeViste();
+    vistaMessaggi.classList.remove('hidden');
+    await fermaScanner();
+    caricaMessaggiClienti();
   });
 
   document.getElementById('tab-registro').addEventListener('click', async () => {
@@ -1278,6 +1321,12 @@ Lì trovi anche la planimetria della villa, piano per piano.
     const h = (handle || '').trim().replace(/^@/, '');
     return `https://instagram.com/${encodeURIComponent(h)}`;
   }
+  function linkEmail(email, oggetto, corpo) {
+    const parti = [];
+    if (oggetto) parti.push('subject=' + encodeURIComponent(oggetto));
+    if (corpo) parti.push('body=' + encodeURIComponent(corpo));
+    return `mailto:${email}${parti.length ? '?' + parti.join('&') : ''}`;
+  }
 
   async function caricaContattiEvento(evento) {
     const { data, error } = await sb.rpc('richieste_contattate', { p_evento: evento });
@@ -1673,6 +1722,114 @@ Lì trovi anche la planimetria della villa, piano per piano.
     if (error) { alert('Errore: ' + error.message); return; }
     caricaCostumi();
   };
+
+  // ============================== MESSAGGI (admin/superadmin) ==============================
+  // Rubrica completa di clienti_magaparty (tutto lo storico, non solo
+  // Halloween): un box messaggio con placeholder {nome} e, per ogni
+  // cliente, un pulsante WhatsApp e uno Email che aprono WhatsApp/il
+  // client di posta già con il testo compilato — nessun invio automatico,
+  // nessun servizio terzo. "Esporta Excel" scarica la stessa rubrica
+  // (eventualmente filtrata dalla ricerca) in un file .xlsx.
+  let clientiMessaggiTutti = [];
+  let clientiMessaggiById = {};
+
+  async function caricaMessaggiClienti() {
+    const lista = document.getElementById('lista-messaggi');
+    lista.innerHTML = '<div class="mc-empty">Caricamento...</div>';
+    const { data, error } = await sb
+      .from('clienti_magaparty')
+      .select('id, nome, telefono, email, instagram, gruppo, n_feste, come_conosciuto, note, created_at')
+      .order('nome', { ascending: true });
+    if (error) {
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      return;
+    }
+    clientiMessaggiTutti = data;
+    clientiMessaggiById = {};
+    data.forEach(c => { clientiMessaggiById[c.id] = c; });
+    applicaFiltroMessaggi();
+  }
+
+  function applicaFiltroMessaggi() {
+    const q = document.getElementById('search-messaggi').value.trim().toLowerCase();
+    const filtrati = q
+      ? clientiMessaggiTutti.filter(c => `${c.nome} ${c.telefono} ${c.email} ${c.gruppo || ''}`.toLowerCase().includes(q))
+      : clientiMessaggiTutti;
+    disegnaMessaggi(filtrati);
+  }
+
+  function disegnaMessaggi(items) {
+    const lista = document.getElementById('lista-messaggi');
+    document.getElementById('messaggi-count').textContent =
+      `${items.length} client${items.length === 1 ? 'e' : 'i'}`;
+    if (items.length === 0) {
+      lista.innerHTML = '<div class="mc-empty">Nessun cliente trovato.</div>';
+      return;
+    }
+    lista.innerHTML = items.map(c => `
+      <div class="mc-row">
+        <div class="info">
+          <b>${c.nome || '—'}</b>
+          <span>${c.telefono || '—'} · ${c.email || '—'}</span>
+          ${c.gruppo ? `<span>Gruppo: ${c.gruppo}</span>` : ''}
+        </div>
+        <div class="azioni">
+          ${c.telefono ? `<button class="btn-confirm" onclick="apriMessaggioWhatsapp('${c.id}')">WhatsApp</button>` : ''}
+          ${c.email ? `<button class="btn-ghost" onclick="apriMessaggioEmail('${c.id}')">Email</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function personalizzaMessaggio(testo, cliente) {
+    return (testo || '').replaceAll('{nome}', cliente.nome || '');
+  }
+
+  window.apriMessaggioWhatsapp = (id) => {
+    const c = clientiMessaggiById[id];
+    if (!c || !c.telefono) return;
+    const testo = personalizzaMessaggio(document.getElementById('messaggi-testo').value, c);
+    if (!testo.trim()) { alert('Scrivi prima il testo del messaggio.'); return; }
+    window.open(linkWhatsapp(c.telefono, testo), '_blank');
+  };
+
+  window.apriMessaggioEmail = (id) => {
+    const c = clientiMessaggiById[id];
+    if (!c || !c.email) return;
+    const testo = personalizzaMessaggio(document.getElementById('messaggi-testo').value, c);
+    if (!testo.trim()) { alert('Scrivi prima il testo del messaggio.'); return; }
+    const oggetto = document.getElementById('messaggi-oggetto').value.trim();
+    window.open(linkEmail(c.email, oggetto, testo), '_blank');
+  };
+
+  document.getElementById('search-messaggi').addEventListener('input', applicaFiltroMessaggi);
+
+  document.getElementById('btn-esporta-excel-clienti').addEventListener('click', () => {
+    const q = document.getElementById('search-messaggi').value.trim().toLowerCase();
+    const items = q
+      ? clientiMessaggiTutti.filter(c => `${c.nome} ${c.telefono} ${c.email} ${c.gruppo || ''}`.toLowerCase().includes(q))
+      : clientiMessaggiTutti;
+    if (items.length === 0) {
+      alert('Nessun cliente da esportare.');
+      return;
+    }
+    const righe = items.map(c => ({
+      'ID': c.id,
+      'Nome': c.nome || '',
+      'Telefono': c.telefono || '',
+      'Email': c.email || '',
+      'Instagram': c.instagram || '',
+      'Gruppo': c.gruppo || '',
+      'N. feste': c.n_feste ?? '',
+      'Come conosciuto': c.come_conosciuto || '',
+      'Note': c.note || '',
+      'Creato il': c.created_at ? new Date(c.created_at).toLocaleString('it-IT') : '',
+    }));
+    const ws = XLSX.utils.json_to_sheet(righe);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Clienti Magaparty');
+    XLSX.writeFile(wb, `clienti-magaparty-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  });
 
   // ============================== REGISTRO CONTATTI (solo superadmin) ==============================
   const selectEventoRegistro = document.getElementById('select-evento-registro');
