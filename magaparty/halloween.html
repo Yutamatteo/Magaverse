@@ -782,7 +782,7 @@ img{max-width:100%;}
       <span class="section-label">Saltafila</span>
       <h3>Chi non vuole fare la fila al bar</h3>
       <p>Non è per entrare prima: è per non perdere tempo al bancone. Con il bracciale saltafila hai una linea dedicata per ordinare da bere, così torni subito in pista.</p>
-      <div class="l3-chips"><span class="l3-chip">€15 fino al 22/10, poi €25</span><span class="l3-chip">Posti limitati</span></div>
+      <div class="l3-chips"><span class="l3-chip">€15</span><span class="l3-chip">Posti limitati</span></div>
     </article>
 
   </div>
@@ -2276,27 +2276,9 @@ window.addEventListener('DOMContentLoaded', function(){
     prima: primaReleaseAttiva ? 'https://www.postoriservato.it/biglietti/american-halloween-zombie-apocalypse-31-ottobre-2026-magazzeno-pontecagnano-pontecagnano-34106.html' : ''
   };
 
-  /* Cambio prezzi automatico dal 22 ottobre 2026 per saltafila, navetta
-     e le 3 soluzioni "dove dormire": nessuna indicazione visibile che
-     si tratti di un aumento, il prezzo in pagina cambia e basta. */
-  var EXTRA_PREZZI_FROM = new Date('2026-10-22T00:00:00+02:00');
-  if (Date.now() >= EXTRA_PREZZI_FROM.getTime()){
-    var EXTRA_PREZZI = {
-      saltafila: '€25',
-      navetta: '€70',
-      'appartamenti-vip': '€100',
-      'villa-belvedere': '€90',
-      'lido-azzurro': '€80'
-    };
-    Object.keys(EXTRA_PREZZI).forEach(function(tier){
-      var card = document.querySelector('.ticket-card[data-tier="' + tier + '"]');
-      var priceEl = card ? card.querySelector('.price') : null;
-      if (!priceEl) return;
-      var note = priceEl.querySelector('.price-note');
-      priceEl.textContent = EXTRA_PREZZI[tier] + ' ';
-      if (note) priceEl.appendChild(note);
-    });
-  }
+  /* Aumento prezzi automatico dal 22/10 per saltafila, navetta e le 3
+     soluzioni "dove dormire" rimosso su richiesta di Matteo (26/10):
+     i prezzi restano quelli base indicati staticamente in pagina. */
 
   /* Evento: 31 ottobre 2026 — l'età minima si valuta a questa data,
      non a oggi, così chi compie 18 anni a ridosso della festa non
