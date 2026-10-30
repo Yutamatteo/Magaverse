@@ -237,7 +237,15 @@
          cliente e confermano il pagamento: solo allora il QR già inviato
          via email diventa scansionabile all'ingresso. -->
     <div id="vista-contanti" class="hidden">
-      <input class="mc-search" type="text" id="search-contanti" placeholder="Cerca per nome, cognome o telefono...">
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <input class="mc-search" type="text" id="search-contanti" placeholder="Cerca per nome, cognome o telefono..." style="flex:1; margin-bottom:0;">
+        <select class="mc-select-evento mc-filtro-piccolo" id="filtro-stato-contanti" style="margin-bottom:0;">
+          <option value="tutti">Tutti</option>
+          <option value="non_pagato">Non pagato</option>
+          <option value="pagato">Pagato</option>
+        </select>
+        <button class="btn-ghost" id="btn-esporta-excel-contanti" style="width:auto; margin:0; padding:12px 16px; white-space:nowrap;">Esporta Excel</button>
+      </div>
       <p class="mc-sub" id="contanti-count" style="margin:12px 0 0;"></p>
       <div id="lista-contanti" style="margin-top:12px;"></div>
     </div>
@@ -1507,12 +1515,19 @@ Lì trovi anche la planimetria della villa, piano per piano.
     applicaFiltroContanti();
   }
 
-  function applicaFiltroContanti() {
+  function filtraContanti() {
     const q = document.getElementById('search-contanti').value.trim().toLowerCase();
-    const filtrati = q
+    const stato = document.getElementById('filtro-stato-contanti').value;
+    let filtrati = q
       ? contantiTutti.filter(r => `${r.nome} ${r.cognome} ${r.telefono}`.toLowerCase().includes(q))
       : contantiTutti;
-    disegnaContanti(filtrati);
+    if (stato === 'non_pagato') filtrati = filtrati.filter(r => r.stato === 'in_attesa');
+    else if (stato === 'pagato') filtrati = filtrati.filter(r => r.stato === 'confermato' || r.stato === 'usato');
+    return filtrati;
+  }
+
+  function applicaFiltroContanti() {
+    disegnaContanti(filtraContanti());
   }
 
   function disegnaContanti(items) {
@@ -1546,6 +1561,30 @@ Lì trovi anche la planimetria della villa, piano per piano.
   }
 
   document.getElementById('search-contanti').addEventListener('input', applicaFiltroContanti);
+  document.getElementById('filtro-stato-contanti').addEventListener('change', applicaFiltroContanti);
+
+  document.getElementById('btn-esporta-excel-contanti').addEventListener('click', () => {
+    const items = filtraContanti();
+    if (items.length === 0) {
+      alert('Nessuna richiesta da esportare.');
+      return;
+    }
+    const righe = items.map(r => ({
+      'Nome': r.nome,
+      'Cognome': r.cognome,
+      'Telefono': r.telefono || '',
+      'Email': r.email || '',
+      'Data di nascita': r.data_nascita || '',
+      'Instagram': r.instagram || '',
+      'Stato': r.stato === 'in_attesa' ? 'Non pagato' : (r.stato === 'confermato' ? 'Pagato · QR attivo' : 'Pagato · ingresso effettuato'),
+      'Prezzo (€)': r.prezzo != null ? r.prezzo : '',
+      'Data richiesta': new Date(r.created_at).toLocaleString('it-IT'),
+    }));
+    const ws = XLSX.utils.json_to_sheet(righe);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Contanti');
+    XLSX.writeFile(wb, `contanti-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  });
 
   // Salva solo il prezzo, senza toccare lo stato: utile per fissare/
   // correggere l'importo accordato col cliente prima di confermare
