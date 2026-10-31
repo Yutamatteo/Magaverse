@@ -982,21 +982,21 @@
     tardeo: {
       label: 'Tardeo',
       tabella: 'tardeo_prenotazioni',
-      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, stato, data_evento, created_at',
+      colonne: 'id, nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, stato, data_evento, created_at',
       extra: () => [],
       extraExcel: () => ({}),
     },
     ultima_onda: {
       label: 'Ultima Onda',
       tabella: 'ultima_onda_prenotazioni',
-      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, interesse_sup, stato, data_evento, created_at',
+      colonne: 'id, nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, interesse_sup, stato, data_evento, created_at',
       extra: (r) => [r.interesse_sup ? '🏄 Interesse SUP' : null],
       extraExcel: (r) => ({ 'Interesse SUP': r.interesse_sup ? 'Sì' : 'No' }),
     },
     battigia: {
       label: 'Battigia',
       tabella: 'battigia_prenotazioni',
-      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, numero_persone, stato, data_evento, created_at',
+      colonne: 'id, nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, numero_persone, stato, data_evento, created_at',
       extra: (r) => [
         BATTIGIA_OPZIONE_LABEL[r.opzione] || r.opzione,
         r.opzione === 'tavolo' && r.numero_persone ? `${r.numero_persone} persone` : null,
@@ -1006,10 +1006,21 @@
     marea: {
       label: 'Marea',
       tabella: 'marea_prenotazioni',
-      colonne: 'nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, stato, data_evento, created_at',
+      colonne: 'id, nome_capogruppo, telefono, email, instagram, chi_ti_ha_invitato, sesso, sesso_altro, opzione, stato, data_evento, created_at',
       extra: (r) => [MAREA_OPZIONE_LABEL[r.opzione] || r.opzione],
       extraExcel: (r) => ({ 'Opzione': MAREA_OPZIONE_LABEL[r.opzione] || r.opzione }),
     },
+  };
+
+  // Funzione DB da chiamare per il check-in manuale, una per evento —
+  // ciascuna applica le stesse regole della scansione QR equivalente
+  // (autorizzazione per ruolo, finestra oraria dove prevista, stato
+  // già "usato"/"annullata") ma identifica la prenotazione per id.
+  const RPC_CHECKIN_MANUALE_PREN = {
+    tardeo: 'checkin_manuale_tardeo',
+    ultima_onda: 'checkin_manuale_ultima_onda',
+    battigia: 'checkin_manuale_battigia',
+    marea: 'checkin_manuale_marea',
   };
 
   let eventoPrenotazioniAttivo = 'tardeo';
@@ -1118,15 +1129,51 @@
       return;
     }
     lista.innerHTML = items.map(r => `
-      <div class="mc-row">
+      <div class="mc-row" data-id="${r.id}">
         <div class="info">
           <b>${r.nome_capogruppo}</b>
           <span>${r.telefono} · ${r.email}</span>
           <span>${scelteLabelPren(r)}</span>
         </div>
+        ${r.stato !== 'usato' && r.stato !== 'annullata' ? `
+        <div class="azioni">
+          <button class="btn-confirm" onclick="checkinManualePrenotazione('${r.id}')">Check-in manuale</button>
+        </div>` : ''}
       </div>
     `).join('');
   }
+
+  // Check-in manuale: come allo scanner, ma scegliendo la persona dalla
+  // lista invece di inquadrarne il QR — per chi non riesce a mostrarlo.
+  // Usa la funzione DB dedicata all'evento attivo, che applica le stesse
+  // regole della scansione (ruolo, finestra oraria, stato già "usato").
+  window.checkinManualePrenotazione = async (id) => {
+    if (!confirm('Confermi il check-in manuale? Il QR risulterà già usato, come se fosse stato scansionato.')) return;
+    const rpcName = RPC_CHECKIN_MANUALE_PREN[eventoPrenotazioniAttivo];
+    const { data, error } = await sb.rpc(rpcName, { p_id: id });
+    if (error) {
+      alert('Errore nel check-in: ' + error.message);
+      return;
+    }
+    const r = data?.[0];
+    const esito = r?.esito;
+    if (esito === 'ok') {
+      alert(`✓ Check-in effettuato: ${r.nome_capogruppo}.`);
+    } else if (esito === 'gia_usato') {
+      alert(`⚠️ Ingresso già effettuato in precedenza per ${r.nome_capogruppo}.`);
+    } else if (esito === 'annullata') {
+      alert('Questa prenotazione è annullata: non è possibile fare il check-in.');
+    } else if (esito === 'non_ancora_valido') {
+      alert('Non è ancora l\'orario valido per questo evento.');
+    } else if (esito === 'scaduto') {
+      alert('La finestra valida per questo evento è scaduta.');
+    } else if (esito === 'non_autorizzato') {
+      alert('Il tuo account non può effettuare check-in manuali.');
+    } else {
+      alert('Prenotazione non trovata.');
+    }
+    caricaPrenotazioni();
+  };
 
   document.getElementById('search-prenotazioni').addEventListener('input', (e) => {
     const q = e.target.value.toLowerCase();
@@ -1540,7 +1587,10 @@ Lì trovi anche la planimetria della villa, piano per piano.
     }
     // Tutto lo staff con questa scheda (ingresso/admin/superadmin) vede
     // l'elenco e il prezzo; solo admin/superadmin possono impostarlo e
-    // confermare il pagamento (anche lato RLS, non solo qui in UI).
+    // confermare il pagamento (anche lato RLS, non solo qui in UI). Il
+    // check-in manuale invece (segnare l'ingresso senza scansionare il QR,
+    // es. QR smarrito o telefono scarico) è concesso anche a ingresso, come
+    // allo scanner: lo autorizza la funzione checkin_manuale_contanti lato DB.
     const puoModificare = ruolo === 'admin' || ruolo === 'superadmin';
     lista.innerHTML = items.map(r => `
       <div class="mc-row" data-id="${r.id}">
@@ -1550,11 +1600,14 @@ Lì trovi anche la planimetria della villa, piano per piano.
           <span>Nata/o il ${formatDataContanti(r.data_nascita)}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
           ${!puoModificare && r.prezzo != null ? `<span>Prezzo: €${r.prezzo}</span>` : ''}
         </div>
-        ${puoModificare ? `
+        ${puoModificare || r.stato === 'confermato' ? `
         <div class="contanti-azioni">
+          ${puoModificare ? `
           <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${r.id}" value="${r.prezzo != null ? r.prezzo : ''}">
           <button class="btn-ghost" onclick="salvaPrezzoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Salva prezzo' : 'Aggiorna prezzo'}</button>
           ${r.stato === 'in_attesa' ? `<button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">Conferma pagamento</button>` : ''}
+          ` : ''}
+          ${r.stato === 'confermato' ? `<button class="btn-confirm" onclick="checkinManualeContanti('${r.id}')">Check-in manuale</button>` : ''}
         </div>` : ''}
       </div>
     `).join('');
@@ -1617,6 +1670,35 @@ Lì trovi anche la planimetria della villa, piano per piano.
     if (error) {
       alert('Errore nella conferma: ' + error.message);
       return;
+    }
+    caricaContanti();
+  };
+
+  // Check-in manuale: come la scansione del QR, ma scelto dalla lista invece
+  // che inquadrando il codice — per chi ha pagato ma non riesce a mostrare
+  // il QR (telefono scarico, email non trovata, ecc.). Passa dalla funzione
+  // DB checkin_manuale_contanti, che applica le stesse regole della
+  // scansione (autorizzazione per ruolo, stato già "usato", ecc.) e segna
+  // l'ingresso allo stesso modo.
+  window.checkinManualeContanti = async (id) => {
+    if (!confirm('Confermi il check-in manuale? Il QR risulterà già usato, come se fosse stato scansionato.')) return;
+    const { data, error } = await sb.rpc('checkin_manuale_contanti', { p_id: id });
+    if (error) {
+      alert('Errore nel check-in: ' + error.message);
+      return;
+    }
+    const r = data?.[0];
+    const esito = r?.esito;
+    if (esito === 'ok') {
+      alert(`✓ Check-in effettuato: ${r.nome} ${r.cognome}.`);
+    } else if (esito === 'gia_usato') {
+      alert(`⚠️ Ingresso già effettuato in precedenza per ${r.nome} ${r.cognome}.`);
+    } else if (esito === 'non_pagato') {
+      alert('Il pagamento non risulta ancora confermato: non puoi fare il check-in.');
+    } else if (esito === 'non_autorizzato') {
+      alert('Il tuo account non può effettuare check-in manuali.');
+    } else {
+      alert('Richiesta non trovata.');
     }
     caricaContanti();
   };
