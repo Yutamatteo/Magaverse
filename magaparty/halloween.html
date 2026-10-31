@@ -2507,5 +2507,47 @@ window.addEventListener('DOMContentLoaded', function(){
   });
 })();
 </script>
+
+<script>
+(function(){
+  'use strict';
+  /* SOLD OUT generale (30/10): su richiesta di Matteo restano "sold" tutte
+     le fasce biglietto/extra/alloggi tranne la Terza Release (€55), che
+     resta l'unica disponibile e passa da form a contatto diretto WhatsApp
+     per l'acquisto. Questo blocco gira per ultimo e sovrascrive qualunque
+     stato impostato sopra (incl. l'auto-apertura della Prima Release). */
+  var WHATSAPP_NUMBER = '393927710510';
+  var WHATSAPP_MESSAGE = 'Ciao! Sarei interessato/a ad acquistare i biglietti per Halloween in Villa, la serata del 31 ottobre 🎃';
+  var waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
+
+  document.querySelectorAll('.ticket-card').forEach(function(card){
+    if (card.dataset.tier === 'terza') return;
+    card.dataset.state = 'sold';
+    var desc = card.querySelector('p');
+    if (desc) desc.textContent = 'Esaurito.';
+  });
+
+  var terza = document.querySelector('.ticket-card[data-tier="terza"]');
+  if (terza){
+    terza.dataset.state = 'open';
+    var terzaDesc = terza.querySelector('p');
+    if (terzaDesc) terzaDesc.textContent = 'Ultimi posti disponibili: scrivici direttamente su WhatsApp per acquistare il biglietto.';
+    var toggleBtn = terza.querySelector('[data-action="toggle-form"]');
+    if (toggleBtn) toggleBtn.remove();
+    var form = terza.querySelector('.ticket-form');
+    if (form) form.remove();
+    var success = terza.querySelector('.ticket-success');
+    if (success) success.remove();
+    var buyLink = terza.querySelector('.ticket-buy');
+    if (buyLink){
+      buyLink.href = waLink;
+      buyLink.target = '_blank';
+      buyLink.rel = 'noopener';
+      buyLink.hidden = false;
+      buyLink.textContent = 'Scrivici su WhatsApp →';
+    }
+  }
+})();
+</script>
 </body>
 </html>
