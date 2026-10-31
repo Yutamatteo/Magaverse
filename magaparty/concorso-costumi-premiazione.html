@@ -127,6 +127,41 @@ p{margin:0;}
   .leader-votes{ justify-content:center; }
   .leader-photo{ width:280px; height:340px; }
 }
+
+/* ---------- REVEAL (classifica a step, dopo la chiusura votazioni) ---------- */
+.suspense{ display:flex; gap:11px; margin-top:30px; }
+.suspense span{ width:11px; height:11px; border-radius:50%; background:var(--ember); opacity:0.3; animation:suspensePulse 1.4s ease-in-out infinite; }
+.suspense span:nth-child(2){ animation-delay:.2s; }
+.suspense span:nth-child(3){ animation-delay:.4s; }
+@keyframes suspensePulse{ 0%,100%{opacity:.25; transform:scale(1);} 50%{opacity:1; transform:scale(1.3);} }
+
+.reveal-card{ display:flex; flex-direction:column; align-items:center; opacity:0; transform:scale(0.7) rotateY(10deg); }
+.slide.is-active .reveal-card{ animation: revealIn 1.1s cubic-bezier(.22,.95,.24,1) both; }
+@keyframes revealIn{
+  0%{ opacity:0; transform:scale(0.6) rotateY(20deg); filter:blur(8px); }
+  60%{ opacity:1; transform:scale(1.05) rotateY(-3deg); filter:blur(0); }
+  100%{ opacity:1; transform:scale(1) rotateY(0); }
+}
+
+.rank-chip{ display:inline-flex; align-items:center; gap:10px; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; padding:10px 20px; border-radius:999px; border:1px solid; font-weight:700; }
+.rank-chip.rank-3{ color:#C9975C; border-color:rgba(201,151,92,0.35); background:rgba(201,151,92,0.09); }
+.rank-chip.rank-2{ color:#C7CBD6; border-color:rgba(199,203,214,0.35); background:rgba(199,203,214,0.09); }
+.rank-chip.rank-1{ color:var(--gold); border-color:var(--gold-soft); background:var(--gold-soft); font-size:16px; box-shadow:0 0 30px rgba(216,182,107,0.25); }
+
+.reveal-photos{ display:flex; gap:22px; flex-wrap:wrap; justify-content:center; margin-top:28px; }
+.reveal-photo{ width:200px; height:250px; flex:none; border-radius:20px; overflow:hidden; background:var(--surface-2); border:2px solid var(--line); }
+.reveal-photo.is-winner-photo{ width:360px; height:450px; border-color:var(--gold-soft); box-shadow:0 40px 90px -20px rgba(0,0,0,.7), 0 0 0 10px rgba(216,182,107,.08); }
+.reveal-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+.reveal-names{ margin-top:24px; font-size:clamp(1.8rem,3.4vw,2.8rem); color:var(--bone); max-width:70ch; }
+.reveal-names.is-winner-name{ font-size:clamp(2.4rem,4.6vw,4rem); }
+.reveal-votes{ margin-top:16px; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.reveal-votes b{ color:var(--gold); font-size:22px; margin-right:7px; }
+
+@media (max-width: 980px){
+  .reveal-photo{ width:160px; height:200px; }
+  .reveal-photo.is-winner-photo{ width:260px; height:320px; }
+}
 </style>
 </head>
 <body>
@@ -203,6 +238,7 @@ p{margin:0;}
       vcLabel.textContent = 'Votazioni';
       vcTime.textContent = 'CHIUSE';
       voteClock.classList.add('is-closed');
+      if (typeof entraInModalitaReveal === 'function') entraInModalitaReveal();
       return;
     }
     voteClock.classList.remove('is-closed');
@@ -245,13 +281,14 @@ p{margin:0;}
   var dotsEl = document.getElementById('dots');
   var slideEls = [];
 
-  function buildSlides(){
-    var chiuse = votazioniChiuse();
+  /* Modalità "live" (votazioni ancora aperte): titolo + una slide per
+     categoria con chi è in testa in questo momento, in loop automatico. */
+  function buildSlidesLive(){
     var html = '' +
       '<div class="slide slide-title is-active" data-slide="0">' +
         '<div class="eyebrow">Halloween in Villa</div>' +
         '<h1 class="gothic">Concorso Costumi</h1>' +
-        '<p class="sub">' + (chiuse ? 'Le votazioni sono chiuse — ecco i vincitori.' : 'Il pubblico sta ancora votando: ecco chi è in testa, categoria per categoria.') + '</p>' +
+        '<p class="sub">Il pubblico sta ancora votando: ecco chi è in testa, categoria per categoria.</p>' +
       '</div>';
 
     CATEGORIES.forEach(function(cat, idx){
@@ -266,15 +303,13 @@ p{margin:0;}
           '</div>';
       } else {
         var c = res.leader;
-        var chipClass = chiuse ? 'status-chip is-winner' : 'status-chip';
-        var chipLabel = chiuse ? 'Vincitore' : 'In testa ora';
-        var tieHtml = (!chiuse && res.pariMerito > 0)
+        var tieHtml = (res.pariMerito > 0)
           ? '<p class="leader-tie">+' + res.pariMerito + ' a pari merito</p>' : '';
         html += '' +
           '<div class="leader">' +
             '<div class="leader-photo"><img src="' + fotoUrl(c.foto_path) + '" alt="Costume di ' + escapeHtml(c.nome_partecipante) + '"></div>' +
             '<div class="leader-info">' +
-              '<span class="' + chipClass + '"><span class="pulse"></span>' + chipLabel + '</span>' +
+              '<span class="status-chip"><span class="pulse"></span>In testa ora</span>' +
               '<h3 class="leader-name">' + escapeHtml(c.nome_partecipante) + '</h3>' +
               '<div class="leader-votes"><b class="mono">' + res.maxVoti + '</b><span>voti</span></div>' +
               tieHtml +
@@ -289,6 +324,100 @@ p{margin:0;}
 
     dotsEl.innerHTML = slideEls.map(function(_, i){
       return '<span class="d' + (i === slideIndex ? ' is-active' : '') + '" data-i="' + i + '"></span>';
+    }).join('');
+  }
+
+  /* ===================== REVEAL (votazioni chiuse) ===================== */
+  /* Classifica dei primi 3 "livelli" di voto per categoria (non le prime 3
+     persone: se più costumi sono a pari merito su un gradino, quel gradino
+     li contiene tutti). Esclude chi non ha ricevuto nemmeno un voto. */
+  function classificaPerCategoria(cat){
+    var items = currentData.filter(function(c){ return c.categoria === cat && (c.voti || 0) > 0; });
+    if (!items.length) return [];
+    var byVoti = {};
+    items.forEach(function(c){
+      var v = c.voti || 0;
+      (byVoti[v] = byVoti[v] || []).push(c);
+    });
+    var livelli = Object.keys(byVoti).map(Number).sort(function(a, b){ return b - a; });
+    return livelli.slice(0, 3).map(function(v, idx){
+      return { posto: idx + 1, voti: v, partecipanti: byVoti[v] };
+    });
+  }
+
+  var RANK_META = {
+    1: { label: 'Vincitore', chipClass: 'rank-chip rank-1', emoji: '🏆' },
+    2: { label: 'Secondo posto', chipClass: 'rank-chip rank-2', emoji: '🥈' },
+    3: { label: 'Terzo posto', chipClass: 'rank-chip rank-3', emoji: '🥉' }
+  };
+
+  function renderRankSlide(cat, piazzamento, slideIdx){
+    var meta = RANK_META[piazzamento.posto];
+    var isWinner = piazzamento.posto === 1;
+    var multi = piazzamento.partecipanti.length > 1;
+    var photosHtml = piazzamento.partecipanti.map(function(c){
+      return '<div class="reveal-photo' + (isWinner && !multi ? ' is-winner-photo' : '') + '"><img src="' + fotoUrl(c.foto_path) + '" alt="Costume di ' + escapeHtml(c.nome_partecipante) + '"></div>';
+    }).join('');
+    var nomi = piazzamento.partecipanti.map(function(c){ return escapeHtml(c.nome_partecipante); }).join(' · ');
+    return '' +
+      '<div class="slide" data-slide="' + slideIdx + '">' +
+        '<div class="cat-eyebrow">' + cat.label + '</div>' +
+        '<div class="reveal-card">' +
+          '<span class="' + meta.chipClass + '">' + meta.emoji + ' ' + meta.label + (multi ? ' · pari merito' : '') + '</span>' +
+          '<div class="reveal-photos">' + photosHtml + '</div>' +
+          '<h3 class="reveal-names' + (isWinner ? ' is-winner-name' : '') + '">' + nomi + '</h3>' +
+          '<div class="reveal-votes"><b class="mono">' + piazzamento.voti + '</b>voti</div>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Modalità "reveal" (votazioni chiuse): sequenza a step controllata a
+     mano dal presentatore — slide di chiusura, poi per ogni categoria una
+     slide di suspense e via via 3°/2°/1° posto (solo i gradini che
+     esistono davvero), infine i ringraziamenti. Nessun avanzamento
+     automatico: click/freccia per procedere, come allo scanner ingresso. */
+  function buildSlidesReveal(){
+    var html = '' +
+      '<div class="slide slide-title is-active" data-slide="0">' +
+        '<div class="eyebrow">Halloween in Villa</div>' +
+        '<h1 class="gothic">È il momento dei vincitori</h1>' +
+        '<p class="sub">Le votazioni sono chiuse. Scopriamo chi ha vinto, categoria per categoria.</p>' +
+      '</div>';
+
+    var idx = 1;
+    CATEGORIES.forEach(function(cat){
+      var classifica = classificaPerCategoria(cat.key);
+      html += '<div class="slide" data-slide="' + idx + '">' +
+        '<div class="cat-eyebrow">Categoria</div><h2 class="cat-title gothic">' + cat.label + '</h2>';
+      if (!classifica.length){
+        html += '<div class="empty-cat"><span class="glyph">✦</span><p>Nessun voto ricevuto in questa categoria.</p></div>';
+      } else {
+        html += '<p class="sub" style="margin-top:0;">Chi avrà vinto?</p><div class="suspense"><span></span><span></span><span></span></div>';
+      }
+      html += '</div>';
+      idx++;
+
+      /* Reveal in ordine 3° → 2° → 1°: la classifica è ordinata dal più
+         votato (posto 1) in giù, quindi la percorriamo al contrario. Se
+         esistono meno di 3 gradini (pochi voti/pari merito) semplicemente
+         quelli mancanti non vengono generati. */
+      classifica.slice().reverse().forEach(function(p){
+        html += renderRankSlide(cat, p, idx);
+        idx++;
+      });
+    });
+
+    html += '' +
+      '<div class="slide slide-title" data-slide="' + idx + '">' +
+        '<div class="eyebrow">Halloween in Villa</div>' +
+        '<h1 class="gothic">Grazie per esservi travestiti con noi 🎃</h1>' +
+        '<p class="sub">Alla prossima Halloween in Villa.</p>' +
+      '</div>';
+
+    slidesEl.innerHTML = html;
+    slideEls = Array.prototype.slice.call(slidesEl.querySelectorAll('.slide'));
+    dotsEl.innerHTML = slideEls.map(function(_, i){
+      return '<span class="d' + (i === 0 ? ' is-active' : '') + '" data-i="' + i + '"></span>';
     }).join('');
   }
 
@@ -315,36 +444,67 @@ p{margin:0;}
     resumeTimer = setTimeout(startAuto, ms || 45000);
   }
 
-  /* Controlli per chi presenta: frecce/click per avanzare a mano,
-     spazio per mettere in pausa/riprendere l'avanzamento automatico. */
+  /* Controlli per chi presenta: frecce/click per avanzare a mano, spazio
+     per mettere in pausa/riprendere l'avanzamento automatico. In modalità
+     reveal (votazioni chiuse) non c'è avanzamento automatico da mettere in
+     pausa: click/frecce avanzano e basta, a tempo del presentatore. */
   document.addEventListener('keydown', function(ev){
-    if (ev.key === 'ArrowRight'){ next(); pauseThenResume(); }
-    else if (ev.key === 'ArrowLeft'){ prev(); pauseThenResume(); }
-    else if (ev.code === 'Space'){ ev.preventDefault(); if (autoTimer) stopAuto(); else startAuto(); }
+    if (ev.key === 'ArrowRight'){ next(); if (slideMode === 'live') pauseThenResume(); }
+    else if (ev.key === 'ArrowLeft'){ prev(); if (slideMode === 'live') pauseThenResume(); }
+    else if (ev.code === 'Space'){
+      ev.preventDefault();
+      if (slideMode === 'live'){ if (autoTimer) stopAuto(); else startAuto(); }
+    }
   });
-  document.getElementById('stage').addEventListener('click', function(){ next(); pauseThenResume(); });
+  document.getElementById('stage').addEventListener('click', function(){
+    next();
+    if (slideMode === 'live') pauseThenResume();
+  });
   dotsEl.addEventListener('click', function(ev){
     var d = ev.target.closest('.d');
     if (!d) return;
     ev.stopPropagation();
     goTo(parseInt(d.dataset.i, 10));
-    pauseThenResume();
+    if (slideMode === 'live') pauseThenResume();
   });
 
   /* ===================== CARICAMENTO DATI ===================== */
+  var slideMode = votazioniChiuse() ? 'reveal' : 'live'; // 'live' | 'reveal'
+  var pollTimer = null;
+
   function caricaRisultati(){
     if (!sb) return;
     sb.from('contest_risultati').select('*').then(function(res){
       if (res.error) return;
       currentData = res.data || [];
-      buildSlides();
-      goTo(slideIndex);
+      if (slideMode === 'reveal'){
+        buildSlidesReveal();
+        goTo(0);
+      } else {
+        buildSlidesLive();
+        goTo(slideIndex);
+      }
     });
   }
 
+  /* Al passaggio da "live" a "reveal" (controllato ogni secondo
+     dall'orologio): si ferma il loop automatico e il refresh periodico —
+     i risultati sono ormai definitivi — e si costruisce la sequenza di
+     reveal con un'ultima lettura fresca dei voti. Da qui in poi avanza
+     solo il presentatore. */
+  function entraInModalitaReveal(){
+    if (slideMode === 'reveal') return;
+    slideMode = 'reveal';
+    stopAuto();
+    if (pollTimer){ clearInterval(pollTimer); pollTimer = null; }
+    caricaRisultati();
+  }
+
   caricaRisultati();
-  setInterval(caricaRisultati, 15000);
-  startAuto();
+  if (slideMode === 'live'){
+    pollTimer = setInterval(caricaRisultati, 15000);
+    startAuto();
+  }
 })();
 </script>
 </body>
