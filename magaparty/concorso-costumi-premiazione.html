@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Premiazione Concorso Costumi · Halloween in Villa</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.12);
+  --ember:#FF7A33; --ember-soft:rgba(255,122,51,0.16);
+  --moss:#8FB88A; --moss-soft:rgba(143,184,138,0.16);
+  --bone:#ECE6DD; --muted:#9A91A8; --gold:#D8B66B; --gold-soft:rgba(216,182,107,0.16);
+  color-scheme: dark;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  background:#000; color:var(--bone); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  margin:0; overflow:hidden; -webkit-font-smoothing:antialiased;
+  width:100vw; height:100vh;
+}
+h1,h2,h3{font-family:'Fraunces', Georgia, serif; margin:0;}
+.mono{font-family:'JetBrains Mono', ui-monospace, monospace;}
+p{margin:0;}
+.gothic{ font-family:'UnifrakturCook', 'Fraunces', serif; }
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+
+/* ---------- STAGE / SFONDO ---------- */
+.stage{
+  position:relative; width:100vw; height:100vh; overflow:hidden;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 8%, rgba(255,122,51,0.16), transparent 60%),
+    linear-gradient(180deg, rgba(10,7,14,0.72) 0%, rgba(8,6,11,0.88) 55%, #050309 100%),
+    url('assets/img/halloween-locandina.jpg');
+  background-size: cover, cover, cover;
+  background-position: center, center, center 30%;
+}
+.grain{
+  position:absolute; inset:0; pointer-events:none; opacity:0.07; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.ember-field{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:1;}
+.ember-field span{ position:absolute; bottom:-20px; width:6px; height:6px; border-radius:50%; background:var(--ember); opacity:0.55; filter:blur(0.4px); animation: embers 10s linear infinite; }
+@keyframes embers{ 0%{transform:translateY(0) translateX(0); opacity:0;} 10%{opacity:0.65;} 100%{transform:translateY(-100vh) translateX(var(--drift,24px)); opacity:0;} }
+
+/* ---------- MARCHIO ANGOLO ---------- */
+.corner-brand{
+  position:absolute; top:28px; left:34px; z-index:5; display:flex; align-items:center; gap:10px;
+}
+.corner-brand .dot{ width:7px; height:7px; border-radius:50%; background:var(--ember); box-shadow:0 0 10px var(--ember); }
+.corner-brand span{ font-size:11px; letter-spacing:0.26em; text-transform:uppercase; color:var(--muted); }
+.corner-brand strong{ color:var(--bone); font-weight:600; }
+
+/* ---------- OROLOGIO VOTAZIONI ---------- */
+.vote-clock{
+  position:absolute; bottom:26px; right:34px; z-index:5; text-align:right;
+  padding:12px 18px; border-radius:14px; background:rgba(14,10,20,0.55); border:1px solid var(--line); backdrop-filter:blur(6px);
+}
+.vote-clock .vc-label{ font-size:9.5px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); }
+.vote-clock .vc-time{ font-size:20px; font-weight:700; color:var(--gold); margin-top:2px; }
+.vote-clock.is-closed .vc-time{ color:var(--moss); }
+
+/* ---------- INDICATORI SLIDE ---------- */
+.dots{ position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:5; display:flex; gap:9px; }
+.dots .d{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.22); transition:all .3s ease; }
+.dots .d.is-active{ background:var(--ember); width:22px; border-radius:4px; }
+
+/* ---------- SLIDES ---------- */
+.slides{ position:relative; width:100%; height:100%; z-index:2; }
+.slide{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transform:scale(1.02);
+  transition:opacity 1s ease, transform 1.4s ease;
+  padding:60px 80px;
+  text-align:center;
+}
+.slide.is-active{ opacity:1; pointer-events:auto; transform:scale(1); }
+
+/* --- slide titolo (apertura/loop) --- */
+.slide-title .eyebrow{ font-size:15px; letter-spacing:0.32em; text-transform:uppercase; color:var(--ember); margin-bottom:22px; }
+.slide-title h1{ font-size:clamp(3.2rem, 8vw, 7rem); color:var(--bone); line-height:1; }
+.slide-title .sub{ margin-top:26px; font-size:19px; color:var(--muted); max-width:46ch; }
+
+/* --- slide categoria --- */
+.cat-eyebrow{ font-size:14px; letter-spacing:0.3em; text-transform:uppercase; color:var(--ember); margin-bottom:6px; }
+.cat-title{ font-size:clamp(2.1rem, 4.4vw, 3.6rem); color:var(--bone); margin-bottom:34px; }
+
+.leader{ display:flex; align-items:center; gap:56px; max-width:1180px; }
+.leader-photo{
+  width:360px; height:450px; flex:none; border-radius:26px; overflow:hidden; position:relative;
+  background:var(--surface-2); border:2px solid var(--gold-soft);
+  box-shadow:0 40px 90px -20px rgba(0,0,0,0.7), 0 0 0 10px rgba(216,182,107,0.06);
+}
+.leader-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.leader-info{ text-align:left; }
+.status-chip{
+  display:inline-flex; align-items:center; gap:9px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase;
+  padding:9px 18px; border-radius:999px; border:1px solid var(--moss-soft); color:var(--moss); font-weight:600;
+}
+.status-chip .pulse{ width:8px; height:8px; border-radius:50%; background:var(--moss); animation:pulseDot 1.8s ease-in-out infinite; }
+@keyframes pulseDot{ 0%,100%{box-shadow:0 0 0 0 rgba(143,184,138,0.5);} 50%{box-shadow:0 0 0 7px rgba(143,184,138,0);} }
+.status-chip.is-winner{ border-color:var(--gold-soft); color:var(--gold); }
+.status-chip.is-winner .pulse{ background:var(--gold); animation:none; box-shadow:0 0 10px var(--gold); }
+
+.leader-name{ font-size:clamp(2.2rem,4vw,3.4rem); color:var(--bone); margin-top:18px; line-height:1.08; }
+.leader-votes{ margin-top:22px; display:flex; align-items:baseline; gap:12px; }
+.leader-votes b{ font-size:56px; color:var(--gold); font-weight:700; }
+.leader-votes span{ font-size:14px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
+.leader-tie{ margin-top:16px; font-size:13.5px; color:var(--muted); }
+
+.empty-cat{ display:flex; flex-direction:column; align-items:center; gap:16px; color:var(--muted); }
+.empty-cat .glyph{ font-size:46px; color:var(--ember); opacity:0.7; }
+.empty-cat p{ font-size:16px; max-width:40ch; line-height:1.6; }
+
+@media (max-width: 980px){
+  .leader{ flex-direction:column; gap:32px; }
+  .leader-info{ text-align:center; }
+  .leader-votes{ justify-content:center; }
+  .leader-photo{ width:280px; height:340px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="grain"></div>
+  <div class="ember-field" id="emberField" aria-hidden="true"></div>
+
+  <div class="corner-brand">
+    <span class="dot"></span>
+    <span><strong>Halloween in Villa</strong> · Concorso Costumi</span>
+  </div>
+
+  <div class="vote-clock" id="voteClock">
+    <div class="vc-label" id="vcLabel">Votazioni chiudono alle</div>
+    <div class="vc-time mono" id="vcTime">02:00:00</div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+
+  <div class="slides" id="slides"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SUPABASE_URL = 'https://dkzzmxsreaegjagqbdnh.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q';
+  var sb = (window.supabase && window.supabase.createClient)
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
+  var BUCKET = 'contest-costumi';
+
+  /* Le votazioni del contest costumi chiudono alle 02:00 (notte tra il 31
+     ottobre e l'1 novembre): da quel momento la card in testa per ogni
+     categoria passa da "IN TESTA ORA" a "VINCITORE", senza bisogno di
+     toccare la pagina — resta aperta sulla TV e si aggiorna da sola. */
+  var VOTE_CLOSE = new Date('2026-11-01T02:00:00+01:00');
+
+  var CATEGORIES = [
+    { key: 'singolo', label: 'Singolo' },
+    { key: 'coppia', label: 'Coppia' },
+    { key: 'gruppo', label: 'Gruppo' }
+  ];
+
+  var currentData = [];
+  var slideIndex = 0;
+  var AUTO_MS = 9000;
+  var autoTimer = null;
+  var resumeTimer = null;
+
+  /* ===================== EMBER PARTICLES ===================== */
+  var emberField = document.getElementById('emberField');
+  for (var i = 0; i < 14; i++){
+    var s = document.createElement('span');
+    s.style.left = (Math.random() * 100) + '%';
+    s.style.setProperty('--drift', (Math.random() * 40 - 20) + 'px');
+    s.style.animationDelay = (Math.random() * 10) + 's';
+    s.style.animationDuration = (8 + Math.random() * 6) + 's';
+    emberField.appendChild(s);
+  }
+
+  /* ===================== OROLOGIO VOTAZIONI ===================== */
+  var vcLabel = document.getElementById('vcLabel');
+  var vcTime = document.getElementById('vcTime');
+  var voteClock = document.getElementById('voteClock');
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function tickClock(){
+    var now = new Date();
+    var diff = VOTE_CLOSE.getTime() - now.getTime();
+    if (diff <= 0){
+      vcLabel.textContent = 'Votazioni';
+      vcTime.textContent = 'CHIUSE';
+      voteClock.classList.add('is-closed');
+      return;
+    }
+    voteClock.classList.remove('is-closed');
+    vcLabel.textContent = 'Votazioni chiudono tra';
+    var h = Math.floor(diff / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    vcTime.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  function votazioniChiuse(){
+    return Date.now() >= VOTE_CLOSE.getTime();
+  }
+
+  /* ===================== DATI COSTUMI ===================== */
+  function fotoUrl(path){
+    if (!sb || !path) return '';
+    var r = sb.storage.from(BUCKET).getPublicUrl(path);
+    return (r && r.data && r.data.publicUrl) || '';
+  }
+
+  function leaderPerCategoria(cat){
+    var items = currentData.filter(function(c){ return c.categoria === cat; });
+    if (!items.length) return null;
+    var maxVoti = items.reduce(function(m, c){ return Math.max(m, c.voti || 0); }, 0);
+    var inTesta = items.filter(function(c){ return (c.voti || 0) === maxVoti; });
+    return { leader: inTesta[0], maxVoti: maxVoti, pariMerito: inTesta.length - 1 };
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+
+  /* ===================== SLIDES ===================== */
+  var slidesEl = document.getElementById('slides');
+  var dotsEl = document.getElementById('dots');
+  var slideEls = [];
+
+  function buildSlides(){
+    var chiuse = votazioniChiuse();
+    var html = '' +
+      '<div class="slide slide-title is-active" data-slide="0">' +
+        '<div class="eyebrow">Halloween in Villa</div>' +
+        '<h1 class="gothic">Concorso Costumi</h1>' +
+        '<p class="sub">' + (chiuse ? 'Le votazioni sono chiuse — ecco i vincitori.' : 'Il pubblico sta ancora votando: ecco chi è in testa, categoria per categoria.') + '</p>' +
+      '</div>';
+
+    CATEGORIES.forEach(function(cat, idx){
+      var res = leaderPerCategoria(cat.key);
+      html += '<div class="slide" data-slide="' + (idx + 1) + '">';
+      html += '<div class="cat-eyebrow">Categoria</div><h2 class="cat-title gothic">' + cat.label + '</h2>';
+      if (!res){
+        html += '' +
+          '<div class="empty-cat">' +
+            '<span class="glyph">✦</span>' +
+            '<p>Nessun costume approvato in questa categoria, per ora.</p>' +
+          '</div>';
+      } else {
+        var c = res.leader;
+        var chipClass = chiuse ? 'status-chip is-winner' : 'status-chip';
+        var chipLabel = chiuse ? 'Vincitore' : 'In testa ora';
+        var tieHtml = (!chiuse && res.pariMerito > 0)
+          ? '<p class="leader-tie">+' + res.pariMerito + ' a pari merito</p>' : '';
+        html += '' +
+          '<div class="leader">' +
+            '<div class="leader-photo"><img src="' + fotoUrl(c.foto_path) + '" alt="Costume di ' + escapeHtml(c.nome_partecipante) + '"></div>' +
+            '<div class="leader-info">' +
+              '<span class="' + chipClass + '"><span class="pulse"></span>' + chipLabel + '</span>' +
+              '<h3 class="leader-name">' + escapeHtml(c.nome_partecipante) + '</h3>' +
+              '<div class="leader-votes"><b class="mono">' + res.maxVoti + '</b><span>voti</span></div>' +
+              tieHtml +
+            '</div>' +
+          '</div>';
+      }
+      html += '</div>';
+    });
+
+    slidesEl.innerHTML = html;
+    slideEls = Array.prototype.slice.call(slidesEl.querySelectorAll('.slide'));
+
+    dotsEl.innerHTML = slideEls.map(function(_, i){
+      return '<span class="d' + (i === slideIndex ? ' is-active' : '') + '" data-i="' + i + '"></span>';
+    }).join('');
+  }
+
+  function goTo(i){
+    slideIndex = ((i % slideEls.length) + slideEls.length) % slideEls.length;
+    slideEls.forEach(function(el, idx){ el.classList.toggle('is-active', idx === slideIndex); });
+    var dots = dotsEl.querySelectorAll('.d');
+    dots.forEach(function(d, idx){ d.classList.toggle('is-active', idx === slideIndex); });
+  }
+
+  function next(){ goTo(slideIndex + 1); }
+  function prev(){ goTo(slideIndex - 1); }
+
+  function startAuto(){
+    stopAuto();
+    autoTimer = setInterval(next, AUTO_MS);
+  }
+  function stopAuto(){
+    if (autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+  }
+  function pauseThenResume(ms){
+    stopAuto();
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(startAuto, ms || 45000);
+  }
+
+  /* Controlli per chi presenta: frecce/click per avanzare a mano,
+     spazio per mettere in pausa/riprendere l'avanzamento automatico. */
+  document.addEventListener('keydown', function(ev){
+    if (ev.key === 'ArrowRight'){ next(); pauseThenResume(); }
+    else if (ev.key === 'ArrowLeft'){ prev(); pauseThenResume(); }
+    else if (ev.code === 'Space'){ ev.preventDefault(); if (autoTimer) stopAuto(); else startAuto(); }
+  });
+  document.getElementById('stage').addEventListener('click', function(){ next(); pauseThenResume(); });
+  dotsEl.addEventListener('click', function(ev){
+    var d = ev.target.closest('.d');
+    if (!d) return;
+    ev.stopPropagation();
+    goTo(parseInt(d.dataset.i, 10));
+    pauseThenResume();
+  });
+
+  /* ===================== CARICAMENTO DATI ===================== */
+  function caricaRisultati(){
+    if (!sb) return;
+    sb.from('contest_risultati').select('*').then(function(res){
+      if (res.error) return;
+      currentData = res.data || [];
+      buildSlides();
+      goTo(slideIndex);
+    });
+  }
+
+  caricaRisultati();
+  setInterval(caricaRisultati, 15000);
+  startAuto();
+})();
+</script>
+</body>
+</html>
