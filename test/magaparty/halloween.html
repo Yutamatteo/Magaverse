@@ -376,8 +376,8 @@ img{max-width:100%;}
       </div>
     </div>
     <div id="countdownLive" class="countdown-live">
-      <span class="pulse-dot"></span><span class="eyebrow" style="margin:0;display:inline;">La villa è viva, stanotte</span>
-      <p>31 Ottobre — l'evento è in corso.</p>
+      <span class="pulse-dot"></span><span class="eyebrow" style="margin:0;display:inline;">Evento concluso</span>
+      <p>Grazie a tutti quelli che hanno reso indimenticabile questa Halloween in Villa. Alla prossima edizione! 🎃</p>
     </div>
   </div>
 </section>
@@ -813,7 +813,7 @@ img{max-width:100%;}
 <section class="wrap prezzi-head" id="prezzi">
   <span class="section-label">Quanto costa</span>
   <h2>Prezzi</h2>
-  <p>Vendita a fasce, posti limitati: compila il form per prenotare.</p>
+  <p>Vendite chiuse: l'evento del 31 ottobre si è concluso. Grazie a chi ha partecipato!</p>
 </section>
 
 <div class="wrap prezzi-subhead">
@@ -920,7 +920,7 @@ img{max-width:100%;}
   </div>
 
   <div class="prezzi-card ticket-card" data-tier="whatsapp-65" data-tier-label="Ultimi biglietti disponibili" data-state="open">
-    <h4>Ultimi biglietti disponibili <span class="state-chip chip-open">Aperto</span></h4>
+    <h4>Ultimi biglietti disponibili <span class="state-chip chip-open">Aperto</span><span class="state-chip chip-sold">Esaurito</span></h4>
     <span class="price">€65</span>
     <p>Contattaci direttamente su WhatsApp per acquistare il biglietto.</p>
     <a class="ticket-cta ticket-buy" href="#" target="_blank" rel="noopener">Scrivici su WhatsApp →</a>
@@ -1141,8 +1141,8 @@ img{max-width:100%;}
 </section>
 
 <section class="closing wrap">
-  <h2>La villa ti aspetta.</h2>
-  <p>Planimetria, navetta, alloggi e saltafila — tutto quello che ti serve per organizzare la notte è qui sopra. Scorri pure da capo, o torna alla pagina dell'evento per i dettagli.</p>
+  <h2>Grazie per questa notte.</h2>
+  <p>Halloween in Villa si è conclusa: grazie a tutti quelli che sono venuti, si sono travestiti e hanno reso speciale questo Capitolo 5. Le vendite sono chiuse, ma la galleria e le prossime novità Magaparty sono sempre qui.</p>
   <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
     <button class="ghost-btn" id="restartBtn">Torna all'inizio ↑</button>
     <a class="ghost-link" href="index.html">← Torna a Magaparty</a>
@@ -2518,35 +2518,17 @@ window.addEventListener('DOMContentLoaded', function(){
 <script>
 (function(){
   'use strict';
-  /* SOLD OUT generale (31/10): su richiesta di Matteo restano "sold" tutte
-     le fasce biglietto/extra/alloggi, inclusa la Terza Release (€55).
-     L'unica disponibilità rimasta è un biglietto a €65, acquistabile solo
-     scrivendo direttamente su WhatsApp. Questo blocco gira per ultimo e
-     sovrascrive qualunque stato impostato sopra (incl. l'auto-apertura
-     della Prima Release). */
-  var WHATSAPP_NUMBER = '393927710510';
-  var WHATSAPP_MESSAGE = 'Ciao! Sarei interessato/a ad acquistare un biglietto da 65€ per Halloween in Villa, la serata del 31 ottobre 🎃';
-  var waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_MESSAGE);
-
+  /* EVENTO CONCLUSO (post 31/10): la serata è finita, vendite chiuse per
+     tutte le fasce senza eccezioni — incluso il biglietto a €65 via
+     WhatsApp che restava aperto durante l'evento. Questo blocco gira per
+     ultimo e sovrascrive qualunque stato impostato sopra. */
   document.querySelectorAll('.ticket-card').forEach(function(card){
-    if (card.dataset.tier === 'whatsapp-65') return;
     card.dataset.state = 'sold';
     var desc = card.querySelector('p');
-    if (desc) desc.textContent = 'Esaurito.';
+    if (desc) desc.textContent = 'Evento concluso — vendite chiuse.';
+    var buyLink = card.querySelector('.ticket-buy');
+    if (buyLink) buyLink.hidden = true;
   });
-
-  var extra = document.querySelector('.ticket-card[data-tier="whatsapp-65"]');
-  if (extra){
-    extra.dataset.state = 'open';
-    var buyLink = extra.querySelector('.ticket-buy');
-    if (buyLink){
-      buyLink.href = waLink;
-      buyLink.target = '_blank';
-      buyLink.rel = 'noopener';
-      buyLink.hidden = false;
-      buyLink.textContent = 'Scrivici su WhatsApp →';
-    }
-  }
 })();
 </script>
 </body>
