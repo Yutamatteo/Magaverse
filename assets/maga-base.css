@@ -61,6 +61,13 @@ h1, h2, h3,
 }
 p { text-wrap: pretty; }
 
+/* Titoli in maiuscolo (pagine evento): meno compressi e senza tracking negativo */
+.brutalist, h1.uppercase, h2.uppercase, h3.uppercase {
+  font-stretch: 86%;
+  font-weight: 850;
+  letter-spacing: 0 !important;
+}
+
 /* ── Focus visibile per chi naviga da tastiera ── */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--mv-oro);
