@@ -522,3 +522,19 @@ section.muted { background: var(--muted); }
 .mt-10 { margin-top: 40px; }
 .mt-6 { margin-top: 24px; }
 .hidden { display: none; }
+
+/* ── Accessibilità (redesign 2026-11) ── */
+:where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #B8743A; outline-offset: 3px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }
+input, select, textarea { font-size: max(16px, 1em); }
+
+/* ── Home: barra leggibile sopra la foto finché non si scorre ── */
+body[data-page="home"] .nav:not(.scrolled) {
+    background: linear-gradient(180deg, rgba(20, 14, 10, 0.55), rgba(20, 14, 10, 0));
+}
+body[data-page="home"] .nav:not(.scrolled) .nav-logo-text,
+body[data-page="home"] .nav:not(.scrolled) .nav-links a,
+body[data-page="home"] .nav:not(.scrolled) .nav-back { color: rgba(255, 250, 242, 0.92); }
+body[data-page="home"] .nav:not(.scrolled) .nav-logo-text .accent,
+body[data-page="home"] .nav:not(.scrolled) .nav-links a.active { color: #F2C48D; }
+body[data-page="home"] .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
