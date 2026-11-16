@@ -1,0 +1,187 @@
+/* =========================================================
+   MAGAVERSE · HOME
+   La foto del tramonto apre la pagina, il testo sta sulla linea
+   dell'orizzonte. Sotto, i tre mondi in righe alternate.
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+body.hub {
+  margin: 0;
+  background: var(--mv-notte);
+  color: var(--mv-sabbia);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.hub a { color: inherit; }
+.hub img { display: block; max-width: 100%; height: auto; }
+
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 50;
+  background: var(--mv-oro); color: var(--mv-notte);
+  padding: 10px 14px; border-radius: 8px; font-weight: 700; text-decoration: none;
+}
+.skip:focus { top: 12px; }
+
+/* ── Barra ── */
+.hub-bar {
+  position: absolute; inset: 0 0 auto 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 18px clamp(18px, 4vw, 48px);
+}
+.hub-logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 800; font-stretch: 80%; font-size: 21px; letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.hub-logo-sole {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, var(--mv-oro) 0 38%, var(--mv-tramonto) 39% 62%, transparent 63%),
+              linear-gradient(transparent 58%, var(--mv-mare) 58% 68%, transparent 68%);
+}
+.hub-nav { display: flex; gap: 4px; }
+.hub-nav a {
+  text-decoration: none; font-size: 15px; font-weight: 600;
+  padding: 8px 12px; border-radius: 999px;
+  background: rgba(14, 18, 36, 0.35);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.hub-nav a:hover { background: rgba(14, 18, 36, 0.6); }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  min-height: min(100svh, 920px);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  isolation: isolate;
+}
+.hero-foto, .hero-foto img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.hero-foto img { object-fit: cover; object-position: 50% 42%; }
+.hero::after {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(14,18,36,0.55) 0%, rgba(14,18,36,0) 22%),
+    linear-gradient(0deg, var(--mv-notte) 0%, rgba(14,18,36,0.86) 30%, rgba(14,18,36,0.15) 62%, rgba(14,18,36,0) 75%);
+}
+.hero-testo {
+  position: relative; z-index: 1; align-self: end;
+  padding: 120px clamp(18px, 4vw, 48px) 28px;
+  max-width: 1200px; width: 100%; margin: 0 auto;
+}
+.hero-luogo { margin: 0 0 12px; font-size: 15px; font-weight: 600; color: var(--mv-oro); }
+.hero h1 {
+  margin: 0;
+  font-size: clamp(58px, 15vw, 164px);
+  font-stretch: 66% !important;
+  font-weight: 850;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+}
+.orizzonte {
+  display: block; height: 3px; margin: 22px 0 18px;
+  width: min(420px, 70%);
+  background: var(--mv-orizzonte);
+  border-radius: 3px;
+  transform-origin: left center;
+  animation: orizzonte 1.4s cubic-bezier(.2,.7,.2,1) .2s both;
+}
+@keyframes orizzonte { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.hero-sub { margin: 0; max-width: 34ch; font-size: clamp(17px, 2vw, 20px); color: rgba(244,234,219,0.86); }
+
+/* ── Prossimo appuntamento ── */
+.prossimo {
+  position: relative; z-index: 1;
+  max-width: 1200px; width: 100%; margin: 0 auto;
+  padding: 0 clamp(18px, 4vw, 48px) 36px;
+}
+.prossimo-label { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: var(--mv-mare); }
+.prossimo-vuoto { margin: 0; max-width: 46ch; color: var(--mv-fumo); }
+.prossimo-vuoto a { color: var(--mv-sabbia); text-underline-offset: 3px; }
+.prossimo-evento {
+  display: flex; gap: 14px; align-items: center; text-decoration: none;
+  max-width: 520px; padding: 10px; border-radius: 16px;
+  background: rgba(22, 27, 51, 0.72); border: 1px solid var(--mv-linea);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.prossimo-evento img { width: 84px; height: 84px; object-fit: cover; border-radius: 10px; flex: none; }
+.prossimo-evento p { margin: 0; }
+.prossimo-nome { font-weight: 800; font-stretch: 75%; font-size: 24px; line-height: 1.05; }
+.prossimo-quando { color: var(--mv-oro); font-weight: 600; font-size: 15px; margin-top: 2px !important; }
+.prossimo-desc { color: var(--mv-fumo); font-size: 14px; }
+.prossimo-evento:hover { border-color: rgba(244,234,219,0.3); }
+
+/* ── Mondi ── */
+.mondi {
+  max-width: 1200px; margin: 0 auto;
+  padding: 56px clamp(18px, 4vw, 48px) 40px;
+  display: grid; gap: 18px;
+}
+.mondi-titolo {
+  margin: 0 0 8px; font-size: clamp(30px, 5vw, 48px); line-height: 1;
+}
+.mondo {
+  --acc: var(--mv-tramonto);
+  display: grid; grid-template-columns: 1fr; text-decoration: none;
+  border-radius: 22px; overflow: hidden;
+  background: var(--mv-notte-2);
+  border: 1px solid var(--mv-linea);
+  transition: border-color .25s;
+}
+.mondo:hover { border-color: var(--acc); }
+.mondo > img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.mondo-testo { padding: 22px 22px 26px; }
+.mondo h3 {
+  margin: 0; font-size: clamp(36px, 7vw, 64px); line-height: 0.92;
+  font-stretch: 68% !important; color: var(--acc);
+}
+.mondo p { margin: 12px 0 18px; max-width: 42ch; color: rgba(244,234,219,0.82); }
+.mondo-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 15px;
+  padding: 11px 18px; border-radius: 999px;
+  background: var(--acc); color: var(--mv-notte);
+}
+.mondo-lido { --acc: var(--mv-mare); }
+.mondo-card { --acc: #FF4FA3; }
+
+.tessera {
+  aspect-ratio: 16 / 10; display: flex; flex-direction: column; justify-content: space-between;
+  padding: 22px;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255,194,61,0.35), transparent 55%),
+    linear-gradient(135deg, #FF4FA3, #8B4DFF);
+}
+.tessera-nome { font-weight: 850; font-stretch: 70%; font-size: clamp(30px, 6vw, 44px); color: #fff; line-height: 1; }
+.tessera-timbri { display: flex; gap: 8px; }
+.tessera-timbri i {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px dashed rgba(255,255,255,0.7);
+}
+.tessera-timbri i:nth-child(-n+3) { background: rgba(255,255,255,0.9); border-style: solid; border-color: #fff; }
+
+@media (min-width: 820px) {
+  .mondo { grid-template-columns: 1.05fr 1fr; align-items: stretch; height: 380px; }
+  .mondo > img, .mondo .tessera { aspect-ratio: auto; height: 100%; min-height: 0; }
+  .mondo:nth-of-type(even) > :first-child { order: 2; }
+  .mondo-testo { padding: 40px 44px; align-self: center; }
+}
+
+/* ── Footer ── */
+.hub-footer {
+  max-width: 1200px; margin: 0 auto;
+  padding: 28px clamp(18px, 4vw, 48px) 44px;
+  border-top: 1px solid var(--mv-linea);
+  display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: space-between;
+  color: var(--mv-fumo); font-size: 15px;
+}
+.hub-footer p { margin: 0; }
+.hub-footer nav { display: flex; gap: 18px; }
+.hub-footer a { text-decoration: none; }
+.hub-footer a:hover { color: var(--mv-sabbia); }
+
+@media (max-width: 480px) {
+  .hub-nav a { padding: 7px 10px; font-size: 14px; }
+  .hub-logo { font-size: 19px; }
+}
