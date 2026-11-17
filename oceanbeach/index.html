@@ -74,6 +74,9 @@
         .story-panel[data-layer="sera"] .sm-plan-overlay{ fill:#3E2723; opacity:.13; }
     </style>
 <link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
 </head>
 <body data-page="home">
 
@@ -128,18 +131,19 @@
             <span>📍</span>
             <span>Stabilimento balneare · Magazzeno, Salerno</span>
         </div>
-        <h1 class="hero-title">La tua oasi di relax.</h1>
+        <h1 class="hero-title" data-rise>La tua oasi di relax.</h1>
         <p class="hero-sub">Al Nello Ocean Beach celebriamo l'estate. Ombrelloni eleganti, bar accogliente, canoe pronte all'avventura — l'atmosfera perfetta per famiglie, giovani e coppie.</p>
         <div class="hero-ctas">
             <a href="/oceanbeach/booking.html" class="btn btn-white"><span>Prenota su WhatsApp</span> →</a>
             <a href="/oceanbeach/services.html" class="btn btn-ghost">Scopri i servizi</a>
         </div>
         <div class="hero-stats">
-            <div class="stat"><div class="stat-k">500m</div><div class="stat-v">di spiaggia dorata</div></div>
-            <div class="stat"><div class="stat-k">4★</div><div class="stat-v">valutazione clienti</div></div>
-            <div class="stat"><div class="stat-k">12h</div><div class="stat-v">di sole al giorno</div></div>
+            <div class="stat"><div class="stat-k" data-conta>500m</div><div class="stat-v">di spiaggia dorata</div></div>
+            <div class="stat"><div class="stat-k" data-conta>4★</div><div class="stat-v">valutazione clienti</div></div>
+            <div class="stat"><div class="stat-k" data-conta>12h</div><div class="stat-v">di sole al giorno</div></div>
         </div>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
 
 <!-- ABOUT TEASER -->

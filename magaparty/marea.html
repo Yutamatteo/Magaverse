@@ -77,7 +77,10 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
     <link rel="stylesheet" href="assets/leggibilita.css">
     <link rel="stylesheet" href="/assets/maga-base.css">
 <link rel="stylesheet" href="/assets/transizioni.css">
-<link rel="expect" href="#mv-pronta" blocking="render">
+<link rel="stylesheet" href="/assets/motion.css">
+<link rel="stylesheet" href="assets/evento-motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script type="module" blocking="render">/* aspetta che intestazione e locandina siano montate prima del primo disegno: serve al passaggio animato tra le pagine */</script>
 </head>
 <body data-page="info">
 <main id="page-main">
@@ -148,7 +151,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="attivita" class="section-anchor animate-fade-in" data-testid="page-attivita">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Non solo musica</p>
     </div>
     <p class="text-[11px] text-gray-400 text-center mb-6 reveal" style="max-width:480px;margin:0 auto 24px">
@@ -169,7 +172,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="lineup" class="section-anchor animate-fade-in" data-testid="page-lineup">
     <div class="text-center mb-6 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 17:00 alle 00:00</p>
     </div>
     <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
@@ -215,7 +218,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="prezzi" class="section-anchor animate-fade-in" data-testid="page-prezzi">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Numero chiuso · lista obbligatoria</p>
     </div>
     <div class="space-y-4">
@@ -261,7 +264,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 
 <section id="bar" class="section-anchor animate-fade-in" data-testid="page-bar">
         <div class="text-center mb-4 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>
 
@@ -456,7 +459,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 
 <section id="galleria" class="section-anchor animate-fade-in" data-testid="page-galleria">
         <div class="text-center mb-8">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
             <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Carica i tuoi scatti della serata</p>
         </div>
         <div class="desktop-2col">
@@ -522,7 +525,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="form" class="section-anchor animate-fade-in" data-testid="page-form">
     <div class="text-center mb-8">
         <span class="section-label">Ultimo step</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Form veloce · il QR arriva via email</p>
     </div>
 
@@ -610,7 +613,6 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 
 </main>
 <script src="assets/marea-app.js"></script>
-<i id="mv-pronta" hidden></i>
 <script>
     // Tab switching DAY / NIGHT (sezione Bar embedded)
     (function () {
@@ -732,5 +734,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
         successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 </script>
+<script src="/assets/motion.js" defer></script>
+<script src="assets/evento-motion.js" defer></script>
 </body>
 </html>

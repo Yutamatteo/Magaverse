@@ -538,3 +538,30 @@ body[data-page="home"] .nav:not(.scrolled) .nav-back { color: rgba(255, 250, 242
 body[data-page="home"] .nav:not(.scrolled) .nav-logo-text .accent,
 body[data-page="home"] .nav:not(.scrolled) .nav-links a.active { color: #F2C48D; }
 body[data-page="home"] .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
+
+/* ── Movimento (fase 2): onde sotto la foto, ingresso dei testi ── */
+.ob-onde { position: absolute; left: 0; right: 0; bottom: -1px; height: 44px; z-index: 2; pointer-events: none; overflow: hidden; }
+.ob-onde::before, .ob-onde::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 300%; height: 100%;
+    background: repeat-x 0 100% / 640px 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 44' preserveAspectRatio='none'%3E%3Cpath fill='%23FAF7F2' d='M0 24c53-20 107-20 160 0s107 20 160 0 107-20 160 0 107 20 160 0v20H0z'/%3E%3C/svg%3E");
+}
+.ob-onde::before { opacity: .5; background-size: 460px 100%; }
+@media (prefers-reduced-motion: no-preference) {
+    .ob-onde::after { animation: ob-onda 10s linear infinite; }
+    .ob-onde::before { animation: ob-onda-2 15s linear infinite reverse; }
+    @keyframes ob-onda { to { transform: translateX(-640px); } }
+    @keyframes ob-onda-2 { to { transform: translateX(-460px); } }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-kicker,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-sub,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-ctas,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-stats {
+        opacity: 0; transform: translateY(16px);
+        animation: ob-entra .9s cubic-bezier(.19, 1, .22, 1) forwards;
+    }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-kicker { animation-delay: .15s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-sub { animation-delay: .65s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-ctas { animation-delay: .8s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-stats { animation-delay: .95s; }
+    @keyframes ob-entra { to { opacity: 1; transform: none; } }
+}

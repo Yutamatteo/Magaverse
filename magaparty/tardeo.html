@@ -73,7 +73,10 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
     <link rel="stylesheet" href="assets/leggibilita.css">
     <link rel="stylesheet" href="/assets/maga-base.css">
 <link rel="stylesheet" href="/assets/transizioni.css">
-<link rel="expect" href="#mv-pronta" blocking="render">
+<link rel="stylesheet" href="/assets/motion.css">
+<link rel="stylesheet" href="assets/evento-motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script type="module" blocking="render">/* aspetta che intestazione e locandina siano montate prima del primo disegno: serve al passaggio animato tra le pagine */</script>
 </head>
 <body data-page="info">
 <main id="page-main">
@@ -148,7 +151,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="programma" class="section-anchor animate-fade-in" data-testid="page-programma">
     <div class="text-center mb-6 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il programma</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il programma</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 19:00 a notte fonda</p>
     </div>
 
@@ -217,7 +220,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="prezzi" class="section-anchor animate-fade-in" data-testid="page-prezzi">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Lista consigliata · posti limitati</p>
     </div>
     <div class="space-y-4">
@@ -254,7 +257,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <!-- ═══════════════════════ BAR ═══════════════════════ -->
 <section id="bar" class="section-anchor animate-fade-in" data-testid="page-bar">
         <div class="text-center mb-4 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" style="color:var(--sunset-coral)">Drink &amp; cocktail · dalle 19:00</p>
         </div>
 
@@ -386,7 +389,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <!-- ═══════════════════════ GALLERIA ═══════════════════════ -->
 <section id="galleria" class="section-anchor animate-fade-in" data-testid="page-galleria">
         <div class="text-center mb-8">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
             <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Carica i tuoi scatti della serata</p>
         </div>
         <div class="desktop-2col">
@@ -453,7 +456,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 <section id="form" class="section-anchor animate-fade-in" data-testid="page-form">
     <div class="text-center mb-8">
         <span class="section-label">Ultimo step</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Form veloce · il QR arriva via email</p>
     </div>
 
@@ -523,7 +526,6 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
 
 </main>
 <script src="assets/tardeo-app.js"></script>
-<i id="mv-pronta" hidden></i>
 <script>
     document.querySelectorAll('.opt-choice').forEach(el => {
         el.addEventListener('click', () => {
@@ -597,5 +599,7 @@ src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
         successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 </script>
+<script src="/assets/motion.js" defer></script>
+<script src="assets/evento-motion.js" defer></script>
 </body>
 </html>
