@@ -44,6 +44,22 @@
 .reveal-stagger > *{ transition-delay: calc(var(--sm-i, 0) * 70ms); }
 .no-js .reveal, noscript ~ .reveal{ opacity: 1; transform: none; }
 
+/* Dove il browser sa legare le animazioni allo scroll, la sezione resta
+   sempre visibile e sono i singoli blocchi a entrare (sul compositore,
+   niente JavaScript): una sezione lunga non resta più bianca. */
+@supports (animation-timeline: view()){
+  .reveal, .reveal.is-visible{ opacity: 1; transform: none; transition: none; }
+  @media (prefers-reduced-motion: no-preference){
+    .reveal :is(.grid-2, .grid-3, .grid-4) > *,
+    .reveal .container > :not(:is(.grid-2, .grid-3, .grid-4)){
+      animation: sm-entra linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    @keyframes sm-entra{ from{ opacity: 0; transform: translateY(22px); } }
+  }
+}
+
 /* ── HERO ── */
 .sm-hero{ position:relative; padding-block:88px 64px; overflow:hidden; border-bottom:1px solid var(--sm-line); }
 .sm-hero-inner{ position:relative; z-index:1; }
