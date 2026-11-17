@@ -335,6 +335,18 @@
   let currentUserEmail = null;
   let currentUserNome = null;
 
+  // Sicurezza: tutto ciò che arriva dal database (scritto dal pubblico nei
+  // moduli) passa da esc() prima di finire in innerHTML, così un nome come
+  // <img onerror=...> viene mostrato come testo e non eseguito. jsArg() serve
+  // per gli argomenti dentro onclick="...": stringa JS valida e già escapata
+  // per l'attributo, così un id non può chiudere l'apice e iniettare codice.
+  function esc(v) {
+    return String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function jsArg(v) {
+    return esc(JSON.stringify(String(v)));
+  }
+
   const loginBox = document.getElementById('login-box');
   const modePicker = document.getElementById('mode-picker');
   const panel = document.getElementById('panel');
@@ -573,7 +585,7 @@
       () => {} // errori di lettura frame-by-frame, si ignorano
     ).catch(err => {
       resultArea.classList.remove('hidden');
-      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Impossibile accedere alla fotocamera: ${err}</div></div>`;
+      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Impossibile accedere alla fotocamera: ${esc(err)}</div></div>`;
     });
   }
 
@@ -615,12 +627,12 @@
       let html = '';
       if (mEsito === 'ok') {
         const r = marea.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito ok">✓ Accesso Marea consentito</div>
-                <p style="margin-top:8px; font-size:14px;">${MAREA_OPZIONE_LABEL[r.opzione] || r.opzione}</p>`;
+                <p style="margin-top:8px; font-size:14px;">${esc(MAREA_OPZIONE_LABEL[r.opzione] || r.opzione)}</p>`;
       } else if (mEsito === 'gia_usato') {
         const r = marea.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito errore">⚠️ QR Marea già utilizzato — accesso già avvenuto.</div>`;
       } else if (mEsito === 'annullata') {
         html = `<div class="esito errore">Prenotazione Marea annullata.</div>`;
@@ -641,13 +653,13 @@
       let html = '';
       if (uoEsito === 'ok') {
         const r = ultimaOnda.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito ok">✓ Accesso Ultima Onda consentito</div>
                 <p style="margin-top:8px; font-size:14px;">🌅 Ingresso + drink omaggio</p>
                 ${r.interesse_sup ? '<p style="margin-top:6px; font-size:13px;">🏄 Interessato al SUP — passalo ai ragazzi di Adventure Lab &amp; Next</p>' : ''}`;
       } else if (uoEsito === 'gia_usato') {
         const r = ultimaOnda.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito errore">⚠️ QR Ultima Onda già utilizzato — accesso già avvenuto.</div>`;
       } else if (uoEsito === 'annullata') {
         html = `<div class="esito errore">Prenotazione Ultima Onda annullata.</div>`;
@@ -668,12 +680,12 @@
       let html = '';
       if (tEsito === 'ok') {
         const r = tardeo.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito ok">✓ Accesso Tardeo consentito</div>
                 <p style="margin-top:8px; font-size:14px;">🌇 Ingresso + drink omaggio</p>`;
       } else if (tEsito === 'gia_usato') {
         const r = tardeo.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito errore">⚠️ QR Tardeo già utilizzato — accesso già avvenuto.</div>`;
       } else if (tEsito === 'annullata') {
         html = `<div class="esito errore">Prenotazione Tardeo annullata.</div>`;
@@ -681,10 +693,10 @@
         html = `<div class="esito errore">Il tuo account non può scansionare ingressi Tardeo.</div>`;
       } else if (tEsito === 'non_ancora_valido') {
         const r = tardeo.data[0];
-        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Tardeo del ${formatDataBreve(r.data_evento)}.</div>`;
+        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Tardeo del ${esc(formatDataBreve(r.data_evento))}.</div>`;
       } else if (tEsito === 'scaduto') {
         const r = tardeo.data[0];
-        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Tardeo del ${formatDataBreve(r.data_evento)}.</div>`;
+        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Tardeo del ${esc(formatDataBreve(r.data_evento))}.</div>`;
       }
       resultArea.innerHTML = `<div class="result-card">${html}</div>
         <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
@@ -701,12 +713,12 @@
       if (bEsito === 'ok') {
         const r = battigia.data[0];
         const dettaglio = `${BATTIGIA_OPZIONE_LABEL[r.opzione] || r.opzione}${r.opzione === 'tavolo' && r.numero_persone ? ' · ' + r.numero_persone + ' persone' : ''}`;
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito ok">✓ Accesso Battigia consentito</div>
-                <p style="margin-top:8px; font-size:14px;">${dettaglio}</p>`;
+                <p style="margin-top:8px; font-size:14px;">${esc(dettaglio)}</p>`;
       } else if (bEsito === 'gia_usato') {
         const r = battigia.data[0];
-        html = `<div class="nome">${r.nome_capogruppo}</div>
+        html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
                 <div class="esito errore">⚠️ QR Battigia già utilizzato — accesso già avvenuto.</div>`;
       } else if (bEsito === 'annullata') {
         html = `<div class="esito errore">Prenotazione Battigia annullata.</div>`;
@@ -714,10 +726,10 @@
         html = `<div class="esito errore">Il tuo account non può scansionare ingressi Battigia.</div>`;
       } else if (bEsito === 'non_ancora_valido') {
         const r = battigia.data[0];
-        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Battigia del ${formatDataBreve(r.data_evento)}.</div>`;
+        html = `<div class="esito errore">⏳ QR non ancora valido — è per il Battigia del ${esc(formatDataBreve(r.data_evento))}.</div>`;
       } else if (bEsito === 'scaduto') {
         const r = battigia.data[0];
-        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Battigia del ${formatDataBreve(r.data_evento)}.</div>`;
+        html = `<div class="esito errore">⚠️ QR scaduto — era valido per il Battigia del ${esc(formatDataBreve(r.data_evento))}.</div>`;
       }
       resultArea.innerHTML = `<div class="result-card">${html}</div>
         <button class="btn-primary" id="btn-prossima" style="margin-top:16px;">Scansiona la prossima</button>`;
@@ -733,16 +745,16 @@
       let html = '';
       if (cEsito === 'ok') {
         const r = contanti.data[0];
-        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+        html = `<div class="nome">${esc(r.nome)} ${esc(r.cognome)}</div>
                 <div class="esito ok">✓ Accesso consentito (pagamento in contanti)</div>
-                ${r.prezzo != null ? `<p style="margin-top:8px; font-size:14px;">Prezzo pagato: €${r.prezzo}</p>` : ''}`;
+                ${r.prezzo != null ? `<p style="margin-top:8px; font-size:14px;">Prezzo pagato: €${esc(r.prezzo)}</p>` : ''}`;
       } else if (cEsito === 'gia_usato') {
         const r = contanti.data[0];
-        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+        html = `<div class="nome">${esc(r.nome)} ${esc(r.cognome)}</div>
                 <div class="esito errore">⚠️ QR già utilizzato — accesso già avvenuto.</div>`;
       } else if (cEsito === 'non_pagato') {
         const r = contanti.data[0];
-        html = `<div class="nome">${r.nome} ${r.cognome}</div>
+        html = `<div class="nome">${esc(r.nome)} ${esc(r.cognome)}</div>
                 <div class="esito errore">⚠️ Pagamento non ancora confermato dallo staff — non far entrare, avvisa un responsabile.</div>`;
       } else if (cEsito === 'non_autorizzato') {
         html = `<div class="esito errore">Il tuo account non può scansionare ingressi in contanti.</div>`;
@@ -767,7 +779,7 @@
     } else {
       const { timbri, livello } = data[0];
       html = `<div class="esito ok">Timbro assegnato ✓</div>
-              <p style="margin-top:8px; font-size:14px;">Timbri: <b>${timbri}</b> · Livello: <b>${livello}</b></p>`;
+              <p style="margin-top:8px; font-size:14px;">Timbri: <b>${esc(timbri)}</b> · Livello: <b>${esc(livello)}</b></p>`;
       if (timbri === 0) {
         html += `<p style="margin-top:10px; color: var(--mc-gold); font-size:13.5px;">🎉 Livello raggiunto! Il premio è già visibile sulla card del cliente.</p>`;
       }
@@ -794,8 +806,8 @@
 
     resultArea.innerHTML = `
       <div class="result-card">
-        <div class="nome">${risultato.nome} ${risultato.cognome}</div>
-        <p class="esito">Punti attuali: <b>${risultato.punti_totali}</b></p>
+        <div class="nome">${esc(risultato.nome)} ${esc(risultato.cognome)}</div>
+        <p class="esito">Punti attuali: <b>${esc(risultato.punti_totali)}</b></p>
         <div class="points-picker" id="points-picker">
           <button data-val="10">+10</button>
           <button data-val="20">+20</button>
@@ -842,7 +854,7 @@
       html = `<div class="esito errore">Valore punti non valido.</div>`;
     } else {
       html = `<div class="esito ok">+${punti} punti assegnati ✓</div>
-              <p style="margin-top:8px; font-size:14px;">Totale punti: <b>${data[0].punti_totali}</b></p>`;
+              <p style="margin-top:8px; font-size:14px;">Totale punti: <b>${esc(data[0].punti_totali)}</b></p>`;
     }
 
     resultArea.innerHTML = `<div class="result-card">${html}</div>
@@ -864,7 +876,7 @@
       .select('id, nome, cognome, telefono, email, stato, card_code')
       .order('created_at', { ascending: false });
     if (error) {
-      document.getElementById('lista').innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      document.getElementById('lista').innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     richieste = data;
@@ -880,12 +892,12 @@
       return;
     }
     lista.innerHTML = pendenti.map(r => `
-      <div class="mc-row" data-id="${r.id}">
+      <div class="mc-row" data-id="${esc(r.id)}">
         <div class="info">
-          <b>${r.nome} ${r.cognome}</b>
-          <span>${r.telefono} · ${r.email}</span>
+          <b>${esc(r.nome)} ${esc(r.cognome)}</b>
+          <span>${esc(r.telefono)} · ${esc(r.email)}</span>
         </div>
-        <button class="btn-confirm" onclick="confermaPagamento('${r.id}')">Conferma pagamento</button>
+        <button class="btn-confirm" onclick="confermaPagamento(${jsArg(r.id)})">Conferma pagamento</button>
       </div>
     `).join('');
   }
@@ -955,12 +967,12 @@
   async function caricaLivelli() {
     const { data, error } = await sb.from('magacard_livelli').select('*').order('livello');
     const lista = document.getElementById('lista-livelli');
-    if (error) { lista.innerHTML = `<div class="mc-empty">Errore: ${error.message}</div>`; return; }
+    if (error) { lista.innerHTML = `<div class="mc-empty">Errore: ${esc(error.message)}</div>`; return; }
     lista.innerHTML = data.map(l => `
       <div class="livello-row">
-        <span>Livello ${l.livello}</span>
-        <input type="text" value="${l.timbri_richiesti}" id="livello-${l.livello}">
-        <button class="btn-ghost" onclick="salvaLivello(${l.livello})">Salva</button>
+        <span>Livello ${esc(l.livello)}</span>
+        <input type="text" value="${esc(l.timbri_richiesti)}" id="livello-${esc(l.livello)}">
+        <button class="btn-ghost" onclick="salvaLivello(${Number(l.livello)})">Salva</button>
       </div>
     `).join('');
   }
@@ -1093,7 +1105,7 @@
       .select(cfg.colonne)
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     prenotazioniEventoTutte = data;
@@ -1103,7 +1115,7 @@
     // prima nella stessa lista/conteggio.
     const dateUniche = [...new Set(data.map(r => r.data_evento).filter(Boolean))].sort();
     if (dateUniche.length > 1) {
-      selectDataPren.innerHTML = dateUniche.map(d => `<option value="${d}">${formatDataBreve(d)}</option>`).join('');
+      selectDataPren.innerHTML = dateUniche.map(d => `<option value="${esc(d)}">${esc(formatDataBreve(d))}</option>`).join('');
       if (!dataPrenotazioniAttiva || !dateUniche.includes(dataPrenotazioniAttiva)) {
         dataPrenotazioniAttiva = dataDefaultPren(dateUniche);
       }
@@ -1129,15 +1141,15 @@
       return;
     }
     lista.innerHTML = items.map(r => `
-      <div class="mc-row" data-id="${r.id}">
+      <div class="mc-row" data-id="${esc(r.id)}">
         <div class="info">
-          <b>${r.nome_capogruppo}</b>
-          <span>${r.telefono} · ${r.email}</span>
-          <span>${scelteLabelPren(r)}</span>
+          <b>${esc(r.nome_capogruppo)}</b>
+          <span>${esc(r.telefono)} · ${esc(r.email)}</span>
+          <span>${esc(scelteLabelPren(r))}</span>
         </div>
         ${r.stato !== 'usato' && r.stato !== 'annullata' ? `
         <div class="azioni">
-          <button class="btn-confirm" onclick="checkinManualePrenotazione('${r.id}')">Check-in manuale</button>
+          <button class="btn-confirm" onclick="checkinManualePrenotazione(${jsArg(r.id)})">Check-in manuale</button>
         </div>` : ''}
       </div>
     `).join('');
@@ -1433,7 +1445,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .select(cfg.colonne)
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     await caricaContattiEvento(eventoRichiesteAttivo);
@@ -1480,16 +1492,16 @@ Lì trovi anche la planimetria della villa, piano per piano.
         : '<span class="chip-stato da-leggere">Da leggere</span>';
       const dettagli = cfg.dettagliLabel(r);
       return `
-        <div class="mc-row" data-id="${r.id}">
+        <div class="mc-row" data-id="${esc(r.id)}">
           <div class="info">
-            <b>${cfg.nomeDisplay(r)}</b>${chip}
-            ${cfg.pacchettoLabel ? `<span class="chip-pacchetto">${cfg.pacchettoLabel(r)}</span>` : ''}
-            <span>${r.telefono || '—'} · ${r.email || '—'}</span>
-            ${dettagli ? `<span>${dettagli}</span>` : ''}
+            <b>${esc(cfg.nomeDisplay(r))}</b>${chip}
+            ${cfg.pacchettoLabel ? `<span class="chip-pacchetto">${esc(cfg.pacchettoLabel(r))}</span>` : ''}
+            <span>${esc(r.telefono || '—')} · ${esc(r.email || '—')}</span>
+            ${dettagli ? `<span>${esc(dettagli)}</span>` : ''}
           </div>
           <div class="azioni">
-            ${r.telefono ? `<button class="btn-confirm" onclick="apriContatto('${r.id}','whatsapp')">WhatsApp</button>` : ''}
-            ${r.instagram ? `<button class="btn-ghost" onclick="apriContatto('${r.id}','instagram')">Instagram</button>` : ''}
+            ${r.telefono ? `<button class="btn-confirm" onclick="apriContatto(${jsArg(r.id)},'whatsapp')">WhatsApp</button>` : ''}
+            ${r.instagram ? `<button class="btn-ghost" onclick="apriContatto(${jsArg(r.id)},'instagram')">Instagram</button>` : ''}
           </div>
         </div>
       `;
@@ -1555,7 +1567,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .select('id, nome, cognome, email, telefono, data_nascita, instagram, prezzo, stato, created_at')
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     contantiTutti = data;
@@ -1593,21 +1605,21 @@ Lì trovi anche la planimetria della villa, piano per piano.
     // allo scanner: lo autorizza la funzione checkin_manuale_contanti lato DB.
     const puoModificare = ruolo === 'admin' || ruolo === 'superadmin';
     lista.innerHTML = items.map(r => `
-      <div class="mc-row" data-id="${r.id}">
+      <div class="mc-row" data-id="${esc(r.id)}">
         <div class="info">
-          <b>${r.nome} ${r.cognome}</b>${statoChipContanti(r.stato)}
-          <span>${r.telefono || '—'} · ${r.email || '—'}</span>
-          <span>Nata/o il ${formatDataContanti(r.data_nascita)}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
-          ${!puoModificare && r.prezzo != null ? `<span>Prezzo: €${r.prezzo}</span>` : ''}
+          <b>${esc(r.nome)} ${esc(r.cognome)}</b>${statoChipContanti(r.stato)}
+          <span>${esc(r.telefono || '—')} · ${esc(r.email || '—')}</span>
+          <span>Nata/o il ${esc(formatDataContanti(r.data_nascita))}${r.instagram ? ' · IG: ' + esc(r.instagram) : ''}</span>
+          ${!puoModificare && r.prezzo != null ? `<span>Prezzo: €${esc(r.prezzo)}</span>` : ''}
         </div>
         ${puoModificare || r.stato === 'confermato' ? `
         <div class="contanti-azioni">
           ${puoModificare ? `
-          <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${r.id}" value="${r.prezzo != null ? r.prezzo : ''}">
-          <button class="btn-ghost" onclick="salvaPrezzoContanti('${r.id}')">${r.stato === 'in_attesa' ? 'Salva prezzo' : 'Aggiorna prezzo'}</button>
-          ${r.stato === 'in_attesa' ? `<button class="btn-confirm" onclick="confermaPagamentoContanti('${r.id}')">Conferma pagamento</button>` : ''}
+          <input type="text" inputmode="decimal" placeholder="Prezzo €" id="prezzo-contanti-${esc(r.id)}" value="${r.prezzo != null ? esc(r.prezzo) : ''}">
+          <button class="btn-ghost" onclick="salvaPrezzoContanti(${jsArg(r.id)})">${r.stato === 'in_attesa' ? 'Salva prezzo' : 'Aggiorna prezzo'}</button>
+          ${r.stato === 'in_attesa' ? `<button class="btn-confirm" onclick="confermaPagamentoContanti(${jsArg(r.id)})">Conferma pagamento</button>` : ''}
           ` : ''}
-          ${r.stato === 'confermato' ? `<button class="btn-confirm" onclick="checkinManualeContanti('${r.id}')">Check-in manuale</button>` : ''}
+          ${r.stato === 'confermato' ? `<button class="btn-confirm" onclick="checkinManualeContanti(${jsArg(r.id)})">Check-in manuale</button>` : ''}
         </div>` : ''}
       </div>
     `).join('');
@@ -1727,7 +1739,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .ilike('note', 'Ordine Posto Riservato%')
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     postoRiservatoTutti = data;
@@ -1753,9 +1765,9 @@ Lì trovi anche la planimetria della villa, piano per piano.
     lista.innerHTML = items.map(r => `
       <div class="mc-row">
         <div class="info">
-          <b>${r.nome}</b>
-          <span>${r.telefono || '—'} · ${r.email || '—'}</span>
-          ${r.note ? `<span>${r.note}</span>` : ''}
+          <b>${esc(r.nome)}</b>
+          <span>${esc(r.telefono || '—')} · ${esc(r.email || '—')}</span>
+          ${r.note ? `<span>${esc(r.note)}</span>` : ''}
         </div>
       </div>
     `).join('');
@@ -1780,7 +1792,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .select('id, nome_partecipante, categoria, descrizione, instagram, telefono, email, foto_path, stato, created_at, contest_voti(count)')
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     costumiTutti = data;
@@ -1815,19 +1827,19 @@ Lì trovi anche la planimetria della villa, piano per piano.
     lista.innerHTML = items.map(r => {
       const voti = (r.contest_voti && r.contest_voti[0] && r.contest_voti[0].count) || 0;
       return `
-      <div class="mc-row" data-id="${r.id}" style="align-items:flex-start;">
-        <img src="${STORAGE_COSTUMI_URL}${r.foto_path}" alt="" loading="lazy"
+      <div class="mc-row" data-id="${esc(r.id)}" style="align-items:flex-start;">
+        <img src="${esc(STORAGE_COSTUMI_URL + r.foto_path)}" alt="" loading="lazy"
           style="width:56px; height:56px; border-radius:10px; object-fit:cover; flex-shrink:0; margin-right:12px; background:rgba(255,255,255,0.05);">
         <div class="info">
-          <b>${r.nome_partecipante}</b>${statoChipCostumi(r.stato)}
-          <span>${CATEGORIA_LABEL_COSTUMI[r.categoria] || r.categoria} · ${voti} vot${voti === 1 ? 'o' : 'i'}${r.instagram ? ' · IG: ' + r.instagram : ''}</span>
-          ${r.descrizione ? `<span>${r.descrizione}</span>` : ''}
-          ${(r.telefono || r.email) ? `<span>${r.telefono || '—'} · ${r.email || '—'}</span>` : ''}
+          <b>${esc(r.nome_partecipante)}</b>${statoChipCostumi(r.stato)}
+          <span>${esc(CATEGORIA_LABEL_COSTUMI[r.categoria] || r.categoria)} · ${voti} vot${voti === 1 ? 'o' : 'i'}${r.instagram ? ' · IG: ' + esc(r.instagram) : ''}</span>
+          ${r.descrizione ? `<span>${esc(r.descrizione)}</span>` : ''}
+          ${(r.telefono || r.email) ? `<span>${esc(r.telefono || '—')} · ${esc(r.email || '—')}</span>` : ''}
         </div>
         ${puoModerare ? `
         <div class="contanti-azioni">
-          ${r.stato !== 'approvato' ? `<button class="btn-confirm" onclick="approvaCostume('${r.id}')">Approva</button>` : ''}
-          ${r.stato !== 'rifiutato' ? `<button class="btn-ghost" onclick="rifiutaCostume('${r.id}')">Rifiuta</button>` : ''}
+          ${r.stato !== 'approvato' ? `<button class="btn-confirm" onclick="approvaCostume(${jsArg(r.id)})">Approva</button>` : ''}
+          ${r.stato !== 'rifiutato' ? `<button class="btn-ghost" onclick="rifiutaCostume(${jsArg(r.id)})">Rifiuta</button>` : ''}
         </div>` : ''}
       </div>
     `;
@@ -1868,7 +1880,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .select('id, nome, telefono, email, instagram, gruppo, n_feste, come_conosciuto, note, created_at')
       .order('nome', { ascending: true });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
     clientiMessaggiTutti = data;
@@ -1904,14 +1916,14 @@ Lì trovi anche la planimetria della villa, piano per piano.
     lista.innerHTML = items.map(c => `
       <div class="mc-row">
         <div class="info">
-          <b>${c.nome || '—'}</b>
-          <span>${c.telefono || '—'} · ${c.email || '—'}${c.instagram ? ' · IG: ' + c.instagram : ''}</span>
-          ${c.gruppo ? `<span>Gruppo: ${c.gruppo}</span>` : ''}
+          <b>${esc(c.nome || '—')}</b>
+          <span>${esc(c.telefono || '—')} · ${esc(c.email || '—')}${c.instagram ? ' · IG: ' + esc(c.instagram) : ''}</span>
+          ${c.gruppo ? `<span>Gruppo: ${esc(c.gruppo)}</span>` : ''}
         </div>
         <div class="azioni">
-          ${c.telefono ? `<button class="btn-confirm" onclick="apriMessaggioWhatsapp('${c.id}')">WhatsApp</button>` : ''}
-          ${c.email ? `<button class="btn-ghost" onclick="apriMessaggioEmail('${c.id}')">Email</button>` : ''}
-          ${c.instagram ? `<button class="btn-ghost" onclick="apriMessaggioInstagram('${c.id}')">Instagram</button>` : ''}
+          ${c.telefono ? `<button class="btn-confirm" onclick="apriMessaggioWhatsapp(${jsArg(c.id)})">WhatsApp</button>` : ''}
+          ${c.email ? `<button class="btn-ghost" onclick="apriMessaggioEmail(${jsArg(c.id)})">Email</button>` : ''}
+          ${c.instagram ? `<button class="btn-ghost" onclick="apriMessaggioInstagram(${jsArg(c.id)})">Instagram</button>` : ''}
         </div>
       </div>
     `).join('');
@@ -1989,7 +2001,7 @@ Lì trovi anche la planimetria della villa, piano per piano.
       .select('*')
       .order('created_at', { ascending: false });
     if (error) {
-      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${error.message}</div>`;
+      lista.innerHTML = `<div class="mc-empty">Errore nel caricamento: ${esc(error.message)}</div>`;
       return;
     }
 
@@ -2034,12 +2046,12 @@ Lì trovi anche la planimetria della villa, piano per piano.
       return `
         <div class="mc-row">
           <div class="info">
-            <b>${cliente}</b>
-            <span>${cfg ? cfg.label : l.evento} · ${canaleLabel}</span>
-            <span>${quando} · ${l.operatore_nome || l.operatore_email}</span>
+            <b>${esc(cliente)}</b>
+            <span>${esc(cfg ? cfg.label : l.evento)} · ${canaleLabel}</span>
+            <span>${esc(quando)} · ${esc(l.operatore_nome || l.operatore_email)}</span>
           </div>
           <div class="azioni">
-            <button class="btn-ghost" onclick="eliminaContatto('${l.evento}','${l.richiesta_id}')">Elimina</button>
+            <button class="btn-ghost" onclick="eliminaContatto(${jsArg(l.evento)},${jsArg(l.richiesta_id)})">Elimina</button>
           </div>
         </div>
       `;
