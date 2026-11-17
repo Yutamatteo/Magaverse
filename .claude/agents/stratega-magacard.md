@@ -32,4 +32,4 @@ dal pannello. Oggi l'iscrizione si completa pagando in cassa a una serata.
 - Non modifichi Supabase né il sito: le modifiche tecniche le fa l'architetto dopo l'ok di Matteo.
 - Ogni proposta indica: obiettivo, come funziona, cosa cambia per lo staff, cosa serve nel database,
   rischi (abusi, code alla cassa), come misurare se funziona.
-- Niente dati personali dei clienti nelle bozze; il repository è pubblico, le proposte vanno nel Cantiere.
+- Niente dati personali dei clienti nelle bozze; il repository è pubblico, le proposte vanno nella Magheca.

@@ -16,7 +16,7 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
 - Anteprima nascosta (noindex, form disattivati): https://www.magaverse.it/anteprima/redesign/
   È una copia del ramo `redesign-grafica` dentro la cartella `anteprima/redesign` di `main`.
   Su `main` si pubblica **solo** quella cartella.
-- Diario dei lavori con screenshot: artifact "Cantiere Magaverse" su claude.ai (db `cantiere/stato`).
+- Diario dei lavori con screenshot: artifact "Magheca" (ex "Cantiere Magaverse") su claude.ai (db `cantiere/stato`).
 
 ### Fatto finora
 - Hub e home Magaparty: "la stagione come parete di foto" (`assets/saga.css`, `assets/saga.js`),
@@ -29,7 +29,7 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   (`assets/racconto.css`); avviso fine stagione su Marea e Battigia.
 - Maga Gala "coming soon" (`magaparty/magagala.html`): niente dettagli inventati, solo la data di Capodanno.
 - Lido: foto vere nella giornata tipo; MagaCard: tessera olografica; pagina 404; sitemap e robots.
-- 17/11 pomeriggio (Claude Code, vedi Cantiere per il dettaglio):
+- 17/11 pomeriggio (Claude Code, vedi Magheca per il dettaglio):
   - Contest costumi chiuso: pagina con classifica finale; voti, iscrizioni e foto chiusi anche su
     Supabase (migrazione `chiudi_contest_costumi_halloween_2026`).
   - Lido rifatto in stile "cartello": servizi, menù e listino da lavagna, contatti a righe, Prenota a
@@ -56,7 +56,7 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   risoluzione, niente rotazioni, niente ripetizioni; si usano le più nitide con un trattamento
   colore unico. Gli originali ad alta risoluzione non sono sul PC: chiederli se servono.
 - Non inventare date, luoghi, prezzi o nomi di serate. Se un dato manca, lascialo generico.
-- Lavora in autonomia quando Matteo dà una finestra di tempo; aggiorna il Cantiere con l'ora reale.
+- Lavora in autonomia quando Matteo dà una finestra di tempo; aggiorna la Magheca con l'ora reale.
   Su questo PC l'ora reale si legge con PowerShell `Get-Date -Format HH:mm`: in Git Bash
   `TZ=Europe/Rome date` restituisce l'ora UTC.
 - Le misure di `fluidita.py` oscillano molto (anche ±15 ms con lo stesso codice, e il PC passa da
@@ -109,7 +109,7 @@ Messaggi in italiano, che spiegano cosa cambia per chi usa il sito.
 
 ## Lavoro autonomo
 Quando Matteo dà una finestra di tempo (o parte una task programmata) si lavora da soli e lui
-passa solo a controllare il Cantiere (artifact "Cantiere Magaverse": stato in `cantiere/stato`,
+passa solo a controllare la Magheca (artifact "Magheca" (ex "Cantiere Magaverse"): stato in `cantiere/stato`,
 una scrivania per agente in `agenti/<id>`, campi `stato` = lavoro / pausa / finito / bloccato,
 `task`, `aggiornato`, `risultato {testo, url}`; voci del diario con `a` = id dell'agente).
 
@@ -117,18 +117,18 @@ una scrivania per agente in `agenti/<id>`, campi `stato` = lavoro / pausa / fini
 - Modificare il ramo `redesign-grafica`, fare commit (identità e riga `Co-Authored-By` come sopra).
 - Pubblicare l'anteprima con `bash strumenti/pubblica.sh "messaggio"` e poi verificare il push con
   `git ls-remote origin refs/heads/redesign-grafica`.
-- Aggiornare e riorganizzare il Cantiere, con l'ora reale (PowerShell `Get-Date -Format HH:mm`).
+- Aggiornare e riorganizzare la Magheca, con l'ora reale (PowerShell `Get-Date -Format HH:mm`).
 
-**Non si fa mai da soli** (va nel Cantiere sotto "Serve te")
+**Non si fa mai da soli** (va nella Magheca sotto "Serve te")
 - Pubblicare sul sito vero (`main` fuori dalla cartella `anteprima/`).
 - Modificare Supabase (schema, dati, funzioni, chiavi).
 - Cancellare file o cartelle fuori dalla propria cartella temporanea.
 - Mandare messaggi, pubblicare sui social, inventare date, prezzi, nomi o luoghi.
 
-**Il ciclo**: una task alla volta = un commit = una pubblicazione dell'anteprima, poi Cantiere
+**Il ciclo**: una task alla volta = un commit = una pubblicazione dell'anteprima, poi Magheca
 aggiornato e task successiva. Prima di chiudere una task: aprire le pagine toccate con Playwright
 a 390x844, controllare che non ci sia scorrimento orizzontale
-(`document.documentElement.scrollWidth <= 390`) e annotare nel Cantiere i ms per fotogramma di
+(`document.documentElement.scrollWidth <= 390`) e annotare nella Magheca i ms per fotogramma di
 `py strumenti/fluidita.py <pagina> 8765` (server: `py -m http.server 8765`). Se il budget finisce,
 fermarsi dopo un commit completo.
 
@@ -136,7 +136,7 @@ fermarsi dopo un commit completo.
 rotazione degli specialisti, passaggi tra agenti, verifica, budget, resoconto). Per avviarla basta
 scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agenti/capoprogetto`.
 
-**Agenti** (`.claude/agents/`, ognuno ha la sua scrivania nel Cantiere in `agenti/<id>`):
+**Agenti** (`.claude/agents/`, ognuno ha la sua scrivania nella Magheca in `agenti/<id>`):
 - `architetto`: ingegnere del software, tutte le modifiche al codice del sito (metodo: capire,
   misurare, implementare, verificare, rivedere, decidere sui numeri).
 - `mystery-guest`: prova l'anteprima da telefono come un cliente arrivato da Instagram.
@@ -154,7 +154,7 @@ scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agen
 - `esperto-informatico`: admin IT e sicurezza informatica di tutto il Magaverse (Supabase, Edge
   Functions, Resend, GitHub e Pages, dominio, SumUp tecnico, pannello staff). Legge e misura da solo,
   corregge in anteprima; scritture su Supabase, chiavi, impostazioni e sito vero solo con l'ok scritto
-  di Matteo, che resta il suo superiore. Tiene nel Cantiere l'inventario di servizi e accessi.
+  di Matteo, che resta il suo superiore. Tiene nella Magheca l'inventario di servizi e accessi.
 - `ufficio-qualita`: modelli, procedure, documentazione e testi legali (termini e condizioni, privacy,
   cookie, regolamenti) a norma, in bozza da far validare a un professionista.
 - `commercialista`: budget e consuntivi delle serate, costo delle idee, scadenzario, domande per il
@@ -163,5 +163,5 @@ scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agen
   da fonti pubbliche, con link e data. Non contatta mai nessuno.
 
 Il repository GitHub è **pubblico**: bozze, report, video e note degli agenti vanno **solo** nel
-Cantiere privato o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,
+Magheca privata o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,
 manda messaggi o spende crediti senza l'ok di Matteo.

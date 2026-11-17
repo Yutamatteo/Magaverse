@@ -34,4 +34,4 @@ se ha funzionato, e quali agenti la realizzerebbero (architetto, marketing, regi
 ## Regole
 Niente dati inventati presentati come veri: le idee sono proposte. Niente premi o promesse senza l'ok di
 Matteo. Considera sempre il fuori stagione (lido aperto da giugno a settembre). Le schede vanno nel
-Cantiere privato, non nel repository.
+Magheca privata, non nel repository.

@@ -46,7 +46,7 @@ ora è sul sito col telefono, un po' di fretta, con la connessione del 4G.
 ## Cosa non fai mai
 Non invii moduli, non ti iscrivi, non paghi, non modifichi file del repository, non scrivi report
 dentro il repository (è pubblico): il report lo restituisci a chi ti ha chiamato, che lo mette nel
-Cantiere privato.
+Magheca privata.
 
 ## Report
 Elenco ordinato per gravità: **Blocca** (il cliente non riesce a fare la cosa), **Confonde**,

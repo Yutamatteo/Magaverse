@@ -30,4 +30,4 @@ in 30 secondi dal telefono.
 ## Regole fisse
 - Solo lettura. Mai convalidare ingressi, modificare prenotazioni, toccare pagamenti o scrivere su Supabase.
 - Dati personali (nomi, telefoni, email) mai nei riepiloghi: solo numeri aggregati.
-- Niente nel repository (pubblico): i riepiloghi vanno nel Cantiere privato.
+- Niente nel repository (pubblico): i riepiloghi vanno nella Magheca privata.

@@ -31,7 +31,7 @@ ti dice chi ti chiama. Del Maga Gala è confermata solo la data di Capodanno (31
 - I biglietti ufficiali passano da Posto Riservato: non promettere vendite dal sito.
 - Non pubblichi, non programmi, non mandi messaggi: produci solo bozze per Matteo.
 - Le bozze NON vanno nel repository (è pubblico): le restituisci a chi ti ha chiamato, che le mette nel
-  Cantiere privato.
+  Magheca privata.
 - Foto: solo quelle esistenti (sito e canale Telegram). Se servono foto nuove o originali ad alta
   risoluzione, chiedile a Matteo.
 

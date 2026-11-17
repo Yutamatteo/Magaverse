@@ -1,6 +1,6 @@
 ---
 name: capoprogetto
-description: Metodo di regia della squadra di agenti del Magaverse. Usala quando Matteo chiede "fai un giro", "giro da capoprogetto", "lavora in autonomia", o quando parte una sessione programmata: scegli cosa fare dal Cantiere, chiama lo specialista giusto, verifica il risultato, aggiorna il Cantiere e fermati in tempo.
+description: Metodo di regia della squadra di agenti del Magaverse. Usala quando Matteo chiede "fai un giro", "giro da capoprogetto", "lavora in autonomia", o quando parte una sessione programmata: scegli cosa fare dalla Magheca, chiama lo specialista giusto, verifica il risultato, aggiorna la Magheca e fermati in tempo.
 ---
 
 # Capoprogetto del Magaverse
@@ -12,7 +12,7 @@ i passaggi da uno all'altro li fai tu. Parli e scrivi in italiano.
 ## 0. Prima di tutto
 1. Leggi `CLAUDE.md` (regole, sezione "Lavoro autonomo", agenti) e `.claude/skills/magaverse-dev/SKILL.md`.
 2. Leggi l'ora reale con PowerShell `Get-Date -Format HH:mm` (mai `TZ=Europe/Rome date` in Git Bash).
-3. Leggi il Cantiere: artifact "Cantiere Magaverse", slug `93f20d91-14a9-4457-897a-7b4543eebf54`,
+3. Leggi la Magheca: artifact "Magheca" (ex "Cantiere Magaverse"), slug `93f20d91-14a9-4457-897a-7b4543eebf54`,
    documento `cantiere/stato` (campi `ora`, `fase`, `log`, `tasks`, `serve_te`, `futuro`) e collezione
    `agenti` (una scrivania per agente: `nome`, `ruolo`, `stato` = lavoro/pausa/finito/bloccato/futuro,
    `task`, `dettaglio`, `aggiornato`, `risultato {testo, url}`). Scrivi sempre con `ifVersion`.
@@ -21,13 +21,13 @@ i passaggi da uno all'altro li fai tu. Parli e scrivi in italiano.
 
 ## 1. Scegli cosa fare (in quest'ordine di priorità)
 1. **Qualcosa di rotto** sull'anteprima o sul sito (report del mystery-guest, errori, link rotti).
-2. **Risposte di Matteo** arrivate nel Cantiere o in chat che sbloccano un lavoro.
+2. **Risposte di Matteo** arrivate nella Magheca o in chat che sbloccano un lavoro.
 3. **Scadenze vicine**: la prossima serata o il Maga Gala (31.12) pesano più delle idee per l'estate.
-4. **Task aperte** nel Cantiere (`tasks` con `s: "todo"`), nell'ordine in cui sono scritte.
+4. **Task aperte** nella Magheca (`tasks` con `s: "todo"`), nell'ordine in cui sono scritte.
 5. **Rotazione**: se non c'è niente di urgente, scegli lo specialista che non lavora da più tempo
    (guarda `aggiornato` delle scrivanie), così il budget non va tutto sul codice.
 
-**Le task le proponi tu, non Matteo.** Tieni sempre nella lista `tasks` del Cantiere almeno 5 task
+**Le task le proponi tu, non Matteo.** Tieni sempre nella lista `tasks` della Magheca almeno 5 task
 "da fare", ordinate per valore: quando scendono sotto, ne crei di nuove da quello che vedi (audit
 del mystery-guest o del revisore a 4 formati, controlli SEO, scadenze vicine, idee del direttore
 creativo, cose notate in verifica, problemi segnalati da Matteo o dai suoi amici). Ogni task nuova:
@@ -57,7 +57,7 @@ Catene tipiche:
 - **Infrastruttura e sicurezza**: `esperto-informatico` (audit, correzioni in anteprima, migrazioni in
   bozza) → `revisore` → solo con l'ok scritto di Matteo, riportato nell'incarico, l'esperto applica su
   Supabase o sul sito vero.
-- **Documenti e conformità**: `ufficio-qualita` (bozze legali e modelli nel Cantiere) → Matteo e un
+- **Documenti e conformità**: `ufficio-qualita` (bozze legali e modelli nella Magheca) → Matteo e un
   professionista approvano → `architetto` pubblica il testo finale.
 - **Numeri**: `commercialista` per budget e costo delle idee (prima di proporre premi, sponsor, video
   a pagamento); i dati veri li dà Matteo.
@@ -74,7 +74,7 @@ Prima di chiamare uno specialista aggiorna la sua scrivania (`stato: "lavoro"`, 
   `strumenti/fluidita.py`. Chiedi di usarli, non di scrivere script nuovi.
 - Ogni agente ha il suo modello (in `.claude/agents/<nome>.md`, campo `model`): controlli e ricerca
   leggeri, codice e creatività forti. Non chiamare un agente forte per un lavoro da agente leggero.
-- Lavori piccoli e ovvi (una riga di testo, un dato nel Cantiere) falli tu, senza scomodare un agente.
+- Lavori piccoli e ovvi (una riga di testo, un dato nella Magheca) falli tu, senza scomodare un agente.
 - Video: prima il `regista` propone 3 direzioni e Matteo ne sceglie una; solo dopo storyboard e montaggio.
 - Lancia in parallelo gli agenti che non dipendono l'uno dall'altro.
 
@@ -86,13 +86,13 @@ Prima di chiamare uno specialista aggiorna la sua scrivania (`stato: "lavoro"`, 
 Se qualcosa non torna, lo correggi o lo segni come non verificato: mai scrivere "fatto" se non lo è.
 
 ## 4. Registra
-- Bozze, report, idee e copioni vanno **nel Cantiere** (sono privati), mai nel repository (è pubblico).
+- Bozze, report, idee e copioni vanno **nella Magheca** (sono privati), mai nel repository (è pubblico).
   Testi lunghi: in `dettaglio` della scrivania dell'agente o in una voce `futuro`.
 - Aggiorna la scrivania dello specialista (`stato: "finito"` o `"bloccato"`, `risultato` con link) e il
   diario con l'ora reale e `a` = id dell'agente.
 - Le domande per Matteo vanno in `serve_te` (`t` titolo, `d` contesto, `q` domanda, `urgente` se serve).
 - **Decisioni non ovvie** (scelta tra due soluzioni, cosa scartato e perché): una voce di diario che
-  comincia con "Decisione:" e dice il perché in una riga. Il registro è il Cantiere, non un file del
+  comincia con "Decisione:" e dice il perché in una riga. Il registro è la Magheca, non un file del
   repository (è pubblico).
 - **Dati personali** (nomi, telefoni, email di clienti, MagaCard, contest): mai nel diario, nei commit,
   negli incarichi o negli screenshot salvati.
@@ -106,7 +106,7 @@ Se qualcosa non torna, lo correggi o lo segni come non verificato: mai scrivere 
   - contesto della sessione oltre il **70%** → finisci la task in corso e chiudi.
   Prima di una task lunga (un video, un audit di tutto il sito) stima se ci sta nel budget rimasto;
   se no, scegline una più piccola.
-- Fermati dopo un lavoro completo (commit pubblicato e verificato, oppure bozza salvata nel Cantiere),
+- Fermati dopo un lavoro completo (commit pubblicato e verificato, oppure bozza salvata nella Magheca),
   mai a metà. Se il budget è basso, non iniziare un'altra task.
 - Se resta budget dopo una task, puoi farne un'altra ripartendo dal punto 1.
 - A fine giro: scrivania `capoprogetto` su `finito` con un riepilogo; campo `ora` di `cantiere/stato`

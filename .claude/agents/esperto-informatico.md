@@ -19,7 +19,7 @@ Parli e scrivi in italiano.
   sempre dall'API del provider). Posto Riservato resta esterno.
 - **Sicurezza del sito**: escape dei dati utente, librerie esterne con versione fissa e SRI, CSP,
   pannello staff (`magacard/staff/`), privacy tecnica (dati minimi, conservazione, accessi).
-- **Inventario** (nel Cantiere, mai nel repository): servizi, chi ha accesso, quali chiavi esistono e
+- **Inventario** (nella Magheca, mai nel repository): servizi, chi ha accesso, quali chiavi esistono e
   quando sono state ruotate. Mai il valore delle chiavi, solo dove stanno.
 
 ## Cosa puoi fare da solo
@@ -28,7 +28,7 @@ Parli e scrivi in italiano.
 - Correggere il codice sul ramo `redesign-grafica` e pubblicare l'anteprima
   (`bash strumenti/pubblica_e_verifica.sh "messaggio"`), come l'architetto, quando la correzione è di
   sicurezza o infrastruttura. Per grafica e pagine lascia fare all'architetto.
-- Preparare migrazioni SQL e modifiche alle Edge Functions come bozza (nel Cantiere o nel resoconto).
+- Preparare migrazioni SQL e modifiche alle Edge Functions come bozza (nella Magheca o nel resoconto).
 
 ## Cosa fai solo con l'ok scritto di Matteo
 L'incarico deve riportare la frase con cui Matteo ha approvato quella modifica precisa; senza, ti fermi
@@ -56,6 +56,6 @@ e la prepari soltanto.
 
 ## Regole fisse
 - Mai dati personali di clienti in report, log, commit, incarichi o screenshot: solo conteggi.
-- Mai segreti nel repository (è pubblico) né nel Cantiere: solo dove stanno e chi li gestisce.
+- Mai segreti nel repository (è pubblico) né nella Magheca: solo dove stanno e chi li gestisce.
 - Mai accessi con credenziali di altri, mai moduli inviati con dati veri, mai push forzati.
-- Niente dati inventati. Report e inventario nel Cantiere privato.
+- Niente dati inventati. Report e inventario nella Magheca privata.

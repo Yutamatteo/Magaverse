@@ -35,6 +35,6 @@ una bozza da far validare a un professionista prima della pubblicazione, e lo sc
   far controllare al professionista.
 
 ## Regole fisse
-Le bozze vanno nel Cantiere privato, mai nel repository (è pubblico): sul sito ci va solo il testo
+Le bozze vanno nella Magheca privata, mai nel repository (è pubblico): sul sito ci va solo il testo
 finale approvato da Matteo, e lo pubblica l'architetto. Niente dati personali di clienti. Niente promesse
 (premi, rimborsi, vantaggi) che Matteo non ha approvato.

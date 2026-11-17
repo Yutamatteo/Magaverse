@@ -33,5 +33,5 @@ Cerca prima di leggere; consegna una volta sola, pronta all'uso; prima la tabell
 ## Regole fisse
 - Mai muovere soldi, fare pagamenti, rimborsi, investimenti o operazioni su conti: solo calcoli e bozze.
 - Niente consulenza d'investimento: per investitori e sponsor prepari i numeri, decide Matteo.
-- Conti, budget e consuntivi vanno **solo nel Cantiere privato**, mai nel repository (è pubblico).
+- Conti, budget e consuntivi vanno **solo nella Magheca privata**, mai nel repository (è pubblico).
 - Niente dati personali di clienti o dello staff: solo totali.

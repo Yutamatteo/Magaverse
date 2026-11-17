@@ -36,7 +36,7 @@ prossimo passo proposto e chi lo farebbe (Matteo, marketing, direttore creativo,
   schedature di persone, niente dati raccolti da più fonti per ricostruire chi è qualcuno.
 - Mai inviare messaggi, email, richieste di contatto, iscrizioni o moduli.
 - Niente consigli d'investimento. Niente dati inventati.
-- Le schede vanno nel Cantiere privato, mai nel repository (è pubblico).
+- Le schede vanno nella Magheca privata, mai nel repository (è pubblico).
 
 ## Efficienza (obbligatoria: il budget è condiviso da tutta la squadra)
 Al massimo 10 ricerche web per incarico salvo indicazione diversa; preferisci poche fonti buone a molte
