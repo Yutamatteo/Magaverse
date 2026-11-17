@@ -55,6 +55,25 @@
     }
   }
 
+  /* ---------- frasi sotto il conto: una ogni 4 s, solo con il conto sullo schermo e la scheda visibile.
+     Con movimento ridotto resta la prima. Il testo per i lettori di schermo è l'elenco .mv-sr. ---------- */
+  var sussurri = document.querySelector('[data-sussurri]');
+  if (sussurri && !riduci && 'IntersectionObserver' in window) {
+    var frasi = sussurri.children, attuale = 0, timer = 0, inVista = false;
+    var avanti = function () {
+      frasi[attuale].classList.remove('su');
+      attuale = (attuale + 1) % frasi.length;
+      frasi[attuale].classList.add('su');
+    };
+    var aggiorna = function () {
+      var gira = inVista && !document.hidden;
+      if (gira && !timer) timer = setInterval(avanti, 4000);
+      else if (!gira && timer) { clearInterval(timer); timer = 0; }
+    };
+    new IntersectionObserver(function (v) { inVista = v[0].isIntersecting; aggiorna(); }).observe(sussurri);
+    document.addEventListener('visibilitychange', aggiorna);
+  }
+
   /* ---------- sipario guidato dallo scroll ---------- */
   var sipario = document.querySelector('[data-sipario]');
   if (sipario && !riduci) {

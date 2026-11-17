@@ -155,6 +155,16 @@ body.gala {
 }
 .conto small { display: block; margin-top: 8px; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,239,228,.7); }
 
+/* frasi sotto il conto: impilate nella stessa cella, così l'altezza è quella della più lunga e il layout non salta */
+.sussurri {
+  display: grid; max-width: 34ch; margin: 34px auto 0;
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(19px, 2.4vw, 25px); line-height: 1.35;
+  color: rgba(246,239,228,.86); text-wrap: balance;
+}
+.sussurri > span { grid-area: 1 / 1; opacity: 0; transform: translateY(8px); transition: opacity .9s ease, transform .9s ease; }
+.sussurri > span.su { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .sussurri > span { transition: none; transform: none; } }
+
 /* ── Cosa sappiamo ── */
 .cosa {
   max-width: 1100px; margin: 0 auto; padding: 70px clamp(18px, 4vw, 48px) 90px;
