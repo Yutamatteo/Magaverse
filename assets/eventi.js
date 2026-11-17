@@ -4,7 +4,7 @@
    data: "AAAA-MM-GG" · img: percorso assoluto (facoltativo) · url: pagina
    presto: true = "coming soon", senza dettagli ancora decisi */
 window.MAGAVERSE_EVENTI = [
-  { nome: "Halloween in Villa", data: "2026-10-31", quando: "Venerdì 31 ottobre",
+  { nome: "Halloween in Villa", data: "2026-10-31", quando: "Sabato 31 ottobre",
     img: "/assets/img/halloween-locandina.webp", url: "/magaparty/index.html#hw-titolo",
     testo: "14 costumi in gara, 460 voti: guarda com'è andata." },
   { nome: "Maga Gala", data: "2026-12-31", quando: "Capodanno · coming soon", presto: true,

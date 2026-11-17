@@ -674,3 +674,6 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 
 /* il pulsante WhatsApp fisso non copre più il fondo pagina sul telefono */
 @media (max-width: 1023px) { .footer { padding-bottom: 96px; } }
+
+/* la mappa della giornata resta ferma sotto la barra, non dietro */
+@media (min-width: 900px) { .story-stage-col { top: 110px; } }
