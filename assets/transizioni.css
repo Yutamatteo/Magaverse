@@ -1,0 +1,61 @@
+/* =========================================================
+   MAGAVERSE · PASSAGGI TRA LE PAGINE
+   Quando si passa da una pagina all'altra, quella nuova sale
+   come la marea, con il bordo a onda. La locandina di un evento
+   "vola" dalla lista alla pagina dell'evento.
+   Funziona nei browser con le View Transitions tra documenti
+   (Chrome/Edge 126+, Safari 18.2+): negli altri si passa da una
+   pagina all'altra come sempre, senza effetti.
+   Va caricato in tutte le pagine pubbliche.
+   ========================================================= */
+@view-transition { navigation: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { mix-blend-mode: normal; }
+
+  ::view-transition-old(root) {
+    animation: mv-via .8s cubic-bezier(.4, 0, .2, 1) both;
+  }
+  ::view-transition-new(root) {
+    animation: mv-marea .8s cubic-bezier(.33, .6, .2, 1) both;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 70C120 10 250 10 380 62S640 130 780 66 1040 8 1200 60V1400H0Z'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 70C120 10 250 10 380 62S640 130 780 66 1040 8 1200 60V1400H0Z'/%3E%3C/svg%3E");
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 140%; mask-size: 100% 140%;
+  }
+  @keyframes mv-via {
+    to { transform: translateY(-5vh) scale(.985); filter: brightness(.5); }
+  }
+  @keyframes mv-marea {
+    from { -webkit-mask-position: 0 106vh; mask-position: 0 106vh; }
+    to   { -webkit-mask-position: 0 -26vh; mask-position: 0 -26vh; }
+  }
+
+  /* La locandina condivisa tra lista ed evento */
+  ::view-transition-group(locandina-marea),
+  ::view-transition-group(locandina-battigia),
+  ::view-transition-group(locandina-ultima-onda),
+  ::view-transition-group(locandina-tardeo) {
+    animation-duration: .75s;
+    animation-timing-function: cubic-bezier(.3, .7, .2, 1);
+  }
+  ::view-transition-old(locandina-marea), ::view-transition-new(locandina-marea),
+  ::view-transition-old(locandina-battigia), ::view-transition-new(locandina-battigia),
+  ::view-transition-old(locandina-ultima-onda), ::view-transition-new(locandina-ultima-onda),
+  ::view-transition-old(locandina-tardeo), ::view-transition-new(locandina-tardeo) {
+    width: 100%; height: 100%; object-fit: cover; animation-duration: .75s;
+  }
+}
+
+/* Chi condivide la stessa locandina tra due pagine */
+.mp-evento[href$="marea.html"] > img,       img.logo-image[src*="marea-locandina"]       { view-transition-name: locandina-marea; }
+.mp-evento[href$="battigia.html"] > img,    img.logo-image[src*="battigia-locandina"]    { view-transition-name: locandina-battigia; }
+.mp-evento[href$="ultima-onda.html"] > img, img.logo-image[src*="ultima-onda-locandina"] { view-transition-name: locandina-ultima-onda; }
+.mp-evento[href$="tardeo.html"] > img,      img.logo-image[src*="tardeo-locandina"]      { view-transition-name: locandina-tardeo; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

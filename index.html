@@ -18,11 +18,14 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicon-180.png" />
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
     <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/assets/img/hero-tramonto-900.webp" as="image" media="(max-width: 899px)" />
-    <link rel="preload" href="/assets/img/hero-tramonto-1600.webp" as="image" media="(min-width: 900px)" />
     <link rel="stylesheet" href="/assets/maga-base.css" />
+    <link rel="stylesheet" href="/assets/transizioni.css" />
+    <link rel="stylesheet" href="/assets/motion.css" />
     <link rel="stylesheet" href="/assets/hub.css" />
+    <script src="/assets/golfo.js" defer></script>
+    <script src="/assets/motion.js" defer></script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Organization","name":"Magaverse","url":"https://www.magaverse.it/",
      "sameAs":["https://www.instagram.com/_magaparty","https://tiktok.com/@_magaparty"],
@@ -32,8 +35,8 @@
 <body class="hub">
     <a class="skip" href="#mondi">Vai ai contenuti</a>
 
-    <header class="hub-bar">
-        <a href="/" class="hub-logo" aria-label="Magaverse, home">
+    <header class="hub-bar" data-barra>
+        <a href="/index.html" class="hub-logo" aria-label="Magaverse, home">
             <span class="hub-logo-sole" aria-hidden="true"></span>
             Magaverse
         </a>
@@ -45,52 +48,72 @@
     </header>
 
     <main>
-        <section class="hero">
-            <picture class="hero-foto">
-                <source media="(min-width: 900px)" srcset="/assets/img/hero-tramonto-1600.webp" />
-                <img src="/assets/img/hero-tramonto-900.webp" alt="Tramonto sul golfo di Salerno visto dalla spiaggia di Nello Ocean Beach, con gli ombrelloni chiusi" width="900" height="1200" fetchpriority="high" />
-            </picture>
-            <div class="hero-testo">
-                <p class="hero-luogo">Magazzeno, sul golfo di Salerno</p>
-                <h1>Dal tramonto<br />a notte fonda.</h1>
-                <span class="orizzonte" aria-hidden="true"></span>
-                <p class="hero-sub">Le feste di Magaparty, il lido Nello Ocean Beach e la MagaCard per chi non ne salta una.</p>
-            </div>
+        <!-- La scena: scorrendo, il sole scende e arriva la notte -->
+        <section class="golfo" data-golfo-scroll aria-label="Dal tramonto a notte fonda">
+            <div class="golfo-fermo" data-golfo-radice>
+                <picture class="golfo-foto">
+                    <source media="(min-width: 900px)" srcset="/assets/img/hero-tramonto-1600.webp" />
+                    <img src="/assets/img/hero-tramonto-900.webp" alt="Tramonto sul golfo di Salerno visto dalla spiaggia di Nello Ocean Beach" width="900" height="1200" />
+                </picture>
+                <canvas class="golfo-tela" data-golfo aria-hidden="true"></canvas>
+                <svg class="luci" data-luci aria-hidden="true" focusable="false"></svg>
 
-            <aside class="prossimo" id="prossimo" aria-live="polite">
-                <!-- riempito da eventi.js; senza JS resta questo -->
-                <p class="prossimo-label">Prossimo appuntamento</p>
-                <p class="prossimo-vuoto">La stagione è chiusa. Il prossimo capitolo esce prima su <a href="https://www.instagram.com/_magaparty">Instagram</a>.</p>
-            </aside>
+                <div class="hero-testo">
+                    <p class="hero-luogo" data-entra style="--e:0">Magazzeno, sul golfo di Salerno</p>
+                    <h1 data-rise><span class="riga riga-tramonto">Dal tramonto</span> <span class="riga riga-notte">a notte fonda.</span></h1>
+                    <span class="orizzonte" aria-hidden="true"></span>
+                    <p class="hero-sub" data-entra style="--e:1">Le feste di Magaparty, il lido Nello Ocean Beach e la MagaCard per chi non ne salta una.</p>
+                </div>
+
+                <aside class="prossimo" id="prossimo" aria-live="polite" data-entra style="--e:2">
+                    <!-- riempito da eventi.js; senza JS resta questo -->
+                    <p class="prossimo-label">Prossimo appuntamento</p>
+                    <p class="prossimo-vuoto">La stagione è chiusa. Il prossimo capitolo esce prima su <a href="https://www.instagram.com/_magaparty">Instagram</a>.</p>
+                </aside>
+
+                <p class="golfo-indizio" aria-hidden="true"><span></span>Scorri: scende la notte</p>
+            </div>
         </section>
 
         <section class="mondi" id="mondi" aria-labelledby="mondi-titolo">
-            <h2 id="mondi-titolo" class="mondi-titolo">Scegli dove andare</h2>
+            <h2 id="mondi-titolo" class="mondi-titolo" data-rise>Scegli dove andare</h2>
 
-            <a class="mondo mondo-party" href="/magaparty/index.html">
-                <img src="/assets/img/mondo-magaparty.webp" alt="Folla che balla in spiaggia di sera a una festa Magaparty" width="800" height="800" loading="lazy" />
+            <a class="mondo mondo-party" href="/magaparty/index.html" data-reveal>
+                <div class="mondo-foto" data-reveal="foto">
+                    <img data-parallax="0.14" src="/assets/img/mondo-magaparty.webp" alt="Folla che balla in spiaggia di sera a una festa Magaparty" width="800" height="800" loading="lazy" />
+                </div>
                 <div class="mondo-testo">
+                    <p class="mondo-ora"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>Dal tramonto in poi</p>
                     <h3>Magaparty</h3>
                     <p>Marea la domenica, Battigia il mercoledì, le feste in villa e i capitoli speciali della stagione.</p>
                     <span class="mondo-cta">Vedi il calendario</span>
                 </div>
             </a>
 
-            <a class="mondo mondo-lido" href="/oceanbeach/index.html">
-                <img src="/assets/img/mondo-oceanbeach.webp" alt="Riva di Magazzeno con il mare mosso e le montagne della costiera sullo sfondo" width="800" height="1067" loading="lazy" />
+            <a class="mondo mondo-lido" href="/oceanbeach/index.html" data-reveal>
+                <div class="mondo-foto" data-reveal="foto">
+                    <img data-parallax="0.14" src="/assets/img/mondo-oceanbeach.webp" alt="Riva di Magazzeno con il mare mosso e le montagne della costiera sullo sfondo" width="800" height="1067" loading="lazy" />
+                </div>
                 <div class="mondo-testo">
+                    <p class="mondo-ora"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Di giorno</p>
                     <h3>Nello Ocean Beach</h3>
                     <p>Il lido di Magazzeno: ombrelloni, bar, canoe e tramonti sul golfo.</p>
                     <span class="mondo-cta">Prenota un ombrellone</span>
                 </div>
             </a>
 
-            <a class="mondo mondo-card" href="/magacard/index.html">
-                <div class="tessera" aria-hidden="true">
-                    <span class="tessera-nome">Magaparty<br />membership</span>
-                    <span class="tessera-timbri"><i></i><i></i><i></i><i></i><i></i></span>
+            <a class="mondo mondo-card" href="/magacard/index.html" data-reveal>
+                <div class="mondo-foto mondo-foto-tessera">
+                    <div class="tessera3d" data-tilt="11" aria-hidden="true">
+                        <div class="tessera3d-corpo">
+                            <span class="tessera3d-marca">MagaCard<small>Magaparty membership</small></span>
+                            <span class="tessera3d-timbri"><i></i><i></i><i></i><i></i><i></i><span>3 timbri su 5</span></span>
+                            <span class="tessera3d-riflesso"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="mondo-testo">
+                    <p class="mondo-ora"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v6.500l2.500 3V16h-11v-3.500L9 9.500zM5 18h14v3H5z"/></svg>A ogni serata</p>
                     <h3>MagaCard</h3>
                     <p>Un timbro a ogni serata, livelli da sbloccare e un premio alla fine del percorso.</p>
                     <span class="mondo-cta">Richiedi la tessera</span>
@@ -99,6 +122,7 @@
         </section>
     </main>
 
+    <div class="onde" aria-hidden="true"></div>
     <footer class="hub-footer">
         <p>© <span id="anno">2026</span> Magaverse, Magazzeno (SA)</p>
         <nav aria-label="Social">
