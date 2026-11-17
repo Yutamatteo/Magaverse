@@ -47,7 +47,7 @@
             width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--night-border); border-radius:12px;
             padding:12px 14px; color:#EDE7D6; font-family:inherit; font-size:13px; outline:none;
         }
-        .form-field input:focus { border-color:var(--sunset-orange); }
+        .form-field :is(input, textarea, select):focus { border-color:var(--sunset-orange); box-shadow:0 0 0 3px rgba(226,84,14,0.25); }
         .opt-choice { display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid var(--night-border); border-radius:14px; padding:14px 16px; cursor:pointer; transition:all .15s; }
         .opt-choice.selected { border-color:var(--sunset-orange); background:rgba(255,51,25,0.09); }
         .opt-choice input { accent-color: var(--sunset-orange); width:16px; height:16px; }
