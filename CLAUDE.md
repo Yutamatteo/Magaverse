@@ -43,6 +43,11 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   - `golfo.js` non rilegge più le dimensioni della tela a ogni fotogramma; galleria senza entrata
     legata allo scroll sul telefono; scena 3D di Halloween ferma fuori schermo.
 
+- 17/11 sera (lavoro autonomo): conto alla rovescia del Gala con cifre che ruotano (`mvCifre` in
+  `saga.js` e `magagala.js`); onda d'inchiostro sui timbri della MagaCard; trama "31.12" e luce che
+  segue il mouse sul sipario del Gala; MagaCard col giroscopio sul telefono (`motion.js`); colonne
+  a velocità diverse solo sulla parete del lido (`saga.css`, una timeline condivisa, `translate`).
+
 ### Regole emerse con Matteo
 - **Fluidità prima di tutto.** Niente lavoro JavaScript a ogni fotogramma di scroll, niente
   `backdrop-filter`, filtri o `mix-blend-mode` su elementi grandi che si muovono. Le animazioni
