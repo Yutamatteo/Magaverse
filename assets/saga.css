@@ -61,7 +61,7 @@ html:has(.saga) { scroll-snap-type: y proximity; }
 }
 .saga-mappa li {
   display: flex; align-items: center; gap: 7px; cursor: pointer; pointer-events: auto;
-  padding: 6px 0; font-size: 13px; font-weight: 700; color: rgba(244,234,219,.6); transition: color .25s;
+  padding: 6px 0; font-size: 13px; font-weight: 700; color: rgba(244,234,219,.82); transition: color .25s;
 }
 .saga-mappa li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(244,234,219,.4); transition: background .25s, transform .25s; }
 .saga-mappa li:hover, .saga-mappa li.ora { color: #fff; }
