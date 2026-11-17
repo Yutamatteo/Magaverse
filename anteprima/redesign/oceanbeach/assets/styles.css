@@ -693,3 +693,11 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
     .field-row:has(#date) { grid-template-columns: 1.6fr 1fr; align-items: end; }
     .field-row:has(#date) input { height: 46px; }
 }
+
+/* Fuori stagione: avviso sobrio sotto la testata */
+.ob-stagione { padding: 28px 0 0; }
+.ob-stagione .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; padding-top: 20px; padding-bottom: 20px; border-top: 2px solid var(--fg); border-bottom: 1px solid var(--border); }
+.ob-stagione p { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.55; color: var(--muted-fg); }
+.ob-stagione b { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--fg); margin-right: 4px; }
+.ob-stagione a { flex-shrink: 0; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
+.ob-stagione a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
