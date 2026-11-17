@@ -13,12 +13,12 @@
   "frase": "Ombrelloni sulla riva, il bar, le canoe e il tramonto sul golfo. Ogni serata dell'estate è cominciata qui, a piedi nudi.",
   "link": [
    [
-    "Prenota un ombrellone",
-    "/oceanbeach/booking.html"
-   ],
-   [
     "Scopri il lido",
     "/oceanbeach/index.html"
+   ],
+   [
+    "Il listino",
+    "/oceanbeach/pricing.html"
    ]
   ],
   "parete": "lido"
