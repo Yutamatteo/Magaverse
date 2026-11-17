@@ -171,7 +171,7 @@
     var w = tela.clientWidth, h = tela.clientHeight;
     if (!w || !h) return false;
     var scala = Math.min(window.devicePixelRatio || 1, 1);
-    var tetto = window.matchMedia('(pointer: coarse)').matches ? 4.5e5 : 8e5;
+    var tetto = window.matchMedia('(pointer: coarse)').matches ? 2.6e5 : 8e5;
     if (w * h * scala * scala > tetto) scala = Math.sqrt(tetto / (w * h));
     var W = Math.round(w * scala), H = Math.round(h * scala);
     if (tela.width !== W || tela.height !== H) { tela.width = W; tela.height = H; }
@@ -225,6 +225,9 @@
     par.y += (par.my - par.y) * Math.min(1, dt * 3);
     applica();
     disegna();
+    /* sul telefono il cielo si ridisegna solo mentre cambia l'ora (cioè mentre scorri):
+       a pagina ferma niente lavoro per la GPU e per la batteria */
+    if (telefono && Math.abs(stato.meta - stato.t) < 0.0006 && Math.abs(par.mx - par.x) < 0.001) return;
     if (inVista && !document.hidden) raf = window.requestAnimationFrame(giro);
   }
   function parti() { if (!raf && !riduci) { ultimo = 0; raf = window.requestAnimationFrame(giro); } }
