@@ -139,7 +139,11 @@
   if (riduci) { aggiornaBarra(); window.addEventListener('scroll', aggiornaBarra, { passive: true }); return; }
 
   /* ---------- tutto ciò che segue lo scroll ---------- */
-  var parallassi = tutti('[data-parallax]').map(function (el) { return { el: el, f: parseFloat(el.dataset.parallax) || 0.1, s: el.dataset.scala || '1.14' }; });
+  /* se il browser sa legare le animazioni allo scorrimento, il parallasse lo fa il CSS
+     (sul compositore, gratis); qui resta solo come ripiego per i browser più vecchi */
+  var parallasseCSS = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()') && !riduci;
+  if (parallasseCSS) document.documentElement.classList.add('mv-parallasse-css');
+  var parallassi = parallasseCSS ? [] : tutti('[data-parallax]').map(function (el) { return { el: el, f: parseFloat(el.dataset.parallax) || 0.1, s: el.dataset.scala || '1.14' }; });
   var inclinati = tutti('[data-tilt]');
   var nastri = tutti('[data-nastro]');
   var ultimoY = window.scrollY, velocita = 0, raf = 0;

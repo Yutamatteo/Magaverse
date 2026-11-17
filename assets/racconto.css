@@ -10,3 +10,9 @@
 .racconto-striscia img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .35s cubic-bezier(.19,1,.22,1); }
 .racconto-striscia a:hover img { transform: scale(1.04); }
 .racconto-striscia a:focus-visible { outline: 3px solid var(--c); outline-offset: 2px; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .racconto-striscia a { animation: racc-entra linear both; animation-timeline: view(inline); animation-range: entry 0% entry 80%; }
+    @keyframes racc-entra { from { opacity: .3; transform: scale(.9) rotate(-2deg); } to { opacity: 1; transform: none; } }
+  }
+}

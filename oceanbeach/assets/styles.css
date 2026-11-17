@@ -594,3 +594,10 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .beat-foto { margin: 0 0 16px; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; background: #e9e1d4; box-shadow: 0 14px 34px -18px rgba(60,40,20,.45); }
 .beat-foto img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.19,1,.22,1); }
 .story-beat:hover .beat-foto img { transform: scale(1.03); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .beat-foto img { animation: beat-zoom linear both; animation-timeline: view(); }
+    @keyframes beat-zoom { from { transform: scale(1.18) translateY(-4%); } to { transform: scale(1.02) translateY(3%); } }
+    .story-beat:hover .beat-foto img { transform: none; }
+  }
+}
