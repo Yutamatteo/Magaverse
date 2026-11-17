@@ -241,7 +241,7 @@
   window.addEventListener('resize', function () { leggiScroll(); parti(); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) parti(); });
   if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (v) { inVista = v[0].isIntersecting; if (inVista) parti(); }, { rootMargin: '80px' }).observe(tela);
+    new IntersectionObserver(function (v) { inVista = v[0].isIntersecting; if (inVista) parti(); }, { rootMargin: '80px' }).observe(radice);
   }
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     window.addEventListener('pointermove', function (e) {
