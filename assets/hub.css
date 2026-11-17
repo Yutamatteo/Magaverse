@@ -292,3 +292,11 @@ body.hub {
   .hero-sub { font-size: 16px; }
   .orizzonte { margin: 16px 0 12px; }
 }
+
+/* telefono: niente sfocatura dietro la barra (si ricalcolava a ogni scorrimento) e tramonto più corto */
+@media (max-width: 760px), (pointer: coarse) {
+  .mv-js .golfo { height: 125vh; height: 125lvh; }
+  .hub-bar, .hub-bar * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .hub-bar.e-piena { background: rgba(14, 18, 36, .96); }
+  .hub-nav a { background: rgba(14, 18, 36, .72); }
+}

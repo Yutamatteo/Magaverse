@@ -170,8 +170,8 @@
   function misura() {
     var w = tela.clientWidth, h = tela.clientHeight;
     if (!w || !h) return false;
-    var scala = Math.min(window.devicePixelRatio || 1, 1.5);
-    var tetto = 1.5e6;
+    var scala = Math.min(window.devicePixelRatio || 1, window.matchMedia('(pointer: coarse)').matches ? 1 : 1.5);
+    var tetto = window.matchMedia('(pointer: coarse)').matches ? 4.5e5 : 1.5e6;
     if (w * h * scala * scala > tetto) scala = Math.sqrt(tetto / (w * h));
     var W = Math.round(w * scala), H = Math.round(h * scala);
     if (tela.width !== W || tela.height !== H) { tela.width = W; tela.height = H; }
@@ -209,8 +209,12 @@
   }
 
   var raf = 0, ultimo = 0, inVista = true;
+  var telefono = window.matchMedia('(pointer: coarse)').matches, ultimoDisegno = 0;
   function giro(ora) {
     raf = 0;
+    /* sui telefoni basta mezzo fotogramma su due: il cielo si muove piano */
+    if (telefono && ora - ultimoDisegno < 32) { if (inVista && !document.hidden) raf = window.requestAnimationFrame(giro); return; }
+    ultimoDisegno = ora;
     var dt = ultimo ? Math.min(0.05, (ora - ultimo) / 1000) : 0.016;
     ultimo = ora;
     stato.tempo += dt;
@@ -237,7 +241,9 @@
     return;
   }
 
-  window.addEventListener('scroll', function () { leggiScroll(); parti(); }, { passive: true });
+  /* si ridisegna solo se il golfo è sullo schermo: prima ogni scorrimento più in basso
+     nella pagina costava un disegno WebGL intero, ed era il motivo della lentezza sui telefoni */
+  window.addEventListener('scroll', function () { if (!inVista) return; leggiScroll(); parti(); }, { passive: true });
   window.addEventListener('resize', function () { leggiScroll(); parti(); });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) parti(); });
   if ('IntersectionObserver' in window) {

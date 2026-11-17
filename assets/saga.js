@@ -11,6 +11,7 @@
   var scene = [].slice.call(saga.querySelectorAll('.scena[data-pannello]'));
   var parete = saga.querySelector('.parete');
   var colonne = parete ? [].slice.call(parete.children) : [];
+  var vel = colonne.map(function (c) { return parseFloat(c.style.getPropertyValue('--v')) || 1; });
   var gruppi = pannelli.filter(function (p) { return +p.dataset.g >= 0; }).length;
   var n = pannelli.length, attiva = -1, raf = 0, altG = 0;
 
@@ -38,8 +39,11 @@
     if (parete && altG) {
       var fg = Math.min(f, gruppi - 1), i0 = Math.floor(fg), i1 = Math.min(gruppi - 1, i0 + 1);
       var c = centri[i0] + (centri[i1] - centri[i0]) * (fg - i0);
-      parete.style.setProperty('--y', (H / 2 - c).toFixed(1) + 'px');
-      parete.style.setProperty('--dy', (f * 26).toFixed(1) + 'px');
+      /* trasformazioni scritte direttamente: niente variabili ereditate, così il
+         telefono non ricalcola gli stili di 90 foto a ogni fotogramma */
+      parete.style.transform = 'translate3d(-50%,' + (H / 2 - c).toFixed(1) + 'px,0) rotate(-4deg)';
+      var dy = f * 26;
+      for (var k = 0; k < colonne.length; k++) colonne[k].style.transform = 'translate3d(0,' + (vel[k] * dy).toFixed(1) + 'px,0)';
     }
     scene.forEach(function (s) {
       var k = +s.dataset.pannello;
