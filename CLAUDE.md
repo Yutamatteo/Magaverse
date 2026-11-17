@@ -40,6 +40,8 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
     h1 nascosti (`.mv-sr` in `maga-base.css`) dove mancavano.
   - `motion.js`: sul telefono non misura più a ogni fotogramma le locandine `.mp-evento` (si
     inclinano solo col mouse); la cornice del Gala si inclina in CSS.
+  - `golfo.js` non rilegge più le dimensioni della tela a ogni fotogramma; galleria senza entrata
+    legata allo scroll sul telefono; scena 3D di Halloween ferma fuori schermo.
 
 ### Regole emerse con Matteo
 - **Fluidità prima di tutto.** Niente lavoro JavaScript a ogni fotogramma di scroll, niente
@@ -52,8 +54,15 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
 - Lavora in autonomia quando Matteo dà una finestra di tempo; aggiorna il Cantiere con l'ora reale.
   Su questo PC l'ora reale si legge con PowerShell `Get-Date -Format HH:mm`: in Git Bash
   `TZ=Europe/Rome date` restituisce l'ora UTC.
-- Le misure di `fluidita.py` oscillano molto (anche ±15 ms con lo stesso codice): confronta
-  alternando le versioni, oppure guarda la traccia di Chrome (ricalcoli forzati, tempo di script).
+- Le misure di `fluidita.py` oscillano molto (anche ±15 ms con lo stesso codice, e il PC passa da
+  fasi lente a veloci): confronta alternando le versioni, oppure guarda la traccia di Chrome
+  (ricalcoli forzati, tempo di script, `AnimationTimeline::serviceAnimations`), che è stabile.
+  `fluidita.py` ora usa la GPU vera: senza, Chromium disegnava in software (SwiftShader) e Commit
+  e WebGL sembravano molto più pesanti del reale.
+- Prestazioni, cose imparate il 17/11: ogni `animation-timeline: view()` viene aggiornata dal
+  thread principale a ogni fotogramma (96 in galleria costavano ~10 ms); mai leggere dimensioni
+  (`clientWidth`, `getBoundingClientRect`) subito dopo aver scritto stili nello stesso fotogramma;
+  i cicli `requestAnimationFrame` (WebGL, Three.js) vanno fermati fuori schermo.
 
 ### In sospeso (serve l'ok di Matteo)
 - Pubblicare il redesign sul sito vero.
