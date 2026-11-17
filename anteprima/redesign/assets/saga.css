@@ -146,7 +146,8 @@
   .notte-muro { inset: -8% -2% -8% 47%; }
 }
 /* locandine dell'estate: verticali, intere */
-.notte-locandine .notte-muro { grid-template-columns: repeat(4, 1fr); }
+/* 9 locandine: griglia 3x3, niente locandina sola su una riga */
+.notte-locandine .notte-muro { grid-template-columns: repeat(3, 1fr); }
 .notte-locandine .notte-muro img { aspect-ratio: 4 / 5; }
 @media (max-width: 760px), (orientation: portrait) { .notte-locandine .notte-muro { grid-template-columns: repeat(3, 1fr); } }
 
