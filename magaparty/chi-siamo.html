@@ -85,9 +85,14 @@
     <link rel="stylesheet" href="assets/tailwind.css">
     <link rel="stylesheet" href="assets/leggibilita.css">
     <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/evento-motion.css">
+    <link rel="stylesheet" href="assets/pagine.css">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
 <link rel="stylesheet" href="/assets/transizioni.css">
 </head>
 <body data-page="chi-siamo">
+<svg class="luci mp-luci-pagina" data-luci data-luci-subito aria-hidden="true" focusable="false"></svg>
 <style>
     body { max-width: none !important; border: none !important; padding-bottom: 40px !important; }
     .s-wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
@@ -108,7 +113,7 @@
 <!-- ═══════════════════════ INTRO ═══════════════════════ -->
 <section class="section-anchor animate-fade-in reveal text-center" data-testid="page-chi-siamo">
     <span class="section-label">Magaparty · Dal 2024</span>
-    <h1 class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">Chi siamo</h1>
+    <h1 data-rise class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">Chi siamo</h1>
     <p class="text-[12px] text-gray-400 leading-relaxed" style="max-width:520px;margin:0 auto">
         Una storia nata in piscina, cresciuta in villa e portata in spiaggia: ecco com'è diventata Magaparty.
     </p>
@@ -120,7 +125,7 @@
 <section id="storia" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">La nostra storia</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Come siamo arrivati fin qui</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Come siamo arrivati fin qui</h2>
     </div>
 
     <div class="timeline">
@@ -239,7 +244,7 @@
 <section id="chi-siamo-section" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Chi siamo</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il collettivo dietro Magaparty</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il collettivo dietro Magaparty</h2>
     </div>
     <div class="glass-card p-6 neon-border-orange reveal" style="max-width:640px;margin:0 auto">
         <p class="text-[12px] text-gray-300 leading-relaxed mb-4">
@@ -265,7 +270,7 @@
 <section id="differenza" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Cosa rende diverso Magaparty</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Non un evento, un calendario</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Non un evento, un calendario</h2>
     </div>
     <div class="glass-card p-6 neon-border-coral reveal" style="max-width:640px;margin:0 auto">
         <p class="text-[12px] text-gray-300 leading-relaxed mb-4">
@@ -301,7 +306,7 @@
 <section id="contatti" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Contatti</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Parliamone</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Parliamone</h2>
     </div>
 
     <div class="desktop-2col" style="max-width:760px;margin:0 auto">
@@ -420,5 +425,6 @@ form.addEventListener('submit', async (e) => {
     }
 });
 </script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>

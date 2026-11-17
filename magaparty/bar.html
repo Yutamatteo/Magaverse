@@ -47,9 +47,14 @@
     <link rel="stylesheet" href="assets/tailwind.css">
     <link rel="stylesheet" href="assets/leggibilita.css">
     <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/evento-motion.css">
+    <link rel="stylesheet" href="assets/pagine.css">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
 <link rel="stylesheet" href="/assets/transizioni.css">
 </head>
 <body data-page="bar">
+<svg class="luci mp-luci-pagina" data-luci data-luci-subito aria-hidden="true" focusable="false"></svg>
 
 <div class="s-top reveal">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
@@ -63,7 +68,7 @@
 <div class="s-wrap" style="padding-top:20px">
     <div class="animate-fade-in" data-testid="page-bar">
         <div class="text-center mb-4 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>
 
@@ -292,5 +297,6 @@
         });
     })();
 </script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>

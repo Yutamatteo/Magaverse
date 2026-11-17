@@ -1,0 +1,38 @@
+/* =========================================================
+   MAGAPARTY · PAGINE INTERNE (chi siamo, bar, galleria)
+   Le porta nella stessa notte della home Magaparty: blu notte
+   del golfo invece del nero piatto, cielo con qualche stella,
+   luci a filo in cima, titoli grandi che salgono.
+   Va caricato dopo il <style> della pagina e dopo tailwind.css.
+   ========================================================= */
+:root {
+  --night-bg: #0E1224;
+  --night-surface: #161B33;
+  --night-border: #262D48;
+  --night-border-soft: rgba(244, 234, 219, 0.08);
+}
+html { background: #0E1224; }
+body {
+  background:
+    radial-gradient(1px 1px at 12% 8%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1px 1px at 78% 4%, rgba(255,255,255,.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 44% 12%, rgba(255,240,210,.8), transparent 60%),
+    radial-gradient(1px 1px at 91% 16%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1px 1px at 27% 19%, rgba(255,255,255,.45), transparent 60%),
+    radial-gradient(1px 1px at 63% 22%, rgba(255,255,255,.4), transparent 60%),
+    linear-gradient(180deg, #05070F 0, #0D1634 340px, #0E1224 760px) !important;
+  background-repeat: no-repeat !important;
+  position: relative;
+}
+.mp-luci-pagina { position: absolute; left: 0; top: 0; width: 100%; height: 96px; z-index: 0; pointer-events: none; }
+body > *:not(.mp-luci-pagina) { position: relative; z-index: 1; }
+
+.glass-card { background: rgba(22, 27, 51, .78); border-color: var(--night-border); }
+
+/* titoli: Archivo stretto e grande come nel resto del Magaverse */
+h1.sunset-title, h2.sunset-title.text-3xl {
+  font-size: clamp(48px, 13vw, 96px) !important; line-height: .9 !important;
+  font-stretch: 66% !important; text-transform: none !important; letter-spacing: -.01em !important;
+  color: #F4EADB !important;
+}
+h2.sunset-title { color: #F4EADB !important; }

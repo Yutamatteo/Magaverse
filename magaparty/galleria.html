@@ -47,9 +47,14 @@
     <link rel="stylesheet" href="assets/tailwind.css">
     <link rel="stylesheet" href="assets/leggibilita.css">
     <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/evento-motion.css">
+    <link rel="stylesheet" href="assets/pagine.css">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
 <link rel="stylesheet" href="/assets/transizioni.css">
 </head>
 <body data-page="galleria">
+<svg class="luci mp-luci-pagina" data-luci data-luci-subito aria-hidden="true" focusable="false"></svg>
 
 <div class="s-top reveal">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
@@ -63,7 +68,7 @@
 <div class="s-wrap" style="padding-top:20px">
     <div class="animate-fade-in" data-testid="page-galleria">
         <div class="text-center mb-8 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
             <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Carica i tuoi scatti della serata</p>
         </div>
         <div class="desktop-2col">
@@ -227,5 +232,6 @@
         setTimeout(() => t.remove(), 3500);
     }
 </script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>
