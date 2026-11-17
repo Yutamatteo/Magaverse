@@ -261,3 +261,34 @@ body.hub {
   .prossimo { padding-bottom: 14px; }
   .luci { height: 90px; }
 }
+
+/* ── Prossimo e appena passato, affiancati ── */
+.prossimi-fila { display: flex; flex-wrap: wrap; gap: 10px; }
+.prossimi-fila .prossimo-evento { flex: 1 1 300px; max-width: 460px; }
+.prossimo-presto { border-color: rgba(224, 24, 43, .45); background: rgba(30, 6, 10, .72); }
+.prossimo-presto .prossimo-label { color: #FF5A6B; }
+.prossimo-presto .prossimo-quando { color: #E9C77B; }
+.mini-sipario {
+  position: relative; flex: none; width: 84px; height: 84px; border-radius: 10px; overflow: hidden;
+  display: grid; place-items: center;
+  background: radial-gradient(60% 60% at 50% 55%, #4a1a08, #0a0405);
+}
+.mini-sipario i {
+  position: absolute; top: 0; bottom: 0; width: 50%;
+  background: repeating-linear-gradient(90deg, #3A0309 0, #8E0B16 5px, #C0172A 8px, #8E0B16 11px, #3A0309 16px);
+  transition: transform .8s cubic-bezier(.19, 1, .22, 1);
+}
+.mini-sipario i:first-child { left: 0; transform-origin: left; transform: scaleX(.78); }
+.mini-sipario i:nth-child(2) { right: 0; transform-origin: right; transform: scaleX(.78); }
+.mini-sipario b { position: relative; font: italic 600 22px/1 'Times New Roman', serif; color: #E9C77B; letter-spacing: .04em; }
+.prossimo-presto:hover .mini-sipario i { transform: scaleX(.25); }
+@media (max-width: 600px) {
+  .prossimi-fila { gap: 8px; }
+  .prossimi-fila .prossimo-evento { padding: 8px; gap: 10px; }
+  .prossimi-fila .prossimo-evento img, .mini-sipario { width: 58px; height: 58px; }
+  .prossimi-fila .prossimo-desc { display: none; }
+  .prossimi-fila .prossimo-nome { font-size: 21px; }
+  .prossimi-fila .prossimo-evento + .prossimo-evento img { display: none; }
+  .hero-sub { font-size: 16px; }
+  .orizzonte { margin: 16px 0 12px; }
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<style>@view-transition{navigation:auto}</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#070405">
+    <title>Maga Gala · Coming soon · Il Capodanno di Magaparty</title>
+    <meta name="description" content="Maga Gala, il Capodanno di Magaparty: ci stiamo preparando. Data, luogo e biglietti li annunciamo prima su Instagram e Telegram.">
+    <link rel="canonical" href="https://www.magaverse.it/magaparty/magagala.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:title" content="Maga Gala · Coming soon">
+    <meta property="og:description" content="Il Capodanno di Magaparty si sta preparando dietro il sipario.">
+    <meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/og-magagala.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/png" href="assets/img/icone/maga-64.png">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+    <link rel="preload" href="assets/fonts/bodoni-moda-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/pinyon-script-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/transizioni.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/magagala.css">
+    <script src="/assets/motion.js" defer></script>
+    <script src="assets/magagala.js" defer></script>
+</head>
+<body class="gala">
+<a class="skip" href="#cosa-sappiamo">Vai ai dettagli</a>
+
+<header class="gala-bar" data-barra>
+    <a href="index.html" class="gala-back">Magaparty</a>
+    <p class="gala-bar-centro">Coming soon</p>
+    <a href="https://www.instagram.com/_magaparty" class="gala-bar-ig">Instagram</a>
+</header>
+
+<main>
+    <!-- Il sipario: chiuso all'arrivo, si apre un poco, scorrendo si apre del tutto -->
+    <section class="sipario" data-sipario aria-labelledby="gala-titolo">
+        <div class="sipario-fermo">
+            <canvas class="polvere" data-polvere aria-hidden="true"></canvas>
+            <div class="sipario-luce" aria-hidden="true"></div>
+
+            <div class="gala-titolo-box">
+                <p class="gala-sopra">Magaparty presenta</p>
+                <h1 id="gala-titolo" class="gala-titolo">
+                    <span class="gala-maga">Maga</span>
+                    <span class="gala-gala">Gala</span>
+                </h1>
+                <p class="gala-sotto">Si prepara il Capodanno</p>
+            </div>
+
+            <div class="telo telo-sx" aria-hidden="true"></div>
+            <div class="telo telo-dx" aria-hidden="true"></div>
+            <div class="mantovana" aria-hidden="true"></div>
+
+            <p class="sipario-indizio" aria-hidden="true">Scorri per aprire il sipario</p>
+        </div>
+    </section>
+
+    <section class="mezzanotte" aria-labelledby="mezzanotte-titolo">
+        <h2 id="mezzanotte-titolo" class="gala-h2" data-rise>Alla mezzanotte mancano</h2>
+        <div class="conto" data-conto data-a="2027-01-01T00:00:00+01:00" role="timer" aria-live="off">
+            <div><span data-u="g">--</span><small>giorni</small></div>
+            <div><span data-u="o">--</span><small>ore</small></div>
+            <div><span data-u="m">--</span><small>minuti</small></div>
+            <div><span data-u="s">--</span><small>secondi</small></div>
+        </div>
+    </section>
+
+    <section class="cosa" id="cosa-sappiamo" aria-labelledby="cosa-titolo">
+        <div class="cosa-testo">
+            <h2 id="cosa-titolo" class="gala-h2" data-rise>Cosa sappiamo, per ora</h2>
+            <p data-reveal>Quasi niente, ed è voluto. Ci stiamo preparando per Capodanno, ma data, luogo e biglietti non sono ancora decisi.</p>
+            <p data-reveal>Quando il sipario si alza lo diciamo prima su Instagram e Telegram: seguici lì per non perdere l'apertura delle liste.</p>
+            <div class="cosa-cta" data-reveal>
+                <a class="gala-btn" href="https://www.instagram.com/_magaparty">Seguici su Instagram</a>
+                <a class="gala-btn gala-btn-vuoto" href="https://t.me/MAGAPART">Canale Telegram</a>
+            </div>
+        </div>
+
+        <figure class="ultimo" data-reveal>
+            <div class="ultimo-cornice" data-tilt="7">
+                <img src="assets/img/magagala-2025.webp" alt="Locandina del Maga Gala del 31 dicembre 2025: festa in villa, open bar" width="720" height="900" loading="lazy">
+            </div>
+            <figcaption>L'ultimo Maga Gala, 31 dicembre 2025: festa in villa, open bar.</figcaption>
+        </figure>
+    </section>
+</main>
+
+<footer class="gala-footer">
+    <a href="index.html">Tutte le serate Magaparty</a>
+    <a href="halloween.html">Com'è andata Halloween in Villa</a>
+</footer>
+</body>
+</html>
