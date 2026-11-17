@@ -213,6 +213,66 @@
     });
   }
 
+  /* ---------- MagaCard col giroscopio (solo telefono) ----------
+     Un solo elemento (la prima .tessera3d). I sensori scrivono solo due numeri; lo stile
+     si aggiorna al massimo una volta per fotogramma. Ascolto spento quando la tessera
+     esce dallo schermo o la scheda è nascosta. Su iPhone serve un tocco sulla tessera
+     per chiedere il permesso; finché non c'è, resta l'inclinazione con lo scroll. */
+  var tessGiro = document.querySelector('.tessera3d');
+  if (tessGiro && !fine && !riduci && 'DeviceOrientationEvent' in window && 'IntersectionObserver' in window) {
+    var serveOk = typeof DeviceOrientationEvent.requestPermission === 'function';
+    /* si ascolta subito: dove il permesso non serve (Android) i dati arrivano da soli,
+       su iPhone non arriva nulla finché non si tocca la tessera */
+    var permesso = true, chiesto = false, ascolta = false, inVista = false, rafG = 0;
+    var beta = null, gamma = 0, beta0 = null, gx = 0, gy = 0, presa = false;
+    var sulSensore = function (e) {
+      if (e.beta == null) return;
+      beta = e.beta; gamma = e.gamma || 0;
+      if (!presa) { /* primo dato vero: da qui la tessera la muove il telefono, non lo scroll */
+        presa = true;
+        inclinatiScroll = inclinatiScroll.filter(function (el) { return el !== tessGiro; });
+        tessGiro.classList.add('mv-in-mano');
+      }
+      if (beta0 === null) beta0 = beta;
+      if (!rafG) rafG = window.requestAnimationFrame(muoviTessera);
+    };
+    var muoviTessera = function () {
+      rafG = 0;
+      if (beta === null) return;
+      beta0 += (beta - beta0) * 0.01; /* il "dritto" segue piano come tieni il telefono */
+      var tx = Math.max(-1, Math.min(1, (beta - beta0) / 25));
+      var ty = Math.max(-1, Math.min(1, gamma / 25));
+      gx += (tx - gx) * 0.25; gy += (ty - gy) * 0.25;
+      tessGiro.style.setProperty('--rx', (-gx * 12).toFixed(2));
+      tessGiro.style.setProperty('--ry', (gy * 14).toFixed(2));
+      tessGiro.style.setProperty('--mx', (0.5 + gy * 0.45).toFixed(3));
+      tessGiro.style.setProperty('--my', (0.5 + gx * 0.4).toFixed(3));
+    };
+    var accendi = function (si) {
+      si = si && permesso && inVista && !document.hidden;
+      if (si === ascolta) return;
+      ascolta = si;
+      if (si) {
+        beta0 = null;
+        window.addEventListener('deviceorientation', sulSensore, { passive: true });
+      } else {
+        window.removeEventListener('deviceorientation', sulSensore);
+        if (rafG) { window.cancelAnimationFrame(rafG); rafG = 0; }
+      }
+    };
+    new IntersectionObserver(function (v) { inVista = v[0].isIntersecting; accendi(true); }).observe(tessGiro);
+    document.addEventListener('visibilitychange', function () { accendi(true); });
+    if (serveOk) {
+      tessGiro.addEventListener('click', function () {
+        if (chiesto || presa) return;
+        chiesto = true;
+        DeviceOrientationEvent.requestPermission().then(function (r) {
+          if (r === 'granted') { ascolta = false; accendi(true); }
+        }).catch(function () { chiesto = false; });
+      });
+    }
+  }
+
   /* ---------- fila orizzontale: la card al centro avanza ---------- */
   tutti('[data-binario]').forEach(function (binario) {
     var carte = Array.prototype.slice.call(binario.children), rafB = 0;
