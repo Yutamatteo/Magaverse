@@ -122,7 +122,20 @@ a 390x844, controllare che non ci sia scorrimento orizzontale
 `py strumenti/fluidita.py <pagina> 8765` (server: `py -m http.server 8765`). Se il budget finisce,
 fermarsi dopo un commit completo.
 
-**Agenti** (`.claude/agents/`): `architetto` (task tecniche), `mystery-guest` (prova l'anteprima da
-telefono come un cliente arrivato da Instagram), `marketing` (bozze di testi). Il repository GitHub
-è **pubblico**: bozze, report e note degli agenti vanno **solo** nel Cantiere privato, mai in file
-del repository.
+**Agenti** (`.claude/agents/`, ognuno ha la sua scrivania nel Cantiere in `agenti/<id>`):
+- `architetto`: ingegnere del software, tutte le modifiche al codice del sito (metodo: capire,
+  misurare, implementare, verificare, rivedere, decidere sui numeri).
+- `mystery-guest`: prova l'anteprima da telefono come un cliente arrivato da Instagram.
+- `marketing`: strategia, piani editoriali, testi per Instagram/TikTok/Telegram, link UTM.
+- `regista`: concept, script, storyboard e liste di inquadrature; prompt per video IA solo con l'ok
+  di Matteo (costano crediti) e mai per fingere riprese vere.
+- `montatore`: monta reel e video con ffmpeg (installato con winget) in
+  `C:\Users\Matteo\Documents\magaverse-produzione\` (`sorgenti\`, `uscite\`), fuori dal repository.
+- `seo-locale`: Google e condivisioni; consegna correzioni all'architetto.
+- `stratega-magacard`: fidelizzazione e premi in bozza, non tocca Supabase.
+- `direttore-creativo`: format, esperienze da QR code, campagne.
+- `ticketing`: **in progettazione**, solo lettura (Posto Riservato e pagamenti in contanti).
+
+Il repository GitHub è **pubblico**: bozze, report, video e note degli agenti vanno **solo** nel
+Cantiere privato o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,
+manda messaggi o spende crediti senza l'ok di Matteo.
