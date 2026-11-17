@@ -145,6 +145,14 @@
   if (parallasseCSS) document.documentElement.classList.add('mv-parallasse-css');
   var parallassi = parallasseCSS ? [] : tutti('[data-parallax]').map(function (el) { return { el: el, f: parseFloat(el.dataset.parallax) || 0.1, s: el.dataset.scala || '1.14' }; });
   var inclinati = tutti('[data-tilt]');
+  /* allo scroll (telefono) si inclinano solo gli elementi che lo mostrano davvero:
+     le locandine della home Magaparty si inclinano solo col mouse, quindi misurarle
+     a ogni fotogramma era lavoro buttato. La cornice del Gala lo fa il CSS (motion.css). */
+  var inclinatiScroll = inclinati.filter(function (el) {
+    if (el.classList.contains('mp-evento')) return false;
+    if (parallasseCSS && el.classList.contains('ultimo-cornice')) return false;
+    return true;
+  });
   var nastri = tutti('[data-nastro]');
   var ultimoY = window.scrollY, velocita = 0, raf = 0;
 
@@ -160,7 +168,7 @@
       p.el.style.transform = 'translate3d(0,' + (-c * p.f * 100).toFixed(2) + '%,0) scale(' + p.s + ')';
     });
     if (!fine) {
-      inclinati.forEach(function (el) {
+      inclinatiScroll.forEach(function (el) {
         var r = el.getBoundingClientRect();
         if (r.bottom < 0 || r.top > H) return;
         var c = Math.max(-1, Math.min(1, (r.top + r.height / 2 - H / 2) / (H / 2)));

@@ -166,3 +166,12 @@
   .mv-parallasse-css [data-parallax] { animation: mv-parallasse linear both; animation-timeline: view(); }
   @keyframes mv-parallasse { from { transform: translate3d(0, -7%, 0) scale(1.14); } to { transform: translate3d(0, 7%, 0) scale(1.14); } }
 }
+
+/* ── Telefono: la cornice del Maga Gala si inclina mentre scorri, in CSS sul compositore
+   (prima lo faceva motion.js a ogni fotogramma) ── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (not ((hover: hover) and (pointer: fine))) {
+    .ultimo-cornice { animation: mv-inclina-lieve linear both; animation-timeline: view(); transition: none; }
+  }
+}
+@keyframes mv-inclina-lieve { from { transform: rotateX(7deg) rotateY(-5deg); } 50% { transform: none; } to { transform: rotateX(-7deg) rotateY(5deg); } }
