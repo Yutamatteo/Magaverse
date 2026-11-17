@@ -71,6 +71,12 @@ body { display: block !important; min-height: 100svh; padding: 0 !important;
   @keyframes tc-atterra { from { transform: translateY(40px) rotateX(38deg) scale(.92); opacity: 0; } to { opacity: 1; } }
   .tc-tessera.entra .tc-timbri i.pieno::after { animation: tc-timbro .4s cubic-bezier(.3,1.7,.5,1) both; animation-delay: calc(.7s + var(--n) * .28s); }
   @keyframes tc-timbro { from { opacity: 0; transform: scale(2.4) rotate(-32deg); } to { opacity: 1; transform: rotate(-10deg); } }
+  .tc-tessera.entra .tc-timbri i.pieno::before {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%; pointer-events: none;
+    border: 3px solid rgba(255,255,255,.9); opacity: 0;
+    animation: tc-onda .6s ease-out both; animation-delay: calc(.86s + var(--n) * .28s);
+  }
+  @keyframes tc-onda { 0% { opacity: 0; transform: scale(.9); } 12% { opacity: .9; } 100% { opacity: 0; transform: scale(1.9); } }
   .tc-tessera:not(.in-mano) .tc-riflesso { animation: tc-luce 5s ease-in-out 1.6s infinite; }
   @keyframes tc-luce { 0%, 60% { transform: translate(-45%, -10%); } 100% { transform: translate(45%, 10%); } }
 }
