@@ -78,7 +78,7 @@
   position: relative; aspect-ratio: 1.586; border-radius: 22px; overflow: hidden;
   padding: clamp(18px, 5%, 26px);
   display: flex; flex-direction: column; justify-content: space-between;
-  color: #fff;
+  color: #fff; text-align: left;
   background:
     radial-gradient(120% 90% at 100% 0%, rgba(255, 194, 61, .5), transparent 55%),
     radial-gradient(90% 80% at 0% 100%, rgba(31, 181, 166, .35), transparent 60%),

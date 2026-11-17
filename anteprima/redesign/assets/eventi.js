@@ -3,6 +3,6 @@
    data: "AAAA-MM-GG" · img: percorso assoluto · url: pagina evento */
 window.MAGAVERSE_EVENTI = [
   { nome: "Halloween in Villa", data: "2026-10-31", quando: "Venerdì 31 ottobre",
-    img: "/anteprima/redesign/assets/img/halloween-locandina.jpg", url: "/anteprima/redesign/magaparty/halloween.html",
+    img: "/anteprima/redesign/assets/img/halloween-locandina.webp", url: "/anteprima/redesign/magaparty/halloween.html",
     testo: "Festa in villa con navetta e posti per dormire." }
 ];

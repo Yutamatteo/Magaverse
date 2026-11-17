@@ -58,14 +58,21 @@ body.hub {
 .hub-nav a:hover { background: var(--mv-sabbia); color: var(--mv-notte); }
 
 /* ── La scena ── */
-.golfo { position: relative; background: var(--mv-notte); height: 230vh; height: 230lvh; }
+.golfo { position: relative; background: var(--mv-notte); }
+/* la corsa dello scroll esiste solo se c'è JavaScript a usarla */
+.mv-js .golfo { height: 230vh; height: 230lvh; }
 .golfo-fermo {
   --t: 0;
-  position: sticky; top: 0;
-  height: 100vh; height: 100lvh;
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
   overflow: hidden; isolation: isolate;
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding-bottom: 0; padding-bottom: calc(100lvh - 100svh);
+  padding-top: 110px;
+}
+.mv-js .golfo-fermo {
+  position: sticky; top: 0;
+  height: 100vh; height: 100lvh; min-height: 0;
+  padding-top: 0; padding-bottom: calc(100lvh - 100svh);
 }
 .golfo-foto, .golfo-foto img, .golfo-tela { position: absolute; inset: 0; width: 100%; height: 100%; }
 .golfo-foto { z-index: -2; }
@@ -164,8 +171,8 @@ body.hub {
   @keyframes indizio { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: translateY(34px) scaleY(0); } }
 }
 @media (prefers-reduced-motion: reduce) {
-  .golfo { height: auto; }
-  .golfo-fermo { position: relative; height: auto; min-height: 100vh; min-height: 100svh; padding-top: 120px; padding-bottom: 0; }
+  .mv-js .golfo { height: auto; }
+  .mv-js .golfo-fermo { position: relative; height: auto; min-height: 100vh; min-height: 100svh; padding-top: 110px; padding-bottom: 0; }
   .golfo-indizio { display: none; }
 }
 
@@ -242,4 +249,15 @@ body.hub {
 @media (max-width: 480px) {
   .hub-nav a { padding: 7px 10px; font-size: 14px; }
   .hub-logo { font-size: 19px; }
+}
+
+/* ── Schermi bassi (telefono in orizzontale): la scena resta, il testo si stringe ── */
+@media (max-height: 520px) and (orientation: landscape) {
+  .golfo h1 { font-size: clamp(40px, 15svh, 72px); }
+  .hero-luogo { margin-bottom: 6px; }
+  .orizzonte { margin: 12px 0 0; }
+  .hero-sub, .golfo-indizio { display: none; }
+  .hero-testo { padding-bottom: 12px; }
+  .prossimo { padding-bottom: 14px; }
+  .luci { height: 90px; }
 }

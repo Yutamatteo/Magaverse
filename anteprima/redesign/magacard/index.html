@@ -3,6 +3,7 @@
 <head>
 <meta name="robots" content="noindex, nofollow">
 <script>/* ANTEPRIMA: blocca le scritture verso Supabase */(function(){var f=window.fetch;window.fetch=function(u,o){var s=String(u&&u.url||u);if(/supabase\.co/.test(s)&&o&&o.method&&o.method!=='GET'){console.warn('Anteprima: invio bloccato',s);return Promise.reject(new Error('Anteprima: invio disattivato'))}return f.apply(this,arguments)}})();</script>
+<style>@view-transition{navigation:auto}</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MagaCard | Magaverse</title>
@@ -34,19 +35,35 @@
   .mc-page-hero{ max-width:720px; margin:0 auto; padding:72px 20px 8px; text-align:center; }
   .mc-page-hero h2{ font-family:var(--sm-font-display); font-size:clamp(1.8rem,6vw,2.7rem); margin:14px 0 14px; color:var(--sm-text); }
   .mc-page-hero p{ color:var(--sm-muted); font-size:15px; line-height:1.7; max-width:46ch; margin:0 auto; }
+  .tessera3d.mc-tessera{ margin:0 auto 38px; }
+  .mc-indietro{ margin:0 0 26px !important; text-align:left; font-size:15px !important; }
+  .mc-indietro a{ color:var(--sm-muted); text-decoration:none; font-weight:600; }
+  .mc-indietro a:hover{ color:var(--sm-text); }
+  .mc-page-hero{ padding-top:28px !important; }
   .mc-cta-section{ display:flex; justify-content:center; padding:18px 20px 110px; }
   .mc-cta-lead{ text-align:center; padding:6px 0 26px; }
   .storymap{ padding-inline:20px; max-width:1180px; margin:0 auto; }
 </style>
 <link rel="stylesheet" href="/anteprima/redesign/assets/maga-base.css">
 <link rel="stylesheet" href="/anteprima/redesign/assets/transizioni.css">
+<link rel="stylesheet" href="/anteprima/redesign/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/anteprima/redesign/assets/motion.js" defer></script>
 </head>
 <body><div style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:99999;background:#FFC23D;color:#0E1224;font:600 12px/1.3 system-ui,sans-serif;padding:6px 12px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.35);white-space:nowrap;pointer-events:none;opacity:.92">Anteprima · i form non inviano dati</div>
 
 <header class="sm-hero reveal">
   <div class="mc-page-hero">
+    <p class="mc-indietro"><a href="/anteprima/redesign/magaparty/index.html">‹ Magaparty</a></p>
+    <div class="tessera3d mc-tessera" data-tilt="12" aria-hidden="true">
+      <div class="tessera3d-corpo">
+        <span class="tessera3d-marca">MagaCard<small>Magaparty membership</small></span>
+        <span class="tessera3d-timbri"><i></i><i></i><i></i><i></i><i></i><span>3 timbri su 5</span></span>
+        <span class="tessera3d-riflesso"></span>
+      </div>
+    </div>
     <div class="sm-eyebrow" style="justify-content:center;">Magaparty · Membership</div>
-    <h2>Come funziona MagaCard</h2>
+    <h2 data-rise>Come funziona MagaCard</h2>
     <p>La tessera per le serate Magaparty: un modulo, un timbro a ogni evento, livelli da sbloccare e un premio ad aspettarti in fondo al percorso.</p>
   </div>
 </header>

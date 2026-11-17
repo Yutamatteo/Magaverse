@@ -3,6 +3,7 @@
 <head>
 <meta name="robots" content="noindex, nofollow">
 <script>/* ANTEPRIMA: blocca le scritture verso Supabase */(function(){var f=window.fetch;window.fetch=function(u,o){var s=String(u&&u.url||u);if(/supabase\.co/.test(s)&&o&&o.method&&o.method!=='GET'){console.warn('Anteprima: invio bloccato',s);return Promise.reject(new Error('Anteprima: invio disattivato'))}return f.apply(this,arguments)}})();</script>
+<style>@view-transition{navigation:auto}</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Premiazione Vincitori · Concorso Costumi · Halloween in Villa</title>
@@ -42,7 +43,7 @@ p{margin:0;}
   background:
     radial-gradient(ellipse 70% 55% at 50% 8%, rgba(255,122,51,0.16), transparent 60%),
     linear-gradient(180deg, rgba(10,7,14,0.72) 0%, rgba(8,6,11,0.88) 55%, #050309 100%),
-    url('assets/img/halloween-locandina.jpg');
+    url('assets/img/halloween-locandina.webp');
   background-size: cover, cover, cover;
   background-position: center, center, center 30%;
 }

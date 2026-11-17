@@ -24,7 +24,7 @@
     }
 
     function logoMarkup(extraStyle) {
-        return `<img src="assets/img/tardeo-locandina.jpg" alt="TARDEO" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
+        return `<img src="assets/img/tardeo-locandina.webp" alt="TARDEO" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
                      onerror="this.outerHTML='<div class=\\'logo-placeholder\\'><i class=\\'fa-solid fa-image\\'></i><span>tardeo-locandina.jpg</span></div>'">`;
     }
 
