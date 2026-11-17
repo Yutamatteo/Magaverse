@@ -61,7 +61,7 @@ html:has(.saga) { scroll-snap-type: y proximity; }
 }
 .saga-mappa li {
   display: flex; align-items: center; gap: 7px; cursor: pointer; pointer-events: auto;
-  padding: 6px 0; font-size: 13px; font-weight: 700; color: rgba(244,234,219,.6); transition: color .25s;
+  padding: 6px 0; font-size: 13px; font-weight: 700; color: rgba(244,234,219,.82); transition: color .25s;
 }
 .saga-mappa li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(244,234,219,.4); transition: background .25s, transform .25s; }
 .saga-mappa li:hover, .saga-mappa li.ora { color: #fff; }
@@ -120,3 +120,8 @@ html:not(.mv-js) .saga-pannello .cap-fermo {
   .saga .scena.cap-gala { --apri: .8; }
   html:has(.saga) { scroll-snap-type: none; }
 }
+
+/* conto alla rovescia verso la mezzanotte di Capodanno */
+.gala-conto { margin: 16px 0 0; color: rgba(246,239,228,.85); font-size: 15px; }
+.gala-conto b { display: inline-block; min-width: 1.6em; margin: 0 2px 0 8px; font: 500 clamp(26px, 3.4vw, 40px)/1 'Bodoni Moda', serif; color: #E9C77B; font-variant-numeric: tabular-nums; }
+.gala-conto b:first-child { margin-left: 0; }
