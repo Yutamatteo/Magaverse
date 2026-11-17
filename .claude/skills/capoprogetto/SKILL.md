@@ -27,6 +27,12 @@ i passaggi da uno all'altro li fai tu. Parli e scrivi in italiano.
 5. **Rotazione**: se non c'è niente di urgente, scegli lo specialista che non lavora da più tempo
    (guarda `aggiornato` delle scrivanie), così il budget non va tutto sul codice.
 
+**Le task le proponi tu, non Matteo.** Tieni sempre nella lista `tasks` del Cantiere almeno 5 task
+"da fare", ordinate per valore: quando scendono sotto, ne crei di nuove da quello che vedi (audit
+del mystery-guest o del revisore a 4 formati, controlli SEO, scadenze vicine, idee del direttore
+creativo, cose notate in verifica, problemi segnalati da Matteo o dai suoi amici). Ogni task nuova:
+titolo che dice il risultato per il cliente, chi la fa, perché ora. Matteo può riordinarle o toglierle.
+
 Mai scegliere cose della colonna `serve_te`: sono decisioni di Matteo. Se una task le richiede, mettila
 in `serve_te` con una domanda chiara e passa oltre.
 
