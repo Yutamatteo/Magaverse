@@ -1,0 +1,141 @@
+/* MAGAVERSE · La stagione come un unico grande sfondo.
+   Uno sfondo fisso (.saga-fondo) con una scena per ogni capitolo; i testi scorrono sopra.
+   Il bordo della scena che entra coincide con il bordo del pannello di testo: sembra
+   che la pagina stessa trascini dentro la serata successiva. */
+
+.saga { position: relative; --tinta: #2FD8F0; }
+
+/* ── lo sfondo ─────────────────────────────────────────────── */
+.saga-fondo { display: none; }
+.mv-js .saga-fondo {
+  display: block;
+  position: sticky; top: 0; z-index: 0;
+  height: 100vh; height: 100lvh;
+  margin-bottom: -100vh; margin-bottom: -100lvh;
+  overflow: hidden; background: #05070b;
+}
+.scena {
+  position: absolute; inset: 0; overflow: hidden; isolation: isolate;
+  --in: 100%; --p: 0;
+  clip-path: inset(var(--in) 0 0 0);
+  visibility: hidden;
+}
+.scena.viva { visibility: visible; }
+.scena:first-child { clip-path: none; }
+
+/* scena fotografica: le foto si danno il cambio mentre scorri */
+.scena-foto { position: absolute; inset: -6% -3%; }
+.scena-foto img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; will-change: opacity, transform;
+  transform: scale(calc(1.14 - var(--p) * .1)) translate3d(0, calc((var(--p) - .5) * -3%), 0);
+}
+.scena-foto img.su { opacity: 1; }
+.scena-velo {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    radial-gradient(110% 75% at 15% 100%, rgba(5,7,11,.94) 0%, rgba(5,7,11,.72) 38%, rgba(5,7,11,.12) 72%),
+    linear-gradient(180deg, rgba(5,7,11,.7) 0%, rgba(5,7,11,0) 26%),
+    linear-gradient(135deg, color-mix(in srgb, var(--tinta) 30%, transparent), transparent 60%);
+}
+.scena-grana {
+  position: absolute; inset: -50%; z-index: 3; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* il nome della serata, enorme e sbiadito, che scivola dietro le foto */
+.scena-nome {
+  position: absolute; z-index: 1; left: 0; right: 0; top: 50%;
+  font-weight: 900; font-stretch: 62%; text-transform: uppercase; white-space: nowrap;
+  font-size: clamp(120px, 30vw, 420px); line-height: .8; letter-spacing: -.02em;
+  color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--tinta) 60%, transparent);
+  transform: translate3d(calc(10% - var(--p) * 45%), -50%, 0);
+  opacity: .55; mix-blend-mode: screen; pointer-events: none;
+}
+
+/* il bordo che entra: una riga di luce del colore della serata */
+.scena::after {
+  content: ""; position: absolute; left: 0; right: 0; top: var(--in); height: 2px; z-index: 9;
+  background: var(--tinta); box-shadow: 0 0 24px 4px var(--tinta);
+  opacity: var(--bordo, 0);
+}
+
+/* Halloween e Gala dentro lo sfondo: riusano lo stile dei capitoli */
+.saga .scena.cap-hw, .saga .scena.cap-gala { background: none; }
+.saga .scena.cap-hw { background: #070a07; }
+.saga .scena.cap-gala { background: radial-gradient(60% 55% at 50% 50%, #3a1408 0%, #140706 50%, #070405 85%); }
+
+/* ── la striscia della stagione (dove sei) ─────────────────── */
+.saga-mappa { display: none; }
+.mv-js .saga-mappa {
+  display: flex; position: absolute; z-index: 20; right: clamp(14px, 2.4vw, 34px); top: 50%;
+  transform: translateY(-50%); flex-direction: column; gap: 14px; margin: 0; padding: 0; list-style: none;
+}
+.saga-mappa li {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(244,234,219,.5); transition: color .4s;
+}
+.saga-mappa li::after {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(244,234,219,.35); transition: transform .4s, background .4s, box-shadow .4s;
+}
+.saga-mappa li span { opacity: 0; transform: translateX(6px); transition: opacity .4s, transform .4s; }
+.saga-mappa li.ora { color: #fff; }
+.saga-mappa li.ora span { opacity: 1; transform: none; }
+.saga-mappa li.ora::after { background: var(--tinta); transform: scale(1.6); box-shadow: 0 0 14px var(--tinta); }
+.saga-mappa li.fatta::after { background: rgba(244,234,219,.75); }
+.saga-mappa:hover li span { opacity: .8; transform: none; }
+@media (max-width: 760px) {
+  .mv-js .saga-mappa {
+    top: auto; bottom: auto; top: 72px; right: 0; left: 0; transform: none;
+    flex-direction: row; justify-content: center; gap: 6px;
+  }
+  .saga-mappa li { font-size: 0; gap: 0; }
+  .saga-mappa li span { display: none; }
+  .saga-mappa li::after { width: 22px; height: 3px; border-radius: 2px; }
+  .saga-mappa li.ora::after { transform: none; width: 34px; }
+}
+
+/* ── i testi che scorrono sopra ────────────────────────────── */
+.saga-pannelli { position: relative; z-index: 2; }
+.saga-pannello { position: relative; color: #F4EADB; background: transparent !important; }
+.mv-js .saga-pannello { height: 175vh; height: 175lvh; }
+.mv-js .saga-pannello:first-child { height: 150vh; height: 150lvh; }
+.saga-pannello .cap-fermo { background: none; }
+.mv-js .saga-pannello .cap-fermo { position: sticky; top: 0; overflow: visible; }
+
+.saga-pannello .cap-sopra { color: var(--tinta); }
+.saga-pannello h2 { margin: 0; font-size: clamp(64px, 15vw, 180px); line-height: .84; font-stretch: 64% !important; font-weight: 850; text-shadow: 0 6px 60px rgba(0,0,0,.7); }
+.saga-pannello h2 em { font-style: normal; color: var(--tinta); }
+.saga-pannello .cap-frase { color: rgba(244,234,219,.92); text-shadow: 0 2px 18px rgba(0,0,0,.6); }
+.saga-pannello .cap-btn { background: var(--tinta); color: #06080b; }
+.saga-pannello .cap-btn-vuoto { background: rgba(5,7,11,.42); color: #F4EADB; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tinta) 60%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.saga-quando { display: inline-flex; gap: 8px; align-items: center; }
+.saga-quando::before { content: ""; width: 26px; height: 2px; background: currentColor; }
+
+/* senza JavaScript: ogni pannello si porta dietro la sua foto */
+html:not(.mv-js) .saga-pannello .cap-fermo {
+  background: linear-gradient(0deg, rgba(5,7,11,.92), rgba(5,7,11,.35)), var(--foto, #05070b) center / cover no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scena-foto img { transform: none; transition: opacity .01s; }
+  .scena-nome { transform: translate3d(-10%, -50%, 0); }
+}
+@media (max-width: 600px) {
+  .saga-pannello h2 { font-size: clamp(56px, 16vw, 84px); }
+  .scena-nome { font-size: 46vw; }
+}
+
+.saga-pannelli { pointer-events: none; }
+.saga-pannello a, .saga-pannello button { pointer-events: auto; }
+.saga-mappa li { cursor: pointer; pointer-events: auto; }
+.saga-pannello.cap-gala .saga-quando::before { display: none; }
+.saga-pannello.cap-gala .cap-btn { background: #E0182B; color: #fff; }
+.saga-pannello.cap-gala .cap-btn-vuoto { background: rgba(7,4,5,.5); }
+.saga-pannello.cap-gala h2 { text-shadow: none; }
+
+/* l'estate dei format: un muro di locandine che scorre */
+.scena-locandine { background: #140806; }
+.scena-locandine .muro { transform: rotate(5deg) scale(1.16); }
+.scena-locandine .muro img { border-radius: 6px; box-shadow: 0 18px 40px -12px rgba(0,0,0,.7); }
