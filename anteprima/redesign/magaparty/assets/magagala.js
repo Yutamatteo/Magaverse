@@ -3,21 +3,56 @@
   'use strict';
   var riduci = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- conto alla rovescia ---------- */
+
+  /* cifre che ruotano: ogni cifra cambiata scende via e la nuova arriva dall'alto (solo transform/opacity) */
+  var mvCifre = function (el, testo, anima) {
+    if (el.getAttribute('data-v') === testo) return;
+    var celle = el.querySelectorAll('.cf-cella');
+    if (!anima || celle.length !== testo.length) {
+      el.textContent = '';
+      for (var i = 0; i < testo.length; i++) {
+        var c = document.createElement('span'); c.className = 'cf-cella';
+        var s = document.createElement('span'); s.className = 'cf'; s.textContent = testo[i];
+        c.appendChild(s); el.appendChild(c);
+      }
+    } else {
+      var prima = el.getAttribute('data-v');
+      for (var k = 0; k < testo.length; k++) {
+        if (prima[k] === testo[k]) continue;
+        var cella = celle[k];
+        [].forEach.call(cella.querySelectorAll('.esce'), function (x) { x.remove(); });
+        var vecchia = cella.lastElementChild;
+        if (vecchia) {
+          vecchia.className = 'cf esce';
+          vecchia.addEventListener('animationend', function () { this.remove(); });
+        }
+        var nuova = document.createElement('span'); nuova.className = 'cf entra'; nuova.textContent = testo[k];
+        cella.appendChild(nuova);
+      }
+    }
+    el.setAttribute('data-v', testo);
+  };
+
+  /* ---------- conto alla rovescia: un aggiornamento al secondo, animato solo se si vede ---------- */
   var conto = document.querySelector('[data-conto]');
   if (conto) {
     var meta = new Date(conto.dataset.a).getTime();
     var u = {};
     ['g', 'o', 'm', 's'].forEach(function (k) { u[k] = conto.querySelector('[data-u="' + k + '"]'); });
     var due = function (n) { return (n < 10 ? '0' : '') + n; };
-    var segna = function () {
+    var visibile = true;
+    var segna = function (anima) {
       var d = Math.max(0, Math.floor((meta - Date.now()) / 1000));
-      u.g.textContent = Math.floor(d / 86400);
-      u.o.textContent = due(Math.floor(d % 86400 / 3600));
-      u.m.textContent = due(Math.floor(d % 3600 / 60));
-      u.s.textContent = due(d % 60);
+      var a = anima && visibile && !riduci && !document.hidden;
+      mvCifre(u.g, String(Math.floor(d / 86400)), a);
+      mvCifre(u.o, due(Math.floor(d % 86400 / 3600)), a);
+      mvCifre(u.m, due(Math.floor(d % 3600 / 60)), a);
+      mvCifre(u.s, due(d % 60), a);
     };
-    segna(); setInterval(segna, 1000);
+    segna(false); setInterval(function () { segna(true); }, 1000);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (v) { visibile = v[0].isIntersecting; }).observe(conto);
+    }
   }
 
   /* ---------- sipario guidato dallo scroll ---------- */

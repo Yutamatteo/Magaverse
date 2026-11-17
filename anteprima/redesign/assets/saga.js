@@ -69,16 +69,53 @@
   }
 })();
 
-/* conto alla rovescia del Gala (solo la data di Capodanno: il resto è ancora segreto) */
+/* conto alla rovescia del Gala (solo la data di Capodanno: il resto è ancora segreto).
+   Un aggiornamento al secondo; le cifre ruotano solo quando il Gala è sullo schermo. */
 (function () {
   var c = document.querySelector('[data-conto]');
   if (!c) return;
-  var fine = new Date(c.dataset.conto).getTime();
-  function tic() {
+  var riduci = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* cifre che ruotano: ogni cifra cambiata scende via e la nuova arriva dall'alto (solo transform/opacity) */
+  var mvCifre = function (el, testo, anima) {
+    if (el.getAttribute('data-v') === testo) return;
+    var celle = el.querySelectorAll('.cf-cella');
+    if (!anima || celle.length !== testo.length) {
+      el.textContent = '';
+      for (var i = 0; i < testo.length; i++) {
+        var c = document.createElement('span'); c.className = 'cf-cella';
+        var s = document.createElement('span'); s.className = 'cf'; s.textContent = testo[i];
+        c.appendChild(s); el.appendChild(c);
+      }
+    } else {
+      var prima = el.getAttribute('data-v');
+      for (var k = 0; k < testo.length; k++) {
+        if (prima[k] === testo[k]) continue;
+        var cella = celle[k];
+        [].forEach.call(cella.querySelectorAll('.esce'), function (x) { x.remove(); });
+        var vecchia = cella.lastElementChild;
+        if (vecchia) {
+          vecchia.className = 'cf esce';
+          vecchia.addEventListener('animationend', function () { this.remove(); });
+        }
+        var nuova = document.createElement('span'); nuova.className = 'cf entra'; nuova.textContent = testo[k];
+        cella.appendChild(nuova);
+      }
+    }
+    el.setAttribute('data-v', testo);
+  };
+
+  var fine = new Date(c.dataset.conto).getTime(), visibile = false;
+  var u = { g: c.querySelector('[data-u="g"]'), h: c.querySelector('[data-u="h"]'), m: c.querySelector('[data-u="m"]') };
+  function tic(anima) {
     var d = Math.max(0, fine - Date.now()), m = Math.floor(d / 60000);
-    c.querySelector('[data-u="g"]').textContent = Math.floor(m / 1440);
-    c.querySelector('[data-u="h"]').textContent = Math.floor(m / 60) % 24;
-    c.querySelector('[data-u="m"]').textContent = m % 60;
+    var a = anima && visibile && !riduci && !document.hidden;
+    mvCifre(u.g, String(Math.floor(m / 1440)), a);
+    mvCifre(u.h, String(Math.floor(m / 60) % 24), a);
+    mvCifre(u.m, String(m % 60), a);
   }
-  tic(); setInterval(tic, 30000);
+  tic(false); setInterval(function () { tic(true); }, 1000);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (v) { visibile = v[0].isIntersecting; }).observe(c);
+  } else { visibile = true; }
 })();
