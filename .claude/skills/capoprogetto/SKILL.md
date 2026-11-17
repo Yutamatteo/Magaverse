@@ -54,6 +54,15 @@ Catene tipiche:
   `montatore` (solo se in `magaverse-produzione\sorgenti\` c'è materiale).
 - **Ricerca e idee**: `seo-locale`, `stratega-magacard`, `direttore-creativo` → le proposte che toccano
   il sito diventano task per l'`architetto` solo dopo l'ok di Matteo.
+- **Infrastruttura e sicurezza**: `esperto-informatico` (audit, correzioni in anteprima, migrazioni in
+  bozza) → `revisore` → solo con l'ok scritto di Matteo, riportato nell'incarico, l'esperto applica su
+  Supabase o sul sito vero.
+- **Documenti e conformità**: `ufficio-qualita` (bozze legali e modelli nel Cantiere) → Matteo e un
+  professionista approvano → `architetto` pubblica il testo finale.
+- **Numeri**: `commercialista` per budget e costo delle idee (prima di proporre premi, sponsor, video
+  a pagamento); i dati veri li dà Matteo.
+- **Opportunità e mercato**: `pr-scanner` (schede con fonte) → `marketing`/`direttore-creativo` per le
+  idee → Matteo decide chi contattare. Nessuno contatta da solo.
 - `ticketing` è in progettazione: non chiamarlo finché Matteo non decide fonti e permessi.
 
 Prima di chiamare uno specialista aggiorna la sua scrivania (`stato: "lavoro"`, `task`).

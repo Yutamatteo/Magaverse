@@ -151,6 +151,16 @@ scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agen
 - `ticketing`: **in progettazione**, solo lettura (Posto Riservato e pagamenti in contanti).
 - `revisore`: rivede in modo avversariale il lavoro di un altro agente (diff, 4 formati di schermo,
   sicurezza, dati inventati) e dà un verdetto prima che il lavoro si consideri finito.
+- `esperto-informatico`: admin IT e sicurezza informatica di tutto il Magaverse (Supabase, Edge
+  Functions, Resend, GitHub e Pages, dominio, SumUp tecnico, pannello staff). Legge e misura da solo,
+  corregge in anteprima; scritture su Supabase, chiavi, impostazioni e sito vero solo con l'ok scritto
+  di Matteo, che resta il suo superiore. Tiene nel Cantiere l'inventario di servizi e accessi.
+- `ufficio-qualita`: modelli, procedure, documentazione e testi legali (termini e condizioni, privacy,
+  cookie, regolamenti) a norma, in bozza da far validare a un professionista.
+- `commercialista`: budget e consuntivi delle serate, costo delle idee, scadenzario, domande per il
+  commercialista vero. Non abilitato: niente decisioni fiscali, mai muovere soldi.
+- `pr-scanner`: location, sponsor, partner, clienti, collab e stand, concorrenza e novità del settore
+  da fonti pubbliche, con link e data. Non contatta mai nessuno.
 
 Il repository GitHub è **pubblico**: bozze, report, video e note degli agenti vanno **solo** nel
 Cantiere privato o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,
