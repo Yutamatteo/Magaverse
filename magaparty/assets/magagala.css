@@ -196,3 +196,14 @@ body.gala {
 
 /* sul telefono la scritta sotto il titolo resta tra le tende */
 @media (max-width: 520px) { .gala-sotto { letter-spacing: .18em; padding-inline: 64px; text-wrap: balance; } }
+
+/* cifre che ruotano nel conto alla rovescia */
+.cf-cella { display: inline-block; position: relative; overflow: hidden; vertical-align: bottom; }
+.cf-cella .cf { display: inline-block; }
+.cf-cella .cf.entra { animation: cf-entra .55s cubic-bezier(.2,.9,.25,1) both; }
+.cf-cella .cf.esce { position: absolute; left: 0; top: 0; width: 100%; animation: cf-esce .45s cubic-bezier(.5,0,.75,0) both; }
+@keyframes cf-entra { from { transform: translateY(-90%) scaleY(.6); opacity: 0; } }
+@keyframes cf-esce { to { transform: translateY(80%) scaleY(.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cf-cella .cf.entra, .cf-cella .cf.esce { animation: none; } .cf-cella .cf.esce { display: none; } }
+.conto span.cf-cella { display: inline-block; font-size: inherit; text-shadow: none; }
+.conto span.cf { font-size: inherit; text-shadow: inherit; }
