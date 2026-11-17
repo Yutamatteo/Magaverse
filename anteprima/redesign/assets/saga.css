@@ -1,135 +1,101 @@
-/* MAGAVERSE · La stagione come un unico sfondo, versione semplice.
-   Una serata = uno schermo. Lo sfondo resta fermo e cambia (dissolvenza breve)
-   quando la serata successiva arriva a metà schermo. Le foto non vengono mai
-   ingrandite oltre la loro risoluzione: dietro c'è la stessa foto sfocata. */
+/* MAGAVERSE · La stagione come un'unica parete di foto che scende con la pagina.
+   Niente sfondo fisso e niente calcoli durante lo scorrimento: ogni serata è una
+   sezione normale con il suo pezzo di parete. Le uniche animazioni sono di entrata
+   (una volta sola, quando la serata arriva sullo schermo). Le sezioni sfumano l'una
+   nell'altra, così si legge come un muro unico dall'estate a Capodanno. */
 
-.saga { position: relative; --tinta: #2FD8F0; }
-html:has(.saga) { scroll-snap-type: y proximity; }
+.stagione-muro { position: relative; background: #06080c; color: #F4EADB; }
 
-/* ── lo sfondo fisso ───────────────────────────────────────── */
-.saga-fondo { display: none; }
-.mv-js .saga-binario { position: absolute; inset: 0; z-index: 0; }
-.mv-js .saga-fondo {
-  display: block; position: sticky; top: 0;
-  height: 100vh; height: 100lvh;
-  overflow: hidden; background: #06080c;
+.notte {
+  position: relative; overflow: hidden; isolation: isolate;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; align-items: flex-end;
+  --tinta: #2FD8F0;
 }
-.scena {
-  position: absolute; inset: 0; overflow: hidden; isolation: isolate; --p: .5;
-  opacity: 0; visibility: hidden;
-  transition: opacity .4s ease, visibility 0s linear .4s;
-}
-.scena.on { opacity: 1; visibility: visible; transition: opacity .4s ease, visibility 0s; }
 
-/* il muro di foto: tutta la stagione in un solo sfondo. La serata di cui stai
-   leggendo è a colori, le altre restano in ombra. */
-.parete {
-  position: absolute; left: 50%; top: 0; width: 118%; z-index: 0;
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
-  transform: translate3d(-50%, var(--y, 0px), 0) rotate(-4deg); transform-origin: 50% 0;
-  will-change: transform;
+/* la parete: tasselli piccoli e nitidi, mai ingranditi oltre la loro risoluzione */
+.notte-muro {
+  position: absolute; inset: -6% -8%; z-index: 0;
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-content: center;
+  transform: rotate(-4deg);
 }
-.parete-col { display: flex; flex-direction: column; gap: 12px; will-change: transform; }
-.parete-col:nth-child(even) { margin-top: -18%; }
-.parete img {
+.notte-muro img {
   display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px;
-  filter: grayscale(1) brightness(.5); opacity: .55;
-  transition: filter .45s ease, opacity .45s ease;
+  background: #11141b;
 }
-.parete-tinta { position: absolute; inset: 0; z-index: 1; background-color: var(--tinta); mix-blend-mode: soft-light; opacity: .55; transition: background-color .45s ease; pointer-events: none; }
-.parete-velo {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(90deg, rgba(6,8,12,.94) 0%, rgba(6,8,12,.8) 34%, rgba(6,8,12,.2) 62%, rgba(6,8,12,0) 80%);
+/* il colore della serata e il buio dove c'è il testo */
+.notte::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, #06080c 0%, rgba(6,8,12,0) 16%, rgba(6,8,12,0) 84%, #06080c 100%),
+    linear-gradient(90deg, rgba(6,8,12,.94) 0%, rgba(6,8,12,.78) 36%, rgba(6,8,12,.18) 70%, rgba(6,8,12,.05) 100%),
+    linear-gradient(135deg, color-mix(in srgb, var(--tinta) 26%, transparent), transparent 55%);
 }
-.scena { z-index: 3; }
-@media (max-width: 760px) {
-  .parete { width: 150%; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .parete-col { gap: 8px; }
-  .parete-col:nth-child(n+4) { display: none; }
-  .parete-velo { background: linear-gradient(0deg, rgba(6,8,12,.96) 0%, rgba(6,8,12,.82) 42%, rgba(6,8,12,.1) 72%); }
+
+/* il testo */
+.notte-testo {
+  position: relative; z-index: 2; width: 100%; max-width: 1180px; margin: 0 auto;
+  padding: 110px clamp(20px, 5vw, 56px) clamp(56px, 10vh, 110px);
 }
-.saga .scena.cap-gala {
-  --apri: clamp(.1, calc(var(--p) * 1.9), .92);
+.notte-testo > * { max-width: 560px; }
+.notte-quando { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 14px; color: var(--tinta); font-weight: 700; font-size: 15px; }
+.notte-quando::before { content: ""; width: 26px; height: 2px; background: currentColor; }
+.notte h2 { margin: 0; font-size: clamp(56px, 8.6vw, 132px); line-height: .86; font-stretch: 64%; font-weight: 850; letter-spacing: -.01em; }
+.notte h2 em { font-style: normal; color: var(--tinta); }
+.notte-frase { margin: 18px 0 0; font-size: clamp(16px, 1.4vw, 19px); line-height: 1.55; color: rgba(244,234,219,.9); }
+.notte .cap-btn { background: var(--tinta); color: #06080b; }
+.notte .cap-btn-vuoto { background: rgba(6,8,12,.55); color: #F4EADB; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tinta) 60%, transparent); }
+.notte .cap-numeri dd { color: var(--tinta); }
+
+/* entrata: i tasselli salgono in ordine sparso, il testo li segue. Una volta sola. */
+.mv-js .notte-muro img { opacity: 0; transform: translateY(26px); transition: opacity .5s ease, transform .6s cubic-bezier(.19,1,.22,1); transition-delay: var(--r, 0ms); }
+.mv-js .notte.vista .notte-muro img { opacity: .62; transform: none; }
+.mv-js .notte-testo > * { opacity: 0; transform: translateY(18px); transition: opacity .45s ease, transform .55s cubic-bezier(.19,1,.22,1); }
+.mv-js .notte.vista .notte-testo > * { opacity: 1; transform: none; }
+.mv-js .notte.vista .notte-testo > :nth-child(2) { transition-delay: .06s; }
+.mv-js .notte.vista .notte-testo > :nth-child(3) { transition-delay: .12s; }
+.mv-js .notte.vista .notte-testo > :nth-child(n+4) { transition-delay: .18s; }
+
+/* Maga Gala: il sipario si apre quando arrivi, poi resta aperto */
+.notte-gala {
+  align-items: center; text-align: center;
   background: radial-gradient(60% 55% at 50% 50%, #3a1408 0%, #140706 50%, #070405 85%);
+  --apri: .1;
 }
-.saga .scena.cap-gala .telo { transition: transform .15s linear; }
-
-/* ── dove sei nella stagione ───────────────────────────────── */
-.saga-mappa { display: none; }
-.mv-js .saga-mappa {
-  display: flex; position: absolute; z-index: 20; margin: 0; padding: 0; list-style: none;
-}
-.saga-mappa li {
-  display: flex; align-items: center; gap: 7px; cursor: pointer; pointer-events: auto;
-  padding: 6px 0; font-size: 13px; font-weight: 700; color: rgba(244,234,219,.82); transition: color .25s;
-}
-.saga-mappa li::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: rgba(244,234,219,.4); transition: background .25s, transform .25s; }
-.saga-mappa li:hover, .saga-mappa li.ora { color: #fff; }
-.saga-mappa li.ora::before { background: var(--tinta); transform: scale(1.5); }
-@media (min-width: 761px) {
-  .mv-js .saga-mappa { background: rgba(6,8,12,.6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding: 10px 14px; border-radius: 14px; }
-  .mv-js .saga-mappa { right: clamp(16px, 2.4vw, 34px); top: 50%; transform: translateY(-50%); flex-direction: column; align-items: flex-end; gap: 2px; }
-  .saga-mappa li { flex-direction: row-reverse; text-shadow: 0 1px 10px rgba(0,0,0,.95); }
-}
-@media (max-width: 760px) {
-  .mv-js .saga-mappa { bottom: calc(10px + (100lvh - 100svh)); left: 0; right: 0; justify-content: center; gap: 6px; }
-  .saga-mappa li { font-size: 0; gap: 0; padding: 8px 0; }
-  .saga-mappa li::before { width: 20px; height: 3px; border-radius: 2px; }
-  .saga-mappa li.ora::before { transform: none; width: 34px; }
-}
-
-/* ── i testi ───────────────────────────────────────────────── */
-.saga-pannelli { position: relative; z-index: 2; pointer-events: none; }
-.saga-pannello { position: relative; color: #F4EADB; background: transparent !important; scroll-snap-align: start; }
-.saga-pannello a, .saga-pannello button { pointer-events: auto; }
-.saga-pannello .cap-fermo { background: none; align-items: center; min-height: 100vh; min-height: 100svh; }
-.mv-js .saga-pannello .cap-fermo { position: relative; height: 100vh; height: 100lvh; overflow: visible; }
-.saga-pannello .cap-testo { padding-top: 70px; padding-bottom: calc(60px + (100lvh - 100svh)); }
-.saga-pannello .cap-testo > * { max-width: min(560px, 46vw); }
-.saga-pannello.cap-gala .cap-testo > * { max-width: none; }
-
-.saga-pannello .cap-sopra { color: var(--tinta); }
-.saga-pannello h2 { margin: 0; font-size: clamp(56px, 8.4vw, 132px); line-height: .86; font-stretch: 64% !important; font-weight: 850; }
-.saga-pannello h2 em { font-style: normal; color: var(--tinta); }
-.saga-pannello .cap-frase { color: rgba(244,234,219,.9); }
-.saga-pannello .cap-btn { background: var(--tinta); color: #06080b; }
-.saga-pannello .cap-btn-vuoto { background: rgba(6,8,12,.5); color: #F4EADB; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tinta) 60%, transparent); }
-.saga-quando { display: inline-flex; gap: 8px; align-items: center; }
-.saga-quando::before { content: ""; width: 22px; height: 2px; background: currentColor; }
-.saga-pannello.cap-gala .saga-quando::before { display: none; }
-.saga-pannello.cap-gala .cap-btn { background: #E0182B; color: #fff; }
-.saga-pannello.cap-gala .cap-btn-vuoto { background: rgba(7,4,5,.5); }
-
-/* senza JavaScript: ogni pannello si porta dietro la sua foto */
-html:not(.mv-js) .saga-pannello .cap-fermo {
-  background: linear-gradient(90deg, rgba(6,8,12,.92), rgba(6,8,12,.4)), var(--foto, #06080c) center / cover no-repeat;
-}
-
-/* ── telefono: testo in basso, muro sopra ─────────────────── */
-@media (max-width: 760px) {
-  .saga-pannello .cap-fermo { align-items: flex-end; }
-  .saga-pannello .cap-testo { padding-bottom: calc(52px + (100lvh - 100svh)); }
-  .saga-pannello .cap-testo > * { max-width: none; }
-  .saga-pannello h2 { font-size: clamp(48px, 14vw, 72px); }
-  .saga-pannello.cap-gala .cap-fermo { align-items: center; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scena, .scena.on { transition: none; }
-  .parete, .parete-col { transition: none; }
-  .saga .scena.cap-gala { --apri: .8; }
-  html:has(.saga) { scroll-snap-type: none; }
-}
+.notte-gala::before { display: none; }
+.notte-gala .notte-testo > * { max-width: none; }
+.notte-gala .notte-quando::before { display: none; }
+.notte-gala .notte-quando { justify-content: center; color: #E9C77B; }
+.notte-gala h2 { font-size: inherit; }
+.notte-gala .cap-link { justify-content: center; }
+.notte-gala .cap-btn { background: #E0182B; color: #fff; }
+.notte-gala .cap-btn-vuoto { background: rgba(7,4,5,.5); box-shadow: inset 0 0 0 1px rgba(233,199,123,.6); }
+.notte-gala .telo { transition: transform 1.3s cubic-bezier(.65,0,.35,1); }
+.notte-gala.vista { --apri: .9; }
+.notte-gala .cap-luce { opacity: .9; }
 
 /* conto alla rovescia verso la mezzanotte di Capodanno */
 .gala-conto { margin: 16px 0 0; color: rgba(246,239,228,.85); font-size: 15px; }
 .gala-conto b { display: inline-block; min-width: 1.6em; margin: 0 2px 0 8px; font: 500 clamp(26px, 3.4vw, 40px)/1 'Bodoni Moda', serif; color: #E9C77B; font-variant-numeric: tabular-nums; }
 .gala-conto b:first-child { margin-left: 0; }
 
-/* ── telefono: tutto ciò che costa a ogni fotogramma va via ── */
-@media (max-width: 760px), (pointer: coarse) {
-  html:has(.saga) { scroll-snap-type: none; }
-  .parete img { filter: none; opacity: .28; transition: opacity .3s ease; }
-  .parete-tinta { mix-blend-mode: normal; opacity: .12; }
-  .mv-js .saga-mappa { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(6,8,12,.82); }
+/* telefono: meno colonne, testo in basso con il buio sotto */
+@media (max-width: 760px) {
+  .notte-muro { grid-template-columns: repeat(3, 1fr); gap: 7px; inset: -4% -12%; align-content: start; }
+  .notte-muro img:nth-child(n+13) { display: none; }
+  .notte::before {
+    background:
+      linear-gradient(180deg, #06080c 0%, rgba(6,8,12,0) 12%, rgba(6,8,12,.2) 40%, rgba(6,8,12,.9) 66%, #06080c 100%),
+      linear-gradient(135deg, color-mix(in srgb, var(--tinta) 24%, transparent), transparent 60%);
+  }
+  .notte-testo { padding-top: 46vh; padding-bottom: 54px; }
+  .notte-testo > * { max-width: none; }
+  .notte h2 { font-size: clamp(48px, 14vw, 72px); }
+  .notte-gala .notte-testo { padding-top: 90px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mv-js .notte-muro img, .mv-js .notte-testo > * { transition: none; opacity: 1; transform: none; }
+  .mv-js .notte-muro img { opacity: .62; }
+  .notte-gala .telo { transition: none; }
 }

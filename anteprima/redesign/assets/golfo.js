@@ -170,8 +170,8 @@
   function misura() {
     var w = tela.clientWidth, h = tela.clientHeight;
     if (!w || !h) return false;
-    var scala = Math.min(window.devicePixelRatio || 1, window.matchMedia('(pointer: coarse)').matches ? 1 : 1.5);
-    var tetto = window.matchMedia('(pointer: coarse)').matches ? 4.5e5 : 1.5e6;
+    var scala = Math.min(window.devicePixelRatio || 1, 1);
+    var tetto = window.matchMedia('(pointer: coarse)').matches ? 4.5e5 : 8e5;
     if (w * h * scala * scala > tetto) scala = Math.sqrt(tetto / (w * h));
     var W = Math.round(w * scala), H = Math.round(h * scala);
     if (tela.width !== W || tela.height !== H) { tela.width = W; tela.height = H; }
@@ -212,8 +212,8 @@
   var telefono = window.matchMedia('(pointer: coarse)').matches, ultimoDisegno = 0;
   function giro(ora) {
     raf = 0;
-    /* sui telefoni basta mezzo fotogramma su due: il cielo si muove piano */
-    if (telefono && ora - ultimoDisegno < 32) { if (inVista && !document.hidden) raf = window.requestAnimationFrame(giro); return; }
+    /* 30 fotogrammi al secondo bastano: il cielo si muove piano */
+    if (ora - ultimoDisegno < 32) { if (inVista && !document.hidden) raf = window.requestAnimationFrame(giro); return; }
     ultimoDisegno = ora;
     var dt = ultimo ? Math.min(0.05, (ora - ultimo) / 1000) : 0.016;
     ultimo = ora;
