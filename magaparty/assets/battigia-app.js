@@ -24,7 +24,7 @@
     }
 
     function logoMarkup(extraStyle) {
-        return `<img src="assets/img/battigia-locandina.jpg" alt="BATTIGIA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
+        return `<img src="assets/img/battigia-locandina.webp" alt="BATTIGIA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
                      onerror="this.outerHTML='<div class=\\'logo-placeholder\\'><i class=\\'fa-solid fa-image\\'></i><span>battigia-locandina.jpg</span></div>'">`;
     }
 

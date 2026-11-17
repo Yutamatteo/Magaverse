@@ -24,7 +24,7 @@
     }
 
     function logoMarkup(extraStyle) {
-        return `<img src="assets/img/ultima-onda-locandina.jpg" alt="ULTIMA ONDA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
+        return `<img src="assets/img/ultima-onda-locandina.webp" alt="ULTIMA ONDA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
                      onerror="this.outerHTML='<div class=\\'logo-placeholder\\'><i class=\\'fa-solid fa-image\\'></i><span>ultima-onda-locandina.jpg</span></div>'">`;
     }
 

@@ -24,7 +24,7 @@
     }
 
     function logoMarkup(extraStyle) {
-        return `<img src="assets/img/marea-locandina.jpg" alt="MAREA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
+        return `<img src="assets/img/marea-locandina.webp" alt="MAREA" class="logo-image"${extraStyle ? ' style="' + extraStyle + '"' : ''}
                      onerror="this.outerHTML='<div class=\\'logo-placeholder\\'><i class=\\'fa-solid fa-image\\'></i><span>marea-locandina.jpg</span></div>'">`;
     }
 
