@@ -99,3 +99,35 @@
   .mv-js .notte-muro img { opacity: .62; }
   .notte-gala .telo { transition: none; }
 }
+
+/* ── animazioni legate allo scorrimento, ma calcolate dal browser ─────────
+   animation-timeline: view() gira sul compositore: nessun JavaScript, nessun
+   ricalcolo della pagina. Dove non è supportato resta la versione ferma. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    /* la parete scorre più lenta della pagina: profondità */
+    .notte-muro { animation: parete-deriva linear both; animation-timeline: view(); }
+    @keyframes parete-deriva {
+      from { transform: translate3d(0, -9%, 0) rotate(-4deg) scale(1.04); }
+      to   { transform: translate3d(0, 9%, 0) rotate(-2deg) scale(1); }
+    }
+    /* il colore della serata si accende quando è al centro */
+    .notte::after {
+      content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: radial-gradient(60% 50% at 70% 50%, color-mix(in srgb, var(--tinta) 30%, transparent), transparent 70%);
+      animation: notte-accendi linear both; animation-timeline: view();
+    }
+    @keyframes notte-accendi { 0%, 20% { opacity: 0; } 50% { opacity: 1; } 80%, 100% { opacity: 0; } }
+    /* il titolo arriva da destra mentre la serata entra */
+    .notte:not(.notte-gala) h2 { animation: titolo-entra linear both; animation-timeline: view(); animation-range: entry 10% cover 45%; }
+    @keyframes titolo-entra { from { transform: translateX(8%); letter-spacing: .04em; } to { transform: none; letter-spacing: -.01em; } }
+    /* il sipario del Gala si apre seguendo il dito */
+    .notte-gala .telo { transition: none; }
+    .notte-gala .telo-sx { animation: telo-sx linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+    .notte-gala .telo-dx { animation: telo-dx linear both; animation-timeline: view(); animation-range: entry 0% cover 50%; }
+    @keyframes telo-sx { from { transform: scaleX(.9); } to { transform: scaleX(.08); } }
+    @keyframes telo-dx { from { transform: scaleX(.9); } to { transform: scaleX(.08); } }
+    .notte-gala .gala-nome { animation: gala-nome linear both; animation-timeline: view(); animation-range: entry 20% cover 50%; }
+    @keyframes gala-nome { from { transform: scale(.82); opacity: 0; filter: blur(8px); } to { transform: none; opacity: 1; filter: none; } }
+  }
+}
