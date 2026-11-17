@@ -81,6 +81,28 @@
     window.addEventListener('resize', leggi);
   }
 
+  /* ---------- luce che segue il mouse sulla trama 31.12 ----------
+     Solo con un mouse vero. Due transform per fotogramma al massimo (compositore). */
+  var faro = document.querySelector('[data-faro]');
+  if (faro && !riduci && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    var palco = faro.parentNode, tramaF = faro.firstElementChild;
+    var px = 0, py = 0, rfF = 0, acceso = false;
+    var muovi = function () {
+      rfF = 0;
+      var r = palco.getBoundingClientRect();
+      var x = Math.round(px - r.left), y = Math.round(py - r.top);
+      faro.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0)';
+      tramaF.style.transform = 'translate3d(' + (-x) + 'px,' + (-y) + 'px,0)';
+      if (!acceso) { acceso = true; faro.classList.add('acceso'); }
+    };
+    palco.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      px = e.clientX; py = e.clientY;
+      if (!rfF) rfF = requestAnimationFrame(muovi);
+    }, { passive: true });
+    palco.addEventListener('pointerleave', function () { acceso = false; faro.classList.remove('acceso'); });
+  }
+
   /* ---------- polvere d'oro ---------- */
   var tela = document.querySelector('[data-polvere]');
   if (!tela || !tela.getContext) return;
