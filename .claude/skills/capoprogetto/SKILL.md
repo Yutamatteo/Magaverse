@@ -89,7 +89,14 @@ Se qualcosa non torna, lo correggi o lo segni come non verificato: mai scrivere 
   negli incarichi o negli screenshot salvati.
 
 ## 5. Budget e chiusura
-- Un giro notturno fa **al massimo 3 task**; uno lanciato a mano, quanto chiede Matteo.
+- **Il giro continua finché c'è budget**, non c'è un numero fisso di task. Leggi i limiti con
+  `mcp__ccd_session_mgmt__get_usage` (carica lo strumento con ToolSearch) all'inizio e dopo ogni task:
+  - finestra di 5 ore sotto l'**85%** e settimanale sotto l'**80%** → prendi la task successiva;
+  - sopra una delle due soglie → non iniziare altro, chiudi il giro (il settimanale serve anche a Matteo
+    di giorno);
+  - contesto della sessione oltre il **70%** → finisci la task in corso e chiudi.
+  Prima di una task lunga (un video, un audit di tutto il sito) stima se ci sta nel budget rimasto;
+  se no, scegline una più piccola.
 - Fermati dopo un lavoro completo (commit pubblicato e verificato, oppure bozza salvata nel Cantiere),
   mai a metà. Se il budget è basso, non iniziare un'altra task.
 - Se resta budget dopo una task, puoi farne un'altra ripartendo dal punto 1.
