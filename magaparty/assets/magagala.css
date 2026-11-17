@@ -193,3 +193,6 @@ body.gala {
 }
 .gala-footer a { color: rgba(246,239,228,.75); text-decoration: none; }
 .gala-footer a:hover { color: var(--oro); }
+
+/* sul telefono la scritta sotto il titolo resta tra le tende */
+@media (max-width: 520px) { .gala-sotto { letter-spacing: .18em; padding-inline: 64px; text-wrap: balance; } }
