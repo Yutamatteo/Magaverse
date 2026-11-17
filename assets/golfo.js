@@ -52,7 +52,7 @@
     'vec3 tinta(float L,float t){',
     ' vec3 s=rampa(vec3(.118,.141,.322),vec3(.353,.227,.525),vec3(.824,.314,.431),vec3(1.,.518,.22),vec3(1.,.831,.42),L);',
     ' vec3 d=rampa(vec3(.039,.055,.149),vec3(.11,.122,.345),vec3(.333,.188,.494),vec3(.769,.278,.424),vec3(1.,.486,.275),L);',
-    ' vec3 n=rampa(vec3(.022,.03,.07),vec3(.035,.058,.145),vec3(.058,.1,.235),vec3(.094,.172,.36),vec3(.16,.29,.52),L);',
+    ' vec3 n=rampa(vec3(.022,.03,.07),vec3(.035,.058,.145),vec3(.06,.105,.25),vec3(.105,.2,.42),vec3(.19,.34,.6),L);',
     ' return mix(mix(s,d,smoothstep(0.,.5,t)),n,smoothstep(.45,1.,t));}',
     'float stelle(vec2 q,float scala,float soglia){vec2 g=floor(q*scala),f=fract(q*scala);float h=hash(g);vec2 c=vec2(hash(g+3.1),hash(g+7.7))*.6+.2;float d=length(f-c);',
     ' float tw=.62+.38*sin(u_time*(1.+3.*hash(g+1.3))+h*40.);float gr=mix(.04,.1,hash(g+9.2));return step(soglia,h)*(1.-smoothstep(0.,gr,d))*tw;}',
