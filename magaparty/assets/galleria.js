@@ -13,6 +13,9 @@
     });
   });
 
+  var chiesta = new URLSearchParams(location.search).get('serata');
+  filtri.forEach(function (b) { if (b.dataset.serata === chiesta) b.click(); });
+
   var v = document.createElement('div');
   v.className = 'gal-visore'; v.setAttribute('role', 'dialog'); v.setAttribute('aria-modal', 'true'); v.setAttribute('aria-label', 'Foto a tutto schermo');
   v.innerHTML = '<img alt=""><p></p><button class="gal-chiudi" aria-label="Chiudi">✕</button><button class="gal-prima" aria-label="Foto precedente">‹</button><button class="gal-dopo" aria-label="Foto successiva">›</button>';
