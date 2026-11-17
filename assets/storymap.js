@@ -86,6 +86,7 @@
     }
 
     stage.querySelectorAll('.story-pin').forEach(function(btn){
+      if (!btn.getAttribute('aria-label') && btn.dataset.name) btn.setAttribute('aria-label', btn.dataset.name);
       btn.addEventListener('click', function(){
         if (openPinId === btn.id) closeCard(); else openCard(btn);
       });
