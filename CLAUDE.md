@@ -29,6 +29,17 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   (`assets/racconto.css`); avviso fine stagione su Marea e Battigia.
 - Maga Gala "coming soon" (`magaparty/magagala.html`): niente dettagli inventati, solo la data di Capodanno.
 - Lido: foto vere nella giornata tipo; MagaCard: tessera olografica; pagina 404; sitemap e robots.
+- 17/11 pomeriggio (Claude Code, vedi Cantiere per il dettaglio):
+  - Contest costumi chiuso: pagina con classifica finale; voti, iscrizioni e foto chiusi anche su
+    Supabase (migrazione `chiudi_contest_costumi_halloween_2026`).
+  - Lido rifatto in stile "cartello": servizi, menù e listino da lavagna, contatti a righe, Prenota a
+    pulsanti (anche da tastiera), avviso fuori stagione, scheda schema.org in home.
+  - Serate passate coerenti: niente conto alla rovescia, "Mettiti in lista" o prezzi (CSS in
+    `assets/racconto.css`, attivo dove c'è `.fine-stagione` o `.racconto`). Halloween 2026 era **sabato**.
+  - Galleria con fascia verso il canale Telegram; moduli con `autocomplete`; og:image assolute;
+    h1 nascosti (`.mv-sr` in `maga-base.css`) dove mancavano.
+  - `motion.js`: sul telefono non misura più a ogni fotogramma le locandine `.mp-evento` (si
+    inclinano solo col mouse); la cornice del Gala si inclina in CSS.
 
 ### Regole emerse con Matteo
 - **Fluidità prima di tutto.** Niente lavoro JavaScript a ogni fotogramma di scroll, niente
@@ -39,6 +50,10 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   colore unico. Gli originali ad alta risoluzione non sono sul PC: chiederli se servono.
 - Non inventare date, luoghi, prezzi o nomi di serate. Se un dato manca, lascialo generico.
 - Lavora in autonomia quando Matteo dà una finestra di tempo; aggiorna il Cantiere con l'ora reale.
+  Su questo PC l'ora reale si legge con PowerShell `Get-Date -Format HH:mm`: in Git Bash
+  `TZ=Europe/Rome date` restituisce l'ora UTC.
+- Le misure di `fluidita.py` oscillano molto (anche ±15 ms con lo stesso codice): confronta
+  alternando le versioni, oppure guarda la traccia di Chrome (ricalcoli forzati, tempo di script).
 
 ### In sospeso (serve l'ok di Matteo)
 - Pubblicare il redesign sul sito vero.
@@ -57,6 +72,13 @@ bash strumenti/pubblica.sh "messaggio"
 
 Lo script ricostruisce `anteprima/redesign`, controlla che il commit tocchi solo quella cartella
 e fa push di `main` e di `redesign-grafica`.
+
+Su questo PC Windows: `../magaverse-main` esiste già (worktree sul ramo `anteprima-redesign`).
+Python si chiama `py`: lo script usa `python3`, quindi metti nel PATH un file `python3` che
+esegue `py`. Git non ha un nome utente configurato: per i commit usa
+`git -c user.name=Claude -c user.email=noreply@anthropic.com` (o le variabili `GIT_AUTHOR_*`).
+Lo script stampa "pubblicato" anche se il push fallisce: controlla con `git ls-remote origin`.
+Per gli screenshot senza finestra c'è Playwright (`py -m playwright`).
 
 ## Commit
 Messaggi in italiano, che spiegano cosa cambia per chi usa il sito.
