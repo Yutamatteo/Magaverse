@@ -91,3 +91,33 @@ Per gli screenshot senza finestra c'è Playwright (`py -m playwright`).
 
 ## Commit
 Messaggi in italiano, che spiegano cosa cambia per chi usa il sito.
+
+## Lavoro autonomo
+Quando Matteo dà una finestra di tempo (o parte una task programmata) si lavora da soli e lui
+passa solo a controllare il Cantiere (artifact "Cantiere Magaverse": stato in `cantiere/stato`,
+una scrivania per agente in `agenti/<id>`, campi `stato` = lavoro / pausa / finito / bloccato,
+`task`, `aggiornato`, `risultato {testo, url}`; voci del diario con `a` = id dell'agente).
+
+**Si può fare da soli**
+- Modificare il ramo `redesign-grafica`, fare commit (identità e riga `Co-Authored-By` come sopra).
+- Pubblicare l'anteprima con `bash strumenti/pubblica.sh "messaggio"` e poi verificare il push con
+  `git ls-remote origin refs/heads/redesign-grafica`.
+- Aggiornare e riorganizzare il Cantiere, con l'ora reale (PowerShell `Get-Date -Format HH:mm`).
+
+**Non si fa mai da soli** (va nel Cantiere sotto "Serve te")
+- Pubblicare sul sito vero (`main` fuori dalla cartella `anteprima/`).
+- Modificare Supabase (schema, dati, funzioni, chiavi).
+- Cancellare file o cartelle fuori dalla propria cartella temporanea.
+- Mandare messaggi, pubblicare sui social, inventare date, prezzi, nomi o luoghi.
+
+**Il ciclo**: una task alla volta = un commit = una pubblicazione dell'anteprima, poi Cantiere
+aggiornato e task successiva. Prima di chiudere una task: aprire le pagine toccate con Playwright
+a 390x844, controllare che non ci sia scorrimento orizzontale
+(`document.documentElement.scrollWidth <= 390`) e annotare nel Cantiere i ms per fotogramma di
+`py strumenti/fluidita.py <pagina> 8765` (server: `py -m http.server 8765`). Se il budget finisce,
+fermarsi dopo un commit completo.
+
+**Agenti** (`.claude/agents/`): `architetto` (task tecniche), `mystery-guest` (prova l'anteprima da
+telefono come un cliente arrivato da Instagram), `marketing` (bozze di testi). Il repository GitHub
+è **pubblico**: bozze, report e note degli agenti vanno **solo** nel Cantiere privato, mai in file
+del repository.
