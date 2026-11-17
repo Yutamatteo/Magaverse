@@ -150,3 +150,21 @@
 @keyframes cf-entra { from { transform: translateY(-90%) scaleY(.6); opacity: 0; } }
 @keyframes cf-esce { to { transform: translateY(80%) scaleY(.6); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .cf-cella .cf.entra, .cf-cella .cf.esce { animation: none; } .cf-cella .cf.esce { display: none; } }
+
+/* Una sola parete (il lido, la prima): le colonne di foto scorrono a velocità diverse.
+   Una sola timeline di scroll condivisa da tutti i tasselli, solo la proprietà translate
+   (separata dal transform dell'entrata), quindi niente JavaScript durante lo scorrimento. */
+@keyframes parete-col { from { translate: 0 calc(var(--v, 0) * 1px); } to { translate: 0 calc(var(--v, 0) * -1px); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .notte[aria-labelledby="notte-lido"] { view-timeline: --parete-lido block; }
+    .notte[aria-labelledby="notte-lido"] .notte-muro img { animation: parete-col linear both; animation-timeline: --parete-lido; animation-range: cover; }
+    .notte[aria-labelledby="notte-lido"] .notte-muro img:nth-child(3n+1) { --v: 22; }
+    .notte[aria-labelledby="notte-lido"] .notte-muro img:nth-child(3n+2) { --v: -34; }
+    .notte[aria-labelledby="notte-lido"] .notte-muro img:nth-child(3n) { --v: 46; }
+    @media (max-width: 760px) {
+      .notte[aria-labelledby="notte-lido"] .notte-muro img:nth-child(odd) { --v: -26; }
+      .notte[aria-labelledby="notte-lido"] .notte-muro img:nth-child(even) { --v: 34; }
+    }
+  }
+}
