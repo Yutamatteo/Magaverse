@@ -122,6 +122,10 @@ a 390x844, controllare che non ci sia scorrimento orizzontale
 `py strumenti/fluidita.py <pagina> 8765` (server: `py -m http.server 8765`). Se il budget finisce,
 fermarsi dopo un commit completo.
 
+**Chi dirige**: la sessione principale, seguendo la skill `.claude/skills/capoprogetto` (priorità,
+rotazione degli specialisti, passaggi tra agenti, verifica, budget, resoconto). Per avviarla basta
+scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agenti/capoprogetto`.
+
 **Agenti** (`.claude/agents/`, ognuno ha la sua scrivania nel Cantiere in `agenti/<id>`):
 - `architetto`: ingegnere del software, tutte le modifiche al codice del sito (metodo: capire,
   misurare, implementare, verificare, rivedere, decidere sui numeri).
