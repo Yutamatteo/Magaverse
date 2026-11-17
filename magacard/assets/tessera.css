@@ -1,0 +1,76 @@
+/* =========================================================
+   MAGACARD · LA TESSERA DEL CLIENTE
+   La stessa tessera olografica della home, con i dati veri:
+   si inclina sotto il dito, il riflesso la attraversa,
+   all'apertura "atterra" e i timbri si stampano uno a uno.
+   ========================================================= */
+body { display: block !important; min-height: 100svh; padding: 0 !important;
+  background: radial-gradient(90% 60% at 50% 0%, #2a0f33 0%, #0B0712 60%) !important; }
+.tc-pagina { max-width: 440px !important; margin: 0 auto; padding: 34px 18px 60px; }
+.tc-sopra { margin: 0 0 14px; text-align: center; font-size: 15px; font-weight: 600; color: #C9BCDB; }
+
+.tc-tessera { --rx: 0; --ry: 0; --mx: .5; --my: .3; perspective: 1000px; container-type: inline-size; touch-action: pan-y; }
+.tc-corpo {
+  position: relative; overflow: hidden; aspect-ratio: 1.586; border-radius: 22px;
+  padding: 6.5cqw 7cqw; display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255,194,61,.55), transparent 55%),
+    radial-gradient(90% 80% at 0% 100%, rgba(34,211,238,.35), transparent 60%),
+    linear-gradient(135deg, #FF2E92, #8B5CF6 85%);
+  box-shadow: 0 34px 70px -24px rgba(139,92,246,.7), 0 2px 0 rgba(255,255,255,.3) inset;
+  transform: rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg));
+  transition: transform .6s cubic-bezier(.19,1,.22,1);
+}
+.tc-tessera.in-mano .tc-corpo { transition-duration: .08s; }
+.tc-riflesso {
+  position: absolute; inset: -40%; pointer-events: none; mix-blend-mode: soft-light;
+  background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,.55) 47%, rgba(255,226,150,.4) 50%, rgba(120,255,240,.35) 53%, transparent 62%);
+  transform: translate(calc((var(--mx) - .5) * 70%), calc((var(--my) - .5) * 40%));
+  transition: transform .6s cubic-bezier(.19,1,.22,1);
+}
+.tc-riga { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.tc-marca { font-weight: 850; font-stretch: 68%; font-size: 9cqw; line-height: 1; }
+.tc-livello { font-size: 3.6cqw; font-weight: 700; padding: .5em .9em; border-radius: 999px; background: rgba(255,255,255,.22); white-space: nowrap; }
+.tc-nome { font-weight: 800; font-stretch: 75%; font-size: 7.6cqw; line-height: 1.02; text-shadow: 0 2px 14px rgba(60,0,60,.35); overflow-wrap: anywhere; }
+.tc-basso { align-items: flex-end; }
+.tc-timbri { display: flex; gap: 2cqw; }
+.tc-timbri i { position: relative; width: 7.6cqw; aspect-ratio: 1; border-radius: 50%; border: 2px dashed rgba(255,255,255,.65); }
+.tc-timbri i.pieno::after {
+  content: ""; position: absolute; inset: -2px; border-radius: 50%; transform: rotate(-10deg);
+  background: radial-gradient(circle at 50% 42%, #FF2E92 0 22%, transparent 23%), linear-gradient(transparent 60%, #8B5CF6 60% 70%, transparent 70%), #fff;
+}
+.tc-codice { font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace; font-size: 3.4cqw; letter-spacing: .08em; opacity: .9; }
+
+.tc-numeri { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0 0; }
+.tc-numeri div { display: flex; flex-direction: column-reverse; padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,240,250,.1); }
+.tc-numeri dd { margin: 0; font-weight: 850; font-stretch: 66%; font-size: 40px; line-height: 1; color: #FFC145; font-variant-numeric: tabular-nums; }
+.tc-numeri dt { margin-top: 4px; font-size: 14px; color: #C9BCDB; }
+
+.tc-premio { margin-top: 14px; padding: 14px 16px; border-radius: 16px; background: rgba(255,193,69,.12); border: 1px solid rgba(255,193,69,.4); display: grid; gap: 4px; }
+.tc-premio strong { color: #FFC145; font-size: 17px; }
+.tc-premio span { color: #E6DCF0; font-size: 15px; }
+
+.tc-qr { margin-top: 18px; padding: 18px; border-radius: 20px; background: #fff; color: #170F26; text-align: center; }
+.tc-qr .qr-wrap { display: flex; justify-content: center; margin: 0 !important; padding: 0 !important; background: none !important; }
+.tc-qr .qr-wrap img, .tc-qr .qr-wrap canvas { width: 200px; height: 200px; }
+.tc-qr p { margin: 12px 0 0; font-size: 15px; font-weight: 600; line-height: 1.4; }
+.tc-home { margin: 14px 0 0; text-align: center; font-size: 14px; color: #A99CBE; }
+
+.tc-vuoto { display: grid; gap: 6px; padding: 26px 22px; border-radius: 20px; text-align: center; background: rgba(255,255,255,.05); border: 1px solid rgba(255,240,250,.1); }
+.tc-vuoto strong { font-size: 18px; color: #F5F0FA; }
+.tc-vuoto span { color: #C9BCDB; font-size: 15px; }
+.tc-carica { display: flex; gap: 12px; align-items: center; justify-content: center; padding: 60px 0; color: #C9BCDB; }
+.tc-carica span { width: 22px; height: 22px; border-radius: 50%; border: 3px solid rgba(255,46,146,.3); border-top-color: #FF2E92; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tc-carica span { animation: tc-gira .8s linear infinite; }
+  @keyframes tc-gira { to { transform: rotate(360deg); } }
+  .tc-tessera:not(.entra) .tc-corpo { transform: translateY(40px) rotateX(38deg) scale(.92); opacity: 0; }
+  .tc-tessera.entra .tc-corpo { animation: tc-atterra 1s cubic-bezier(.19,1,.22,1); }
+  @keyframes tc-atterra { from { transform: translateY(40px) rotateX(38deg) scale(.92); opacity: 0; } to { opacity: 1; } }
+  .tc-tessera.entra .tc-timbri i.pieno::after { animation: tc-timbro .4s cubic-bezier(.3,1.7,.5,1) both; animation-delay: calc(.7s + var(--n) * .28s); }
+  @keyframes tc-timbro { from { opacity: 0; transform: scale(2.4) rotate(-32deg); } to { opacity: 1; transform: rotate(-10deg); } }
+  .tc-tessera:not(.in-mano) .tc-riflesso { animation: tc-luce 5s ease-in-out 1.6s infinite; }
+  @keyframes tc-luce { 0%, 60% { transform: translate(-45%, -10%); } 100% { transform: translate(45%, 10%); } }
+}

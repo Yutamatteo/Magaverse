@@ -30,10 +30,13 @@
 </style>
 <link rel="stylesheet" href="/assets/maga-base.css">
 <link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<link rel="stylesheet" href="../assets/tessera.css">
+<meta name="theme-color" content="#0B0712">
 </head>
 <body>
-<div class="mc-wrap reveal">
-  <div id="app"><div class="mc-empty">Caricamento della tua MagaCard...</div></div>
+<div class="mc-wrap tc-pagina">
+  <div id="app"><div class="tc-carica" role="status"><span></span>Carico la tua MagaCard…</div></div>
 </div>
 
 <script>
@@ -48,7 +51,7 @@
 
   async function carica() {
     if (!code) {
-      app.innerHTML = '<div class="glass-card"><div class="mc-empty">Nessun codice card nel link.<br>Chiedi allo staff il link corretto.</div></div>';
+      app.innerHTML = '<div class="tc-vuoto"><strong>Manca il codice della tessera nel link.</strong><span>Apri il link che ti è arrivato per email, o chiedilo allo staff.</span></div>';
       return;
     }
 
@@ -59,7 +62,7 @@
       .single();
 
     if (error || !data) {
-      app.innerHTML = '<div class="glass-card"><div class="mc-empty">Card non trovata.<br>Controlla il link o chiedi allo staff.</div></div>';
+      app.innerHTML = '<div class="tc-vuoto"><strong>Tessera non trovata.</strong><span>Controlla il link o chiedi allo staff alla prossima serata.</span></div>';
       return;
     }
 
@@ -73,36 +76,66 @@
 
     const premioDisponibile = premio && premio.stato === 'da_riscattare';
 
+    const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+    const timbri = Math.max(0, parseInt(data.timbri, 10) || 0);
+    const punti = Math.max(0, parseInt(data.punti_totali, 10) || 0);
+    const livello = esc(data.livello);
+    const cerchi = Array.from({ length: 5 }, (_, k) => '<i' + (k < (timbri % 5 || (timbri && 5)) ? ' class="pieno"' : '') + ' style="--n:' + k + '"></i>').join('');
+
     app.innerHTML = `
-      <div class="ticket-card">
-        <div class="mc-top">
-          <div class="mc-brand brutalist">MAGACARD</div>
-          <div class="badge active" style="margin:0;">Livello ${data.livello}</div>
-        </div>
-        <div class="mc-nome">${data.nome} ${data.cognome}</div>
-        <div class="mc-code">#${data.card_code}</div>
-        <div class="ticket-perforation"></div>
-        <div class="mc-stats">
-          <div class="mc-stat"><div class="n">${data.punti_totali}</div><div class="l">Punti</div></div>
-          <div class="mc-stat"><div class="n">${data.timbri}</div><div class="l">Timbri</div></div>
-        </div>
-        ${premioDisponibile ? `
-        <div style="margin-top:16px; background: var(--mc-gold-soft); border: 1px solid rgba(255,193,69,0.35);
-                    border-radius:14px; padding:14px 16px; position:relative; z-index:1;">
-          <div style="color: var(--mc-gold); font-weight:700; font-size:13.5px;">🎉 Premio disponibile!</div>
-          <div style="color: var(--mc-muted); font-size:12.5px; margin-top:4px;">
-            Mostra questa card allo staff per riscattarlo.
+      <p class="tc-sopra">La tua MagaCard</p>
+      <div class="tc-tessera" id="tessera" aria-label="MagaCard di ${esc(data.nome)} ${esc(data.cognome)}, livello ${livello}">
+        <div class="tc-corpo">
+          <div class="tc-riga">
+            <span class="tc-marca">MagaCard</span>
+            <span class="tc-livello">Livello ${livello}</span>
           </div>
-        </div>` : ''}
-        <div class="qr-wrap" id="qr" style="margin-top:18px;"></div>
-        <div class="mc-hint">Mostra questo QR allo staff per ricevere punti e timbri alle serate.<br>Aggiungi questa pagina alla schermata Home per riaprirla come un'app.</div>
+          <div class="tc-nome">${esc(data.nome)}<br>${esc(data.cognome)}</div>
+          <div class="tc-riga tc-basso">
+            <span class="tc-timbri" aria-hidden="true">${cerchi}</span>
+            <span class="tc-codice">#${esc(data.card_code)}</span>
+          </div>
+          <span class="tc-riflesso" aria-hidden="true"></span>
+        </div>
       </div>
+
+      <dl class="tc-numeri">
+        <div><dt>Punti</dt><dd>${punti}</dd></div>
+        <div><dt>Timbri</dt><dd>${timbri}</dd></div>
+      </dl>
+
+      ${premioDisponibile ? `
+      <div class="tc-premio" role="status">
+        <strong>Premio disponibile</strong>
+        <span>Mostra questa card allo staff per riscattarlo.</span>
+      </div>` : ''}
+
+      <div class="tc-qr">
+        <div class="qr-wrap" id="qr"></div>
+        <p>Mostra questo QR allo staff a ogni serata: ricevi punti e un timbro.</p>
+      </div>
+      <p class="tc-home">Aggiungi questa pagina alla schermata Home per riaprirla come un'app.</p>
     `;
+
+    // la tessera segue il dito o il mouse
+    const t = document.getElementById('tessera');
+    const muovi = (x, y) => {
+      const r = t.getBoundingClientRect();
+      const px = Math.min(1, Math.max(0, (x - r.left) / r.width)), py = Math.min(1, Math.max(0, (y - r.top) / r.height));
+      t.style.setProperty('--rx', ((0.5 - py) * 14).toFixed(2));
+      t.style.setProperty('--ry', ((px - 0.5) * 18).toFixed(2));
+      t.style.setProperty('--mx', px.toFixed(3)); t.style.setProperty('--my', py.toFixed(3));
+    };
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      t.addEventListener('pointermove', (e) => { t.classList.add('in-mano'); muovi(e.clientX, e.clientY); });
+      t.addEventListener('pointerleave', () => { t.classList.remove('in-mano'); ['--rx','--ry'].forEach(v => t.style.setProperty(v, 0)); t.style.setProperty('--mx', .5); t.style.setProperty('--my', .3); });
+      requestAnimationFrame(() => t.classList.add('entra'));
+    } else { t.classList.add('entra'); }
 
     new QRCode(document.getElementById('qr'), {
       text: data.card_code,
-      width: 180,
-      height: 180,
+      width: 200,
+      height: 200,
       colorDark: '#170F26',
       colorLight: '#ffffff',
     });
