@@ -677,3 +677,11 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 
 /* la mappa della giornata resta ferma sotto la barra, non dietro */
 @media (min-width: 900px) { .story-stage-col { top: 110px; } }
+
+/* Home: i servizi come righe del cartello, senza card né emoji */
+.grid-3:has(> .svc-card) { gap: 0 48px; }
+.svc-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 24px 0 26px; box-shadow: none; }
+.svc-card:hover { transform: none; box-shadow: none; }
+.svc-icon { display: none; }
+.svc-title { margin-top: 0; font-size: 24px; }
+.svc-desc { font-size: 16px; line-height: 1.6; }
