@@ -160,3 +160,9 @@
   .nastro-giro { animation: nastro-scorri var(--durata, 38s) linear infinite; }
   @keyframes nastro-scorri { to { transform: translateX(-50%); } }
 }
+
+/* parallasse delle foto calcolato dal browser (vedi motion.js) */
+@supports (animation-timeline: view()) {
+  .mv-parallasse-css [data-parallax] { animation: mv-parallasse linear both; animation-timeline: view(); }
+  @keyframes mv-parallasse { from { transform: translate3d(0, -7%, 0) scale(1.14); } to { transform: translate3d(0, 7%, 0) scale(1.14); } }
+}
