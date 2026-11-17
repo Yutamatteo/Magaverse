@@ -109,7 +109,7 @@ body.mp {
   background: var(--mv-notte-2); border: 1px solid var(--mv-linea);
   transition: border-color .25s, box-shadow .35s, transform .5s cubic-bezier(.19, 1, .22, 1);
 }
-.mp-carta > img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+.mp-carta > img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
 .mp-evento-testo { padding: 16px 18px 20px; display: flex; flex-direction: column; flex: 1; }
 .mp-evento-testo p { margin: 0; }
 .mp-quando { color: var(--acc); font-weight: 700; font-size: 15px; }
