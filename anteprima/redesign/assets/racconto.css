@@ -28,3 +28,12 @@
 .fine-stagione p { margin: 0; font: 600 15px/1.45 'Archivo', system-ui, sans-serif; }
 .fine-stagione b { color: var(--c); }
 .fine-stagione a { flex: none; padding: 10px 16px; border-radius: 999px; background: #E0182B; color: #fff; text-decoration: none; font: 700 14px/1 'Archivo', system-ui, sans-serif; }
+
+/* Stagione finita: niente conto alla rovescia verso la prossima domenica
+   né avviso "evento a numero chiuso", che contraddirebbero l'avviso. */
+body:has(.fine-stagione) #dynamic-card,
+body:has(.fine-stagione) .urgency-banner { display: none !important; }
+body:has(.racconto) .urgency-banner { display: none !important; }
+body:is(:has(.fine-stagione), :has(.racconto)) #info .desktop-2col { grid-template-columns: 1fr; }
+/* serata o stagione finita: niente inviti a mettersi in lista o a salvare la data */
+body:is(:has(.fine-stagione), :has(.racconto)) :is(.bottom-cta-mobile, [data-testid="sidebar-cta-lista"], [data-testid="sidebar-calendar"]) { display: none !important; }
