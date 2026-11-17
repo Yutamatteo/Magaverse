@@ -13,49 +13,22 @@
   var n = Math.min(scene.length, pannelli.length);
   var attiva = -1, raf = 0;
 
-  /* le foto di ogni scena: quale è "su" dipende da quanto hai scorso nel pannello */
-  scene.forEach(function (s) { s.__foto = [].slice.call(s.querySelectorAll('.scena-foto img')); s.__k = -1; });
-
-  function lampo(s, p) {
-    var l = s.querySelector('.cap-lampo');
-    if (!l || riduci) return;
-    var passo = Math.floor(p * 7);
-    if (s.__passo !== undefined && passo !== s.__passo && l.animate) l.animate([{ opacity: .5 }, { opacity: 0 }], { duration: 380, easing: 'ease-out' });
-    s.__passo = passo;
-  }
-
   function aggiorna() {
     raf = 0;
     var H = window.innerHeight, ora = 0;
     for (var i = 0; i < n; i++) {
-      var r = pannelli[i].getBoundingClientRect(), s = scene[i];
-      var dentro = Math.max(0, Math.min(H, r.top));           /* bordo della scena che entra */
-      var corsa = Math.max(1, r.height - H);
-      var p = Math.max(0, Math.min(1, -r.top / corsa));
-      if (r.top < H * .55) ora = i;
-      if (i > 0) {
-        s.style.setProperty('--in', (dentro / H * 100).toFixed(3) + '%');
-        s.style.setProperty('--bordo', dentro > 2 && dentro < H - 2 ? '.9' : '0');
+      var r = pannelli[i].getBoundingClientRect();
+      if (r.top <= H * .5) ora = i;
+      if (r.bottom > -H && r.top < 2 * H) {
+        var p = Math.max(0, Math.min(1, (H - r.top) / (2 * H)));
+        scene[i].style.setProperty('--p', p.toFixed(3));
       }
-      s.style.setProperty('--p', p.toFixed(4));
-      var fs = s.__foto;
-      if (fs.length) {
-        var k = Math.min(fs.length - 1, Math.floor(p * fs.length * .999));
-        if (k !== s.__k) { fs.forEach(function (f, j) { f.classList.toggle('su', j === k); }); s.__k = k; }
-      }
-      lampo(s, p);
-    }
-    /* visibili solo la scena che copre lo schermo e quella che sta entrando */
-    for (var j = 0; j < n; j++) {
-      var su = scene[j], rp = pannelli[j].getBoundingClientRect();
-      var coperta = j + 1 < n && pannelli[j + 1].getBoundingClientRect().top <= 0;
-      var arrivata = j === 0 || rp.top < H;
-      su.classList.toggle('viva', arrivata && !coperta);
     }
     if (ora !== attiva) {
       attiva = ora;
+      scene.forEach(function (s, j) { s.classList.toggle('on', j === ora); });
       saga.style.setProperty('--tinta', getComputedStyle(pannelli[ora]).getPropertyValue('--tinta'));
-      voci.forEach(function (v, j) { v.classList.toggle('ora', j === ora); v.classList.toggle('fatta', j < ora); });
+      voci.forEach(function (v, j) { v.classList.toggle('ora', j === ora); });
     }
   }
   function chiedi() { if (!raf) raf = requestAnimationFrame(aggiorna); }
@@ -66,8 +39,7 @@
   /* toccando una voce della striscia si va a quella serata */
   voci.forEach(function (v, j) {
     v.addEventListener('click', function () {
-      var t = pannelli[j].getBoundingClientRect().top + window.scrollY + 2;
-      window.scrollTo({ top: t, behavior: riduci ? 'auto' : 'smooth' });
+      window.scrollTo({ top: pannelli[j].getBoundingClientRect().top + window.scrollY, behavior: riduci ? 'auto' : 'smooth' });
     });
   });
 
@@ -103,7 +75,7 @@
     var scenaGala = tela.closest('.scena');
     if (!riduci && 'IntersectionObserver' in window) {
       setInterval(function () {
-        var ok = scenaGala.classList.contains('viva');
+        var ok = scenaGala.classList.contains('on');
         if (ok && !vivo) { vivo = true; if (!rp2) rp2 = requestAnimationFrame(giro); }
         else if (!ok) vivo = false;
       }, 400);

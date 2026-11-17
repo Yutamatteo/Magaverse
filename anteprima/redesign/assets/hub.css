@@ -60,7 +60,7 @@ body.hub {
 /* ── La scena ── */
 .golfo { position: relative; background: var(--mv-notte); }
 /* la corsa dello scroll esiste solo se c'è JavaScript a usarla */
-.mv-js .golfo { height: 230vh; height: 230lvh; }
+.mv-js .golfo { height: 160vh; height: 160lvh; }
 .golfo-fermo {
   --t: 0;
   position: relative;
