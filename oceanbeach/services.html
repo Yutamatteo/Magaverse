@@ -30,8 +30,11 @@
         }
     </style>
 <link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
 </head>
-<body data-page="services">
+<body data-page="services" class="con-testata">
 
 <header class="nav">
     <div class="nav-inner">
@@ -72,12 +75,13 @@
     </div>
 </header>
 
-<section class="with-nav reveal">
+<section class="with-nav ob-testata" style="--foto:url('/assets/img/nello lido 2.webp');--pos:50% 55%">
     <div class="container">
         <span class="kicker">Servizi</span>
-        <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Comfort e mare, in perfetto equilibrio.</h1>
+        <h1 class="h2" data-rise>Comfort e mare, in perfetto equilibrio.</h1>
         <p class="lead">Ogni dettaglio del Nello Ocean Beach è pensato per farti sentire a casa. Ecco cosa trovi quando arrivi da noi.</p>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
 
 <section class="reveal">
