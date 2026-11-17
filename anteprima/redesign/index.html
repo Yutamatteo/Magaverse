@@ -140,26 +140,36 @@
         document.getElementById('anno').textContent = new Date().getFullYear();
         var lista = window.MAGAVERSE_EVENTI || [];
         var oggi = new Date(); oggi.setHours(0, 0, 0, 0);
-        var prossimi = lista.filter(function (e) { return new Date(e.data + 'T23:59:59') >= oggi; })
+        var fine = function (e) { return new Date(e.data + 'T23:59:59'); };
+        var prossimi = lista.filter(function (e) { return fine(e) >= oggi; })
                             .sort(function (a, b) { return a.data < b.data ? -1 : 1; });
-        if (!prossimi.length) return;
-        var e = prossimi[0];
+        var passati = lista.filter(function (e) { return fine(e) < oggi && (oggi - fine(e)) < 45 * 864e5; })
+                           .sort(function (a, b) { return a.data < b.data ? 1 : -1; });
         var box = document.getElementById('prossimo');
+        if (!prossimi.length && !passati.length) return;
         box.innerHTML = '';
-        var a = document.createElement('a');
-        a.className = 'prossimo-evento';
-        a.href = e.url;
-        if (e.img) {
-            var img = document.createElement('img');
-            img.src = e.img; img.alt = ''; img.loading = 'lazy';
-            a.appendChild(img);
+        function scheda(e, etichetta) {
+            var a = document.createElement('a');
+            a.className = 'prossimo-evento' + (e.presto ? ' prossimo-presto' : '');
+            a.href = e.url;
+            if (e.presto) {
+                var s = document.createElement('span'); s.className = 'mini-sipario'; s.setAttribute('aria-hidden', 'true');
+                s.innerHTML = '<i></i><i></i><b>MG</b>'; a.appendChild(s);
+            } else if (e.img) {
+                var img = document.createElement('img'); img.src = e.img; img.alt = ''; img.loading = 'lazy'; a.appendChild(img);
+            }
+            var t = document.createElement('div');
+            var l = document.createElement('p'); l.className = 'prossimo-label'; l.textContent = etichetta;
+            var n = document.createElement('p'); n.className = 'prossimo-nome'; n.textContent = e.nome;
+            var q = document.createElement('p'); q.className = 'prossimo-quando'; q.textContent = e.quando;
+            var d = document.createElement('p'); d.className = 'prossimo-desc'; d.textContent = e.testo || '';
+            t.append(l, n, q, d); a.appendChild(t);
+            return a;
         }
-        var t = document.createElement('div');
-        var l = document.createElement('p'); l.className = 'prossimo-label'; l.textContent = 'Prossimo appuntamento';
-        var n = document.createElement('p'); n.className = 'prossimo-nome'; n.textContent = e.nome;
-        var q = document.createElement('p'); q.className = 'prossimo-quando'; q.textContent = e.quando;
-        var d = document.createElement('p'); d.className = 'prossimo-desc'; d.textContent = e.testo || '';
-        t.append(l, n, q, d); a.appendChild(t); box.appendChild(a);
+        var fila = document.createElement('div'); fila.className = 'prossimi-fila';
+        if (prossimi.length) fila.appendChild(scheda(prossimi[0], prossimi[0].presto ? 'In arrivo' : 'Prossimo appuntamento'));
+        if (passati.length) fila.appendChild(scheda(passati[0], 'Appena passato'));
+        box.appendChild(fila);
     })();
     </script>
 </body>
