@@ -1623,7 +1623,7 @@ window.addEventListener('DOMContentLoaded', function(){
 
     if (loadingEl) loadingEl.classList.add('is-hidden');
     clock.start();
-    requestAnimationFrame(animate);
+    l3Raf = requestAnimationFrame(animate);
   }
 
   function resize(){
@@ -2107,8 +2107,23 @@ window.addEventListener('DOMContentLoaded', function(){
     }
   }
 
+  /* la scena 3D si disegna solo quando è sullo schermo e la scheda è in primo piano:
+     prima girava sempre (ombre + bagliore a ogni fotogramma), anche fuori schermo */
+  var l3Vivo = true, l3Raf = 0;
+  function l3Avvia(){
+    if (l3Raf || !l3Vivo || document.hidden || !clock) return;
+    clock.getDelta();
+    l3Raf = requestAnimationFrame(animate);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(v){ l3Vivo = v[0].isIntersecting; l3Avvia(); }, { rootMargin: '120px 0px' }).observe(stageEl);
+  }
+  document.addEventListener('visibilitychange', l3Avvia);
+
   function animate(){
-    requestAnimationFrame(animate);
+    l3Raf = 0;
+    if (!l3Vivo || document.hidden) return;
+    l3Raf = requestAnimationFrame(animate);
     var dt = Math.min(clock.getDelta(), 0.1);
     updateNavetta(dt);
     updateHotels(dt);
