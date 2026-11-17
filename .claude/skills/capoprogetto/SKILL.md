@@ -43,6 +43,17 @@ Catene tipiche:
 
 Prima di chiamare uno specialista aggiorna la sua scrivania (`stato: "lavoro"`, `task`).
 
+**Efficienza della regia** (il budget è uno solo per tutta la squadra):
+- Incarichi brevi e precisi: obiettivo, file esatti (con righe se le conosci), vincoli, formato del
+  resoconto. Non incollare istruzioni che l'agente ha già nel suo file (strumenti, regole di commit).
+- Gli agenti hanno strumenti pronti: `strumenti/controlla.py`, `strumenti/pubblica_e_verifica.sh`,
+  `strumenti/fluidita.py`. Chiedi di usarli, non di scrivere script nuovi.
+- Ogni agente ha il suo modello (in `.claude/agents/<nome>.md`, campo `model`): controlli e ricerca
+  leggeri, codice e creatività forti. Non chiamare un agente forte per un lavoro da agente leggero.
+- Lavori piccoli e ovvi (una riga di testo, un dato nel Cantiere) falli tu, senza scomodare un agente.
+- Video: prima il `regista` propone 3 direzioni e Matteo ne sceglie una; solo dopo storyboard e montaggio.
+- Lancia in parallelo gli agenti che non dipendono l'uno dall'altro.
+
 ## 3. Verifica tu, non fidarti del resoconto
 - Codice: il commit esiste (`git log`), il push è su GitHub (`git ls-remote origin refs/heads/redesign-grafica`),
   la pagina si apre senza errori e senza scorrimento orizzontale a 390x844, le misure sono nel resoconto.
