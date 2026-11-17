@@ -601,3 +601,56 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
     .story-beat:hover .beat-foto img { transform: none; }
   }
 }
+
+
+/* ── Servizi: il cartello del lido accanto alle foto vere ── */
+.ob-servizi-grid { display: grid; gap: 40px; align-items: start; }
+@media (min-width: 960px) { .ob-servizi-grid { grid-template-columns: 5fr 7fr; gap: 72px; } }
+.ob-servizi-foto { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ob-servizi-foto img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; display: block; background: #e9e1d4; }
+.ob-servizi-foto img:nth-child(2) { margin-top: 48px; }
+@media (min-width: 960px) {
+    .ob-servizi-foto { position: sticky; top: 110px; grid-template-columns: 1fr; }
+    .ob-servizi-foto img { aspect-ratio: 4 / 3; }
+    .ob-servizi-foto img:nth-child(2) { margin: 0 0 0 18%; width: 82%; }
+}
+.ob-cartello { margin: 0; counter-reset: none; }
+.ob-cartello > div {
+    display: grid; gap: 6px; padding: 22px 0;
+    border-top: 1px solid var(--border);
+}
+.ob-cartello > div:last-child { border-bottom: 1px solid var(--border); }
+@media (min-width: 640px) { .ob-cartello > div { grid-template-columns: 15ch 1fr; gap: 28px; align-items: baseline; } }
+.ob-cartello dt { font-family: 'Playfair Display', Georgia, serif; font-size: 23px; font-weight: 600; line-height: 1.15; color: var(--fg); }
+.ob-cartello dd { margin: 0; font-size: 16px; line-height: 1.65; color: var(--muted-fg); max-width: 52ch; }
+.ob-servizi-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 44px; }
+@media (min-width: 960px) { .ob-servizi-cta { margin-left: calc(5 / 12 * 100% + 30px); } }
+.btn-outline { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+.btn-outline:hover { background: var(--fg); color: var(--bg); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ── Menù e listino come una lavagna da bar: nome, puntini, prezzo ── */
+.price-card { border-radius: 6px; box-shadow: 0 1px 0 var(--border), 0 18px 40px -30px rgba(62,39,35,.35); }
+.price-card h3 { font-size: 28px; letter-spacing: -.01em; padding-bottom: 14px; border-bottom: 2px solid var(--fg); }
+.price-list li { border-bottom: 0; padding: 9px 0; font-size: 15px; align-items: baseline; gap: 10px; }
+.price-list li:has(.price-value)::after { content: none; }
+.price-list .price-label { display: flex; align-items: baseline; flex: 1; min-width: 0; gap: 10px; }
+.price-list li:has(.price-value) .price-label::after {
+    content: ""; flex: 1; min-width: 18px; transform: translateY(-4px);
+    border-bottom: 1.5px dotted rgba(62,39,35,.35);
+}
+.price-value { font-size: 16px; font-weight: 600; color: var(--fg); white-space: nowrap; }
+.price-list li:not(:has(.price-value)) .price-label { font-size: 13px; color: var(--muted-fg); font-style: italic; }
+.price-list li:not(:has(.price-value)) { padding: 0 0 10px 14px; margin-top: -4px; }
+.price-when { font-family: 'Outfit', system-ui, sans-serif; font-size: 13px; font-weight: 400; color: var(--muted-fg); letter-spacing: 0; }
+
+/* ── Contatti: righe nette invece di card con emoji ── */
+.contact-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 22px 0; box-shadow: none; }
+.contact-card + .contact-card { margin-top: 0; }
+.contact-grid > div > .contact-card:last-child { border-bottom: 1px solid var(--border); }
+.contact-icon { display: none; }
+.contact-card-label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--muted-fg); }
+.contact-card-value { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; line-height: 1.25; color: var(--fg); margin-top: 6px; }
+.contact-card-action { display: inline-block; margin-top: 10px; font-weight: 500; text-underline-offset: 4px; }
+.map-wrap { border-radius: 6px; }
+.grid-3:has(> .price-card) { align-items: start; }
