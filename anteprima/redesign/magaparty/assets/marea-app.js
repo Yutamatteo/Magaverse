@@ -393,9 +393,12 @@
         handleDragOver, handleDragLeave, handleDrop, handleFiles, uploadAll
     };
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', boot);
-    } else {
+    // Lo script sta dopo </main>: il contenuto c'è già, quindi costruiamo subito
+    // intestazione e menu senza aspettare DOMContentLoaded. Così la pagina non
+    // "salta" al caricamento e la locandina è pronta per il passaggio animato.
+    if (document.getElementById('page-main') || document.readyState !== 'loading') {
         boot();
+    } else {
+        document.addEventListener('DOMContentLoaded', boot);
     }
 })();

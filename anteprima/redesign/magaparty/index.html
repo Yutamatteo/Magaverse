@@ -14,11 +14,16 @@
     <meta property="og:description" content="Marea, Battigia, Ultima Onda, Tardeo e Halloween in Villa: tutta la stagione Magaparty.">
     <meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/marea-locandina.jpg">
     <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
     <link rel="preload" href="/anteprima/redesign/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/anteprima/redesign/assets/maga-base.css">
+    <link rel="stylesheet" href="/anteprima/redesign/assets/transizioni.css">
+    <link rel="stylesheet" href="/anteprima/redesign/assets/motion.css">
     <link rel="stylesheet" href="assets/home.css">
+    <script src="/anteprima/redesign/assets/golfo.js" defer></script>
+    <script src="/anteprima/redesign/assets/motion.js" defer></script>
 </head>
-<body class="mp" data-page="home"><div style="position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:99999;background:#FFC23D;color:#0E1224;font:600 13px/1.3 system-ui,sans-serif;padding:8px 14px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.35)">Anteprima redesign · i form non inviano dati</div>
+<body class="mp" data-page="home"><div style="position:fixed;left:50%;bottom:10px;transform:translateX(-50%);z-index:99999;background:#FFC23D;color:#0E1224;font:600 12px/1.3 system-ui,sans-serif;padding:6px 12px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.35);white-space:nowrap;pointer-events:none;opacity:.92">Anteprima · i form non inviano dati</div>
 <a class="skip" href="#stagione">Vai al calendario</a>
 
 <header class="mp-bar">
@@ -31,96 +36,120 @@
 </header>
 
 <main>
-    <section class="mp-hero">
-        <img class="mp-logo" src="assets/img/logo-teal.png" alt="Magaparty" width="819" height="540">
-        <h1>Le feste<br>di Magazzeno.</h1>
-        <p class="mp-hero-sub">Dal 2024 portiamo il tramonto e la notte a Nello Ocean Beach. Ogni format ha la sua lista: scegli la serata e mettiti in lista dalla sua pagina.</p>
+    <!-- Qui è già notte: le luci si accendono appena entri -->
+    <section class="mp-hero" data-golfo-radice>
+        <canvas class="mp-cielo" data-golfo data-t="0.9" data-t-da="0.36" data-h="0.33" data-h-largo="0.36" data-sx="1.08" data-sx-largo="1.02" aria-hidden="true"></canvas>
+        <svg class="luci" data-luci aria-hidden="true" focusable="false"></svg>
+        <div class="mp-hero-dentro">
+            <img class="mp-logo" src="assets/img/logo-teal.png" alt="Magaparty" width="819" height="540" data-entra style="--e:0">
+            <h1 data-rise>Le feste<br>di Magazzeno.</h1>
+            <p class="mp-hero-sub" data-entra style="--e:1">Dal 2024 portiamo il tramonto e la notte a Nello Ocean Beach. Ogni format ha la sua lista: scegli la serata e mettiti in lista dalla sua pagina.</p>
+        </div>
     </section>
+
+    <div class="nastro mp-nastro" aria-hidden="true">
+        <div class="nastro-giro" data-nastro>
+            <span>Marea</span><i></i><span>Battigia</span><i></i><span>Ultima Onda</span><i></i><span>Tardeo</span><i></i><span>Halloween in Villa</span><i></i><span>Drink Another Night</span><i></i>
+            <span>Marea</span><i></i><span>Battigia</span><i></i><span>Ultima Onda</span><i></i><span>Tardeo</span><i></i><span>Halloween in Villa</span><i></i><span>Drink Another Night</span><i></i>
+        </div>
+    </div>
 
     <section class="mp-stagione" id="stagione" aria-labelledby="stagione-titolo">
         <div class="mp-head">
-            <h2 id="stagione-titolo">La stagione</h2>
-            <p>Due appuntamenti fissi ogni settimana d'estate, più i capitoli speciali.</p>
+            <h2 id="stagione-titolo" data-rise>La stagione</h2>
+            <p data-reveal>Due appuntamenti fissi ogni settimana d'estate, più i capitoli speciali.</p>
         </div>
 
-        <div class="mp-rail">
-            <a class="mp-evento" href="marea.html" data-testid="link-marea" style="--acc:#FF6A33">
-                <img src="assets/img/marea-locandina.jpg" alt="Locandina di Marea, l'happy hour della domenica" width="1122" height="1402" loading="lazy">
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">Ogni domenica, 17:00–00:00</p>
-                    <h3>Marea</h3>
-                    <p>Happy hour con tre DJ, beach games e la promo lettino + drink. Numero chiuso.</p>
-                    <span class="mp-cta">Mettiti in lista</span>
+        <div class="mp-rail" data-binario data-reveal-gruppo>
+            <a class="mp-evento" href="marea.html" data-testid="link-marea" style="--acc:#FF6A33" data-reveal="carta" data-tilt="8">
+                <div class="mp-carta">
+                    <img src="assets/img/marea-locandina.jpg" alt="Locandina di Marea, l'happy hour della domenica" width="1122" height="1402" loading="lazy">
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">Ogni domenica, 17:00–00:00</p>
+                        <h3>Marea</h3>
+                        <p>Happy hour con tre DJ, beach games e la promo lettino + drink. Numero chiuso.</p>
+                        <span class="mp-cta">Mettiti in lista</span>
+                    </div>
                 </div>
             </a>
 
-            <a class="mp-evento" href="battigia.html" data-testid="link-battigia" style="--acc:#F59A2E">
-                <img src="assets/img/battigia-locandina.jpg" alt="Locandina di Battigia, il mercoledì chill" width="1120" height="1400" loading="lazy">
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">Ogni mercoledì, dalle 20:00</p>
-                    <h3>Battigia</h3>
-                    <p>Il mercoledì chill in riva al mare. Ingresso gratuito, tavolo prenotabile gratis.</p>
-                    <span class="mp-cta">Mettiti in lista</span>
+            <a class="mp-evento" href="battigia.html" data-testid="link-battigia" style="--acc:#F59A2E" data-reveal="carta" data-tilt="8">
+                <div class="mp-carta">
+                    <img src="assets/img/battigia-locandina.jpg" alt="Locandina di Battigia, il mercoledì chill" width="1120" height="1400" loading="lazy">
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">Ogni mercoledì, dalle 20:00</p>
+                        <h3>Battigia</h3>
+                        <p>Il mercoledì chill in riva al mare. Ingresso gratuito, tavolo prenotabile gratis.</p>
+                        <span class="mp-cta">Mettiti in lista</span>
+                    </div>
                 </div>
             </a>
 
-            <a class="mp-evento" href="ultima-onda.html" data-testid="link-ultima-onda" style="--acc:#E08A2C">
-                <img src="assets/img/ultima-onda-locandina.jpg" alt="Locandina di Ultima Onda" loading="lazy">
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">Domenica 13 settembre</p>
-                    <h3>Ultima Onda</h3>
-                    <p>SUP School, showcase Indieficio e DJ set di Adolfo Citro. Ingresso 10€, drink omaggio se sei in lista.</p>
-                    <span class="mp-cta">Vedi la serata</span>
+            <a class="mp-evento" href="ultima-onda.html" data-testid="link-ultima-onda" style="--acc:#E08A2C" data-reveal="carta" data-tilt="8">
+                <div class="mp-carta">
+                    <img src="assets/img/ultima-onda-locandina.jpg" alt="Locandina di Ultima Onda" loading="lazy">
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">Domenica 13 settembre</p>
+                        <h3>Ultima Onda</h3>
+                        <p>SUP School, showcase Indieficio e DJ set di Adolfo Citro. Ingresso 10€, drink omaggio se sei in lista.</p>
+                        <span class="mp-cta">Vedi la serata</span>
+                    </div>
                 </div>
             </a>
 
-            <a class="mp-evento" href="tardeo.html" data-testid="link-tardeo" style="--acc:#FF4A33">
-                <img src="assets/img/tardeo-locandina.jpg" alt="Locandina di Tardeo" loading="lazy">
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">Giovedì 24 settembre</p>
-                    <h3>Tardeo</h3>
-                    <p>DJ Kiki, Adolfo Citro, H8daprep e Omen. Ingresso 10€, drink omaggio se sei in lista.</p>
-                    <span class="mp-cta">Vedi la serata</span>
+            <a class="mp-evento" href="tardeo.html" data-testid="link-tardeo" style="--acc:#FF4A33" data-reveal="carta" data-tilt="8">
+                <div class="mp-carta">
+                    <img src="assets/img/tardeo-locandina.jpg" alt="Locandina di Tardeo" loading="lazy">
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">Giovedì 24 settembre</p>
+                        <h3>Tardeo</h3>
+                        <p>DJ Kiki, Adolfo Citro, H8daprep e Omen. Ingresso 10€, drink omaggio se sei in lista.</p>
+                        <span class="mp-cta">Vedi la serata</span>
+                    </div>
                 </div>
             </a>
 
-            <a class="mp-evento" href="halloween.html" data-testid="link-halloween" style="--acc:#FF9A3C">
-                <img src="assets/img/halloween-locandina.jpg" alt="Locandina di Halloween in Villa" loading="lazy">
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">Venerdì 31 ottobre</p>
-                    <h3>Halloween in Villa</h3>
-                    <p>Dal beach club alla villa: tre livelli, dieci stanze e la planimetria interattiva.</p>
-                    <span class="mp-cta">Esplora la villa</span>
+            <a class="mp-evento" href="halloween.html" data-testid="link-halloween" style="--acc:#FF9A3C" data-reveal="carta" data-tilt="8">
+                <div class="mp-carta">
+                    <img src="assets/img/halloween-locandina.jpg" alt="Locandina di Halloween in Villa" loading="lazy">
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">Venerdì 31 ottobre</p>
+                        <h3>Halloween in Villa</h3>
+                        <p>Dal beach club alla villa: tre livelli, dieci stanze e la planimetria interattiva.</p>
+                        <span class="mp-cta">Esplora la villa</span>
+                    </div>
                 </div>
             </a>
 
-            <div class="mp-evento mp-evento-presto" style="--acc:#8FA0B8">
-                <div class="mp-presto-segno" aria-hidden="true">D·A·N</div>
-                <div class="mp-evento-testo">
-                    <p class="mp-quando">In arrivo</p>
-                    <h3>Drink Another Night</h3>
-                    <p>Le serate speciali del venerdì. Date e lista escono prima su Instagram.</p>
+            <div class="mp-evento mp-evento-presto" style="--acc:#8FA0B8" data-reveal="carta">
+                <div class="mp-carta">
+                    <div class="mp-presto-segno" aria-hidden="true">D·A·N</div>
+                    <div class="mp-evento-testo">
+                        <p class="mp-quando">In arrivo</p>
+                        <h3>Drink Another Night</h3>
+                        <p>Le serate speciali del venerdì. Date e lista escono prima su Instagram.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <section class="mp-sempre" aria-labelledby="sempre-titolo">
-        <h2 id="sempre-titolo">Anche fuori serata</h2>
-        <div class="mp-link-grid">
-            <a href="bar.html" data-testid="link-bar">
+        <h2 id="sempre-titolo" data-rise>Anche fuori serata</h2>
+        <div class="mp-link-grid" data-reveal-gruppo>
+            <a href="bar.html" data-testid="link-bar" data-reveal>
                 <h3>Bar</h3>
                 <p>Il menu drink e aperitivo.</p>
             </a>
-            <a href="galleria.html" data-testid="link-galleria">
+            <a href="galleria.html" data-testid="link-galleria" data-reveal>
                 <h3>Galleria</h3>
                 <p>Carica e rivedi foto e video delle serate.</p>
             </a>
-            <a href="chi-siamo.html" data-testid="link-chi-siamo">
+            <a href="chi-siamo.html" data-testid="link-chi-siamo" data-reveal>
                 <h3>Chi siamo</h3>
                 <p>Dai pool party del 2024 a oggi, e come contattarci.</p>
             </a>
-            <a href="/anteprima/redesign/magacard/index.html">
+            <a href="/anteprima/redesign/magacard/index.html" data-reveal>
                 <h3>MagaCard</h3>
                 <p>Un timbro a ogni serata e un premio alla fine.</p>
             </a>
@@ -128,6 +157,7 @@
     </section>
 </main>
 
+<div class="onde" aria-hidden="true"></div>
 <footer class="mp-footer">
     <p>Liste, anteprime e photo dump passano prima dai social.</p>
     <nav aria-label="Social">
