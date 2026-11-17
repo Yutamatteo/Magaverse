@@ -1,42 +1,65 @@
-/* MAGAVERSE · La stagione come un unico grande sfondo.
-   Per ogni pannello di testo c'è una scena nello sfondo fisso. Mentre il pannello sale,
-   la sua scena entra dal basso esattamente sotto il suo bordo superiore (--in), poi
-   scorre al suo interno (--p: 0 → 1). Le scene già coperte vengono nascoste. */
+/* MAGAVERSE · La stagione come un unico muro di foto.
+   Scorrendo, il muro si sposta sulla serata di cui stai leggendo e la accende;
+   le altre restano in ombra. Alla fine il sipario del Gala copre tutto. */
 (function () {
   'use strict';
   var saga = document.querySelector('[data-saga]');
   if (!saga) return;
   var riduci = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var scene = [].slice.call(saga.querySelectorAll('.scena'));
   var pannelli = [].slice.call(saga.querySelectorAll('.saga-pannello'));
   var voci = [].slice.call(saga.querySelectorAll('.saga-mappa li'));
-  var n = Math.min(scene.length, pannelli.length);
-  var attiva = -1, raf = 0;
+  var scene = [].slice.call(saga.querySelectorAll('.scena[data-pannello]'));
+  var parete = saga.querySelector('.parete');
+  var colonne = parete ? [].slice.call(parete.children) : [];
+  var gruppi = pannelli.filter(function (p) { return +p.dataset.g >= 0; }).length;
+  var n = pannelli.length, attiva = -1, raf = 0, altG = 0;
+
+  /* centro verticale (nel muro) di ogni serata, misurato sulla colonna centrale */
+  var centri = [];
+  function misura() {
+    if (!parete) return;
+    var col = colonne[Math.min(2, colonne.length - 1)];
+    if (window.innerWidth <= 760) col = colonne[1];
+    centri = [];
+    for (var g = 0; g < gruppi; g++) {
+      var imgs = col.querySelectorAll('img[data-g="' + g + '"]');
+      if (!imgs.length) continue;
+      var a = imgs[0], b = imgs[imgs.length - 1];
+      centri[g] = col.offsetTop + (a.offsetTop + b.offsetTop + b.offsetHeight) / 2;
+    }
+    altG = centri.length > 1 ? centri[1] - centri[0] : 0;
+  }
 
   function aggiorna() {
     raf = 0;
-    var H = window.innerHeight, ora = 0;
-    for (var i = 0; i < n; i++) {
-      var r = pannelli[i].getBoundingClientRect();
-      if (r.top <= H * .5) ora = i;
-      if (r.bottom > -H && r.top < 2 * H) {
-        var p = Math.max(0, Math.min(1, (H - r.top) / (2 * H)));
-        scene[i].style.setProperty('--p', p.toFixed(3));
-      }
+    var H = window.innerHeight;
+    var f = Math.max(0, Math.min(n - 1, -pannelli[0].getBoundingClientRect().top / H));
+    var ora = Math.min(n - 1, Math.round(f));
+    if (parete && altG) {
+      var fg = Math.min(f, gruppi - 1), i0 = Math.floor(fg), i1 = Math.min(gruppi - 1, i0 + 1);
+      var c = centri[i0] + (centri[i1] - centri[i0]) * (fg - i0);
+      parete.style.setProperty('--y', (H / 2 - c).toFixed(1) + 'px');
+      parete.style.setProperty('--dy', (f * 26).toFixed(1) + 'px');
     }
+    scene.forEach(function (s) {
+      var k = +s.dataset.pannello;
+      s.style.setProperty('--p', Math.max(0, Math.min(1, (f - k + 1) / 2)).toFixed(3));
+    });
     if (ora !== attiva) {
       attiva = ora;
-      scene.forEach(function (s, j) { s.classList.toggle('on', j === ora); });
+      var g = +pannelli[ora].dataset.g;
+      if (parete && g >= 0) parete.dataset.ora = g;
+      scene.forEach(function (s) { s.classList.toggle('on', +s.dataset.pannello === ora); });
       saga.style.setProperty('--tinta', getComputedStyle(pannelli[ora]).getPropertyValue('--tinta'));
       voci.forEach(function (v, j) { v.classList.toggle('ora', j === ora); });
     }
   }
   function chiedi() { if (!raf) raf = requestAnimationFrame(aggiorna); }
   window.addEventListener('scroll', chiedi, { passive: true });
-  window.addEventListener('resize', chiedi);
-  aggiorna();
+  window.addEventListener('resize', function () { misura(); chiedi(); });
+  window.addEventListener('load', function () { misura(); chiedi(); });
+  misura(); aggiorna();
 
-  /* toccando una voce della striscia si va a quella serata */
   voci.forEach(function (v, j) {
     v.addEventListener('click', function () {
       window.scrollTo({ top: pannelli[j].getBoundingClientRect().top + window.scrollY, behavior: riduci ? 'auto' : 'smooth' });

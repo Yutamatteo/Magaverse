@@ -21,34 +21,33 @@ html:has(.saga) { scroll-snap-type: y proximity; }
 }
 .scena.on { opacity: 1; visibility: visible; transition: opacity .4s ease, visibility 0s; }
 
-/* scena con foto: la foto nitida a destra, la stessa sfocata dietro */
-.scena-sfocata {
-  position: absolute; inset: -40px; z-index: 0;
-  background: var(--img) center / cover no-repeat;
-  filter: blur(34px) saturate(1.25) brightness(.42);
+/* il muro di foto: tutta la stagione in un solo sfondo. La serata di cui stai
+   leggendo è a colori, le altre restano in ombra. */
+.parete {
+  position: absolute; left: 50%; top: 0; width: 118%; z-index: 0;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+  transform: translate3d(-50%, var(--y, 0px), 0) rotate(-4deg); transform-origin: 50% 0;
+  will-change: transform;
 }
-.scena-foto {
-  position: absolute; z-index: 1; right: 0; top: 50%; transform: translateY(-50%);
-  width: min(60vw, 960px); aspect-ratio: 3 / 2; margin: 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 28%);
-          mask-image: linear-gradient(90deg, transparent 0, #000 28%);
+.parete-col { display: flex; flex-direction: column; gap: 12px; transform: translate3d(0, calc(var(--v) * var(--dy, 0px)), 0); }
+.parete-col:nth-child(even) { margin-top: -18%; }
+.parete img {
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px;
+  filter: grayscale(1) brightness(.5); opacity: .55;
+  transition: filter .45s ease, opacity .45s ease;
 }
-.scena-foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.scena-velo {
+.parete-tinta { position: absolute; inset: 0; z-index: 1; background-color: var(--tinta); mix-blend-mode: soft-light; opacity: .55; transition: background-color .45s ease; pointer-events: none; }
+.parete-velo {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: linear-gradient(90deg, rgba(6,8,12,.86) 0%, rgba(6,8,12,.55) 38%, rgba(6,8,12,0) 62%);
+  background: linear-gradient(90deg, rgba(6,8,12,.94) 0%, rgba(6,8,12,.8) 34%, rgba(6,8,12,.2) 62%, rgba(6,8,12,0) 80%);
 }
-
-/* muri di immagini (locandine dell'estate, foto di Halloween) */
-.scena-locandine { background: #140806; }
-.scena-locandine .muro { transform: rotate(4deg) scale(1.12); }
-.scena-locandine .muro img { border-radius: 6px; }
-.scena-locandine .scena-velo,
-.saga .scena.cap-hw .cap-velo {
-  background: linear-gradient(90deg, rgba(6,8,12,.94) 0%, rgba(6,8,12,.78) 42%, rgba(6,8,12,.25) 75%);
+.scena { z-index: 3; }
+@media (max-width: 760px) {
+  .parete { width: 150%; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .parete-col { gap: 8px; }
+  .parete-col:nth-child(n+4) { display: none; }
+  .parete-velo { background: linear-gradient(0deg, rgba(6,8,12,.96) 0%, rgba(6,8,12,.82) 42%, rgba(6,8,12,.1) 72%); }
 }
-.saga .muro-col { transform: translate3d(0, calc((var(--p) - .5) * var(--v) * 22%), 0); transition: transform .12s linear; }
-.saga .scena.cap-hw { background: #070a07; }
 .saga .scena.cap-gala {
   --apri: clamp(.1, calc(var(--p) * 1.9), .92);
   background: radial-gradient(60% 55% at 50% 50%, #3a1408 0%, #140706 50%, #070405 85%);
@@ -68,6 +67,7 @@ html:has(.saga) { scroll-snap-type: y proximity; }
 .saga-mappa li:hover, .saga-mappa li.ora { color: #fff; }
 .saga-mappa li.ora::before { background: var(--tinta); transform: scale(1.5); }
 @media (min-width: 761px) {
+  .mv-js .saga-mappa { background: rgba(6,8,12,.6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); padding: 10px 14px; border-radius: 14px; }
   .mv-js .saga-mappa { right: clamp(16px, 2.4vw, 34px); top: 50%; transform: translateY(-50%); flex-direction: column; align-items: flex-end; gap: 2px; }
   .saga-mappa li { flex-direction: row-reverse; text-shadow: 0 1px 10px rgba(0,0,0,.95); }
 }
@@ -105,16 +105,8 @@ html:not(.mv-js) .saga-pannello .cap-fermo {
   background: linear-gradient(90deg, rgba(6,8,12,.92), rgba(6,8,12,.4)), var(--foto, #06080c) center / cover no-repeat;
 }
 
-/* ── telefono: foto nitida in alto, testo sotto ────────────── */
+/* ── telefono: testo in basso, muro sopra ─────────────────── */
 @media (max-width: 760px) {
-  .scena-foto {
-    top: 0; right: 0; left: 0; transform: none; width: 100%; aspect-ratio: auto; height: 54%;
-    -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
-            mask-image: linear-gradient(180deg, #000 72%, transparent 100%);
-  }
-  .scena-velo { background: linear-gradient(0deg, rgba(6,8,12,.94) 0%, rgba(6,8,12,.7) 40%, rgba(6,8,12,0) 60%); }
-  .scena-locandine .scena-velo,
-  .saga .scena.cap-hw .cap-velo { background: linear-gradient(0deg, rgba(6,8,12,.96) 0%, rgba(6,8,12,.78) 45%, rgba(6,8,12,.15) 80%); }
   .saga-pannello .cap-fermo { align-items: flex-end; }
   .saga-pannello .cap-testo { padding-bottom: calc(52px + (100lvh - 100svh)); }
   .saga-pannello .cap-testo > * { max-width: none; }
@@ -124,7 +116,7 @@ html:not(.mv-js) .saga-pannello .cap-fermo {
 
 @media (prefers-reduced-motion: reduce) {
   .scena, .scena.on { transition: none; }
-  .saga .muro-col { transform: none; }
+  .parete, .parete-col { transition: none; }
   .saga .scena.cap-gala { --apri: .8; }
   html:has(.saga) { scroll-snap-type: none; }
 }
