@@ -76,6 +76,16 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
   ancora: va spostata sulla RPC `cerca_card`); chiave Resend scritta nella funzione
   `invia_email_magacard` da ruotare.
 
+## Autonomia: anteprima sì, sito vero non ancora
+Matteo (17/11): d'ora in poi la squadra lavora in autonomia, **solo sull'anteprima**. Il sito vero
+(`main` fuori da `anteprima/`) resta di Matteo finché non dice che siamo pronti. Per proporlo servono:
+1. almeno 5 giri autonomi di fila senza errori trovati poi da Matteo o dal revisore;
+2. una procedura di pubblicazione sul sito vero scritta e provata a secco: tag di ripristino prima di
+   ogni rilascio, controllo a 4 formati dopo, ritorno al tag in meno di 2 minuti se qualcosa si rompe;
+3. le tre correzioni di sicurezza Supabase fatte (oggi rimandate da Matteo);
+4. nessuna voce urgente aperta in "Serve te".
+Quando sono vere, il capoprogetto lo propone in "Serve te": decide Matteo.
+
 ## Pubblicare l'anteprima
 Serve una seconda cartella con `main` accanto a questa (default `../magaverse-main`, oppure
 variabile `MV_MAIN`). Poi da questa cartella:
@@ -139,6 +149,8 @@ scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agen
 - `stratega-magacard`: fidelizzazione e premi in bozza, non tocca Supabase.
 - `direttore-creativo`: format, esperienze da QR code, campagne.
 - `ticketing`: **in progettazione**, solo lettura (Posto Riservato e pagamenti in contanti).
+- `revisore`: rivede in modo avversariale il lavoro di un altro agente (diff, 4 formati di schermo,
+  sicurezza, dati inventati) e dà un verdetto prima che il lavoro si consideri finito.
 
 Il repository GitHub è **pubblico**: bozze, report, video e note degli agenti vanno **solo** nel
 Cantiere privato o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,

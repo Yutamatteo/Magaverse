@@ -1,8 +1,12 @@
 """Controllo rapido delle pagine, da telefono e da PC, in un solo comando.
 
-uso:  py strumenti/controlla.py magaparty/magagala.html index.html [--foto CARTELLA] [--solo-telefono]
+uso:  py strumenti/controlla.py magaparty/magagala.html index.html [--foto CARTELLA] [--solo-telefono] [--veloce]
 
-Per ogni pagina e per ogni schermo (telefono 390x844 densità 3, PC 1280x800) stampa una riga:
+Per ogni pagina e per ogni schermo stampa una riga. Schermi: telefono 390x844 (densità 3), tablet
+verticale 820x1180, telefono in "sito desktop" 980x2120, PC 1280x800 (--veloce: solo telefono e PC;
+--solo-telefono: solo il telefono). I due formati "larghi ma verticali" esistono perché il 17/11 un
+bug si vedeva solo lì (parete di foto tagliata).
+Ogni riga:
   OK / ERRORE  pagina  schermo  errori-js  scorrimento-orizzontale
 Con --foto salva uno screenshot per pagina e schermo nella cartella indicata (mai nel repository).
 Avvia da solo il server locale sulla porta 8765 se non risponde. Esce con codice 1 se c'è un errore.
@@ -35,9 +39,12 @@ def avvia_server():
     sys.exit("ERRORE: server locale non partito")
 
 
-async def main(pagine, foto, solo_tel):
+async def main(pagine, foto, solo_tel, veloce):
     schermi = [("telefono", dict(viewport={"width": 390, "height": 844}, device_scale_factor=3, is_mobile=True, has_touch=True))]
     if not solo_tel:
+        if not veloce:
+            schermi.append(("tablet", dict(viewport={"width": 820, "height": 1180}, device_scale_factor=2, has_touch=True)))
+            schermi.append(("sito-desktop", dict(viewport={"width": 980, "height": 2120}, device_scale_factor=1)))
         schermi.append(("pc", dict(viewport={"width": 1280, "height": 800})))
     errori_tot = 0
     async with async_playwright() as p:
@@ -73,8 +80,9 @@ if __name__ == "__main__":
     if "--foto" in args:
         i = args.index("--foto"); foto = args[i + 1]; del args[i:i + 2]
     solo_tel = "--solo-telefono" in args
-    args = [a for a in args if a != "--solo-telefono"]
+    veloce = "--veloce" in args
+    args = [a for a in args if a not in ("--solo-telefono", "--veloce")]
     if not args:
         sys.exit(__doc__)
     avvia_server()
-    asyncio.run(main(args, foto, solo_tel))
+    asyncio.run(main(args, foto, solo_tel, veloce))

@@ -31,10 +31,19 @@ Mai scegliere cose della colonna `serve_te`: sono decisioni di Matteo. Se una ta
 in `serve_te` con una domanda chiara e passa oltre.
 
 ## 2. Affida il lavoro
-Un giro = **una task principale**. Dai allo specialista un incarico completo e autonomo (lui non vede
-questa conversazione): obiettivo, file o pagine coinvolte, vincoli, cosa deve restituire.
+Un giro = **una task principale**. Ogni incarico è una **specifica** (lo specialista non vede questa
+conversazione); senza criterio di "finito" o senza stop non si lancia:
+- **Obiettivo** concreto, **contesto** minimo (file e righe), **vincoli**;
+- **Finito quando**: cosa deve risultare vero e verificabile (pagina, formato, numero, file);
+- **Verifica**: con quale strumento (`controlla.py`, `fluidita.py`, `ffprobe`, screenshot guardati);
+- **Stop**: fermati e scrivi cosa hai provato dopo 3 tentativi falliti sullo stesso problema, o se servono
+  cancellazioni, produzione, credenziali, Supabase o spese.
+- **Bug**: prima riprodurlo (screenshot o misura che lo mostra), poi correggere, poi mostrare che è sparito.
+- **Lavori grandi** (pagina nuova, cambio di struttura o di font, qualcosa che il cliente nota subito):
+  prima un piano breve in `serve_te` e si aspetta l'ok di Matteo; i lavori piccoli e medi si fanno.
 Catene tipiche:
-- **Sito**: `architetto` → poi `mystery-guest` sulle pagine toccate.
+- **Sito**: `architetto` → `revisore` sul suo commit (prima di considerarlo finito; se BOCCIATO,
+  di nuovo all'architetto con i problemi) → `mystery-guest` solo per modifiche visibili ai clienti.
 - **Contenuti**: `marketing` (piano e testi) → `regista` (concept, storyboard, inquadrature) →
   `montatore` (solo se in `magaverse-produzione\sorgenti\` c'è materiale).
 - **Ricerca e idee**: `seo-locale`, `stratega-magacard`, `direttore-creativo` → le proposte che toccano
@@ -67,8 +76,14 @@ Se qualcosa non torna, lo correggi o lo segni come non verificato: mai scrivere 
 - Aggiorna la scrivania dello specialista (`stato: "finito"` o `"bloccato"`, `risultato` con link) e il
   diario con l'ora reale e `a` = id dell'agente.
 - Le domande per Matteo vanno in `serve_te` (`t` titolo, `d` contesto, `q` domanda, `urgente` se serve).
+- **Decisioni non ovvie** (scelta tra due soluzioni, cosa scartato e perché): una voce di diario che
+  comincia con "Decisione:" e dice il perché in una riga. Il registro è il Cantiere, non un file del
+  repository (è pubblico).
+- **Dati personali** (nomi, telefoni, email di clienti, MagaCard, contest): mai nel diario, nei commit,
+  negli incarichi o negli screenshot salvati.
 
 ## 5. Budget e chiusura
+- Un giro notturno fa **al massimo 3 task**; uno lanciato a mano, quanto chiede Matteo.
 - Fermati dopo un lavoro completo (commit pubblicato e verificato, oppure bozza salvata nel Cantiere),
   mai a metà. Se il budget è basso, non iniziare un'altra task.
 - Se resta budget dopo una task, puoi farne un'altra ripartendo dal punto 1.
