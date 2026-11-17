@@ -127,7 +127,8 @@
     @keyframes telo-sx { from { transform: scaleX(.9); } to { transform: scaleX(.08); } }
     @keyframes telo-dx { from { transform: scaleX(.9); } to { transform: scaleX(.08); } }
     .notte-gala .gala-nome { animation: gala-nome linear both; animation-timeline: view(); animation-range: entry 20% cover 50%; }
-    @keyframes gala-nome { from { transform: scale(.82); opacity: 0; filter: blur(8px); } to { transform: none; opacity: 1; filter: none; } }
+    /* solo opacità e scala: girano sul compositore (niente blur, che ridisegna a ogni fotogramma) */
+    @keyframes gala-nome { from { transform: scale(.82); opacity: 0; } to { transform: none; opacity: 1; } }
   }
 }
 
