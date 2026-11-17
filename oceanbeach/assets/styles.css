@@ -654,3 +654,23 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .contact-card-action { display: inline-block; margin-top: 10px; font-weight: 500; text-underline-offset: 4px; }
 .map-wrap { border-radius: 6px; }
 .grid-3:has(> .price-card) { align-items: start; }
+
+/* ── Prenota: scelta del servizio a pulsanti, usabile anche da tastiera ── */
+.service-pick { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0; border: 1.5px solid var(--fg); border-radius: 999px; padding: 4px; }
+.service-pick input { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.service-pick label { position: relative; border: 0; border-radius: 999px; padding: 11px 6px; text-align: center; background: transparent; box-shadow: none !important; transition: background .2s, color .2s; }
+.service-pick label .ico { display: none; }
+.service-pick label .txt { font-size: 13.5px; line-height: 1.2; }
+.service-pick label.active, .service-pick label:has(input:checked) { background: var(--fg); color: var(--bg); }
+.service-pick label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Chi siamo: per chi è il lido, a righe come il cartello ── */
+.grid-3:has(> .value-card) { gap: 0; }
+.value-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 26px 0; }
+@media (min-width: 1024px) { .value-card { border-top: 0; border-left: 1px solid var(--border); padding: 8px 32px; } .value-card:first-child { border-left: 0; padding-left: 0; } }
+.value-icon { display: none; }
+.value-card h3 { margin-top: 0; font-size: 30px; }
+.value-card p { font-size: 16px; max-width: 34ch; }
+
+/* il pulsante WhatsApp fisso non copre più il fondo pagina sul telefono */
+@media (max-width: 1023px) { .footer { padding-bottom: 96px; } }
