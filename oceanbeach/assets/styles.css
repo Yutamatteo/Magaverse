@@ -685,3 +685,11 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .svc-icon { display: none; }
 .svc-title { margin-top: 0; font-size: 24px; }
 .svc-desc { font-size: 16px; line-height: 1.6; }
+
+/* Prenota sul telefono: nome e telefono uno sotto l'altro; data e persone affiancati ma allineati */
+@media (max-width: 480px) {
+    .field-row:has(#name) { grid-template-columns: 1fr; gap: 0; }
+    .field-row:has(#name) .field + .field { margin-top: 18px; }
+    .field-row:has(#date) { grid-template-columns: 1.6fr 1fr; align-items: end; }
+    .field-row:has(#date) input { height: 46px; }
+}
