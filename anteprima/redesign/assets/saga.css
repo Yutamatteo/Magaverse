@@ -29,7 +29,7 @@ html:has(.saga) { scroll-snap-type: y proximity; }
   transform: translate3d(-50%, var(--y, 0px), 0) rotate(-4deg); transform-origin: 50% 0;
   will-change: transform;
 }
-.parete-col { display: flex; flex-direction: column; gap: 12px; transform: translate3d(0, calc(var(--v) * var(--dy, 0px)), 0); }
+.parete-col { display: flex; flex-direction: column; gap: 12px; will-change: transform; }
 .parete-col:nth-child(even) { margin-top: -18%; }
 .parete img {
   display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px;
@@ -125,3 +125,11 @@ html:not(.mv-js) .saga-pannello .cap-fermo {
 .gala-conto { margin: 16px 0 0; color: rgba(246,239,228,.85); font-size: 15px; }
 .gala-conto b { display: inline-block; min-width: 1.6em; margin: 0 2px 0 8px; font: 500 clamp(26px, 3.4vw, 40px)/1 'Bodoni Moda', serif; color: #E9C77B; font-variant-numeric: tabular-nums; }
 .gala-conto b:first-child { margin-left: 0; }
+
+/* ── telefono: tutto ciò che costa a ogni fotogramma va via ── */
+@media (max-width: 760px), (pointer: coarse) {
+  html:has(.saga) { scroll-snap-type: none; }
+  .parete img { filter: none; opacity: .28; transition: opacity .3s ease; }
+  .parete-tinta { mix-blend-mode: normal; opacity: .12; }
+  .mv-js .saga-mappa { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(6,8,12,.82); }
+}
