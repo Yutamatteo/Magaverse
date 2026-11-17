@@ -105,3 +105,16 @@
     }
   }
 })();
+/* conto alla rovescia del Gala (solo la data di Capodanno: il resto è ancora segreto) */
+(function () {
+  var c = document.querySelector('[data-conto]');
+  if (!c) return;
+  var fine = new Date(c.dataset.conto).getTime();
+  function tic() {
+    var d = Math.max(0, fine - Date.now()), m = Math.floor(d / 60000);
+    c.querySelector('[data-u="g"]').textContent = Math.floor(m / 1440);
+    c.querySelector('[data-u="h"]').textContent = Math.floor(m / 60) % 24;
+    c.querySelector('[data-u="m"]').textContent = m % 60;
+  }
+  tic(); setInterval(tic, 30000);
+})();
