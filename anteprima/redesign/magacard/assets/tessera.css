@@ -74,3 +74,5 @@ body { display: block !important; min-height: 100svh; padding: 0 !important;
   .tc-tessera:not(.in-mano) .tc-riflesso { animation: tc-luce 5s ease-in-out 1.6s infinite; }
   @keyframes tc-luce { 0%, 60% { transform: translate(-45%, -10%); } 100% { transform: translate(45%, 10%); } }
 }
+.tc-vuoto-link { justify-self: center; margin-top: 12px; padding: 12px 20px; border-radius: 999px; background: linear-gradient(90deg, #FF3EA5, #8B5CF6); color: #fff; font-weight: 700; font-size: 14px; text-decoration: none; }
+.tc-vuoto-link:focus-visible { outline: 2px solid #F5F0FA; outline-offset: 3px; }

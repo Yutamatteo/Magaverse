@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La tua MagaCard</title>
+<meta name="robots" content="noindex">
 <link rel="icon" type="image/png" sizes="32x32" href="/anteprima/redesign/assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="/anteprima/redesign/assets/img/favicon-180.png">
 <link rel="preload" href="/anteprima/redesign/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -53,7 +54,7 @@
 
   async function carica() {
     if (!code) {
-      app.innerHTML = '<div class="tc-vuoto"><strong>Manca il codice della tessera nel link.</strong><span>Apri il link che ti è arrivato per email, o chiedilo allo staff.</span></div>';
+      app.innerHTML = '<div class="tc-vuoto"><strong>Manca il codice della tessera nel link.</strong><span>Apri il link che ti è arrivato per email, o chiedilo allo staff.</span><a class="tc-vuoto-link" href="/anteprima/redesign/magacard/">Richiedi la MagaCard</a></div>';
       return;
     }
 
@@ -64,7 +65,7 @@
       .single();
 
     if (error || !data) {
-      app.innerHTML = '<div class="tc-vuoto"><strong>Tessera non trovata.</strong><span>Controlla il link o chiedi allo staff alla prossima serata.</span></div>';
+      app.innerHTML = '<div class="tc-vuoto"><strong>Tessera non trovata.</strong><span>Controlla il link o chiedi allo staff alla prossima serata.</span><a class="tc-vuoto-link" href="/anteprima/redesign/magacard/">Richiedi la MagaCard</a></div>';
       return;
     }
 
