@@ -167,9 +167,16 @@
   }
 
   var par = { x: 0, y: 0, mx: 0, my: 0 };
+  /* le dimensioni della tela si leggono solo quando cambiano: leggerle a ogni fotogramma,
+     subito dopo aver scritto --t, costringeva il browser a ricalcolare stili e layout */
+  var misurata = false;
+  if ('ResizeObserver' in window) new ResizeObserver(function () { misurata = false; }).observe(tela);
+  window.addEventListener('resize', function () { misurata = false; });
   function misura() {
+    if (misurata) return true;
     var w = tela.clientWidth, h = tela.clientHeight;
     if (!w || !h) return false;
+    misurata = true;
     var scala = Math.min(window.devicePixelRatio || 1, 1);
     var tetto = window.matchMedia('(pointer: coarse)').matches ? 2.6e5 : 8e5;
     if (w * h * scala * scala > tetto) scala = Math.sqrt(tetto / (w * h));
