@@ -40,7 +40,7 @@ body:is(:has(.fine-stagione), :has(.racconto)) :is(.bottom-cta-mobile, [data-tes
 
 /* Serata passata (Tardeo, Ultima Onda): niente biglietti, modulo di lista, prezzi del bar,
    né voci di menu che ci portano. Le regole sopra coprivano solo banner e barra fissa. */
-body:has(.racconto) :is(#prezzi, #form, #prezzi + .section-divider, #form + .section-divider),
-body:has(.racconto) :is([data-testid$="-prezzi"], [data-testid$="-form"]):not(section),
-body:has(.racconto) :is(a[href="#prezzi"], a[href="#form"]),
-body:has(.racconto) #bar .menu-grid .justify-between > span:last-child { display: none !important; }
+body[data-passata] :is(#prezzi, #form, #prezzi + .section-divider, #form + .section-divider),
+body[data-passata] :is([data-testid$="-prezzi"], [data-testid$="-form"]):not(section),
+body[data-passata] :is(a[href="#prezzi"], a[href="#form"]),
+body[data-passata] #bar .menu-grid .justify-between > span:last-child { display: none !important; }
