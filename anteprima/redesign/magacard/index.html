@@ -206,6 +206,7 @@
   </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
 <script type="module">
 // ===================== CONFIGURAZIONE =====================
 // Sostituisci questi due valori con quelli del tuo progetto Supabase
@@ -214,7 +215,7 @@ const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
 // ============================================================
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const { createClient } = window.supabase;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const content = document.getElementById("content");
