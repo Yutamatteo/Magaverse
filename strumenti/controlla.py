@@ -114,5 +114,10 @@ if __name__ == "__main__":
     args = [a for a in args if a not in ("--solo-telefono", "--veloce")]
     if not args:
         sys.exit(__doc__)
+    import fa_subset  # controllo statico: ogni icona fa-* usata ha la sua regola in assets/fa/fa.css
+    fa_errore = fa_subset.controlla()
     avvia_server()
-    asyncio.run(main(args, foto, solo_tel, veloce))
+    try:
+        asyncio.run(main(args, foto, solo_tel, veloce))
+    except SystemExit as e:
+        sys.exit(1 if fa_errore else e.code)
