@@ -3,7 +3,7 @@
 .gal-filtri { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 14px; scrollbar-width: none; justify-content: center; flex-wrap: wrap; }
 .gal-filtri button {
   font: 700 14px/1 'Archivo', system-ui, sans-serif; color: #F4EADB; cursor: pointer; white-space: nowrap;
-  padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(244,234,219,.22); background: rgba(255,255,255,.04);
+  min-height: 44px; display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(244,234,219,.22); background: rgba(255,255,255,.04);
   transition: background .2s, color .2s, border-color .2s;
 }
 .gal-filtri button span { opacity: .85; font-weight: 600; margin-left: 4px; }

@@ -132,6 +132,7 @@ button, .btn-maga {
 }
 .btn-primary {
   margin-top: 20px;
+  min-height: 44px;
   background: linear-gradient(135deg, var(--mc-magenta), var(--mc-violet));
   color: #0B0712;
   box-shadow: 0 10px 26px rgba(255, 46, 146, 0.28);
