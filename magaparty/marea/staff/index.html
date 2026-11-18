@@ -91,6 +91,13 @@
   let html5QrCode = null;
   let scansioneAttiva = false;
 
+  // Sicurezza: i dati che arrivano dal database (scritti dal pubblico nei
+  // moduli) passano da esc() prima di finire in innerHTML, così vengono
+  // mostrati come testo e non eseguiti.
+  function esc(v) {
+    return String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
   document.getElementById('btn-login').addEventListener('click', async () => {
     const email = document.getElementById('staff-email').value.trim();
     const password = document.getElementById('staff-pass').value;
@@ -132,7 +139,7 @@
       () => {}
     ).catch(err => {
       resultArea.classList.remove('hidden');
-      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Impossibile accedere alla fotocamera: ${err}</div></div>`;
+      resultArea.innerHTML = `<div class="result-card"><div class="esito errore">Impossibile accedere alla fotocamera: ${esc(err)}</div></div>`;
     });
   }
 
@@ -160,17 +167,17 @@
     } else if (r.esito === 'non_trovato') {
       html = `<div class="esito errore">QR non valido o non riconosciuto.</div>`;
     } else if (r.esito === 'gia_usato') {
-      html = `<div class="nome">${r.nome_capogruppo}</div>
+      html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
               <div class="esito warn">⚠️ QR già utilizzato — accesso già avvenuto.</div>`;
     } else if (r.esito === 'annullata') {
       html = `<div class="esito errore">Prenotazione annullata.</div>`;
     } else if (r.esito === 'non_autorizzato') {
       html = `<div class="esito errore">Il tuo account non è autorizzato per questa postazione.</div>`;
     } else {
-      html = `<div class="nome">${r.nome_capogruppo}</div>
+      html = `<div class="nome">${esc(r.nome_capogruppo)}</div>
               <div class="esito ok">✓ Accesso consentito</div>
-              <p style="margin-top:8px; font-size:13px; color:#ECE3D8">${OPZIONE_LABEL[r.opzione] || r.opzione}</p>
-              <p style="margin-top:4px; font-size:12px; color:#8A7B6E">Invitato da: ${r.chi_ti_ha_invitato}</p>`;
+              <p style="margin-top:8px; font-size:13px; color:#ECE3D8">${esc(OPZIONE_LABEL[r.opzione] || r.opzione)}</p>
+              <p style="margin-top:4px; font-size:12px; color:#8A7B6E">Invitato da: ${esc(r.chi_ti_ha_invitato)}</p>`;
     }
 
     resultArea.innerHTML = `<div class="result-card">${html}</div>
