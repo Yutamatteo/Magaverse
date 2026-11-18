@@ -99,7 +99,8 @@
   /* più alte che larghe, così la parete riempie lo schermo alto */
   .notte-muro img { aspect-ratio: 3 / 4; }
   .notte h2 { font-size: clamp(72px, 12vw, 120px); }
-  /* schermi molto alti (es. 980x2120): la sezione non supera l'altezza della parete, niente fascia scura vuota */
+  /* schermi molto alti (es. 980x2120): la sezione non supera l'altezza della parete, niente fascia scura vuota.
+     156vw e 138vw dipendono da aspect-ratio 3/4, 3 colonne e inset -6% della parete: se cambiano, ricalcolarli */
   .notte:not(.notte-gala) { min-height: min(100svh, 156vw); }
   .notte-locandine { min-height: min(100svh, 138vw); }
 }
