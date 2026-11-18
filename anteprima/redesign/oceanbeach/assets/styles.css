@@ -701,3 +701,12 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .ob-stagione b { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--fg); margin-right: 4px; }
 .ob-stagione a { flex-shrink: 0; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
 .ob-stagione a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Fascia "Dal Magaverse": due link sobri verso le altre sezioni, in fondo prima del footer */
+.altro-mv { padding: 48px 0 56px; }
+.altro-mv-grid { display: grid; gap: 12px; margin-top: 16px; }
+.altro-mv-grid a { display: block; min-height: 44px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 16px; background: var(--white); transition: border-color .2s; }
+.altro-mv-grid a:hover, .altro-mv-grid a:focus-visible { border-color: var(--accent); }
+.altro-mv-nome { display: block; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 24px; color: var(--fg); }
+.altro-mv-testo { display: block; margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted-fg); }
+@media (min-width: 768px) { .altro-mv-grid { grid-template-columns: 1fr 1fr; } }
