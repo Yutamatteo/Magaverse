@@ -25,7 +25,7 @@ OSSERVA = ("window.__l=0;window.__e='';new PerformanceObserver(l=>{for(const e o
            "{__l=e.startTime;__e=e.element?(e.element.tagName+' '+(e.url||e.element.className)):''}})"
            ".observe({type:'largest-contentful-paint',buffered:true})")
 LEGGI = r"""()=>{const t={};const n=performance.getEntriesByType('resource');
-n.forEach(e=>{const m=e.name.match(/.(\w+)(\?|$)/);const k=(m||[])[1]||'altro';t[k]=(t[k]||0)+e.transferSize});
+n.forEach(e=>{const m=e.name.match(/\.(\w+)(\?|$)/);const k=(m||[])[1]||'altro';t[k]=(t[k]||0)+e.transferSize});
 const nav=performance.getEntriesByType('navigation')[0];
 const fcp=(performance.getEntriesByName('first-contentful-paint')[0]||{}).startTime||0;
 return {lcp:__l,el:__e,fcp,load:nav.loadEventEnd,t,n:n.length+1}}"""
