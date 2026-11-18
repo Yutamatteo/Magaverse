@@ -16,6 +16,12 @@ cd "$QUI"
 bash strumenti/pubblica.sh "$MSG" 2>&1 | grep -v "LF will be" | tail -3
 LOCALE=$(git rev-parse HEAD)
 REMOTO=$(timeout 30 git ls-remote origin refs/heads/redesign-grafica | cut -f1)
+# Se l'anteprima non è cambiata (commit solo su strumenti/ ecc.) pubblica.sh esce prima del push
+# del ramo: lo spingiamo qui, senza forzare, così il commit non resta solo in locale.
+if [ "$LOCALE" != "$REMOTO" ]; then
+  timeout 180 git -c push.negotiate=true push -q origin redesign-grafica 2>&1 | grep -v "^remote:" | tail -2
+  REMOTO=$(timeout 30 git ls-remote origin refs/heads/redesign-grafica | cut -f1)
+fi
 if [ "$LOCALE" != "$REMOTO" ]; then echo "ERRORE: GitHub ha $REMOTO, in locale c'è $LOCALE (push non arrivato)"; exit 1; fi
 echo "OK GitHub: redesign-grafica = ${LOCALE:0:7}"
 if [ -n "$PAG" ] && [ -n "$TESTO" ]; then
