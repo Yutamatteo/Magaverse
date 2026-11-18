@@ -1,0 +1,67 @@
+/*! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com
+ * Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT. Copyright 2023 Fonticons, Inc.
+ * Sottoinsieme: solo le icone usate dal sito (webfont ridotti in assets/fa/). */
+.fa-brands,.fa-regular,.fa-solid{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:inline-block;font-style:normal;font-variant:normal;line-height:1;text-rendering:auto}
+.fa-regular,.fa-solid{font-family:"Font Awesome 6 Free"}
+.fa-brands{font-family:"Font Awesome 6 Brands";font-weight:400}
+.fa-regular{font-weight:400}
+.fa-solid{font-weight:900}
+.fa-spin{animation:fa-spin 2s linear infinite}
+@media (prefers-reduced-motion:reduce){.fa-spin{animation-delay:-1ms;animation-duration:1ms;animation-iteration-count:1}}
+@keyframes fa-spin{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}
+@font-face{font-family:"Font Awesome 6 Brands";font-style:normal;font-weight:400;font-display:block;src:url(fa-brands-400.woff2) format("woff2")}
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:400;font-display:block;src:url(fa-regular-400.woff2) format("woff2")}
+@font-face{font-family:"Font Awesome 6 Free";font-style:normal;font-weight:900;font-display:block;src:url(fa-solid-900.woff2) format("woff2")}
+.fa-arrow-left:before{content:"\f060"}
+.fa-arrow-right:before{content:"\f061"}
+.fa-ban:before{content:"\f05e"}
+.fa-bolt:before{content:"\f0e7"}
+.fa-bus:before{content:"\f207"}
+.fa-calendar-plus:before{content:"\f271"}
+.fa-camera:before{content:"\f030"}
+.fa-car:before{content:"\f1b9"}
+.fa-chair:before{content:"\f6c0"}
+.fa-champagne-glasses:before{content:"\f79f"}
+.fa-check-double:before{content:"\f560"}
+.fa-circle-exclamation:before{content:"\f06a"}
+.fa-circle-info:before{content:"\f05a"}
+.fa-clock:before{content:"\f017"}
+.fa-cloud-arrow-up:before{content:"\f0ee"}
+.fa-compact-disc:before{content:"\f51f"}
+.fa-envelope:before{content:"\f0e0"}
+.fa-film:before{content:"\f008"}
+.fa-fire:before{content:"\f06d"}
+.fa-flag:before{content:"\f024"}
+.fa-folder-open:before{content:"\f07c"}
+.fa-ghost:before{content:"\f6e2"}
+.fa-google:before{content:"\f1a0"}
+.fa-hashtag:before{content:"\23"}
+.fa-headphones:before{content:"\f025"}
+.fa-heart:before{content:"\f004"}
+.fa-house:before{content:"\f015"}
+.fa-image:before{content:"\f03e"}
+.fa-instagram:before{content:"\f16d"}
+.fa-list-check:before{content:"\f0ae"}
+.fa-location-dot:before{content:"\f3c5"}
+.fa-martini-glass:before{content:"\f57b"}
+.fa-martini-glass-citrus:before{content:"\f561"}
+.fa-mask:before{content:"\f6fa"}
+.fa-moon:before{content:"\f186"}
+.fa-music:before{content:"\f001"}
+.fa-paper-plane:before{content:"\f1d8"}
+.fa-person-swimming:before{content:"\f5c4"}
+.fa-phone:before{content:"\f095"}
+.fa-share-nodes:before{content:"\f1e0"}
+.fa-spinner:before{content:"\f110"}
+.fa-sun:before{content:"\f185"}
+.fa-telegram:before{content:"\f2c6"}
+.fa-ticket:before{content:"\f145"}
+.fa-tiktok:before{content:"\e07b"}
+.fa-triangle-exclamation:before{content:"\f071"}
+.fa-umbrella-beach:before{content:"\f5ca"}
+.fa-users:before{content:"\f0c0"}
+.fa-utensils:before{content:"\f2e7"}
+.fa-volleyball:before{content:"\f45f"}
+.fa-water-ladder:before{content:"\f5c5"}
+.fa-whatsapp:before{content:"\f232"}
+.fa-xmark:before{content:"\f00d"}
