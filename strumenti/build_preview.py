@@ -23,7 +23,9 @@ for f in files:
         t=re.sub(r'''(["'(])/(assets|magaparty|magacard|oceanbeach|index\.html|favicon)''', lambda m: m.group(1)+P+'/'+m.group(2), t)
         t=re.sub(r'''href="/"''', f'href="{P}/"', t)
         if f.endswith('.html'):
-            t=t.replace('<head>','<head>\n'+(guard.replace('<meta name="robots" content="noindex, nofollow">\n','',1) if 'name="robots"' in t else guard),1)  # niente robots doppio se la pagina ne ha già uno
+            t=re.sub(r'''<meta[^>]*name=["']robots["'][^>]*>\s*''','',t,flags=re.I)  # in anteprima vale solo il robots della guardia (sempre noindex)
+            t=t.replace('<head>','<head>\n'+guard,1)
+            t=re.sub(r'(<meta property="og:url" content="https://www\.magaverse\.it)/', lambda m: m.group(1)+P+'/', t)  # le condivisioni dell'anteprima puntano all'anteprima
             t=re.sub(r'(<body[^>]*>)', lambda m: m.group(1)+banner, t, count=1)
             t=re.sub(r'<link rel="canonical"[^>]*>\s*','',t)
         open(d,'w',encoding='utf-8').write(t)
