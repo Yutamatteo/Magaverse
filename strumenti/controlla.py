@@ -19,6 +19,29 @@ PORTA = 8765
 GPU = ["--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist"]
 
 
+CTRL_PASSATA = """() => {
+  const b = document.body;
+  const passata = b.hasAttribute('data-passata');
+  const fine = !!document.querySelector('.racconto') && !!document.querySelector('.fine-stagione');
+  if (!passata && !fine) return [];
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el);
+    return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0; };
+  const out = [];
+  for (const sez of document.querySelectorAll('#prezzi, #form')) {
+    // elementi foglia con testo proprio, visibili (anche i genitori devono esserlo)
+    for (const el of sez.querySelectorAll('*')) {
+      const own = [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join(' ');
+      const m = /mettiti in lista/i.test(own) ? 'Mettiti in lista' : (passata && own.includes('€') ? '€' : '');
+      if (!m) continue;
+      let ok = true;
+      for (let e = el; e && e !== document.body; e = e.parentElement) if (!vis(e)) { ok = false; break; }
+      if (ok) out.push('#' + sez.id + ' "' + m + '"');
+    }
+  }
+  return out;
+}"""
+
+
 def server_attivo():
     try:
         urllib.request.urlopen(f"http://localhost:{PORTA}/", timeout=2)
@@ -60,6 +83,13 @@ async def main(pagine, foto, solo_tel, veloce):
                 await pg.wait_for_timeout(800)
                 sw = await pg.evaluate("[document.documentElement.scrollWidth, innerWidth]")
                 largo = sw[0] > sw[1]
+                # Serate passate: niente inviti a iscriversi né prezzi visibili in #prezzi/#form.
+                # "€" si controlla solo dove c'è body[data-passata] (Tardeo, Ultima Onda): su Halloween
+                # (.racconto + .fine-stagione) i prezzi e "Vendite chiuse" in #prezzi sono voluti,
+                # lì si cerca solo "Mettiti in lista".
+                inviti = await pg.evaluate(CTRL_PASSATA)
+                if inviti:
+                    errs.append("serata passata con inviti visibili: " + "; ".join(inviti[:3]))
                 ok = not errs and not largo
                 errori_tot += 0 if ok else 1
                 print(f"{'OK    ' if ok else 'ERRORE'} {pag or 'hub'}  {nome}  js:{len(errs)}  scorrimento:{'SI ' + str(sw[0]) + '>' + str(sw[1]) if largo else 'no'}"
