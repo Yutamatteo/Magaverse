@@ -37,3 +37,10 @@ body:has(.racconto) .urgency-banner { display: none !important; }
 body:is(:has(.fine-stagione), :has(.racconto)) #info .desktop-2col { grid-template-columns: 1fr; }
 /* serata o stagione finita: niente inviti a mettersi in lista o a salvare la data */
 body:is(:has(.fine-stagione), :has(.racconto)) :is(.bottom-cta-mobile, [data-testid="sidebar-cta-lista"], [data-testid="sidebar-calendar"]) { display: none !important; }
+
+/* Serata passata (Tardeo, Ultima Onda): niente biglietti, modulo di lista, prezzi del bar,
+   né voci di menu che ci portano. Le regole sopra coprivano solo banner e barra fissa. */
+body:has(.racconto) :is(#prezzi, #form, #prezzi + .section-divider, #form + .section-divider),
+body:has(.racconto) :is([data-testid$="-prezzi"], [data-testid$="-form"]):not(section),
+body:has(.racconto) :is(a[href="#prezzi"], a[href="#form"]),
+body:has(.racconto) #bar .menu-grid .justify-between > span:last-child { display: none !important; }
