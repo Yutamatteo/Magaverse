@@ -161,6 +161,12 @@ body.mp {
 .mp-link-grid h3 { margin: 0 0 4px; font-size: 28px; line-height: 1; color: var(--teal); }
 .mp-link-grid p { margin: 0; color: var(--mv-fumo); font-size: 15px; }
 @media (min-width: 900px) { .mp-link-grid { grid-template-columns: repeat(4, 1fr); } }
+/* fascia "Dal Magaverse": due schede, titolo più piccolo */
+.mp-altro { padding-top: 10px; }
+.mp-altro h2 { font-size: clamp(24px, 4vw, 36px); }
+.mp-altro .mp-link-grid { grid-template-columns: 1fr; }
+@media (min-width: 700px) { .mp-altro .mp-link-grid { grid-template-columns: 1fr 1fr; } }
+.mp-altro .mp-link-grid a { min-height: 44px; }
 
 /* ── Footer ── */
 .mp .onde { margin-top: 18px; }
