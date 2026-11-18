@@ -20,14 +20,6 @@
 <link rel="stylesheet" href="../assets/storymap.css">
 <script src="../assets/storymap.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js" integrity="sha384-HUR8WVDx2FD1OlSm1nohJJ2a3aIfeClGjv/oVFdTHd3skt+4i7/z0dl/ux4nd2ti" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js" integrity="sha384-nhO9toQuMo5osCuA0l+YFpSqscZWxDu251Bnho2gD3kSPv1neEwHg0LyEmrA+mPj" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js" integrity="sha384-mY+ii969jnDCI2HjRHftH2NZVkIO5ZGUkcnGCg3oVJ3kVstWQXwerYWBg+nbUG4R" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js" integrity="sha384-I3lsvPeDJYFrEAzn/TA0yhc/SCYKwpyfyq8lKzHYKohu43H9f7xc/Q9ZWgSVUDl3" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js" integrity="sha384-2EpLreWSFuZsk4hcSplXLhlHd/wzvDNF907bTGIXSXM0SlhJNzy4YK0DhBFvkFEs" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js" integrity="sha384-aVQ2QnWkoxhOefDB0YZB64OPVzujvccydpcC7UqMDJUK0ChwA382zOHmrWHGDRRa" crossorigin="anonymous" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js" integrity="sha384-GkidzTYmQg24v13sa3xhBBbvOLbVLO1QxfyKLdOWweQqNqS/iWwUst2T1fER2Xrg" crossorigin="anonymous" defer></script>
 <style>
 /* ============================================================
    Halloween in Villa — pagina dedicata. Mondo visivo a parte
@@ -1254,7 +1246,7 @@ img{max-width:100%;}
 </script>
 
 <script>
-window.addEventListener('DOMContentLoaded', function(){
+function l3Main(){
   'use strict';
   if (typeof THREE === 'undefined') {
     var loadingEl0 = document.getElementById('l3Loading');
@@ -2171,7 +2163,52 @@ window.addEventListener('DOMContentLoaded', function(){
       loadingEl.classList.remove('is-hidden');
     }
   }
-});
+}
+
+/* three.js (~600 KB con il post-processing) si scarica solo quando la scena sta per entrare
+   nello schermo: prima bloccava l'apertura della pagina anche per chi non scorre fin qui.
+   async=false mantiene l'ordine di esecuzione; integrity e crossorigin invariati. */
+(function(){
+  var LIBS = [
+    ['https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+     'sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/Pass.js',
+     'sha384-HUR8WVDx2FD1OlSm1nohJJ2a3aIfeClGjv/oVFdTHd3skt+4i7/z0dl/ux4nd2ti'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js',
+     'sha384-nhO9toQuMo5osCuA0l+YFpSqscZWxDu251Bnho2gD3kSPv1neEwHg0LyEmrA+mPj'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js',
+     'sha384-mY+ii969jnDCI2HjRHftH2NZVkIO5ZGUkcnGCg3oVJ3kVstWQXwerYWBg+nbUG4R'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js',
+     'sha384-I3lsvPeDJYFrEAzn/TA0yhc/SCYKwpyfyq8lKzHYKohu43H9f7xc/Q9ZWgSVUDl3'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js',
+     'sha384-2EpLreWSFuZsk4hcSplXLhlHd/wzvDNF907bTGIXSXM0SlhJNzy4YK0DhBFvkFEs'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js',
+     'sha384-aVQ2QnWkoxhOefDB0YZB64OPVzujvccydpcC7UqMDJUK0ChwA382zOHmrWHGDRRa'],
+    ['https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js',
+     'sha384-GkidzTYmQg24v13sa3xhBBbvOLbVLO1QxfyKLdOWweQqNqS/iWwUst2T1fER2Xrg']
+  ];
+  var avviato = false;
+  function carica(){
+    if (avviato) return;
+    avviato = true;
+    var rimasti = LIBS.length;
+    LIBS.forEach(function(l){
+      var el = document.createElement('script');
+      el.src = l[0]; el.integrity = l[1]; el.crossOrigin = 'anonymous'; el.async = false;
+      el.onload = el.onerror = function(){ if (--rimasti === 0) l3Main(); };
+      document.head.appendChild(el);
+    });
+  }
+  function pronto(){
+    var stage = document.getElementById('l3Stage');
+    if (!stage || !('IntersectionObserver' in window)) { carica(); return; }
+    var io = new IntersectionObserver(function(v){
+      if (v[0].isIntersecting) { io.disconnect(); carica(); }
+    }, { rootMargin: '1500px 0px' });
+    io.observe(stage);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pronto); else pronto();
+})();
 </script>
 
 <script>
