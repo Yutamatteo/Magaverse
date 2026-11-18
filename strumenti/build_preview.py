@@ -18,9 +18,9 @@ for f in files:
     s=os.path.join(SRC,f); d=os.path.join(DST,f)
     if not os.path.exists(s): continue
     os.makedirs(os.path.dirname(d),exist_ok=True)
-    if f.endswith(('.html','.css','.js')):
+    if f.endswith(('.html','.css','.js','.webmanifest')):
         t=open(s,encoding='utf-8').read()
-        t=re.sub(r'''(["'(])/(assets|magaparty|magacard|oceanbeach|index\.html|favicon)''', lambda m: m.group(1)+P+'/'+m.group(2), t)
+        t=re.sub(r'''(["'(])/(assets|magaparty|magacard|oceanbeach|index\.html|favicon|site\.webmanifest)''', lambda m: m.group(1)+P+'/'+m.group(2), t)
         t=re.sub(r'''href="/"''', f'href="{P}/"', t)
         if f.endswith('.html'):
             t=re.sub(r'''<meta[^>]*name=["']robots["'][^>]*>\s*''','',t,flags=re.I)  # in anteprima vale solo il robots della guardia (sempre noindex)
