@@ -48,3 +48,4 @@ body[data-passata] #bar .menu-grid .justify-between > span:last-child { display:
 /* Halloween (serata conclusa): al posto del listino dei biglietti resta l'avviso con "Vendite chiuse".
    Le schede restano nel codice (ci lavorano gli script) ma non si vedono né si raggiungono. */
 body.serata-conclusa :is(.prezzi-subhead, .prezzi-grid) { display: none !important; }
+body.serata-conclusa #termini-e-condizioni { display: none !important; }
