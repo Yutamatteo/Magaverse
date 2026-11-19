@@ -16,6 +16,12 @@ from playwright.async_api import async_playwright
 
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PORTA = 8765
+# Per il rilascio: MV_RADICE = cartella da servire (porta MV_PORTA, che deve essere libera; il server
+# si chiude alla fine); MV_BASE = indirizzo già online da controllare (es. https://www.magaverse.it).
+MV_RADICE = os.environ.get("MV_RADICE")
+if MV_RADICE:
+    RADICE, PORTA = MV_RADICE, int(os.environ.get("MV_PORTA", "8799"))
+BASE = os.environ.get("MV_BASE", "").rstrip("/") or None
 GPU = ["--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist"]
 
 
@@ -51,13 +57,17 @@ def server_attivo():
 
 
 def avvia_server():
+    if BASE:
+        return None
     if server_attivo():
-        return
-    subprocess.Popen([sys.executable, "-m", "http.server", str(PORTA)], cwd=RADICE,
-                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if MV_RADICE:
+            sys.exit(f"ERRORE: la porta {PORTA} è già occupata, non controllerei la cartella giusta")
+        return None
+    proc = subprocess.Popen([sys.executable, "-m", "http.server", str(PORTA)], cwd=RADICE,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for _ in range(20):
         if server_attivo():
-            return
+            return proc if MV_RADICE else None
         time.sleep(0.25)
     sys.exit("ERRORE: server locale non partito")
 
@@ -79,7 +89,7 @@ async def main(pagine, foto, solo_tel, veloce):
                 errs = []
                 pg.on("pageerror", lambda e, errs=errs: errs.append(str(e)[:120]))
                 pg.on("console", lambda m, errs=errs: errs.append(m.text[:120]) if m.type == "error" else None)
-                await pg.goto(f"http://localhost:{PORTA}/{pag}", wait_until="networkidle")
+                await pg.goto(f"{BASE or f'http://localhost:{PORTA}'}/{pag}", wait_until="networkidle")
                 await pg.wait_for_timeout(800)
                 sw = await pg.evaluate("[document.documentElement.scrollWidth, innerWidth]")
                 largo = sw[0] > sw[1]
@@ -116,8 +126,11 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     import fa_subset  # controllo statico: ogni icona fa-* usata ha la sua regola in assets/fa/fa.css
     fa_errore = fa_subset.controlla()
-    avvia_server()
+    server = avvia_server()
     try:
         asyncio.run(main(args, foto, solo_tel, veloce))
     except SystemExit as e:
         sys.exit(1 if fa_errore else e.code)
+    finally:
+        if server:
+            server.terminate()
