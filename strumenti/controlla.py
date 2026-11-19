@@ -21,7 +21,7 @@ GPU = ["--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist"]
 
 CTRL_PASSATA = """() => {
   const b = document.body;
-  const passata = b.hasAttribute('data-passata');
+  const passata = b.hasAttribute('data-passata') || b.classList.contains('serata-conclusa');
   const fine = !!document.querySelector('.racconto') && !!document.querySelector('.fine-stagione');
   if (!passata && !fine) return [];
   const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el);
@@ -84,9 +84,9 @@ async def main(pagine, foto, solo_tel, veloce):
                 sw = await pg.evaluate("[document.documentElement.scrollWidth, innerWidth]")
                 largo = sw[0] > sw[1]
                 # Serate passate: niente inviti a iscriversi né prezzi visibili in #prezzi/#form.
-                # "€" si controlla solo dove c'è body[data-passata] (Tardeo, Ultima Onda): su Halloween
-                # (.racconto + .fine-stagione) i prezzi e "Vendite chiuse" in #prezzi sono voluti,
-                # lì si cerca solo "Mettiti in lista".
+                # "€" si controlla dove c'è body[data-passata] (Tardeo, Ultima Onda) o body.serata-conclusa (Halloween):
+                # niente importi nemmeno lì; "Vendite chiuse" resta voluto.
+                # (la regola vale per #prezzi e #form).
                 inviti = await pg.evaluate(CTRL_PASSATA)
                 if inviti:
                     errs.append("serata passata con inviti visibili: " + "; ".join(inviti[:3]))

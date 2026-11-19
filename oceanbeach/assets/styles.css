@@ -73,7 +73,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
 .nav-logo-text .accent { color: var(--primary); }
 .nav-back {
     display: none;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em;
     color: var(--muted-fg);
     transition: color 0.2s;
 }
@@ -177,7 +177,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(8px);
     border-radius: 999px;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em;
     color: rgba(255,255,255,0.9);
 }
 .hero-title {
@@ -225,7 +225,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
 section { padding: 64px 0; }
 @media (min-width: 768px) { section { padding: 96px 0; } }
 section.muted { background: var(--muted); }
-.kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--primary); }
+.kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--primary); }
 .h2 {
     margin-top: 12px;
     font-family: 'Playfair Display', serif;
@@ -453,7 +453,7 @@ section.muted { background: var(--muted); }
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 16px;
 }
-.contact-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted-fg); }
+.contact-card-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted-fg); }
 .contact-card-value { margin-top: 4px; word-break: break-word; }
 .contact-card-action {
     margin-top: 10px;
