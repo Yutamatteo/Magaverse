@@ -71,10 +71,8 @@ ancora stato toccato: il redesign va online solo quando Matteo lo dice.
 
 ### In sospeso (serve l'ok di Matteo)
 - Pubblicare il redesign sul sito vero.
-- Sicurezza Supabase: `ruolo_utente()` legge `user_metadata` (deve usare `app_metadata`); la vista
-  `magacard_pubblica` è SECURITY DEFINER e scrivibile da anon (la pagina `magacard/card` la legge
-  ancora: va spostata sulla RPC `cerca_card`); chiave Resend scritta nella funzione
-  `invia_email_magacard` da ruotare.
+- Tre correzioni di sicurezza su Supabase e una chiave da ruotare: il dettaglio è nella Magheca
+  privata ("Serve te"), **mai** in file di questo repository, che è pubblico.
 
 ## Autonomia: anteprima sì, sito vero non ancora
 Matteo (17/11): d'ora in poi la squadra lavora in autonomia, **solo sull'anteprima**. Il sito vero
