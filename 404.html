@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <style>@view-transition{navigation:auto}</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0E1224" />
+    <title>Pagina non trovata · Magaverse</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/assets/maga-base.css" />
+    <style>
+        body { margin: 0; min-height: 100vh; min-height: 100svh; display: grid; place-items: center; overflow: hidden;
+               background: radial-gradient(120% 80% at 50% 110%, #2a1640 0%, #0E1224 55%, #070912 100%); color: #F4EADB;
+               font-family: 'Archivo', system-ui, sans-serif; }
+        .cielo { position: fixed; inset: 0; pointer-events: none; }
+        .cielo i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; opacity: .6; animation: brilla 3s ease-in-out infinite alternate; }
+        @keyframes brilla { to { opacity: .1; } }
+        .mare { position: fixed; left: -10%; right: -10%; bottom: 0; height: 26vh; background: linear-gradient(180deg, #1b2a55, #0b1230); border-radius: 50% 50% 0 0 / 22px 22px 0 0; }
+        .bottiglia { position: fixed; left: 50%; bottom: calc(26vh - 30px); width: 70px; translate: -50% 0; animation: galleggia 3.2s ease-in-out infinite; }
+        @keyframes galleggia { 50% { transform: translateY(-10px) rotate(-8deg); } }
+        main { position: relative; z-index: 2; text-align: center; padding: 24px; margin-bottom: 20vh; }
+        .codice { margin: 0; font-weight: 850; font-stretch: 62%; font-size: clamp(120px, 30vw, 260px); line-height: .8; color: transparent; -webkit-text-stroke: 2px #FF9A3C; }
+        h1 { margin: 10px 0 8px; font-weight: 850; font-stretch: 66%; font-size: clamp(34px, 7vw, 58px); line-height: .95; }
+        p { margin: 0 auto 26px; max-width: 36ch; color: rgba(244,234,219,.82); }
+        nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        nav a { padding: 12px 18px; border-radius: 999px; text-decoration: none; font-weight: 700; color: #0a0b0f; background: #FF9A3C; }
+        nav a + a { background: rgba(255,255,255,.08); color: #F4EADB; box-shadow: inset 0 0 0 1px rgba(244,234,219,.25); }
+        @media (prefers-reduced-motion: reduce) { .bottiglia, .cielo i { animation: none; } }
+    </style>
+</head>
+<body>
+    <div class="cielo" aria-hidden="true"></div>
+    <div class="mare" aria-hidden="true"></div>
+    <svg class="bottiglia" viewBox="0 0 70 40" aria-hidden="true"><rect x="4" y="10" width="46" height="20" rx="9" fill="#6fd3c9" opacity=".75"/><rect x="48" y="15" width="14" height="10" rx="3" fill="#6fd3c9" opacity=".75"/><rect x="61" y="14" width="6" height="12" rx="2" fill="#b07a4a"/><rect x="12" y="14" width="26" height="12" rx="2" fill="#f4eadb"/></svg>
+    <main>
+        <p class="codice" aria-hidden="true">404</p>
+        <h1>Questa pagina è finita in mare.</h1>
+        <p>Il link è vecchio o sbagliato. La festa però è da questa parte.</p>
+        <nav aria-label="Dove andare">
+            <a href="/">Torna al Magaverse</a>
+            <a href="/magaparty/index.html">Magaparty</a>
+            <a href="/oceanbeach/index.html">Il lido</a>
+            <a href="/magacard/index.html">MagaCard</a>
+        </nav>
+    </main>
+    <script>
+        (function () { var c = document.querySelector('.cielo'); for (var i = 0; i < 70; i++) { var s = document.createElement('i'); s.style.left = Math.random() * 100 + '%'; s.style.top = Math.random() * 70 + '%'; s.style.animationDelay = (Math.random() * 3) + 's'; c.appendChild(s); } })();
+    </script>
+</body>
+</html>

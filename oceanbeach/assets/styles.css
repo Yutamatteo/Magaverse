@@ -73,7 +73,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
 .nav-logo-text .accent { color: var(--primary); }
 .nav-back {
     display: none;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em;
     color: var(--muted-fg);
     transition: color 0.2s;
 }
@@ -177,7 +177,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(8px);
     border-radius: 999px;
-    font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em;
     color: rgba(255,255,255,0.9);
 }
 .hero-title {
@@ -225,7 +225,7 @@ h1, h2, h3, h4, .serif { font-family: 'Playfair Display', Georgia, serif; letter
 section { padding: 64px 0; }
 @media (min-width: 768px) { section { padding: 96px 0; } }
 section.muted { background: var(--muted); }
-.kicker { font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--primary); }
+.kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--primary); }
 .h2 {
     margin-top: 12px;
     font-family: 'Playfair Display', serif;
@@ -453,7 +453,7 @@ section.muted { background: var(--muted); }
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 16px;
 }
-.contact-card-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted-fg); }
+.contact-card-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted-fg); }
 .contact-card-value { margin-top: 4px; word-break: break-word; }
 .contact-card-action {
     margin-top: 10px;
@@ -522,3 +522,191 @@ section.muted { background: var(--muted); }
 .mt-10 { margin-top: 40px; }
 .mt-6 { margin-top: 24px; }
 .hidden { display: none; }
+
+/* ── Accessibilità (redesign 2026-11) ── */
+:where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid #B8743A; outline-offset: 3px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; scroll-behavior: auto !important; } }
+input, select, textarea { font-size: max(16px, 1em); }
+
+/* ── Home: barra leggibile sopra la foto finché non si scorre ── */
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) {
+    background: linear-gradient(180deg, rgba(20, 14, 10, 0.55), rgba(20, 14, 10, 0));
+}
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-logo-text,
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a,
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-back { color: rgba(255, 250, 242, 0.92); }
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-logo-text .accent,
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a.active { color: #F2C48D; }
+body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
+
+/* ── Movimento (fase 2): onde sotto la foto, ingresso dei testi ── */
+.ob-onde { position: absolute; left: 0; right: 0; bottom: -1px; height: 44px; z-index: 2; pointer-events: none; overflow: hidden; }
+.ob-onde::before, .ob-onde::after {
+    content: ""; position: absolute; left: 0; bottom: 0; width: 300%; height: 100%;
+    background: repeat-x 0 100% / 640px 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 44' preserveAspectRatio='none'%3E%3Cpath fill='%23FAF7F2' d='M0 24c53-20 107-20 160 0s107 20 160 0 107-20 160 0 107 20 160 0v20H0z'/%3E%3C/svg%3E");
+}
+.ob-onde::before { opacity: .5; background-size: 460px 100%; }
+@media (prefers-reduced-motion: no-preference) {
+    .ob-onde::after { animation: ob-onda 10s linear infinite; }
+    .ob-onde::before { animation: ob-onda-2 15s linear infinite reverse; }
+    @keyframes ob-onda { to { transform: translateX(-640px); } }
+    @keyframes ob-onda-2 { to { transform: translateX(-460px); } }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-kicker,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-sub,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-ctas,
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-stats {
+        opacity: 0; transform: translateY(16px);
+        animation: ob-entra .9s cubic-bezier(.19, 1, .22, 1) forwards;
+    }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-kicker { animation-delay: .15s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-sub { animation-delay: .65s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-ctas { animation-delay: .8s; }
+    .mv-js:not(.mv-fallback) body[data-page="home"] .hero-stats { animation-delay: .95s; }
+    @keyframes ob-entra { to { opacity: 1; transform: none; } }
+}
+
+/* ── Testata con foto per le pagine interne ── */
+.ob-testata {
+    position: relative; isolation: isolate; overflow: hidden;
+    min-height: min(62vh, 560px); display: flex; align-items: flex-end;
+    padding: 130px 0 76px; color: #fff;
+    background: #2b1d16;
+}
+.ob-testata::before {
+    content: ""; position: absolute; inset: -6% 0; z-index: -2;
+    background: var(--foto) var(--pos, 50% 50%) / cover no-repeat;
+    transform: scale(1.06);
+}
+.ob-testata::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, rgba(40,26,20,.55) 0%, rgba(40,26,20,.15) 35%, rgba(40,26,20,.8) 100%);
+}
+.ob-testata .kicker { color: #F2C48D; }
+.ob-testata h1 { color: #fff; font-size: clamp(40px, 7vw, 76px); line-height: 1.02; max-width: 16ch; text-wrap: balance; }
+.ob-testata .lead { color: rgba(255,255,255,.88); max-width: 56ch; }
+@media (prefers-reduced-motion: no-preference) {
+    .ob-testata::before { animation: ob-respiro 22s ease-in-out infinite alternate; }
+    @keyframes ob-respiro { from { transform: scale(1.06); } to { transform: scale(1.14) translateY(-1.5%); } }
+}
+
+/* una foto vera per ogni momento della giornata */
+.beat-foto { margin: 0 0 16px; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; background: #e9e1d4; box-shadow: 0 14px 34px -18px rgba(60,40,20,.45); }
+.beat-foto img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.19,1,.22,1); }
+.story-beat:hover .beat-foto img { transform: scale(1.03); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .beat-foto img { animation: beat-zoom linear both; animation-timeline: view(); }
+    @keyframes beat-zoom { from { transform: scale(1.18) translateY(-4%); } to { transform: scale(1.02) translateY(3%); } }
+    .story-beat:hover .beat-foto img { transform: none; }
+  }
+}
+
+
+/* ── Servizi: il cartello del lido accanto alle foto vere ── */
+.ob-servizi-grid { display: grid; gap: 40px; align-items: start; }
+@media (min-width: 960px) { .ob-servizi-grid { grid-template-columns: 5fr 7fr; gap: 72px; } }
+.ob-servizi-foto { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ob-servizi-foto img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; display: block; background: #e9e1d4; }
+.ob-servizi-foto img:nth-child(2) { margin-top: 48px; }
+@media (min-width: 960px) {
+    .ob-servizi-foto { position: sticky; top: 110px; grid-template-columns: 1fr; }
+    .ob-servizi-foto img { aspect-ratio: 4 / 3; }
+    .ob-servizi-foto img:nth-child(2) { margin: 0 0 0 18%; width: 82%; }
+}
+.ob-cartello { margin: 0; counter-reset: none; }
+.ob-cartello > div {
+    display: grid; gap: 6px; padding: 22px 0;
+    border-top: 1px solid var(--border);
+}
+.ob-cartello > div:last-child { border-bottom: 1px solid var(--border); }
+@media (min-width: 640px) { .ob-cartello > div { grid-template-columns: 15ch 1fr; gap: 28px; align-items: baseline; } }
+.ob-cartello dt { font-family: 'Playfair Display', Georgia, serif; font-size: 23px; font-weight: 600; line-height: 1.15; color: var(--fg); }
+.ob-cartello dd { margin: 0; font-size: 16px; line-height: 1.65; color: var(--muted-fg); max-width: 52ch; }
+.ob-servizi-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 44px; }
+@media (min-width: 960px) { .ob-servizi-cta { margin-left: calc(5 / 12 * 100% + 30px); } }
+.btn-outline { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+.btn-outline:hover { background: var(--fg); color: var(--bg); }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ── Menù e listino come una lavagna da bar: nome, puntini, prezzo ── */
+.price-card { border-radius: 6px; box-shadow: 0 1px 0 var(--border), 0 18px 40px -30px rgba(62,39,35,.35); }
+.price-card h3 { font-size: 28px; letter-spacing: -.01em; padding-bottom: 14px; border-bottom: 2px solid var(--fg); }
+.price-list li { border-bottom: 0; padding: 9px 0; font-size: 15px; align-items: baseline; gap: 10px; }
+.price-list li:has(.price-value)::after { content: none; }
+.price-list .price-label { display: flex; align-items: baseline; flex: 1; min-width: 0; gap: 10px; }
+.price-list li:has(.price-value) .price-label::after {
+    content: ""; flex: 1; min-width: 18px; transform: translateY(-4px);
+    border-bottom: 1.5px dotted rgba(62,39,35,.35);
+}
+.price-value { font-size: 16px; font-weight: 600; color: var(--fg); white-space: nowrap; }
+.price-list li:not(:has(.price-value)) .price-label { font-size: 13px; color: var(--muted-fg); font-style: italic; }
+.price-list li:not(:has(.price-value)) { padding: 0 0 10px 14px; margin-top: -4px; }
+.price-when { font-family: 'Outfit', system-ui, sans-serif; font-size: 13px; font-weight: 400; color: var(--muted-fg); letter-spacing: 0; }
+
+/* ── Contatti: righe nette invece di card con emoji ── */
+.contact-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 22px 0; box-shadow: none; }
+.contact-card + .contact-card { margin-top: 0; }
+.contact-grid > div > .contact-card:last-child { border-bottom: 1px solid var(--border); }
+.contact-icon { display: none; }
+.contact-card-label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--muted-fg); }
+.contact-card-value { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; line-height: 1.25; color: var(--fg); margin-top: 6px; }
+.contact-card-action { display: inline-block; margin-top: 10px; font-weight: 500; text-underline-offset: 4px; }
+.map-wrap { border-radius: 6px; }
+.grid-3:has(> .price-card) { align-items: start; }
+
+/* ── Prenota: scelta del servizio a pulsanti, usabile anche da tastiera ── */
+.service-pick { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0; border: 1.5px solid var(--fg); border-radius: 999px; padding: 4px; }
+.service-pick input { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.service-pick label { position: relative; border: 0; border-radius: 999px; padding: 11px 6px; text-align: center; background: transparent; box-shadow: none !important; transition: background .2s, color .2s; }
+.service-pick label .ico { display: none; }
+.service-pick label .txt { font-size: 13.5px; line-height: 1.2; }
+.service-pick label.active, .service-pick label:has(input:checked) { background: var(--fg); color: var(--bg); }
+.service-pick label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ── Chi siamo: per chi è il lido, a righe come il cartello ── */
+.grid-3:has(> .value-card) { gap: 0; }
+.value-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 26px 0; }
+@media (min-width: 1024px) { .value-card { border-top: 0; border-left: 1px solid var(--border); padding: 8px 32px; } .value-card:first-child { border-left: 0; padding-left: 0; } }
+.value-icon { display: none; }
+.value-card h3 { margin-top: 0; font-size: 30px; }
+.value-card p { font-size: 16px; max-width: 34ch; }
+
+/* il pulsante WhatsApp fisso non copre più il fondo pagina sul telefono */
+@media (max-width: 1023px) { .footer { padding-bottom: 96px; } }
+
+/* la mappa della giornata resta ferma sotto la barra, non dietro */
+@media (min-width: 900px) { .story-stage-col { top: 110px; } }
+
+/* Home: i servizi come righe del cartello, senza card né emoji */
+.grid-3:has(> .svc-card) { gap: 0 48px; }
+.svc-card { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 24px 0 26px; box-shadow: none; }
+.svc-card:hover { transform: none; box-shadow: none; }
+.svc-icon { display: none; }
+.svc-title { margin-top: 0; font-size: 24px; }
+.svc-desc { font-size: 16px; line-height: 1.6; }
+
+/* Prenota sul telefono: nome e telefono uno sotto l'altro; data e persone affiancati ma allineati */
+@media (max-width: 480px) {
+    .field-row:has(#name) { grid-template-columns: 1fr; gap: 0; }
+    .field-row:has(#name) .field + .field { margin-top: 18px; }
+    .field-row:has(#date) { grid-template-columns: 1.6fr 1fr; align-items: end; }
+    .field-row:has(#date) input { height: 46px; }
+}
+
+/* Fuori stagione: avviso sobrio sotto la testata */
+.ob-stagione { padding: 28px 0 0; }
+.ob-stagione .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; padding-top: 20px; padding-bottom: 20px; border-top: 2px solid var(--fg); border-bottom: 1px solid var(--border); }
+.ob-stagione p { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.55; color: var(--muted-fg); }
+.ob-stagione b { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--fg); margin-right: 4px; }
+.ob-stagione a { flex-shrink: 0; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
+.ob-stagione a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Fascia "Dal Magaverse": due link sobri verso le altre sezioni, in fondo prima del footer */
+.altro-mv { padding: 48px 0 56px; }
+.altro-mv-grid { display: grid; gap: 12px; margin-top: 16px; }
+.altro-mv-grid a { display: block; min-height: 44px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 16px; background: var(--white); transition: border-color .2s; }
+.altro-mv-grid a:hover, .altro-mv-grid a:focus-visible { border-color: var(--accent); }
+.altro-mv-nome { display: block; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 24px; color: var(--fg); }
+.altro-mv-testo { display: block; margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted-fg); }
+@media (min-width: 768px) { .altro-mv-grid { grid-template-columns: 1fr 1fr; } }

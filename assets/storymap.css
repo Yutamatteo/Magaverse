@@ -44,11 +44,27 @@
 .reveal-stagger > *{ transition-delay: calc(var(--sm-i, 0) * 70ms); }
 .no-js .reveal, noscript ~ .reveal{ opacity: 1; transform: none; }
 
+/* Dove il browser sa legare le animazioni allo scroll, la sezione resta
+   sempre visibile e sono i singoli blocchi a entrare (sul compositore,
+   niente JavaScript): una sezione lunga non resta più bianca. */
+@supports (animation-timeline: view()){
+  .reveal, .reveal.is-visible{ opacity: 1; transform: none; transition: none; }
+  @media (prefers-reduced-motion: no-preference){
+    .reveal :is(.grid-2, .grid-3, .grid-4) > *,
+    .reveal .container > :not(:is(.grid-2, .grid-3, .grid-4)){
+      animation: sm-entra linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    @keyframes sm-entra{ from{ opacity: 0; transform: translateY(22px); } }
+  }
+}
+
 /* ── HERO ── */
 .sm-hero{ position:relative; padding-block:88px 64px; overflow:hidden; border-bottom:1px solid var(--sm-line); }
 .sm-hero-inner{ position:relative; z-index:1; }
 .sm-eyebrow{
-  display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em;
+  display:inline-flex; align-items:center; gap:10px; font-size:12px; letter-spacing:0.22em;
   text-transform:uppercase; color:var(--sm-accent); margin-bottom:22px;
 }
 .sm-eyebrow::before, .sm-eyebrow::after{ content:""; width:22px; height:1px; background:var(--sm-accent); opacity:0.5; }
@@ -100,15 +116,15 @@
 .story-card p{ font-size:12.5px; line-height:1.6; color:var(--sm-muted); margin-top:8px; }
 .story-card button.close{ background:none; border:none; color:var(--sm-muted); font-size:18px; line-height:1; cursor:pointer; padding:2px; }
 
-.story-beat{ min-height:56vh; display:flex; flex-direction:column; justify-content:center; padding-block:7vh; }
-.story-beat .sm-label{ font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:var(--sm-accent); margin-bottom:10px; display:block; }
-.story-beat h3{ font-family:var(--sm-font-display); font-size:clamp(1.3rem,2.6vw,1.8rem); font-weight:600; color:var(--sm-text); }
-.story-beat p{ margin-top:12px; font-size:14.5px; line-height:1.75; color:var(--sm-muted); max-width:46ch; }
+.story-beat{ min-height:44vh; display:flex; flex-direction:column; justify-content:center; padding-block:5vh; }
+.story-beat .sm-label{ font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:var(--sm-accent); margin-bottom:10px; display:block; }
+.story-beat h3{ font-family:var(--sm-font-display); font-size:clamp(1.5rem,3vw,2.3rem); line-height:1.1; font-weight:600; color:var(--sm-text); }
+.story-beat p{ margin-top:12px; font-size:16px; line-height:1.65; color:var(--sm-muted); max-width:46ch; }
 
 .sm-pill-nav{ display:flex; justify-content:center; gap:8px; margin-bottom:12px; flex-wrap:wrap; }
 @media (min-width:900px){ .sm-pill-nav{ justify-content:flex-start; } }
 .sm-pill{
-  font-family:inherit; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px;
+  font-family:inherit; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; padding:9px 15px;
   border-radius:999px; border:1px solid var(--sm-line); background:var(--sm-surface); color:var(--sm-muted);
   cursor:pointer; transition:all .2s ease; text-decoration:none; display:inline-flex; align-items:center;
 }
@@ -116,14 +132,20 @@
 
 .sm-preview-ribbon{
   position:fixed; bottom:16px; right:16px; z-index:999; display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--sm-font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  font-family:var(--sm-font-mono); font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
   color:var(--sm-muted); background:rgba(14,10,20,0.85); border:1px solid var(--sm-line); border-radius:999px;
   padding:8px 14px; backdrop-filter:blur(6px); text-decoration:none; box-shadow:0 10px 30px -10px rgba(0,0,0,0.6);
 }
 .sm-preview-ribbon::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--sm-accent); }
 
 .sm-badge-demo{
-  position:absolute; top:10px; left:10px; z-index:5; font-size:9px; letter-spacing:0.14em; text-transform:uppercase;
+  position:absolute; top:10px; left:10px; z-index:5; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
   color:var(--sm-muted); background:rgba(14,10,20,0.7); border:1px solid var(--sm-line); border-radius:999px;
   padding:5px 10px; backdrop-filter:blur(4px);
 }
+
+/* ── Ritocchi redesign 2026-11: più leggibile, meno vuoto su telefono ── */
+.story-beat .sm-label{ font-size:12px; letter-spacing:0.12em; }
+.story-beat h3{ font-size:clamp(1.7rem,3.2vw,2.3rem); font-weight:800; line-height:1.05; }
+.story-beat p{ font-size:16px; line-height:1.65; }
+@media (max-width:899px){ .story-beat{ min-height:44vh; padding-block:5vh; } }

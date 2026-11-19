@@ -1,0 +1,54 @@
+/* =========================================================
+   MAGAPARTY · MOVIMENTO NELLE PAGINE EVENTO
+   Strato in più, solo estetico: non cambia struttura, form o
+   testi. Usa i colori della pagina (--sunset-orange, ecc.).
+   ========================================================= */
+
+/* La linea tra le sezioni diventa una linea d'acqua che scorre */
+.section-divider {
+  height: 16px; background: none; opacity: .55;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+          mask: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+  position: relative; overflow: hidden;
+}
+.section-divider::before {
+  content: ""; position: absolute; inset: 0; width: 300%;
+  background-color: var(--sunset-orange, #FF6A2B);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 16'%3E%3Cpath d='M0 8c15-8 30-8 45 0s30 8 45 0 20-6 30 0' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 50% / 120px 16px;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 16'%3E%3Cpath d='M0 8c15-8 30-8 45 0s30 8 45 0 20-6 30 0' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") repeat-x 0 50% / 120px 16px;
+}
+
+/* Le card rispondono al puntatore */
+@media (hover: hover) and (pointer: fine) {
+  .glass-card { transition: transform .45s cubic-bezier(.19, 1, .22, 1), border-color .25s; }
+  .glass-card:hover { transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .section-divider::before { animation: ev-acqua 9s linear infinite; }
+  @keyframes ev-acqua { to { transform: translateX(-120px); } }
+
+  /* La locandina "respira" nel colore della serata */
+  .logo-image { animation: ev-respira 4.5s ease-in-out infinite alternate; }
+  @keyframes ev-respira {
+    from { box-shadow: 0 0 0 0 transparent; }
+    to   { box-shadow: 0 14px 60px -8px color-mix(in srgb, var(--sunset-orange, #FF6A2B) 75%, transparent); }
+  }
+
+  /* Il conto alla rovescia batte a ogni secondo */
+  .ev-tic { animation: ev-tic .45s cubic-bezier(.3, 1.6, .5, 1); display: block; }
+  @keyframes ev-tic { from { transform: translateY(-.28em); opacity: .35; } to { transform: none; opacity: 1; } }
+
+  /* Un riflesso passa ogni tanto sul pulsante della lista */
+  .bottom-cta-mobile button, [data-testid="sidebar-cta-lista"] { position: relative; overflow: hidden; }
+  .bottom-cta-mobile button::after, [data-testid="sidebar-cta-lista"]::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -40%; width: 30%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .42), transparent);
+    transform: skewX(-18deg); animation: ev-riflesso 5.5s ease-in-out 2s infinite;
+  }
+  @keyframes ev-riflesso { 0%, 72% { left: -40%; } 100% { left: 130%; } }
+
+  /* I titoli di sezione salgono (motion.js li spezza in parole) */
+  .mv-js:not(.mv-fallback) h2.sunset-title[data-rise] { visibility: hidden; }
+  .mv-js:not(.mv-fallback) h2.sunset-title[data-rise].mv-spezzato { visibility: visible; }
+}

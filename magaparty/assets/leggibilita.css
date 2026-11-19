@@ -1,0 +1,57 @@
+/* =========================================================
+   MAGAPARTY · LEGGIBILITÀ PAGINE EVENTO
+   Le pagine usano molte dimensioni da 9–12px: su telefono, di
+   sera e in spiaggia sono troppo piccole. Qui le portiamo a una
+   scala leggibile senza toccare l'HTML. Caricato dopo tailwind.css.
+   ========================================================= */
+.text-\[9px\]  { font-size: 12px; }
+.text-\[10px\] { font-size: 12px; }
+.text-\[11px\] { font-size: 14px; line-height: 1.55; }
+.text-\[12px\] { font-size: 15px; line-height: 1.55; }
+.text-\[13px\] { font-size: 15px; }
+
+/* Le etichette in maiuscolo restano piccole ma con spaziatura più contenuta */
+.uppercase.tracking-widest { letter-spacing: 0.12em; }
+.uppercase.tracking-\[0\.3em\], .uppercase.tracking-\[0\.25em\] { letter-spacing: 0.16em; }
+
+/* Testo grigio un po' più chiaro sugli sfondi scuri */
+.text-gray-400 { color: rgb(176 176 186); }
+.text-gray-500 { color: rgb(150 150 162); }
+
+/* contrasto minimo AA sulle etichette piccole */
+.opacity-50 { opacity: .78; }
+[style*="color:#6b7280"] { color: #9CA3AF !important; }
+.text-gray-600 { color: rgb(156 163 175); }
+
+/* I colori scuri della palette usati come TESTO su fondo scuro: schiariti
+   verso il bianco mantenendo la tinta, per arrivare al contrasto AA. */
+[style^="color:var(--sunset-teal2)"],
+[style*=";color:var(--sunset-teal2)"],
+[style*="; color:var(--sunset-teal2)"],
+[style*="; color: var(--sunset-teal2)"],
+[style^="color: var(--sunset-teal2)"] {
+  color: color-mix(in srgb, var(--sunset-teal2) 45%, #fff) !important;
+}
+[style^="color:var(--sunset-teal)"],
+[style*=";color:var(--sunset-teal)"],
+[style*="; color:var(--sunset-teal)"],
+[style*="; color: var(--sunset-teal)"],
+[style^="color: var(--sunset-teal)"] {
+  color: color-mix(in srgb, var(--sunset-teal) 55%, #fff) !important;
+}
+[style^="color:var(--sunset-amber)"],
+[style*=";color:var(--sunset-amber)"],
+[style*="; color:var(--sunset-amber)"],
+[style*="; color: var(--sunset-amber)"],
+[style^="color: var(--sunset-amber)"] {
+  color: color-mix(in srgb, var(--sunset-amber) 62%, #fff) !important;
+}
+[style^="color:var(--sunset-orange)"],
+[style*=";color:var(--sunset-orange)"],
+[style*="; color:var(--sunset-orange)"],
+[style*="; color: var(--sunset-orange)"],
+[style^="color: var(--sunset-orange)"] {
+  color: color-mix(in srgb, var(--sunset-orange) 82%, #fff) !important;
+}
+
+p.text-\[10px\][style^="color:rgba("] { color: rgba(244, 234, 219, .74) !important; }

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JUNGLE NIGHT · Dettagli evento | Magaparty</title>
+<meta name="robots" content="noindex">
     <meta name="description" content="La spiaggia si trasforma in giungla. 8 Luglio 2026 – Nello Ocean Beach, Magazzeno Salerno. 2 DJ. Dalle 19:00 alle 2:00.">
     <meta property="og:title" content="JUNGLE NIGHT – 8 Luglio 2026 | Magaparty">
     <meta property="og:description" content="La spiaggia si trasforma in giungla. Nello Ocean Beach, Magazzeno Salerno.">
-    <meta property="og:image" content="logo_maga.jpg">
+    <meta property="og:image" content="https://www.magaverse.it/magaparty/logo_maga.jpg">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="it_IT">
-    <link rel="icon" type="image/png" href="../magaparty/logo_maga.jpg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/img/icone/maga-64.png">
+    
+    <link rel="stylesheet" href="/assets/fa/fa.css">
+    <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="../assets/storymap.css">
     <script src="../assets/storymap.js" defer></script>
@@ -59,6 +59,10 @@
         }
         .story-panel svg { display: block; width: 100%; height: 100%; }
     </style>
+    <link rel="stylesheet" href="assets/tailwind.css">
+    <link rel="stylesheet" href="assets/leggibilita.css">
+    <link rel="stylesheet" href="/assets/maga-base.css">
+<link rel="stylesheet" href="/assets/transizioni.css">
 </head>
 <body data-page="info">
 <main id="page-main">
@@ -295,8 +299,8 @@
                         <text x="234" y="172" text-anchor="middle" style="fill:var(--sm-muted);font-size:7px;letter-spacing:1px">PISTA</text>
                     </svg>
                     <div class="story-pins">
-                        <button type="button" class="story-pin pin--primary is-available" id="pin-ingresso" style="left:38%;top:18%" data-kind="info" data-kind-label="Ore 19:00" data-name="Ingresso" data-desc="Apertura cancelli alle 19:00. Ingresso gratuito e lettino omaggio per scaldare l'atmosfera."></button>
-                        <button type="button" class="story-pin" id="pin-parcheggio" style="left:12%;top:18%" data-kind="info" data-name="Parcheggio" data-desc="Parcheggio custodito gratuito, ingresso lato Salerno sulla SS18."></button>
+                        <button aria-label="Ingresso" type="button" class="story-pin pin--primary is-available" id="pin-ingresso" style="left:38%;top:18%" data-kind="info" data-kind-label="Ore 19:00" data-name="Ingresso" data-desc="Apertura cancelli alle 19:00. Ingresso gratuito e lettino omaggio per scaldare l'atmosfera."></button>
+                        <button aria-label="Parcheggio" type="button" class="story-pin" id="pin-parcheggio" style="left:12%;top:18%" data-kind="info" data-name="Parcheggio" data-desc="Parcheggio custodito gratuito, ingresso lato Salerno sulla SS18."></button>
                     </div>
                 </div>
 
@@ -345,8 +349,8 @@
                         <circle cx="226" cy="178" r="4" style="fill:var(--sunset-gold)"/>
                     </svg>
                     <div class="story-pins">
-                        <button type="button" class="story-pin pin--primary is-available" id="pin-palco" style="left:58%;top:32%" data-kind="info" data-kind-label="Ore 21:00" data-name="Palco · H8DAPREP" data-desc="Dalle 21:00 parte il DJ set: amapiano, afrobeat, trap, dembow e baile funk in console con H8DAPREP."></button>
-                        <button type="button" class="story-pin" id="pin-bar" style="left:83%;top:46%" data-kind="info" data-name="Bar" data-desc="Tariffa notte €10 con drink e lettino omaggio inclusi."></button>
+                        <button aria-label="Palco · H8DAPREP" type="button" class="story-pin pin--primary is-available" id="pin-palco" style="left:58%;top:32%" data-kind="info" data-kind-label="Ore 21:00" data-name="Palco · H8DAPREP" data-desc="Dalle 21:00 parte il DJ set: amapiano, afrobeat, trap, dembow e baile funk in console con H8DAPREP."></button>
+                        <button aria-label="Bar" type="button" class="story-pin" id="pin-bar" style="left:83%;top:46%" data-kind="info" data-name="Bar" data-desc="Tariffa notte €10 con drink e lettino omaggio inclusi."></button>
                     </div>
                 </div>
 
@@ -396,8 +400,8 @@
                         <circle cx="264" cy="162" r="4" style="fill:var(--sunset-gold)"/>
                     </svg>
                     <div class="story-pins">
-                        <button type="button" class="story-pin pin--primary is-available" id="pin-pista" style="left:55%;top:60%" data-kind="info" data-kind-label="Ore 2:00" data-name="Pista" data-desc="La giungla resta accesa fino a tarda notte: luci verdi e rosse, bassi che ruggiscono fino alle 2:00."></button>
-                        <button type="button" class="story-pin" id="pin-palco-notte" style="left:58%;top:32%" data-kind="info" data-name="Adolfo Citro" data-desc="Groove ipnotici e tech-house underground accompagnano la notte fonda."></button>
+                        <button aria-label="Pista" type="button" class="story-pin pin--primary is-available" id="pin-pista" style="left:55%;top:60%" data-kind="info" data-kind-label="Ore 2:00" data-name="Pista" data-desc="La giungla resta accesa fino a tarda notte: luci verdi e rosse, bassi che ruggiscono fino alle 2:00."></button>
+                        <button aria-label="Adolfo Citro" type="button" class="story-pin" id="pin-palco-notte" style="left:58%;top:32%" data-kind="info" data-name="Adolfo Citro" data-desc="Groove ipnotici e tech-house underground accompagnano la notte fonda."></button>
                     </div>
                 </div>
 

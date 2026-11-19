@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BATTIGIA · Il Mercoledì Chill | Magaparty</title>
-    <meta name="description" content="BATTIGIA — Il mercoledì chill di Magaparty @ Nello Ocean Beach. Ingresso dalle 20:00, gratuito, lista obbligatoria. Possibilità di prenotare un tavolo gratis.">
+<link rel="canonical" href="https://www.magaverse.it/magaparty/battigia.html">
+<meta property="og:url" content="https://www.magaverse.it/magaparty/battigia.html">
+    <meta name="description" content="Battigia, il mercoledì chill di Magaparty al Nello Ocean Beach, dalle 20:00. La stagione 2026 è finita: torna la prossima estate.">
     <meta property="og:title" content="BATTIGIA · Il Mercoledì Chill | Magaparty">
-    <meta property="og:description" content="Nello Ocean Beach, dalle 20:00. Ingresso gratuito, lista obbligatoria. Prenota il tuo tavolo gratis.">
-    <meta property="og:image" content="assets/img/battigia-locandina.jpg">
+    <meta property="og:description" content="Il mercoledì chill al Nello Ocean Beach. Torna la prossima estate.">
+    <meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/battigia-locandina.jpg">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="it_IT">
-    <link rel="icon" type="image/jpeg" href="assets/img/battigia-locandina.jpg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="assets/img/icone/battigia-64.png">
+    
+    <link rel="stylesheet" href="/assets/fa/fa.css">
+    <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="../assets/storymap.css">
     <script src="../assets/storymap.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha384-3zSEDfvllQohrq0PHL1fOXJuC/jSOO34H46t6UQfobFOmxE5BpjjaIJY5F2/bMnU" crossorigin="anonymous"></script>
     <style>
         /* ═══ Palette BATTIGIA — presa dalla locandina (duotone tramonto dorato: ambra + terracotta) ═══ */
         :root {
@@ -41,19 +42,19 @@
 
         .section-anchor { padding-top: 24px; scroll-margin-top: 80px; }
         .section-divider { margin: 56px 0 32px; height: 1px; background: linear-gradient(90deg, transparent, rgba(242,217,160,0.2), transparent); }
-        .section-label { display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px; }
+        .section-label { display: inline-block; font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px; }
 
         .urgency-banner { background: rgba(232,118,58,0.1); border: 1px solid rgba(232,118,58,0.4); border-radius: 16px; padding: 16px 18px; text-align:center; }
         .activity-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:10px; }
         @media (min-width:640px) { .activity-grid { grid-template-columns: repeat(3,1fr); } }
-        .activity-chip { background: var(--night-surface); border:1px solid var(--night-border); border-radius:14px; padding:14px 10px; text-align:center; font-size:11px; line-height:1.3; }
+        .activity-chip { background: var(--night-surface); border:1px solid var(--night-border); border-radius:14px; padding:14px 10px; text-align:center; font-size:12px; line-height:1.3; }
         .activity-chip .em { font-size:22px; display:block; margin-bottom:6px; }
-        .form-field label { display:block; font-size:10px; text-transform:uppercase; letter-spacing:0.12em; color:#C9A878; margin-bottom:6px; }
+        .form-field label { display:block; font-size:12px; text-transform:uppercase; letter-spacing:0.12em; color:#C9A878; margin-bottom:6px; }
         .form-field input, .form-field textarea, .form-field select {
             width:100%; background:rgba(255,255,255,0.03); border:1px solid var(--night-border); border-radius:12px;
             padding:12px 14px; color:#F2E7D6; font-family:inherit; font-size:13px; outline:none;
         }
-        .form-field input:focus { border-color:var(--sunset-orange); }
+        .form-field :is(input, textarea, select):focus { border-color:var(--sunset-orange); box-shadow:0 0 0 3px rgba(226,84,14,0.25); }
         .opt-choice { display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid var(--night-border); border-radius:14px; padding:14px 16px; cursor:pointer; transition:all .15s; }
         .opt-choice.selected { border-color:var(--sunset-orange); background:rgba(217,114,15,0.09); }
         .opt-choice input { accent-color: var(--sunset-orange); width:16px; height:16px; }
@@ -71,13 +72,28 @@
     fbq('init', '1205712864989093');
     fbq('track', 'PageView');
     </script>
-    <noscript><img height="1" width="1" style="display:none"
+    <noscript><img alt="" height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=1205712864989093&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+    <link rel="stylesheet" href="assets/tailwind.css">
+    <link rel="stylesheet" href="assets/leggibilita.css">
+    <link rel="stylesheet" href="/assets/maga-base.css">
+<link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<link rel="stylesheet" href="assets/evento-motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script type="module" blocking="render">/* aspetta che intestazione e locandina siano montate prima del primo disegno: serve al passaggio animato tra le pagine */</script>
+    <link rel="stylesheet" href="/assets/racconto.css">
 </head>
-<body data-page="info">
+<body data-page="info" data-passata>
+<h1 class="mv-sr">Battigia, il mercoledì chill al Nello Ocean Beach</h1>
 <main id="page-main">
+<!-- FINE-STAGIONE -->
+<aside class="fine-stagione" style="--c:#F2B14C" aria-label="Stagione conclusa">
+    <div><p><b>Battigia torna la prossima estate.</b> La stagione 2026 al Nello è finita: il prossimo appuntamento è il Maga Gala di Capodanno.</p><a href="magagala.html">Scopri il Maga Gala</a></div>
+</aside>
+
 
 <!-- ═══════════════════════ INFO ═══════════════════════ -->
 <section id="info" class="section-anchor animate-fade-in" data-testid="page-info">
@@ -145,7 +161,7 @@
 <section id="attivita" class="section-anchor animate-fade-in" data-testid="page-attivita">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Il vibe & le attività</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Il mercoledì chill</p>
     </div>
     <p class="text-[11px] text-gray-400 text-center mb-6 reveal" style="max-width:480px;margin:0 auto 24px">
@@ -166,7 +182,7 @@
 <section id="lineup" class="section-anchor animate-fade-in" data-testid="page-lineup">
     <div class="text-center mb-6 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Timeline</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Dalle 20:00</p>
     </div>
     <div class="relative pl-6 space-y-8 before:absolute before:inset-y-0 before:left-2.5 before:w-px before:bg-white/10">
@@ -212,7 +228,7 @@
 <section id="prezzi" class="section-anchor animate-fade-in" data-testid="page-prezzi">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Sezione</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Tickets</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Ingresso gratuito · lista obbligatoria</p>
     </div>
     <div class="space-y-4">
@@ -220,7 +236,7 @@
             <div class="flex justify-between items-start mb-3">
                 <div>
                     <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(140,36,20,0.15); color:var(--sunset-teal)">🎟️ Ingresso Base</span>
-                    <h4 class="brutalist text-xl text-white">FREE ENTRY</h4>
+                    <h3 class="brutalist text-xl text-white">FREE ENTRY</h3>
                     <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-teal)"><i class="fa-solid fa-list-check mr-1"></i> Lista obbligatoria</p>
                 </div>
                 <span class="brutalist text-4xl" style="color:var(--sunset-teal)">€0</span>
@@ -231,7 +247,7 @@
             <div class="flex justify-between items-start mb-3">
                 <div>
                     <span class="text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded mb-2 inline-block" style="background:rgba(217,114,15,0.15); color:var(--sunset-orange)">🪑 Tavolo</span>
-                    <h4 class="brutalist text-xl text-white">PRENOTA IL TAVOLO</h4>
+                    <h3 class="brutalist text-xl text-white">PRENOTA IL TAVOLO</h3>
                     <p class="text-[10px] uppercase tracking-wider mt-1" style="color:var(--sunset-orange)"><i class="fa-solid fa-users mr-1"></i> Indica nome e numero di persone</p>
                 </div>
                 <span class="brutalist text-4xl" style="color:var(--sunset-orange)">€0</span>
@@ -248,7 +264,7 @@
 
 <section id="bar" class="section-anchor animate-fade-in" data-testid="page-bar">
         <div class="text-center mb-4 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>
 
@@ -444,7 +460,7 @@
 
 <section id="galleria" class="section-anchor animate-fade-in" data-testid="page-galleria">
         <div class="text-center mb-8">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Galleria</h2>
             <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Carica i tuoi scatti della serata</p>
         </div>
         <div class="desktop-2col">
@@ -511,7 +527,7 @@
 <section id="form" class="section-anchor animate-fade-in" data-testid="page-form">
     <div class="text-center mb-8">
         <span class="section-label">Ultimo step</span>
-        <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
+        <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Mettiti in lista</h2>
         <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase mt-2">Form veloce · il QR arriva via email</p>
     </div>
 
@@ -519,11 +535,11 @@
         <form id="battigiaForm" class="space-y-4">
             <div class="form-field">
                 <label for="nome">Nome e Cognome *</label>
-                <input type="text" id="nome" required placeholder="Es. Mario Rossi">
+                <input autocomplete="name" type="text" id="nome" required placeholder="Es. Mario Rossi">
             </div>
             <div class="form-field">
                 <label for="telefono">Numero di Cellulare *</label>
-                <input type="tel" id="telefono" required placeholder="Es. 333 1234567">
+                <input autocomplete="tel" type="tel" id="telefono" required placeholder="Es. 333 1234567">
             </div>
             <div class="form-field">
                 <label for="instagram">Instagram (opzionale)</label>
@@ -548,7 +564,7 @@
             </div>
             <div class="form-field">
                 <label for="email">Email *</label>
-                <input type="email" id="email" required placeholder="La tua email — qui arriva il QR">
+                <input autocomplete="email" type="email" id="email" required placeholder="La tua email — qui arriva il QR">
             </div>
 
             <div class="form-field">
@@ -766,5 +782,7 @@
         successCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 </script>
+<script src="/assets/motion.js" defer></script>
+<script src="assets/evento-motion.js" defer></script>
 </body>
 </html>

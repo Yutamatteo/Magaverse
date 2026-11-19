@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#8B5A2B" />
-    <title>Nello Ocean Beach · Lido a Magazzeno (Pontecagnano)o</title>
+    <title>Nello Ocean Beach · Lido a Magazzeno (Pontecagnano)</title>
+<link rel="canonical" href="https://www.magaverse.it/oceanbeach/">
+<meta property="og:url" content="https://www.magaverse.it/oceanbeach/">
     <meta name="description" content="Nello Ocean Beach — stabilimento balneare a Magazzeno (Pontecagnano). Ombrelloni, lettini, noleggio canoe, beach bar e prenotazione su WhatsApp." />
     <meta name="keywords" content="lido Magazzeno, stabilimento balneare Pontecagnano, Nello Ocean Beach, noleggio canoe Pontecagnano" />
     <meta property="og:title" content="Nello Ocean Beach · Lido a Magazzeno (Pontecagnano)" />
-    <meta property="og:description" content="La tua oasi di relax. Ombrelloni, canoe, beach bar. Prenota su WhatsApp." />
-    <meta property="og:image" content="/assets/img/nello lido.jpeg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:description" content="La tua oasi di relax. Ombrelloni, canoe, beach bar. Scrivici su WhatsApp." />
+    <meta property="og:image" content="https://www.magaverse.it/assets/img/nello%20lido.jpeg" />
+        <link rel="preload" href="/oceanbeach/assets/fonts/outfit-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/oceanbeach/assets/fonts/outfit-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/oceanbeach/assets/fonts/playfair-display-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/app-180.png" />
+    <link rel="stylesheet" href="/oceanbeach/assets/fonts.css" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
     <link rel="stylesheet" href="../assets/storymap.css" />
     <script src="../assets/storymap.js" defer></script>
@@ -36,7 +42,7 @@
         .story-card{ background: rgba(255,255,255,0.97); box-shadow: 0 10px 30px -12px rgba(62,39,35,0.25); }
         .story-card h4{ color: var(--fg); }
         .story-card p{ color: var(--muted-fg); }
-        .story-card .kind{ font-size:10px; letter-spacing:.12em; text-transform:uppercase; color: var(--sm-accent); }
+        .story-card .kind{ font-size:12px; letter-spacing:.12em; text-transform:uppercase; color: var(--sm-accent); }
         .story-card .kind.avail{ color: var(--sm-good); }
         .story-card .kind.occ{ color: var(--muted-fg); }
         .story-pin.pin--primary.is-occupied{ background:#B8A68C; }
@@ -75,6 +81,11 @@
         .story-panel[data-layer="sera"] .sm-umbrella-top{ opacity:.25; }
         .story-panel[data-layer="sera"] .sm-plan-overlay{ fill:#3E2723; opacity:.13; }
     </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BeachResort", "name": "Nello Ocean Beach", "url": "https://www.magaverse.it/oceanbeach/", "image": "https://www.magaverse.it/assets/img/nello-sunset.jpg", "telephone": "+39 345 423 7269", "address": {"@type": "PostalAddress", "streetAddress": "Via Mar Ionio, 22", "postalCode": "84098", "addressLocality": "Magazzeno, Pontecagnano Faiano", "addressRegion": "SA", "addressCountry": "IT"}, "parentOrganization": {"@type": "Organization", "name": "Magaverse", "url": "https://www.magaverse.it/"}}</script>
 </head>
 <body data-page="home">
 
@@ -98,7 +109,7 @@
             <a href="/oceanbeach/contact.html"   data-nav="contact">Contatti</a>
         </nav>
         <div class="nav-right">
-            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
         </div>
         <button class="menu-toggle" aria-label="Menu">☰</button>
     </div>
@@ -112,7 +123,7 @@
             <a href="/oceanbeach/booking.html"  data-nav="booking">Prenota</a>
             <a href="/oceanbeach/contact.html"  data-nav="contact">Contatti</a>
             <div class="mobile-menu-foot">
-                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
             </div>
         </div>
     </div>
@@ -121,7 +132,7 @@
 <!-- HERO -->
 <section class="hero">
     <div class="hero-bg">
-        <img src="/assets/img/nello lido.jpeg" alt="Tramonto al Nello Ocean Beach" />
+        <img src="/assets/img/nello lido.webp" alt="Tramonto al Nello Ocean Beach" fetchpriority="high" decoding="async" />
     </div>
     <div class="hero-grad"></div>
     <div class="hero-inner">
@@ -129,25 +140,33 @@
             <span>📍</span>
             <span>Stabilimento balneare · Magazzeno, Salerno</span>
         </div>
-        <h1 class="hero-title">La tua oasi di relax.</h1>
+        <h1 class="hero-title" data-rise>La tua oasi di relax.</h1>
         <p class="hero-sub">Al Nello Ocean Beach celebriamo l'estate. Ombrelloni eleganti, bar accogliente, canoe pronte all'avventura — l'atmosfera perfetta per famiglie, giovani e coppie.</p>
         <div class="hero-ctas">
-            <a href="/oceanbeach/booking.html" class="btn btn-white"><span>Prenota su WhatsApp</span> →</a>
+            <a href="/oceanbeach/booking.html" class="btn btn-white"><span>Scrivici su WhatsApp</span> →</a>
             <a href="/oceanbeach/services.html" class="btn btn-ghost">Scopri i servizi</a>
         </div>
         <div class="hero-stats">
-            <div class="stat"><div class="stat-k">500m</div><div class="stat-v">di spiaggia dorata</div></div>
-            <div class="stat"><div class="stat-k">4★</div><div class="stat-v">valutazione clienti</div></div>
-            <div class="stat"><div class="stat-k">12h</div><div class="stat-v">di sole al giorno</div></div>
+            <div class="stat"><div class="stat-k" data-conta>500m</div><div class="stat-v">di spiaggia dorata</div></div>
+            <div class="stat"><div class="stat-k" data-conta>4★</div><div class="stat-v">valutazione clienti</div></div>
+            <div class="stat"><div class="stat-k" data-conta>12h</div><div class="stat-v">di sole al giorno</div></div>
         </div>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
+
+<aside class="ob-stagione" aria-label="Lido chiuso per la stagione">
+    <div class="container">
+        <p><b>Il lido riapre la prossima estate.</b> Siamo aperti da giugno a settembre: la stagione 2026 è finita. Per informazioni sulla prossima, scrivici su WhatsApp.</p>
+        <a href="#" data-wa-quick target="_blank" rel="noopener">Scrivici su WhatsApp</a>
+    </div>
+</aside>
 
 <!-- ABOUT TEASER -->
 <section class="reveal">
     <div class="container split">
         <div class="split-img">
-            <img src="/assets/img/nello-sunset.jpg" alt="Spiaggia al tramonto" />
+            <img src="/assets/img/nello-sunset.webp" alt="Spiaggia al tramonto" loading="lazy" decoding="async" />
         </div>
         <div>
             <span class="kicker">Chi siamo</span>
@@ -177,30 +196,35 @@
                 </div>
 
                 <article class="story-beat" data-layer="mattina" data-focus-x="47" data-focus-y="48" data-pin="pin-mattina-staff">
+                    <figure class="beat-foto"><img src="/assets/img/colazione.webp" alt="Cappuccino e ciambella al bar del lido, con la spiaggia sullo sfondo" loading="lazy" decoding="async" width="1100" height="619"></figure>
                     <span class="sm-label">06:30 · Prima dell'alba</span>
                     <h3>Si comincia quando la spiaggia è ancora deserta</h3>
                     <p>Mentre Magazzeno dorme ancora, il nostro team rastrella la sabbia, apre gli ombrelloni fila per fila e prepara il beach bar. Tutto pronto prima che arrivi il primo ospite, alle 08:30.</p>
                 </article>
 
                 <article class="story-beat" data-layer="giorno" data-focus-x="62" data-focus-y="62" data-pin="pin-giorno-ombrelloni">
+                    <figure class="beat-foto"><img src="/assets/img/nello lido 4.webp" alt="Acqua limpida e riva di Magazzeno in una giornata di sole" loading="lazy" decoding="async" width="1100" height="619"></figure>
                     <span class="sm-label">10:30 · Il lido si riempie</span>
                     <h3>Famiglie, asciugamani e il primo bagno</h3>
                     <p>Le file di ombrelloni si riempiono, i bambini corrono verso l'acqua, i lettini si scaldano al sole. È il cuore della giornata: relax ordinato, spazio per tutti.</p>
                 </article>
 
                 <article class="story-beat" data-layer="giorno" data-focus-x="9" data-focus-y="13" data-pin="pin-giorno-canoa">
+                    <figure class="beat-foto"><img src="/assets/img/nello lido 3.webp" alt="La riva del lido con le onde che si rompono sulla sabbia" loading="lazy" decoding="async" width="1100" height="619"></figure>
                     <span class="sm-label">12:00 · Si va al largo</span>
                     <h3>Le canoe prendono il mare</h3>
                     <p>Chi cerca un po' di movimento raggiunge il punto noleggio: pagaia in mano e si parte, lungo la costa, con la scogliera di Magazzeno sullo sfondo.</p>
                 </article>
 
                 <article class="story-beat" data-layer="aperitivo" data-focus-x="90" data-focus-y="77" data-pin="pin-aperitivo-bar">
+                    <figure class="beat-foto"><img src="/assets/img/nello lido 2.webp" alt="La terrazza del bar sotto la copertura di canne, affacciata sul mare" loading="lazy" decoding="async" width="1100" height="619"></figure>
                     <span class="sm-label">18:30 · L'ora dell'aperitivo</span>
                     <h3>Il cielo si accende, il bar si anima</h3>
                     <p>Il sole si abbassa sul mare e il beach bar prende vita: granite, analcolici e snack serviti sotto l'ombrellone, con il tramonto come sfondo.</p>
                 </article>
 
                 <article class="story-beat" data-layer="sera" data-focus-x="47" data-focus-y="80" data-pin="pin-sera-luci">
+                    <figure class="beat-foto"><img src="/assets/img/nello lido.webp" alt="Tramonto sul golfo sopra gli ombrelloni del lido" loading="lazy" decoding="async" width="1100" height="619"></figure>
                     <span class="sm-label">20:00 · Il mare si acquieta</span>
                     <h3>Le ultime luci sulla sabbia</h3>
                     <p>Le luci calde si accendono lungo la passerella, il rumore delle onde rallenta. Gli ultimi bagnanti restano a godersi la sabbia ancora tiepida.</p>
@@ -249,7 +273,7 @@
                             <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
                         </svg>
                         <div class="story-pins">
-                            <button class="story-pin" id="pin-mattina-staff" style="left:47.5%; top:48.2%;" data-kind="info" data-name="Allestimento in corso" data-desc="Il team sistema ombrelloni e lettini prima dell'arrivo degli ospiti, rastrella la sabbia e prepara il beach bar per l'apertura delle 08:30."></button>
+                            <button aria-label="Allestimento in corso" class="story-pin" id="pin-mattina-staff" style="left:47.5%; top:48.2%;" data-kind="info" data-name="Allestimento in corso" data-desc="Il team sistema ombrelloni e lettini prima dell'arrivo degli ospiti, rastrella la sabbia e prepara il beach bar per l'apertura delle 08:30."></button>
                         </div>
                     </div>
 
@@ -291,8 +315,8 @@
                             <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
                         </svg>
                         <div class="story-pins">
-                            <button class="story-pin pin--primary is-occupied" id="pin-giorno-ombrelloni" style="left:62.5%; top:62.5%;" data-kind="occ" data-name="File ombrelloni" data-desc="Ombrelloni e lettini allineati, pensati per famiglie e gruppi: ombra generosa e spazio per tutti, a due passi dal bagnasciuga."></button>
-                            <button class="story-pin pin--primary is-available" id="pin-giorno-canoa" style="left:8.75%; top:12.5%;" data-kind="avail" data-name="Punto noleggio canoe" data-desc="Canoe singole e doppie pronte a ore, con breve briefing di sicurezza: il modo più dinamico di vivere la costa di Magazzeno."></button>
+                            <button aria-label="File ombrelloni" class="story-pin pin--primary is-occupied" id="pin-giorno-ombrelloni" style="left:62.5%; top:62.5%;" data-kind="occ" data-name="File ombrelloni" data-desc="Ombrelloni e lettini allineati, pensati per famiglie e gruppi: ombra generosa e spazio per tutti, a due passi dal bagnasciuga."></button>
+                            <button aria-label="Punto noleggio canoe" class="story-pin pin--primary is-available" id="pin-giorno-canoa" style="left:8.75%; top:12.5%;" data-kind="avail" data-name="Punto noleggio canoe" data-desc="Canoe singole e doppie pronte a ore, con breve briefing di sicurezza: il modo più dinamico di vivere la costa di Magazzeno."></button>
                         </div>
                     </div>
 
@@ -334,7 +358,7 @@
                             <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
                         </svg>
                         <div class="story-pins">
-                            <button class="story-pin" id="pin-aperitivo-bar" style="left:90%; top:76.8%;" data-kind="info" data-name="Aperitivo al Beach Bar" data-desc="Quando il sole si abbassa il bar si anima: granite, spritz analcolici e snack serviti sotto l'ombrellone o al bancone, vista tramonto."></button>
+                            <button aria-label="Aperitivo al Beach Bar" class="story-pin" id="pin-aperitivo-bar" style="left:90%; top:76.8%;" data-kind="info" data-name="Aperitivo al Beach Bar" data-desc="Quando il sole si abbassa il bar si anima: granite, spritz analcolici e snack serviti sotto l'ombrellone o al bancone, vista tramonto."></button>
                         </div>
                     </div>
 
@@ -376,7 +400,7 @@
                             <rect class="sm-plan-overlay" x="0" y="0" width="400" height="280" />
                         </svg>
                         <div class="story-pins">
-                            <button class="story-pin" id="pin-sera-luci" style="left:47.5%; top:80.4%;" data-kind="info" data-name="Luci della sera" data-desc="Le luci calde si accendono lungo la passerella, il ritmo rallenta: gli ultimi bagnanti si godono il refrigerio della sera sulla sabbia ancora tiepida."></button>
+                            <button aria-label="Luci della sera" class="story-pin" id="pin-sera-luci" style="left:47.5%; top:80.4%;" data-kind="info" data-name="Luci della sera" data-desc="Le luci calde si accendono lungo la passerella, il ritmo rallenta: gli ultimi bagnanti si godono il refrigerio della sera sulla sabbia ancora tiepida."></button>
                         </div>
                     </div>
 
@@ -407,25 +431,8 @@
             <div class="svc-card"><div class="svc-icon">🛶</div><h3 class="svc-title">Noleggio Canoe</h3><p class="svc-desc">Pagaia leggera, vista sulla costa: il modo migliore per vivere il mare attivamente.</p></div>
             <div class="svc-card"><div class="svc-icon">☕</div><h3 class="svc-title">Beach Bar</h3><p class="svc-desc">Aperitivi, caffè, granite e snack freschi serviti direttamente sotto l'ombrellone.</p></div>
             <div class="svc-card"><div class="svc-icon">🚿</div><h3 class="svc-title">Docce Calde & Fredde</h3><p class="svc-desc">Acqua calda dopo il bagno, fredda nelle ore più assolate. Sempre pulite, sempre disponibili.</p></div>
-            <div class="svc-card"><div class="svc-icon">📶</div><h3 class="svc-title">Wi-Fi su richiesta</h3><p class="svc-desc">Connessione veloce per chi vuole restare in contatto, senza disturbare il relax.</p></div>
+            <div class="svc-card"><div class="svc-icon">📶</div><h3 class="svc-title">Wi-Fi su richiesta</h3><p class="svc-desc">Chiedila al bancone del bar se hai bisogno di restare in contatto.</p></div>
             <div class="svc-card"><div class="svc-icon">🚪</div><h3 class="svc-title">Bagni & Cabine</h3><p class="svc-desc">Servizi igienici sempre puliti e cabine private per cambiarsi con comodità.</p></div>
-        </div>
-    </div>
-</section>
-
-<!-- GALLERY -->
-<section class="reveal">
-    <div class="container">
-        <div class="center" style="margin-bottom:48px;">
-            <h2 class="h2">Vivilo con i tuoi occhi</h2>
-            <p class="lead" style="margin-left:auto;margin-right:auto;">Sabbia, ombrelloni allineati, il rumore delle onde. Dai un'occhiata all'atmosfera che ti aspetta.</p>
-        </div>
-        <div class="gallery">
-            <div class="gal-item large"><img src="/assets/img/nello lido 4.jpeg" alt="" /></div>
-            <div class="gal-item"><img src="/assets/img/nello lido 2.jpeg" alt="" /></div>
-            <div class="gal-item"><img src="/assets/img/nello lido 3.jpeg" alt="" /></div>
-            <div class="gal-item"><img src="/assets/img/cornetti.jpeg" alt="" /></div>
-            <div class="gal-item"><img src="/assets/img/colazione.jpeg" alt="" /></div>
         </div>
     </div>
 </section>
@@ -433,12 +440,23 @@
 <!-- FINAL CTA -->
 <section class="final-cta reveal">
     <div class="container">
-        <span class="kicker">Prenota ora</span>
+        <span class="kicker">Scrivici</span>
         <h2 class="h2">L'estate non aspetta. Fatti trovare in prima fila.</h2>
         <p class="lead">Scrivici su WhatsApp e ricevi conferma immediata. È il modo più rapido per assicurarti il posto migliore.</p>
         <div class="hero-ctas">
-            <a href="/oceanbeach/booking.html" class="btn btn-white">Prenota ora →</a>
+            <a href="/oceanbeach/booking.html" class="btn btn-white">Scrivici su WhatsApp →</a>
             <a href="#" data-wa-quick class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp</a>
+        </div>
+    </div>
+</section>
+
+<!-- ALTRO DAL MAGAVERSE -->
+<section class="altro-mv" aria-labelledby="altro-mv-titolo">
+    <div class="container">
+        <h2 id="altro-mv-titolo" class="kicker">Dal Magaverse</h2>
+        <div class="altro-mv-grid">
+            <a href="/magaparty/"><span class="altro-mv-nome">Magaparty</span><span class="altro-mv-testo">Le serate dell'estate in spiaggia, Halloween in Villa e, a Capodanno, il Maga Gala.</span></a>
+            <a href="/magacard/index.html"><span class="altro-mv-nome">MagaCard</span><span class="altro-mv-testo">Un timbro a ogni serata, livelli da sbloccare e un premio alla fine del percorso.</span></a>
         </div>
     </div>
 </section>
@@ -462,7 +480,7 @@
                     <li><a href="/oceanbeach/services.html">Servizi</a></li>
                     <li><a href="/oceanbeach/pricing.html">Listino</a></li>
                     <li><a href="/oceanbeach/booking.html">Prenota</a></li>
-                    <li><a href="/" style="opacity:.7;">↗ Magaverse</a></li>
+                    <li><a href="/" style="opacity:.92;">↗ Magaverse</a></li>
                 </ul>
             </div>
             <div>
@@ -475,13 +493,13 @@
         </div>
         <div class="footer-bottom">
             <span>© <span id="year">2026</span> Nello Ocean Beach · <span>Tutti i diritti riservati.</span></span>
-            <span style="opacity:.75;">Sito realizzato con cura da Matteo Finizio.</span>
+            <span style="opacity:.92;">Sito realizzato con cura da Matteo Finizio.</span>
         </div>
     </div>
 </footer>
 
 <!-- STICKY CTA -->
-<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">💬 <span>Prenota WhatsApp</span></a>
+<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">💬 <span>Scrivici su WhatsApp</span></a>
 
 <script src="/oceanbeach/assets/app.js"></script>
 </body>

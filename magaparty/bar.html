@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar Menu · Magaparty</title>
+<link rel="canonical" href="https://www.magaverse.it/magaparty/bar.html">
+<meta property="og:url" content="https://www.magaverse.it/magaparty/bar.html">
     <meta name="description" content="Il menu bar di Magaparty. Aperitivo 16–18 e Serata 18–00.">
     <meta property="og:title" content="Bar Menu · Magaparty">
-    <meta property="og:image" content="assets/img/logo-teal.png">
+    <meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/logo-teal.png">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/fa/fa.css">
+    <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="../assets/storymap.css">
     <script src="../assets/storymap.js" defer></script>
@@ -44,23 +45,34 @@
         body { max-width: none !important; border: none !important; padding-bottom: 40px !important; }
         .s-wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
         .s-top { display:flex; align-items:center; justify-content:space-between; padding:20px 20px 0; max-width:900px; margin:0 auto; }
+        @media (min-width: 1024px) { .menu-grid.desktop-3col { display: block; columns: 3; column-gap: 12px; } .menu-grid.desktop-3col > * { break-inside: avoid; margin: 0 0 12px !important; } }
     </style>
+    <link rel="stylesheet" href="assets/tailwind.css">
+    <link rel="stylesheet" href="assets/leggibilita.css">
+    <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/evento-motion.css">
+    <link rel="stylesheet" href="assets/pagine.css">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<link rel="stylesheet" href="/assets/transizioni.css">
 </head>
 <body data-page="bar">
+<h1 class="mv-sr">Il menù del bar di Magaparty</h1>
+<svg class="luci mp-luci-pagina" data-luci data-luci-subito aria-hidden="true" focusable="false"></svg>
 
 <div class="s-top reveal">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
     <div style="display:flex;gap:14px">
-        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" aria-label="Instagram" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" aria-label="TikTok" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" aria-label="Telegram" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
     </div>
 </div>
 
 <div class="s-wrap" style="padding-top:20px">
     <div class="animate-fade-in" data-testid="page-bar">
         <div class="text-center mb-4 reveal">
-            <h2 class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
+            <h2 data-rise class="brutalist text-3xl tracking-tighter uppercase sunset-title">Bar Menu</h2>
             <p class="text-[10px] tracking-[0.2em] uppercase mt-2" id="bar-subtitle" style="color:var(--sunset-coral)">Aperitivo · dalle 16:00 alle 18:00</p>
         </div>
 
@@ -289,5 +301,6 @@
         });
     })();
 </script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>
