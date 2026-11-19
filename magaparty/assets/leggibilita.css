@@ -4,7 +4,7 @@
    sera e in spiaggia sono troppo piccole. Qui le portiamo a una
    scala leggibile senza toccare l'HTML. Caricato dopo tailwind.css.
    ========================================================= */
-.text-\[9px\]  { font-size: 11px; }
+.text-\[9px\]  { font-size: 12px; }
 .text-\[10px\] { font-size: 12px; }
 .text-\[11px\] { font-size: 14px; line-height: 1.55; }
 .text-\[12px\] { font-size: 15px; line-height: 1.55; }
