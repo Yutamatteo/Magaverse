@@ -48,8 +48,9 @@ h1, h2, h3, .serif { font-family: 'Playfair Display', 'Archivo Black', serif; }
 /* ── PILL TABS ── */
 .pill-tab {
     padding: 9px 18px;
+    min-height: 44px;
     border-radius: var(--radius-pill);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     transition: all 0.2s ease;
     white-space: nowrap;
@@ -74,7 +75,7 @@ h1, h2, h3, .serif { font-family: 'Playfair Display', 'Archivo Black', serif; }
     width: 100%;
     padding: 11px 16px;
     border-radius: 14px;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -125,7 +126,7 @@ h1, h2, h3, .serif { font-family: 'Playfair Display', 'Archivo Black', serif; }
 /* Link "torna a Ocean Beach" — bridge fra i due brand */
 .maga-back-link {
     display: inline-flex; align-items: center; gap: 6px;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;
     color: #8A7B6E; text-decoration: none;
     transition: color 0.2s;
 }
@@ -292,7 +293,7 @@ h1, h2, h3, .serif { font-family: 'Playfair Display', 'Archivo Black', serif; }
     border: 1px dashed var(--night-border);
     color: #8A7B6E;
     font-family: 'Outfit', monospace;
-    font-size: 9px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     text-align: center;

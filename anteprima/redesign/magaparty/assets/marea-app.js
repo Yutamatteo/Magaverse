@@ -45,14 +45,14 @@
         <aside class="desktop-sidebar">
             <div class="sidebar-logo-section">
                 <div class="sidebar-meta">
-                    <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.marea</span>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
+                    <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.marea</span>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
                         <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> Ogni domenica
                     </div>
                 </div>
                 ${logoMarkup()}
                 <p class="brutalist" style="font-size:14px;letter-spacing:0.2em;margin-top:8px;color:var(--sunset-gold)">MAREA</p>
-                <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.55;margin-top:4px">L'happy hour della domenica</p>
+                <p style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.55;margin-top:4px">L'happy hour della domenica</p>
             </div>
 
             <nav class="sidebar-nav">${items}</nav>
@@ -64,10 +64,10 @@
                     <i class="fa-solid fa-list-check"></i> METTITI IN LISTA
                 </button>
                 <div style="display:flex;gap:8px">
-                    <button data-testid="sidebar-share" onclick="MAREA.share()" class="glass-card" style="flex:1;padding:8px;font-size:9px;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;display:flex;justify-content:center;align-items:center;gap:4px;color:#fff;border:1px solid rgba(240,255,232,0.08);cursor:pointer">
+                    <button data-testid="sidebar-share" onclick="MAREA.share()" class="glass-card" style="flex:1;padding:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;display:flex;justify-content:center;align-items:center;gap:4px;color:#fff;border:1px solid rgba(240,255,232,0.08);cursor:pointer">
                         <i class="fa-solid fa-share-nodes"></i> Condividi
                     </button>
-                    <button data-testid="sidebar-calendar" onclick="MAREA.addToCalendar()" class="glass-card" style="flex:1;padding:8px;font-size:9px;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;display:flex;justify-content:center;align-items:center;gap:4px;color:#fff;border:1px solid rgba(240,255,232,0.08);cursor:pointer">
+                    <button data-testid="sidebar-calendar" onclick="MAREA.addToCalendar()" class="glass-card" style="flex:1;padding:8px;font-size:12px;text-transform:uppercase;letter-spacing:0.2em;font-weight:700;display:flex;justify-content:center;align-items:center;gap:4px;color:#fff;border:1px solid rgba(240,255,232,0.08);cursor:pointer">
                         <i class="fa-regular fa-calendar-plus"></i> Calendario
                     </button>
                 </div>
@@ -83,14 +83,14 @@
         <div class="mobile-header-wrapper">
             <header style="padding:40px 24px 24px;text-align:center">
                 <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:24px">
-                    <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.marea</span>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
+                    <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.marea</span>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
                         <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> Ogni domenica
                     </div>
                 </div>
                 ${logoMarkup('max-width:150px')}
                 <p class="brutalist sunset-title" style="font-size:22px;letter-spacing:0.2em;margin-top:8px">MAREA</p>
-                <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.55;margin-top:4px">L'happy hour della domenica</p>
+                <p style="font-size:12px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.55;margin-top:4px">L'happy hour della domenica</p>
                 <a href="index.html" class="maga-back-link" style="justify-content:center;margin-top:12px;">&#8592; Magaparty</a>
             </header>
         </div>`;
@@ -199,7 +199,7 @@
     }
     function showToast(msg) {
         const t = document.createElement('div');
-        t.style.cssText = 'position:fixed;bottom:8rem;left:50%;transform:translateX(-50%);z-index:200;color:#fff;font-size:11px;padding:8px 16px;border-radius:9999px;box-shadow:0 10px 30px rgba(0,0,0,0.5);white-space:nowrap;background:#111;border:1px solid rgba(255,255,255,0.1)';
+        t.style.cssText = 'position:fixed;bottom:8rem;left:50%;transform:translateX(-50%);z-index:200;color:#fff;font-size:12px;padding:8px 16px;border-radius:9999px;box-shadow:0 10px 30px rgba(0,0,0,0.5);white-space:nowrap;background:#111;border:1px solid rgba(255,255,255,0.1)';
         t.textContent = msg;
         document.body.appendChild(t);
         setTimeout(() => t.remove(), 3500);
@@ -302,10 +302,10 @@
             <div id="qitem-${i}" class="glass-card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(255,255,255,0.1)">
                 <i class="fa-solid ${f.type.startsWith('video') ? 'fa-film' : 'fa-image'}" style="font-size:14px;color:var(--sunset-orange)"></i>
                 <div style="flex:1;min-width:0">
-                    <p style="font-size:11px;color:#fff;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</p>
-                    <p style="font-size:9px;color:#6b7280;margin:0">${(f.size / 1024 / 1024).toFixed(1)} MB</p>
+                    <p style="font-size:12px;color:#fff;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</p>
+                    <p style="font-size:12px;color:#6b7280;margin:0">${(f.size / 1024 / 1024).toFixed(1)} MB</p>
                 </div>
-                <div id="qstatus-${i}" style="font-size:10px;color:#6b7280;flex-shrink:0">In attesa</div>
+                <div id="qstatus-${i}" style="font-size:12px;color:#6b7280;flex-shrink:0">In attesa</div>
             </div>
         `).join('');
     }
@@ -341,7 +341,7 @@
             if (resList) resList.innerHTML = results.map(r => `
                 <div class="glass-card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(226,84,14,0.2);background:rgba(226,84,14,0.05)">
                     <i class="fa-solid ${r.type.startsWith('video') ? 'fa-film' : 'fa-image'}" style="font-size:14px;color:var(--sunset-orange)"></i>
-                    <p style="font-size:11px;color:#fff;flex:1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</p>
+                    <p style="font-size:12px;color:#fff;flex:1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</p>
                     <span style="font-size:12px;font-weight:700;color:var(--sunset-gold)">✓ Caricato</span>
                 </div>
             `).join('');
