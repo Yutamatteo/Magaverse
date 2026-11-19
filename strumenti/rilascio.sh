@@ -85,9 +85,9 @@ echo "== 4. Controlli sui file del nuovo main"
 mkdir -p "$LAV/sito"
 git archive "$NUOVO" | tar -x -C "$LAV/sito" || { echo "ERRORE: estrazione"; exit 1; }
 git diff "$BASE_TAG" "$MAIN" -- . ':!anteprima' > "$LAV/correzioni.diff"
-"$PY" - "$LAV/sito" "$LAV/correzioni.diff" <<'EOF' || ERR=1
-import os, re, sys
-sito, corr = sys.argv[1], sys.argv[2]
+"$PY" - "$LAV/sito" "$LAV/correzioni.diff" "$MAIN" <<'EOF' || ERR=1
+import os, re, subprocess, sys
+sito, corr, main = sys.argv[1], sys.argv[2], sys.argv[3]
 male = []
 def leggi(p):
     try: return open(os.path.join(sito, p), encoding='utf-8', errors='replace').read()
@@ -125,8 +125,18 @@ for r in open(corr, encoding='utf-8', errors='replace'):
     elif f and r.startswith('+') and len(r.strip()) > 12:
         t = leggi(f)
         if t is None or r[1:].strip() not in t: persi[f] = persi.get(f, 0) + 1
+# Righe TOLTE da main dopo il tag (es. una correzione fatta togliendo codice): non devono tornare col rilascio.
+f, tornate = None, {}
+for r in open(corr, encoding='utf-8', errors='replace'):
+    if r.startswith('--- '): f = r[6:].strip() if r.startswith('--- a/') else None
+    elif f and r.startswith('-') and not r.startswith('---') and len(r.strip()) > 12:
+        riga, t = r[1:].strip(), leggi(f)
+        if t is None or riga not in t: continue
+        m = subprocess.run(['git', 'show', f'{main}:{f}'], capture_output=True, text=True, encoding='utf-8', errors='replace').stdout
+        if t.count(riga) > m.count(riga): tornate[f] = tornate.get(f, 0) + 1
+for f, n in tornate.items(): male.append(f'{f}: {n} righe tolte da main tornano col rilascio')
 for f, n in persi.items(): male.append(f'{f}: {n} righe corrette su main non ci sono nel rilascio')
-print(f'   sitemap: {len(urls)} pagine controllate; resti anteprima: {resti}; correzioni di main perse: {sum(persi.values())}')
+print(f'   sitemap: {len(urls)} pagine controllate; resti anteprima: {resti}; correzioni di main perse: {sum(persi.values())}; righe tolte da main che tornano: {sum(tornate.values())}')
 for m in male: print('   BLOCCO', m)
 sys.exit(1 if male else 0)
 EOF

@@ -48,6 +48,13 @@ git diff --name-status --no-renames "$MAIN" "$RIT" > "$LAV/diff"
 printf 'rispetto a main: aggiunti %s  cambiati %s  tolti %s\n' "$(grep -c '^A' "$LAV/diff")" "$(grep -c '^M' "$LAV/diff")" "$(grep -c '^D' "$LAV/diff")"
 echo "commit tra il tag e main che toccano il sito (verrebbero annullati):"
 git log --format='  %h %s' "$OBI..$MAIN" -- . ':!anteprima' | head -15
+# Il ritorno deve annullare solo il rilascio del redesign: se annulla altro (es. correzioni di sicurezza) si ferma.
+ALTRI=$(git log --format='%h %s' "$OBI..$MAIN" -- . ':!anteprima' | grep -vc "Rilascio del redesign")
+if [ "$ALTRI" != 0 ]; then
+  echo "BLOCCO: il ritorno annullerebbe $ALTRI commit che non sono il rilascio del redesign (vedi elenco sopra)."
+  echo "        Usa il tag creato da rilascio.sh subito prima del rilascio. Solo se Matteo lo vuole davvero: MV_FORZA_RITORNO=si."
+  if [ "$MODO" = "--vero" ] && [ "${MV_FORZA_RITORNO:-}" != "si" ]; then exit 4; fi
+fi
 
 if [ "$MODO" = "--prova" ]; then
   echo "prova del push (--dry-run, GitHub non cambia):"
