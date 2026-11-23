@@ -160,6 +160,11 @@ scrivere "fai un giro"; le sessioni programmate fanno lo stesso. Scrivania `agen
 - `pr-scanner`: location, sponsor, partner, clienti, collab e stand, concorrenza e novità del settore
   da fonti pubbliche, con link e data. Non contatta mai nessuno.
 
+**App Craft** (ArtCraft, 25/11): 9 app collegate come server MCP nel file locale `.mcp.json` (escluso da git):
+PhotoCraft, EffectCraft, FilmCraft, SoundCraft, DesignCraft, DeckCraft, GridCraft, WordCraft, PdfCraft. Leggono da
+`magaverse-produzione` e dalle foto del sito, scrivono solo in `magaverse-produzione\uscite` (FilmCraft e GridCraft
+non si possono limitare: usarle solo su file di produzione). Chi usa cosa è nei file degli agenti.
+
 Il repository GitHub è **pubblico**: bozze, report, video e note degli agenti vanno **solo** nel
 Magheca privata o nella cartella di produzione, mai in file del repository. Nessun agente pubblica,
 manda messaggi o spende crediti senza l'ok di Matteo.

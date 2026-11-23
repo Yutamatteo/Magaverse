@@ -64,6 +64,11 @@ Catene tipiche:
 - **Opportunità e mercato**: `pr-scanner` (schede con fonte) → `marketing`/`direttore-creativo` per le
   idee → Matteo decide chi contattare. Nessuno contatta da solo.
 - `ticketing` è in progettazione: non chiamarlo finché Matteo non decide fonti e permessi.
+- **App Craft** (ArtCraft, collegate il 25/11 con `.mcp.json` locale, fuori da git): montatore → FilmCraft,
+  EffectCraft, SoundCraft, PhotoCraft; commercialista → GridCraft, DeckCraft, PdfCraft; ufficio-qualita →
+  WordCraft, PdfCraft; direttore-creativo → DesignCraft, PhotoCraft; pr-scanner → DeckCraft. Leggono da
+  `magaverse-produzione`, scrivono solo in `magaverse-produzione\uscite`. Nell'incarico chiedi il file prodotto e
+  verificalo tu (esiste, si apre, anteprima guardata). ArtCraft Studio (IA a crediti) non è collegato.
 
 Prima di chiamare uno specialista aggiorna la sua scrivania (`stato: "lavoro"`, `task`).
 
