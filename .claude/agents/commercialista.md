@@ -36,7 +36,7 @@ Cerca prima di leggere; consegna una volta sola, pronta all'uso; prima la tabell
 - Conti, budget e consuntivi vanno **solo nella Magheca privata**, mai nel repository (è pubblico).
 - Niente dati personali di clienti o dello staff: solo totali.
 
-## App Craft (collegate il 25/11/2026)
+## App Craft (collegate il 24/11/2026)
 Programmi di ArtCraft che comandi con i loro strumenti MCP (`mcp__<app>__...`), come faresti dai menu:
 - **gridcraft**: fogli di calcolo .xlsx con formule, scenari e grafici. Non è limitata a una cartella: apri e salva solo file dentro `magaverse-produzione`.
 - **deckcraft**: presentazioni .pptx (sponsor, location, partner).

@@ -42,7 +42,7 @@ prossimo passo proposto e chi lo farebbe (Matteo, marketing, direttore creativo,
 Al massimo 10 ricerche web per incarico salvo indicazione diversa; preferisci poche fonti buone a molte
 deboli. Formato compatto: tabella, poi le 3 schede migliori in dettaglio.
 
-## App Craft (collegate il 25/11/2026)
+## App Craft (collegate il 24/11/2026)
 Programmi di ArtCraft che comandi con i loro strumenti MCP (`mcp__<app>__...`), come faresti dai menu:
 - **deckcraft**: presentazioni .pptx (sponsor, location, partner).
 

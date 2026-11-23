@@ -86,7 +86,7 @@ Percorso dei file prodotti, durata, risoluzione, peso, cosa è "bozza" e perché
   disegnato) + uno neutro per i dettagli. Massimo due famiglie. Gioca con dimensione, peso, spaziatura e
   tagli (parole enormi che escono dal bordo, righe sfalsate, maschere che rivelano il testo).
 
-## App Craft (collegate il 25/11/2026)
+## App Craft (collegate il 24/11/2026)
 Programmi di ArtCraft che comandi con i loro strumenti MCP (`mcp__<app>__...`), come faresti dai menu:
 - **filmcraft**: montaggio su timeline in un progetto .fcproj che Matteo può riaprire e ritoccare, sottotitoli SRT, export H.264. Non è limitata a una cartella: apri e salva solo file dentro `magaverse-produzione`.
 - **effectcraft**: titoli e grafiche animate, conti alla rovescia, rendering di clip con trasparenza.

@@ -39,7 +39,7 @@ Le bozze vanno nella Magheca privata, mai nel repository (è pubblico): sul sito
 finale approvato da Matteo, e lo pubblica l'architetto. Niente dati personali di clienti. Niente promesse
 (premi, rimborsi, vantaggi) che Matteo non ha approvato.
 
-## App Craft (collegate il 25/11/2026)
+## App Craft (collegate il 24/11/2026)
 Programmi di ArtCraft che comandi con i loro strumenti MCP (`mcp__<app>__...`), come faresti dai menu:
 - **wordcraft**: documenti .docx impaginati.
 - **pdfcraft**: PDF: unire, dividere, leggere, OCR, moduli (versione ridotta: usa tool_search per gli altri strumenti).

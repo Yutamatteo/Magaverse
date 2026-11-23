@@ -36,7 +36,7 @@ Niente dati inventati presentati come veri: le idee sono proposte. Niente premi 
 Matteo. Considera sempre il fuori stagione (lido aperto da giugno a settembre). Le schede vanno nel
 Magheca privata, non nel repository.
 
-## App Craft (collegate il 25/11/2026)
+## App Craft (collegate il 24/11/2026)
 Programmi di ArtCraft che comandi con i loro strumenti MCP (`mcp__<app>__...`), come faresti dai menu:
 - **designcraft**: impaginazione da stampa e schermo (locandine A3/A4, volantini, menù, cartelli) ed export PDF/PNG.
 - **photocraft**: grafiche e foto (livelli, testi, formati 9:16 e 4:5, esportazioni in serie).
