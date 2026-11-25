@@ -2,8 +2,8 @@
 nativo, nessun calcolo durante lo scroll). uso: saga_build.py [pagina] [id,da,saltare]"""
 import re, json, os, sys, glob
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CFG = json.load(open(os.path.join(os.path.dirname(__file__), 'saga.json')))
-TARGET = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
+CFG = json.load(open(os.path.join(os.path.dirname(__file__), 'saga.json'), encoding='utf-8'))
+TARGET = sys.argv[1] if len(sys.argv) > 1 else 'magaparty/index.html'  # l'hub (index.html) non ha più la parete
 SALTA = set(sys.argv[2].split(',')) if len(sys.argv) > 2 else set()
 CFG = [c for c in CFG if c['id'] not in SALTA]
 N = 9  # tasselli per serata, tutti diversi (il telefono ne mostra 6)
@@ -30,7 +30,7 @@ for i, s in enumerate(CFG):
     imgs = ''
     for k in range(min(N, len(tiles))):
         w, h = Image.open(tiles[k]).size
-        imgs += f'<img src="{tiles[k].replace(R, "")}" alt="" width="{w}" height="{h}" loading="lazy" decoding="async">'
+        imgs += f'<img src="{tiles[k].replace(R, "").replace("\\", "/")}" alt="" width="{w}" height="{h}" loading="lazy" decoding="async">'
     loc = ' notte-locandine' if s['parete'] == 'format' else ''
     sezioni.append(f'''<section class="notte{loc}" style="--tinta:{t}" aria-labelledby="notte-{s["id"]}">
                 <div class="notte-muro" aria-hidden="true">{imgs}</div>
@@ -42,7 +42,8 @@ blocco = f'''<!-- SAGA:INIZIO · la stagione come un'unica parete di foto che sc
             {"".join(sezioni)}
         </div>
         <!-- SAGA:FINE -->'''
-idx = open(f'{R}/{TARGET}').read()
+if TARGET == 'index.html': sys.exit('index.html (hub) non contiene più la parete: usa magaparty/index.html')
+idx = open(f'{R}/{TARGET}', encoding='utf-8').read()
 idx = re.sub(r'<!-- SAGA:INIZIO.*?<!-- SAGA:FINE -->', lambda m: blocco, idx, flags=re.S)
-open(f'{R}/{TARGET}', 'w').write(idx)
+open(f'{R}/{TARGET}', 'w', encoding='utf-8', newline='').write(idx)
 print('ok', TARGET, len(CFG), 'serate')
