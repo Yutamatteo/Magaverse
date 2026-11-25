@@ -35,6 +35,9 @@ body:has(.fine-stagione) #dynamic-card,
 body:has(.fine-stagione) .urgency-banner { display: none !important; }
 body:has(.racconto) .urgency-banner { display: none !important; }
 body:is(:has(.fine-stagione), :has(.racconto)) #info .desktop-2col { grid-template-columns: 1fr; }
+/* Stagione finita: il puntino accanto a "Orario" (ogni domenica / ogni mercoledì) resta fermo e
+   spento, così non suggerisce una serata "in corso". */
+body:has(.fine-stagione) #info .animate-pulse { animation: none; opacity: .45; }
 /* serata o stagione finita: niente inviti a mettersi in lista o a salvare la data */
 body:is(:has(.fine-stagione), :has(.racconto)) :is(.bottom-cta-mobile, [data-testid="sidebar-cta-lista"], [data-testid="sidebar-calendar"]) { display: none !important; }
 
