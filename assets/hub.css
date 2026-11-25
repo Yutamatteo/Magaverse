@@ -247,7 +247,7 @@ body.hub {
 .prossimo-nome i { font-style: normal; color: var(--oro); }
 .prossimo-nome span { display: block; margin-top: 6px; font-size: .42em; letter-spacing: .08em; opacity: .75; }
 .prossimo-frase { margin: 16px 0 22px; max-width: 46ch; color: rgba(244,234,219,0.82); }
-.prossimo-cta { --acc: var(--oro); text-decoration: none; }
+.prossimo .prossimo-cta { --acc: var(--oro); color: var(--mv-notte); text-decoration: none; }
 .prossimo-cta:hover::after { transform: translateX(5px); }
 
 /* ── Footer ── */

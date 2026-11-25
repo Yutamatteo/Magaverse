@@ -30,7 +30,8 @@ for i, s in enumerate(CFG):
     imgs = ''
     for k in range(min(N, len(tiles))):
         w, h = Image.open(tiles[k]).size
-        imgs += f'<img src="{tiles[k].replace(R, "").replace("\\", "/")}" alt="" width="{w}" height="{h}" loading="lazy" decoding="async">'
+        src = tiles[k].replace(R, "").replace(chr(92), "/")  # percorsi con la barra normale anche su Windows
+        imgs += f'<img src="{src}" alt="" width="{w}" height="{h}" loading="lazy" decoding="async">'
     loc = ' notte-locandine' if s['parete'] == 'format' else ''
     sezioni.append(f'''<section class="notte{loc}" style="--tinta:{t}" aria-labelledby="notte-{s["id"]}">
                 <div class="notte-muro" aria-hidden="true">{imgs}</div>
