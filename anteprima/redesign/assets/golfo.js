@@ -38,7 +38,7 @@
   var VERT = 'attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}';
   var FRAG = [
     'precision highp float;',
-    'uniform vec2 u_res;uniform float u_time;uniform float u_t;uniform float u_h;uniform float u_sx;uniform float u_velo;uniform vec2 u_par;',
+    'uniform vec2 u_res;uniform float u_time;uniform float u_t;uniform float u_h;uniform float u_sx;uniform float u_pt;uniform float u_velo;uniform vec2 u_par;',
     'const vec3 NOTTE=vec3(0.055,0.071,0.141);',
     'const float FASCE=11.0;',
     'float hash(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}',
@@ -64,14 +64,14 @@
     ' float sunUp=smoothstep(-.10,.06,sunY);',
     ' float r=mix(.068,.105,clamp((asp-.5)/1.3,0.,1.));',
     ' float d=length(vec2(xa-sxa,y-sunY));',
-    /* promontori: la Costiera a sinistra (più alta, con i paesi), il Cilento a destra */
-    ' float xl=u_sx-.13;',
-    ' float tapL=1.-smoothstep(xl-.62,xl,uv.x);',
-    ' float mVicino=.118*tapL*(.30+.70*cresta(xq*2.4+11.+u_par.x*.02));',
-    ' float tapL2=1.-smoothstep(xl-.5,xl+.07,uv.x);',
-    ' float mLontano=.175*tapL2*(.42+.58*cresta(xq*1.35+4.+u_par.x*.01));',
-    ' float tapR=smoothstep(u_sx+.15,u_sx+.46,uv.x);',
-    ' float mDestra=.062*tapR*(.40+.60*cresta(xq*2.9+31.));',
+    /* la vista di Magazzeno: mare aperto a sinistra; a destra la Costiera Amalfitana, alta e vicina,
+       che scende verso sinistra fino alla punta (Punta Campanella), con Capri appena staccata */
+    ' float pt=u_pt;float dx=uv.x-pt;',
+    ' float mLontano=smoothstep(0.,.012,dx)*(.008+.12*pow(smoothstep(0.,.4,dx),.8))*(.38+.42*cresta(xq*8.+4.+u_par.x*.01)+.2*cresta(xq*21.+9.));',
+    ' float capri=.017*max(0.,1.-pow((uv.x-(pt-.05))/.021,2.))*(.75+.25*noise1(xq*40.));',
+    ' mLontano=max(mLontano,capri);',
+    ' float dv=uv.x-(pt+.17);',
+    ' float mVicino=smoothstep(0.,.05,dv)*(.04+.21*pow(smoothstep(0.,.34,dv),.7))*(.36+.46*cresta(xq*6.5+11.+u_par.x*.02)+.18*cresta(xq*17.+2.));',
     ' float notte=smoothstep(.42,.9,t);',
     ' float accese=smoothstep(.36,.6,t);',
     ' vec3 col;',
@@ -99,16 +99,14 @@
     '  col+=vec3(1.,.95,.85)*scia*smoothstep(.8,.98,t);',
     '  float bl=1.-smoothstep(mLontano-px,mLontano+px,y);',
     '  col=mix(col,mix(tinta(.15,t),tinta(.56,t),.2),bl);',
-    '  float br=1.-smoothstep(mDestra-px,mDestra+px,y);',
-    '  col=mix(col,mix(tinta(.1,t),tinta(.5,t),.12),br);',
     '  float bv=1.-smoothstep(mVicino-px,mVicino+px,y);',
     '  col=mix(col,tinta(.045,t),bv);',
     /* le luci dei paesi sulla costa */
     '  float cx=xq*120.;float id=floor(cx);float fx=fract(cx);',
     '  float paese=smoothstep(.36,.58,noise1(id*.11+2.))*step(.3,hash1(id+.5));',
-    '  float lyy=(.006+.72*hash1(id+9.))*mVicino;float lxx=.25+.5*hash1(id+4.);',
+    '  float mC=max(mVicino,mLontano);float lyy=(.006+.72*hash1(id+9.))*mC;float lxx=.25+.5*hash1(id+4.);',
     '  vec2 ld=vec2((fx-lxx)/120.,y-lyy);',
-    '  float luce=(1.-smoothstep(0.,2.6*px,length(ld)))*paese*step(.012,mVicino);',
+    '  float luce=(1.-smoothstep(0.,2.6*px,length(ld)))*paese*step(.012,mC);',
     '  luce*=.65+.35*sin(u_time*(1.2+2.6*hash1(id+2.))+id);',
     '  col+=vec3(1.,.78,.42)*luce*accese;',
     ' }else{',
@@ -127,7 +125,7 @@
     '  col=tinta(Lq*.94,t)*vec3(.92,.95,1.);',
     /* riflessi delle luci della costa */
     '  float cx=xq*120.;float id=floor(cx);float fx=fract(cx);',
-    '  float paese=smoothstep(.36,.58,noise1(id*.11+2.))*step(.3,hash1(id+.5))*step(.012,mVicino);',
+    '  float paese=smoothstep(.36,.58,noise1(id*.11+2.))*step(.3,hash1(id+.5))*step(.012,max(mVicino,mLontano));',
     '  float lxx=.25+.5*hash1(id+4.);',
     '  float rif=exp(-abs(fx-lxx)*9.)*exp(-dy*38.)*paese*(.5+.5*lampo);',
     '  col+=vec3(1.,.72,.38)*rif*accese*.55;',
@@ -162,7 +160,7 @@
     var buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     var loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-    ['u_res', 'u_time', 'u_t', 'u_h', 'u_sx', 'u_velo', 'u_par'].forEach(function (n) { uni[n] = gl.getUniformLocation(prog, n); });
+    ['u_res', 'u_time', 'u_t', 'u_h', 'u_sx', 'u_pt', 'u_velo', 'u_par'].forEach(function (n) { uni[n] = gl.getUniformLocation(prog, n); });
     return true;
   }
 
@@ -192,7 +190,8 @@
     gl.uniform1f(uni.u_time, stato.tempo);
     gl.uniform1f(uni.u_t, stato.t);
     gl.uniform1f(uni.u_h, num(largo ? tela.dataset.hLargo : tela.dataset.h, num(tela.dataset.h, largo ? 0.52 : 0.5)));
-    gl.uniform1f(uni.u_sx, num(largo ? tela.dataset.sxLargo : tela.dataset.sx, num(tela.dataset.sx, largo ? 0.66 : 0.74)));
+    gl.uniform1f(uni.u_sx, num(largo ? tela.dataset.sxLargo : tela.dataset.sx, num(tela.dataset.sx, largo ? 0.45 : 0.34)));
+    gl.uniform1f(uni.u_pt, num(largo ? tela.dataset.puntaLargo : tela.dataset.punta, num(tela.dataset.punta, largo ? 0.58 : 0.5)));
     gl.uniform1f(uni.u_velo, num(tela.dataset.velo, 1));
     gl.uniform2f(uni.u_par, par.x, par.y);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
