@@ -22,6 +22,9 @@ for f in files:
         t=open(s,encoding='utf-8').read()
         t=re.sub(r'''(["'(])/(assets|magaparty|magacard|oceanbeach|index\.html|favicon|site\.webmanifest)''', lambda m: m.group(1)+P+'/'+m.group(2), t)
         t=re.sub(r'''href="/"''', f'href="{P}/"', t)
+        if f.endswith('.webmanifest'):  # l'app installata dall'anteprima deve aprire l'anteprima, non il sito vero
+            t=re.sub(r'("start_url"\s*:\s*)"/"', lambda m: m.group(1)+f'"{P}/"', t)
+            t=re.sub(r'("scope"\s*:\s*)"/"', lambda m: m.group(1)+f'"{P}/"', t)
         if f.endswith('.html'):
             t=re.sub(r'''<meta[^>]*name=["']robots["'][^>]*>\s*''','',t,flags=re.I)  # in anteprima vale solo il robots della guardia (sempre noindex)
             t=t.replace('<head>','<head>\n'+guard,1)
