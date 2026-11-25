@@ -95,6 +95,11 @@ Se qualcosa non torna, lo correggi o lo segni come non verificato: mai scrivere 
   Testi lunghi: in `dettaglio` della scrivania dell'agente o in una voce `futuro`.
 - Aggiorna la scrivania dello specialista (`stato: "finito"` o `"bloccato"`, `risultato` con link) e il
   diario con l'ora reale e `a` = id dell'agente.
+- **Collegamenti ai lavori**: ogni lavoro finito va anche nella lista `lavori` della scrivania
+  (`{t, url, tipo}`, tipo = sito, video, documento, presentazione, codice, fonte), così Matteo lo apre da
+  "Il lavoro della squadra". Pagine dell'anteprima con il loro indirizzo `https://www.magaverse.it/anteprima/redesign/…`;
+  video e immagini di produzione caricati nella Magheca con `upload_asset` (url `/_blob/…`); bozze solo
+  scritte: `{t}` senza url, e il testo in `dettaglio`. La lista si riscrive intera: rileggi prima la scrivania.
 - Le domande per Matteo vanno in `serve_te` (`t` titolo, `d` contesto, `q` domanda, `urgente` se serve).
 - **Decisioni non ovvie** (scelta tra due soluzioni, cosa scartato e perché): una voce di diario che
   comincia con "Decisione:" e dice il perché in una riga. Il registro è la Magheca, non un file del
