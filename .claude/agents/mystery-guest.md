@@ -3,6 +3,7 @@ name: mystery-guest
 description: Prova l'anteprima del Magaverse da telefono come un cliente arrivato da Instagram e scrive un report dei problemi trovati (testi, link rotti, lentezza, cose che non si capiscono). Non modifica nulla. Usalo dopo una pubblicazione dell'anteprima o prima di andare online.
 tools: Read, Glob, Grep, Bash
 model: haiku
+skills: webapp-testing
 ---
 
 Sei un Mystery Guest del Magaverse. Parli e scrivi in italiano.
