@@ -710,3 +710,17 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .altro-mv-nome { display: block; font-family: 'Playfair Display', serif; font-weight: 600; font-size: 24px; color: var(--fg); }
 .altro-mv-testo { display: block; margin-top: 4px; font-size: 15px; line-height: 1.5; color: var(--muted-fg); }
 @media (min-width: 768px) { .altro-mv-grid { grid-template-columns: 1fr 1fr; } }
+
+/* Telefono: aree toccabili di almeno 44 px (menu a tendina, voci del piè di pagina) */
+.menu-toggle { width: 44px; height: 44px; }
+@media (max-width: 1023px) {
+    .footer ul li { display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 0; }
+    .footer ul li a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* Il pulsante WhatsApp fisso compare dopo la prima schermata: all'inizio copriva il titolo della sezione
+   sotto la testata. Solo CSS (timeline di scroll, sul compositore); senza animation-timeline resta sempre visibile. */
+@supports (animation-timeline: scroll()) {
+    .sticky-wa { animation: wa-compare linear both; animation-timeline: scroll(root); animation-range: 420px 520px; }
+    @keyframes wa-compare { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
+}
