@@ -17,7 +17,7 @@
 /* Rifiuta e Accetta sono identici: stessa classe, nessuna differenza di colore, misura o peso */
 .mvcc-btn {
   flex: 1 1 0; min-width: 96px; min-height: 44px; padding: 8px 10px; cursor: pointer;
-  font-weight: 700; font-size: 14px; line-height: 1.2; font-family: inherit; color: #F4EADB; background: #1d2444;
+  font-weight: 700; font-size: 14px; line-height: 1.2; font-family: inherit; text-transform: none; letter-spacing: normal; color: #F4EADB; background: #1d2444;
   border: 1.5px solid #F4EADB; border-radius: 10px;
 }
 .mvcc-btn.mvcc-sec { background: transparent; border-color: rgba(244,234,219,.45); font-weight: 700; }
