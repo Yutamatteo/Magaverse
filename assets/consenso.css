@@ -52,3 +52,6 @@
 .mvcc-footriga { text-align: center; padding: 14px 10px 22px; font: 13px system-ui, sans-serif; background: #0E1224; color: #F4EADB; }
 @media (min-width: 700px) { .mvcc-banner { left: 16px; right: auto; bottom: 16px; } .mvcc-ov { align-items: center; } }
 @media (prefers-reduced-motion: reduce) { .mvcc-pista, .mvcc-pista::after { transition: none; } }
+/* Alcune pagine danno position: relative a tutti i figli di body (pagine.css): banner e finestra
+   devono restare fissi, altrimenti il banner entra nel flusso e sborda di 8 px sul telefono. */
+html body > .mvcc-banner, html body > .mvcc-ov { position: fixed; }
