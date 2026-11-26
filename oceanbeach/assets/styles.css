@@ -258,6 +258,8 @@ section.muted { background: var(--muted); }
     transition: gap 0.2s;
 }
 .link-arrow:hover { gap: 10px; }
+/* area toccabile di 44 px senza spostare il testo (margini compensati) */
+.link-arrow { min-height: 44px; margin: 14px 0 -10px; }
 
 /* --------- Service cards grid --------- */
 .grid-3 { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -651,7 +653,7 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .contact-icon { display: none; }
 .contact-card-label { font-size: 13px; text-transform: none; letter-spacing: 0; color: var(--muted-fg); }
 .contact-card-value { font-family: 'Playfair Display', Georgia, serif; font-size: 22px; line-height: 1.25; color: var(--fg); margin-top: 6px; }
-.contact-card-action { display: inline-block; margin-top: 10px; font-weight: 500; text-underline-offset: 4px; }
+.contact-card-action { display: inline-flex; align-items: center; min-height: 44px; margin: -2px 0 -12px; font-weight: 500; text-underline-offset: 4px; } /* area toccabile 44 px, ingombro invariato */
 .map-wrap { border-radius: 6px; }
 .grid-3:has(> .price-card) { align-items: start; }
 
@@ -699,7 +701,7 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
 .ob-stagione .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; padding-top: 20px; padding-bottom: 20px; border-top: 2px solid var(--fg); border-bottom: 1px solid var(--border); }
 .ob-stagione p { margin: 0; max-width: 62ch; font-size: 16px; line-height: 1.55; color: var(--muted-fg); }
 .ob-stagione b { font-family: 'Playfair Display', Georgia, serif; font-size: 20px; font-weight: 600; color: var(--fg); margin-right: 4px; }
-.ob-stagione a { flex-shrink: 0; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
+.ob-stagione a { flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; margin: -10px 0; font-weight: 600; color: var(--primary); text-underline-offset: 4px; }
 .ob-stagione a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 /* Fascia "Dal Magaverse": due link sobri verso le altre sezioni, in fondo prima del footer */
