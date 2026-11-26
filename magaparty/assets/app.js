@@ -48,9 +48,9 @@
         return `
         <aside class="desktop-sidebar">
             <div class="sidebar-logo-section">
-                <div class="sidebar-meta">
+                <div class="sidebar-meta" style="flex-direction:column;align-items:flex-start;gap:6px">
                     <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
+                    <div style="display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
                         <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 8 Luglio 2026
                     </div>
                 </div>
