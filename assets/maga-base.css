@@ -38,7 +38,7 @@
   --mv-linea:   rgba(244, 234, 219, 0.12);
   --mv-orizzonte: linear-gradient(90deg, var(--mv-tramonto), var(--mv-oro) 50%, var(--mv-mare));
 
-  --mv-font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mv-font: 'Archivo', 'Archivo Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mv-display-stretch: 72%;
 
   /* Le pagine storymap leggono questi */
@@ -92,3 +92,8 @@ input, select, textarea { font-size: max(16px, 1em); }
 
 /* testo per lettori di schermo e motori di ricerca, invisibile a schermo */
 .mv-sr { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+/* Carattere di riserva dimensionato su Archivo: il testo non si sposta quando il font arriva. Tre fasce misurate (titoli stretti e pesanti, testi stretti leggeri, tutto il resto) */
+@font-face{font-family:'Archivo Fallback';src:local('Arial'),local('Helvetica'),local('Roboto');font-stretch:62% 80%;font-weight:700 900;size-adjust:82%}
+@font-face{font-family:'Archivo Fallback';src:local('Arial'),local('Helvetica'),local('Roboto');font-stretch:62% 80%;font-weight:100 699;size-adjust:74%}
+@font-face{font-family:'Archivo Fallback';src:local('Arial'),local('Helvetica'),local('Roboto');font-stretch:81% 125%;font-weight:100 900;size-adjust:100%}
