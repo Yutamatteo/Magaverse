@@ -54,4 +54,5 @@
 @media (prefers-reduced-motion: reduce) { .mvcc-pista, .mvcc-pista::after { transition: none; } }
 /* Alcune pagine danno position: relative a tutti i figli di body (pagine.css): banner e finestra
    devono restare fissi, altrimenti il banner entra nel flusso e sborda di 8 px sul telefono. */
-html body > .mvcc-banner, html body > .mvcc-ov { position: fixed; }
+html body > .mvcc-banner { position: fixed; z-index: 2147483000; }
+html body > .mvcc-ov { position: fixed; z-index: 2147483001; }
