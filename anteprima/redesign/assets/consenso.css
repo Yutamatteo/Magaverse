@@ -17,7 +17,7 @@
 /* Rifiuta e Accetta sono identici: stessa classe, nessuna differenza di colore, misura o peso */
 .mvcc-btn {
   flex: 1 1 0; min-width: 96px; min-height: 44px; padding: 8px 10px; cursor: pointer;
-  font-weight: 700; font-size: 14px; line-height: 1.2; font-family: inherit; color: #F4EADB; background: #1d2444;
+  font-weight: 700; font-size: 14px; line-height: 1.2; font-family: inherit; text-transform: none; letter-spacing: normal; color: #F4EADB; background: #1d2444;
   border: 1.5px solid #F4EADB; border-radius: 10px;
 }
 .mvcc-btn.mvcc-sec { background: transparent; border-color: rgba(244,234,219,.45); font-weight: 700; }
@@ -52,3 +52,7 @@
 .mvcc-footriga { text-align: center; padding: 14px 10px 22px; font: 13px system-ui, sans-serif; background: #0E1224; color: #F4EADB; }
 @media (min-width: 700px) { .mvcc-banner { left: 16px; right: auto; bottom: 16px; } .mvcc-ov { align-items: center; } }
 @media (prefers-reduced-motion: reduce) { .mvcc-pista, .mvcc-pista::after { transition: none; } }
+/* Alcune pagine danno position: relative a tutti i figli di body (pagine.css): banner e finestra
+   devono restare fissi, altrimenti il banner entra nel flusso e sborda di 8 px sul telefono. */
+html body > .mvcc-banner { position: fixed; z-index: 2147483000; }
+html body > .mvcc-ov { position: fixed; z-index: 2147483001; }
