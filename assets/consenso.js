@@ -63,7 +63,7 @@
     if (html) e.innerHTML = html; // solo testi fissi scritti qui, mai dati utente
     return e;
   }
-  function radice() { var m = document.querySelector('script[src*="consenso.js"]'); return m ? m.src.replace(/assets\/consenso\.js.*$/, '') : '/'; }
+  function radice() { var m = document.querySelector('script[src*="consenso.js"]'); return m ? m.src.split('assets/consenso.js')[0] : '/'; } // niente regex qui: build_preview.py riscrive i percorsi che iniziano con /assets dopo una parentesi
   var R = radice();
   var LINK = '<a href="' + R + 'cookie.html">Informativa cookie</a> · <a href="' + R + 'privacy.html">Privacy</a>';
 
