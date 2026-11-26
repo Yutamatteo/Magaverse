@@ -726,3 +726,7 @@ body:is([data-page="home"], .con-testata) .nav:not(.scrolled) .nav-links a:hover
     .sticky-wa { animation: wa-compare linear both; animation-timeline: scroll(root); animation-range: 420px 520px; }
     @keyframes wa-compare { from { opacity: 0; visibility: hidden; } to { opacity: 1; visibility: visible; } }
 }
+
+/* Marchio in testata: area toccabile di 44 px di altezza (era 36) */
+.nav-logo { position: relative; }
+.nav-logo::after { content: ""; position: absolute; inset: -4px 0; }

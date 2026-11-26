@@ -149,3 +149,6 @@
 .story-beat h3{ font-size:clamp(1.7rem,3.2vw,2.3rem); font-weight:800; line-height:1.05; }
 .story-beat p{ font-size:16px; line-height:1.65; }
 @media (max-width:899px){ .story-beat{ min-height:44vh; padding-block:5vh; } }
+
+/* Segnaposto: area toccabile di 44 px attorno al pallino da 16 px, senza cambiarne l'aspetto */
+.story-pin::after{ content:""; position:absolute; inset:-14px; border-radius:50%; }

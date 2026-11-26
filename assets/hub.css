@@ -56,6 +56,10 @@ body.hub {
   transition: background-color .2s, color .2s;
 }
 .hub-nav a:hover { background: var(--mv-sabbia); color: var(--mv-notte); }
+/* area toccabile di almeno 44 px di altezza senza cambiare l'aspetto (le pillole distano 4 px: nessuna sovrapposizione) */
+.hub-nav a, .hub-logo { position: relative; }
+.hub-nav a::after { content: ""; position: absolute; inset: -5px -2px; }
+.hub-logo::after { content: ""; position: absolute; inset: -8px 0; }
 
 /* ── La scena ── */
 .golfo { position: relative; background: var(--mv-notte); }
