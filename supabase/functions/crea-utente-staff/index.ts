@@ -14,6 +14,8 @@
 // Body JSON atteso:
 //   { "email": "...", "password": "...", "ruolo": "ingresso", "nome": "..." }
 // ruolo valido: bar | ingresso | admin | superadmin
+// Il ruolo viene scritto in app_metadata (autorizzazioni) e duplicato in
+// user_metadata (solo visualizzazione nei pannelli staff).
 
 // deno-lint-ignore-file no-explicit-any
 
@@ -82,6 +84,11 @@ Deno.serve(async (req: Request) => {
       email,
       password,
       email_confirm: true,
+      // Il ruolo che conta per le autorizzazioni (ruolo_utente() e RLS) sta in
+      // app_metadata, che l'utente non può modificare. Resta copiato anche in
+      // user_metadata solo perché i pannelli staff lo leggono lato client per
+      // decidere cosa mostrare: non va mai usato per autorizzare.
+      app_metadata: { ruolo },
       user_metadata: { ruolo, nome: nome || undefined },
     }),
   });
