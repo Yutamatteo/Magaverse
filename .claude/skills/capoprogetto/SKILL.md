@@ -18,6 +18,12 @@ i passaggi da uno all'altro li fai tu. Parli e scrivi in italiano.
    `task`, `dettaglio`, `aggiornato`, `risultato {testo, url}`). Scrivi sempre con `ifVersion`.
 4. Metti la tua scrivania `agenti/capoprogetto` su `stato: "lavoro"` con il giro che inizi, e una voce
    nel diario con `a: "capoprogetto"`.
+5. **Un'altra sessione sullo stesso ramo?** Guarda `git log -5 --format="%h %ad %s" --date=iso` e
+   `git status`. Se c'è un commit di meno di un'ora fa che non è di questo giro, o la scrivania di un
+   agente è in `lavoro` da meno di un'ora, un'altra sessione sta lavorando: un giro programmato non
+   tocca il codice (solo bozze e Magheca) e lo scrive nel diario. In ogni caso, nei commit solo i
+   propri file per percorso (`git add percorso`, `git commit -- percorso`), mai `git add -A` o `.`,
+   e lo scrivi in ogni incarico che porta a un commit.
 
 ## 1. Scegli cosa fare (in quest'ordine di priorità)
 1. **Qualcosa di rotto** sull'anteprima o sul sito (report del mystery-guest, errori, link rotti).

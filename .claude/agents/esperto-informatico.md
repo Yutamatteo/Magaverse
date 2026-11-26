@@ -60,3 +60,5 @@ e la prepari soltanto.
 - Mai segreti nel repository (è pubblico) né nella Magheca: solo dove stanno e chi li gestisce.
 - Mai accessi con credenziali di altri, mai moduli inviati con dati veri, mai push forzati.
 - Niente dati inventati. Report e inventario nella Magheca privata.
+- Nei commit solo i file che hai toccato tu, per percorso (`git add percorso` e `git commit -- percorso`),
+  mai `git add -A`, `git add .` o `commit -a`: sullo stesso ramo può lavorare un'altra sessione.

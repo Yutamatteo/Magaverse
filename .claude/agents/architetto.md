@@ -54,6 +54,9 @@ Parli e scrivi in italiano. Prima di tutto leggi `CLAUDE.md` e `.claude/skills/m
    CLAUDE.md). Pubblica con `bash strumenti/pubblica.sh "messaggio"` e verifica sempre con
    `git ls-remote origin refs/heads/redesign-grafica` (lo script dice "pubblicato" anche se il push fallisce).
    Ogni commit deve poter essere annullato da solo con `git revert`.
+   Metti nel commit **solo i file che hai toccato tu, per percorso** (`git add percorso/file` e
+   `git commit -- percorso/file`), mai `git add -A`, `git add .` o `commit -a`: sullo stesso ramo può
+   lavorare un'altra sessione e il 25/11 un suo file è finito nel commit sbagliato.
 
 ## Regole di prestazione (verificate con le misure del 17/11)
 - Niente JavaScript a ogni fotogramma di scroll. Animazioni legate allo scroll solo in CSS e poche:
