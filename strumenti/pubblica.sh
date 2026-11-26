@@ -34,6 +34,13 @@ if git diff --cached --quiet; then
     echo "trovati $INDIETRO commit dell'anteprima non ancora su origin/main (push precedente fallito?): li spingo"
     pubblica_main; exit $?
   fi
+  # Anche il ramo di lavoro può essere rimasto indietro (push di main riuscito, il suo no).
+  cd "$QUI"
+  git fetch -q origin redesign-grafica 2>/dev/null || true
+  if [ "$(git rev-list --count origin/redesign-grafica..redesign-grafica 2>/dev/null || echo 0)" -gt 0 ]; then
+    echo "anteprima già online, ma redesign-grafica non è su GitHub: lo spingo"
+    spingi 180 origin redesign-grafica || exit 1
+  fi
   echo "niente da pubblicare"; exit 0
 fi
 git commit -qm "$MSG

@@ -19,7 +19,7 @@ export PATH="$BIN:$PATH" GIT_AUTHOR_NAME=Claude GIT_AUTHOR_EMAIL=noreply@anthrop
 cd "$QUI"
 MAIN="${MV_MAIN:-$QUI/../magaverse-main}"
 ONLINE="https://www.magaverse.it/anteprima/redesign"
-if [ -n "$PAG" ] && [ -n "$TESTO" ] && curl -s "$ONLINE/$PAG?x=$RANDOM" | grep -qF "$TESTO"; then
+if [ -n "$PAG" ] && [ -n "$TESTO" ] && curl -s -m 20 "$ONLINE/$PAG?x=$RANDOM" | grep -qF "$TESTO"; then
   echo "ATTENZIONE: il testo c'era già online su $PAG prima di pubblicare: il controllo non prova nulla. Non pubblico: scegli un testo presente solo nella versione nuova."; exit 3
 fi
 PUB=$(bash strumenti/pubblica.sh "$MSG" 2>&1); PUBRC=$?
@@ -38,7 +38,7 @@ if [ "$LOCALE" != "$REMOTO" ]; then echo "ERRORE: GitHub ha $REMOTO, in locale c
 echo "OK GitHub: redesign-grafica = ${LOCALE:0:7}"
 if [ -n "$PAG" ] && [ -n "$TESTO" ]; then
   for i in $(seq 1 12); do
-    if curl -s "$ONLINE/$PAG?x=$RANDOM" | grep -qF "$TESTO"; then echo "OK online: $PAG"; exit 0; fi
+    if curl -s -m 20 "$ONLINE/$PAG?x=$RANDOM" | grep -qF "$TESTO"; then echo "OK online: $PAG"; exit 0; fi
     sleep 15
   done
   echo "ATTENZIONE: dopo 3 minuti il testo non è ancora online su $PAG (GitHub Pages lento?)"; exit 2
@@ -48,7 +48,7 @@ elif [ -n "$PAG" ]; then
   # tolgo i ritorni a capo CR (ottale 015): su Windows git scrive i file locali con CRLF, Pages li serve con LF
   HL=$(tr -d '\015' < "$LOC" | sha256sum | cut -d' ' -f1)
   for i in $(seq 1 12); do
-    HO=$(curl -s "$ONLINE/$PAG?x=$RANDOM" | tr -d '\015' | sha256sum | cut -d' ' -f1)
+    HO=$(curl -s -m 20 "$ONLINE/$PAG?x=$RANDOM" | tr -d '\015' | sha256sum | cut -d' ' -f1)
     if [ "$HL" = "$HO" ]; then echo "OK online: $PAG identica al file pubblicato (sha256 ${HL:0:10})"; exit 0; fi
     sleep 15
   done
