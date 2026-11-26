@@ -1,0 +1,58 @@
+/* Banner e preferenze cookie. Colori propri: la pagina può avere qualsiasi tema. */
+.mvcc-banner, .mvcc-dlg { font: 14px/1.5 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif; color: #F4EADB; }
+.mvcc-banner {
+  position: fixed; z-index: 2147483000; left: 8px; right: 8px; bottom: 8px; max-width: 460px;
+  background: #0E1224; border: 1px solid rgba(244,234,219,.28); border-radius: 14px;
+  padding: 14px 14px 12px; box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+.mvcc-banner p { margin: 0 0 8px; font-size: 13px; }
+.mvcc-banner .mvcc-t, .mvcc-dlg h2 { font-weight: 800; font-size: 16px; margin: 0 28px 6px 0; }
+.mvcc-x {
+  position: absolute; top: 4px; right: 4px; width: 44px; height: 44px; border: 0; background: none;
+  color: #F4EADB; font-size: 26px; line-height: 1; cursor: pointer; border-radius: 10px;
+}
+.mvcc-banner a, .mvcc-dlg a { color: #FFC23D; text-decoration: underline; }
+.mvcc-l { font-size: 12px; }
+.mvcc-b { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+/* Rifiuta e Accetta sono identici: stessa classe, nessuna differenza di colore, misura o peso */
+.mvcc-btn {
+  flex: 1 1 0; min-width: 96px; min-height: 44px; padding: 8px 10px; cursor: pointer;
+  font-weight: 700; font-size: 14px; line-height: 1.2; font-family: inherit; text-transform: none; letter-spacing: normal; color: #F4EADB; background: #1d2444;
+  border: 1.5px solid #F4EADB; border-radius: 10px;
+}
+.mvcc-btn.mvcc-sec { background: transparent; border-color: rgba(244,234,219,.45); font-weight: 700; }
+.mvcc-btn:hover { background: #2a335f; }
+.mvcc-banner button:focus-visible, .mvcc-dlg button:focus-visible, .mvcc-dlg a:focus-visible,
+.mvcc-banner a:focus-visible, .mvcc-foot:focus-visible, .mvcc-sw input:focus-visible + .mvcc-pista {
+  outline: 3px solid #FFC23D; outline-offset: 2px;
+}
+.mvcc-ov {
+  position: fixed; inset: 0; z-index: 2147483001; background: rgba(5,7,16,.72);
+  display: flex; align-items: flex-end; justify-content: center; padding: 8px; overflow: auto;
+}
+.mvcc-dlg {
+  width: 100%; max-width: 520px; max-height: calc(100dvh - 16px); overflow: auto; margin: auto;
+  background: #0E1224; border: 1px solid rgba(244,234,219,.28); border-radius: 14px; padding: 18px 16px 14px;
+}
+.mvcc-dlg h3 { margin: 0 0 4px; font-size: 14px; font-weight: 800; }
+.mvcc-dlg p { margin: 0 0 8px; font-size: 13px; }
+.mvcc-riga { display: flex; gap: 14px; align-items: flex-start; justify-content: space-between; padding: 12px 0; border-top: 1px solid rgba(244,234,219,.14); }
+.mvcc-fisso { font-size: 12px; color: #A3A8BF; white-space: nowrap; padding-top: 2px; }
+.mvcc-sw { position: relative; flex: none; width: 52px; height: 32px; cursor: pointer; }
+.mvcc-sw input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.mvcc-pista { position: absolute; inset: 0; border-radius: 16px; background: #3a4163; border: 1.5px solid #F4EADB; transition: background .15s; }
+.mvcc-pista::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #F4EADB; transition: transform .15s; }
+.mvcc-sw input:checked + .mvcc-pista { background: #1FB5A6; }
+.mvcc-sw input:checked + .mvcc-pista::after { transform: translateX(20px); background: #0E1224; }
+.mvcc-aperto body { overflow: hidden; }
+.mvcc-foot {
+  background: none; border: 0; padding: 8px 4px; margin: 0; font: inherit; color: inherit; opacity: .85;
+  text-decoration: underline; cursor: pointer; min-height: 32px;
+}
+.mvcc-footriga { text-align: center; padding: 14px 10px 22px; font: 13px system-ui, sans-serif; background: #0E1224; color: #F4EADB; }
+@media (min-width: 700px) { .mvcc-banner { left: 16px; right: auto; bottom: 16px; } .mvcc-ov { align-items: center; } }
+@media (prefers-reduced-motion: reduce) { .mvcc-pista, .mvcc-pista::after { transition: none; } }
+/* Alcune pagine danno position: relative a tutti i figli di body (pagine.css): banner e finestra
+   devono restare fissi, altrimenti il banner entra nel flusso e sborda di 8 px sul telefono. */
+html body > .mvcc-banner { position: fixed; z-index: 2147483000; }
+html body > .mvcc-ov { position: fixed; z-index: 2147483001; }

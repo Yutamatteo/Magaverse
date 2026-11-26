@@ -1,0 +1,81 @@
+/* =========================================================
+   MAGAVERSE · PASSAGGI TRA LE PAGINE
+   Quando si passa da una pagina all'altra, quella nuova sale
+   come la marea: una linea d'onda con i colori del tramonto
+   attraversa lo schermo dal basso e la scopre. La locandina di
+   un evento "vola" dalla lista alla pagina dell'evento.
+   Funziona nei browser con le View Transitions tra documenti
+   (Chrome/Edge 126+, Safari 18.2+): negli altri si passa da una
+   pagina all'altra come sempre, senza effetti.
+   Va caricato in tutte le pagine pubbliche.
+
+   Come è fatto: la pagina vecchia è ritagliata SOPRA un'onda,
+   quella nuova SOTTO la stessa onda, poco più in basso. Nella
+   fessura tra le due si vede lo sfondo del gruppo: la linea
+   colorata.
+   ========================================================= */
+/* L'adesione (@view-transition) sta anche in linea, in cima a ogni pagina: deve esistere
+   prima che arrivi questo file, altrimenti il browser può scartare il passaggio. */
+@view-transition { navigation: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(root) {
+    background: linear-gradient(90deg, #FF6A2B, #FFC23D 50%, #1FB5A6);
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    mix-blend-mode: normal;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 140%; mask-size: 100% 140%;
+    animation-duration: .9s;
+    animation-timing-function: cubic-bezier(.5, .05, .2, 1);
+    animation-fill-mode: both;
+  }
+  ::view-transition-old(root) {
+    animation-name: mv-marea-via;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V1320C1040 1268 920 1278 780 1326S510 1374 380 1322 120 1270 0 1330Z'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V1320C1040 1268 920 1278 780 1326S510 1374 380 1322 120 1270 0 1330Z'/%3E%3C/svg%3E");
+  }
+  ::view-transition-new(root) {
+    animation-name: mv-marea-su;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 70C120 10 250 10 380 62S640 114 780 66 1040 8 1200 60V1400H0Z'/%3E%3C/svg%3E");
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 1400' preserveAspectRatio='none'%3E%3Cpath d='M0 70C120 10 250 10 380 62S640 114 780 66 1040 8 1200 60V1400H0Z'/%3E%3C/svg%3E");
+  }
+  /* l'onda nuova parte sotto lo schermo e finisce sopra */
+  @keyframes mv-marea-su {
+    from { -webkit-mask-position: 0 106vh; mask-position: 0 106vh; }
+    to   { -webkit-mask-position: 0 -26vh; mask-position: 0 -26vh; }
+  }
+  /* quella vecchia la precede: stessa corsa, 128,4vh più su (126 di forma + 2,4 di linea) */
+  @keyframes mv-marea-via {
+    from { -webkit-mask-position: 0 -22.4vh; mask-position: 0 -22.4vh; filter: brightness(1); }
+    to   { -webkit-mask-position: 0 -154.4vh; mask-position: 0 -154.4vh; filter: brightness(.6); }
+  }
+
+  /* La locandina condivisa tra lista ed evento */
+  ::view-transition-group(locandina-marea),
+  ::view-transition-group(locandina-battigia),
+  ::view-transition-group(locandina-ultima-onda),
+  ::view-transition-group(locandina-tardeo) {
+    animation-duration: .9s;
+    animation-timing-function: cubic-bezier(.5, .05, .2, 1);
+  }
+  ::view-transition-old(locandina-marea), ::view-transition-new(locandina-marea),
+  ::view-transition-old(locandina-battigia), ::view-transition-new(locandina-battigia),
+  ::view-transition-old(locandina-ultima-onda), ::view-transition-new(locandina-ultima-onda),
+  ::view-transition-old(locandina-tardeo), ::view-transition-new(locandina-tardeo) {
+    width: 100%; height: 100%; object-fit: cover; animation-duration: .9s;
+  }
+}
+
+/* Chi condivide la stessa locandina tra due pagine */
+.mp-evento[href$="marea.html"] img,       img.logo-image[src*="marea-locandina"]       { view-transition-name: locandina-marea; }
+.mp-evento[href$="battigia.html"] img,    img.logo-image[src*="battigia-locandina"]    { view-transition-name: locandina-battigia; }
+.mp-evento[href$="ultima-onda.html"] img, img.logo-image[src*="ultima-onda-locandina"] { view-transition-name: locandina-ultima-onda; }
+.mp-evento[href$="tardeo.html"] img,      img.logo-image[src*="tardeo-locandina"]      { view-transition-name: locandina-tardeo; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+}

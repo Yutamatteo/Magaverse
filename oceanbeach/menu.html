@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#8B5A2B" />
     <title>Menù · Nello Ocean Beach</title>
+<link rel="canonical" href="https://www.magaverse.it/oceanbeach/menu.html">
+<meta property="og:url" content="https://www.magaverse.it/oceanbeach/menu.html">
     <meta name="description" content="Menù Nello Ocean Beach: bibite, analcolici, snack, panini e saltimbocca direttamente in spiaggia." />
     <meta property="og:title" content="Menù · Nello Ocean Beach" />
-    <meta property="og:image" content="/assets/img/nello lido.jpeg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:image" content="https://www.magaverse.it/assets/img/nello%20lido.jpeg" />
+    <link rel="stylesheet" href="/oceanbeach/assets/fonts.css" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
     <link rel="stylesheet" href="../assets/storymap.css" />
     <script src="../assets/storymap.js" defer></script>
@@ -30,8 +31,13 @@
             --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
         }
     </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
+<script src="/assets/consenso.js" defer></script>
 </head>
-<body data-page="menu">
+<body data-page="menu" class="con-testata">
 
 <header class="nav">
     <div class="nav-inner">
@@ -72,12 +78,13 @@
     </div>
 </header>
 
-<section class="with-nav reveal">
+<section class="with-nav ob-testata" style="--foto:url('/assets/img/colazione.webp');--pos:50% 72%">
     <div class="container">
         <span class="kicker">Beach Bar</span>
-        <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Cosa vuoi bere o mangiare?</h1>
+        <h1 class="h2" data-rise>Cosa vuoi bere o mangiare?</h1>
         <p class="lead">Bibite fresche, snack e piatti direttamente sotto il tuo ombrellone. Chiedi al nostro staff.</p>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
 
 <section class="reveal" style="padding-top: 24px;">
@@ -86,7 +93,7 @@
 
             <!-- ANALCOLICI -->
             <div class="price-card">
-                <h3>🥤 Analcolici</h3>
+                <h3>Analcolici</h3>
                 <ul class="price-list">
                     <li><span class="price-label">Coca-Cola</span><span class="price-value">&euro; 2,50</span></li>
                     <li><span class="price-label">Coca-Cola Zero</span><span class="price-value">&euro; 2,50</span></li>
@@ -105,7 +112,7 @@
 
             <!-- SNACK -->
             <div class="price-card">
-                <h3>🍟 Snack</h3>
+                <h3>Snack</h3>
                 <ul class="price-list">
                     <li><span class="price-label">Patatine</span><span class="price-value">&euro; 2</span></li>
                     <li><span class="price-label">Chipster</span><span class="price-value">&euro; 3</span></li>
@@ -119,7 +126,7 @@
 
             <!-- PANINI -->
             <div class="price-card">
-                <h3>🥖 Panini</h3>
+                <h3>Panini</h3>
                 <ul class="price-list">
                     <li><span class="price-label">Salsiccia / Würstel + Patatine / Insalata</span><span class="price-value">&euro; 5</span></li>
                     <li><span class="price-label">Salse: Ketchup / Maionese / Cheddar</span></li>
@@ -129,7 +136,7 @@
 
             <!-- PATATINE -->
             <div class="price-card">
-                <h3>🍟 Patatine Fritte</h3>
+                <h3>Patatine Fritte</h3>
                 <ul class="price-list">
                     <li><span class="price-label">Patatine</span><span class="price-value">&euro; 5</span></li>
                     <li><span class="price-label">Patatine + Würstel </span><span class="price-value">&euro; 5</span></li>
@@ -170,7 +177,7 @@
                     <li><a href="/oceanbeach/menu.html">Menù</a></li>
                     <li><a href="/oceanbeach/pricing.html">Listino</a></li>
                     <li><a href="/oceanbeach/booking.html">Prenota</a></li>
-                    <li><a href="/" style="opacity:.7;">&#8599; Magaverse</a></li>
+                    <li><a href="/" style="opacity:.92;">&#8599; Magaverse</a></li>
                 </ul>
             </div>
             <div>
@@ -183,7 +190,7 @@
         </div>
         <div class="footer-bottom">
             <span>&copy; <span id="year">2026</span> Nello Ocean Beach &middot; <span>Tutti i diritti riservati.</span></span>
-            <span style="opacity:.75;">Sito realizzato con cura da Matteo Finizio.</span>
+            <span style="opacity:.92;">Sito realizzato con cura da Matteo Finizio.</span>
         </div>
     </div>
 </footer>

@@ -48,15 +48,15 @@
         return `
         <aside class="desktop-sidebar">
             <div class="sidebar-logo-section">
-                <div class="sidebar-meta">
-                    <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
+                <div class="sidebar-meta" style="flex-direction:column;align-items:flex-start;gap:6px">
+                    <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
+                    <div style="display:flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
                         <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 8 Luglio 2026
                     </div>
                 </div>
                 ${logoMarkup()}
                 <p class="brutalist" style="font-size:14px;letter-spacing:0.2em;margin-top:8px;color:var(--sunset-gold)">JUNGLE NIGHT</p>
-                <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.4;margin-top:4px">Una notte nella giungla</p>
+                <p style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;opacity:0.4;margin-top:4px">Una notte nella giungla</p>
             </div>
 
             <nav class="sidebar-nav">${items}</nav>
@@ -87,14 +87,14 @@
         <div class="mobile-header-wrapper">
             <header style="padding:40px 24px 24px;text-align:center">
                 <div style="display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:24px">
-                    <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
-                    <div style="display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
+                    <span style="font-size:12px;text-transform:uppercase;letter-spacing:0.2em;color:#6b7280">Magaparty.eventi</span>
+                    <div style="display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:0.15em;font-weight:700;text-transform:uppercase;color:var(--sunset-orange)">
                         <span style="width:8px;height:8px;border-radius:9999px;background:var(--sunset-orange);animation:pulse 1.5s infinite"></span> 8 Luglio 2026
                     </div>
                 </div>
                 ${logoMarkup('max-width:150px')}
                 <p class="brutalist sunset-title" style="font-size:22px;letter-spacing:0.2em;margin-top:8px">JUNGLE NIGHT</p>
-                <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.5;margin-top:4px">Una notte nella giungla</p>
+                <p style="font-size:12px;text-transform:uppercase;letter-spacing:0.3em;opacity:0.5;margin-top:4px">Una notte nella giungla</p>
                 <a href="/" class="maga-back-link" style="justify-content:center;margin-top:12px;">&#8592; Magaverse</a>
             </header>
         </div>`;

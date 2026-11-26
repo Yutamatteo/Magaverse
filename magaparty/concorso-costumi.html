@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Contest Costumi · Halloween in Villa · Magaparty</title>
-<meta name="description" content="Iscriviti al contest dei migliori costumi di Halloween in Villa e vota i tuoi preferiti: singolo, coppia o gruppo.">
+<link rel="canonical" href="https://www.magaverse.it/magaparty/concorso-costumi.html">
+<meta property="og:url" content="https://www.magaverse.it/magaparty/concorso-costumi.html">
+<meta name="description" content="Il contest costumi di Halloween in Villa è concluso: tutti i costumi in gara con i voti finali, categoria per categoria.">
 <meta property="og:title" content="Contest Costumi · Halloween in Villa">
-<meta property="og:description" content="Iscriviti e vota i migliori costumi della festa: singolo, coppia, gruppo.">
+<meta property="og:description" content="Il pubblico ha scelto: i costumi di Halloween in Villa con i voti finali.">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/halloween-locandina.jpg">
 <meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contest Costumi · Halloween in Villa">
+<meta name="twitter:description" content="Il pubblico ha scelto: i costumi di Halloween in Villa con i voti finali.">
+<meta name="twitter:image" content="https://www.magaverse.it/magaparty/assets/img/halloween-locandina.jpg">
 <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
 <style>
 :root{
   --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.09);
@@ -38,12 +46,18 @@ input,select,textarea{font-family:inherit; font-size:15px;}
 .topbar a{ font-size:9px; text-transform:uppercase; letter-spacing:0.2em; color:var(--muted); text-decoration:none; }
 .topbar a:hover{ color:var(--gold); }
 
-.hero{ padding-block:44px 36px; border-bottom:1px solid var(--line); text-align:center;
-  background: radial-gradient(ellipse 60% 50% at 50% -10%, rgba(255,122,51,0.14), transparent 60%), var(--ink); }
+.hero{ padding-block:clamp(72px, 14vh, 140px) clamp(56px, 10vh, 110px); border-bottom:1px solid var(--line); text-align:center; margin-top:-56px;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 8%, rgba(255,122,51,0.16), transparent 60%),
+    radial-gradient(ellipse 60% 70% at 50% 45%, rgba(10,7,14,0.55), transparent 75%),
+    linear-gradient(180deg, rgba(10,7,14,0.82) 0%, rgba(8,6,11,0.9) 60%, var(--ink) 100%),
+    url('assets/img/halloween-locandina.webp') center 30% / cover no-repeat, var(--ink); }
+.topbar{ position:relative; z-index:2; }
 .eyebrow{ display:inline-flex; align-items:center; gap:10px; font-size:11px; letter-spacing:0.22em; text-transform:uppercase; color:var(--ember); margin-bottom:18px; }
 .eyebrow::before, .eyebrow::after{content:""; width:22px; height:1px; background:var(--ember); opacity:0.5;}
-.hero h1{ font-size:clamp(2rem, 5.4vw, 3.4rem); font-weight:600; line-height:1.08; letter-spacing:-0.01em; color:var(--bone); text-wrap:balance; }
-.hero h1 em{font-style:italic; color:var(--ember); font-weight:500;}
+.hero h1{ font-family:'UnifrakturCook', 'Fraunces', serif; font-size:clamp(2.6rem, 8vw, 5.2rem); font-weight:700; line-height:1.02; color:var(--bone); text-wrap:balance; max-width:14ch; margin-inline:auto; }
+.hero h1 em{font-style:normal; color:var(--ember);}
+.hero-sub{ color:rgba(236,230,221,0.82) !important; }
 .hero-sub{ max-width:52ch; margin:18px auto 0; font-size:15px; line-height:1.65; color:var(--muted); }
 .hero-cta{ margin-top:28px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 .btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; letter-spacing:0.01em; padding:13px 24px; border-radius:999px; border:1px solid var(--line); text-decoration:none; cursor:pointer; background:var(--surface); color:var(--bone); transition:transform .15s ease, border-color .15s ease; }
@@ -100,7 +114,7 @@ section h2{ font-size:clamp(1.5rem,3vw,2.1rem); font-weight:600; text-align:cent
 .costume-card{ background:var(--surface); border:1px solid var(--line); border-radius:18px; overflow:hidden; display:flex; flex-direction:column; }
 .costume-photo{ aspect-ratio:4/5; background:var(--surface-2); overflow:hidden; position:relative; }
 .costume-photo img{ width:100%; height:100%; object-fit:cover; }
-.costume-cat-badge{ position:absolute; top:10px; left:10px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:rgba(14,10,20,0.75); color:var(--gold); backdrop-filter:blur(4px); border:1px solid var(--line); }
+.costume-cat-badge{ position:absolute; top:10px; left:10px; font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px; background:rgba(14,10,20,0.75); color:var(--gold); border:1px solid var(--line); }
 .costume-body{ padding:16px 16px 18px; display:flex; flex-direction:column; gap:10px; flex:1; }
 .costume-body h3{ font-size:16px; font-weight:600; color:var(--bone); }
 .costume-body .descr{ font-size:12.5px; color:var(--muted); line-height:1.55; }
@@ -113,31 +127,39 @@ section h2{ font-size:clamp(1.5rem,3vw,2.1rem); font-weight:600; text-align:cent
 .vote-btn.voted{ background:var(--moss); border-color:var(--moss); color:#15241A; cursor:default; }
 .vote-btn:disabled{ opacity:0.7; }
 
+/* ---- CONTEST CONCLUSO ---- */
+.rank{ font-family:'JetBrains Mono', ui-monospace, monospace; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; border-radius:999px; border:1px solid var(--line); color:var(--muted); white-space:nowrap; }
+.rank.r1{ background:var(--gold-soft); border-color:rgba(216,182,107,0.45); color:var(--gold); font-weight:500; }
+.rank.r2, .rank.r3{ color:var(--bone); }
+.costume-card.podio{ border-color:rgba(216,182,107,0.35); }
+
 footer{ padding-block:32px; text-align:center; }
 footer p{ font-size:11px; color:var(--muted); letter-spacing:0.02em; }
 footer a{ color:var(--gold); text-decoration:none; }
 </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<script src="/assets/consenso.js" defer></script>
 </head>
 <body>
 
 <div class="topbar">
   <a href="halloween.html">&larr; Halloween in Villa</a>
-  <a href="#vota">Vai al voto &darr;</a>
+  <a href="#vota">Classifica &darr;</a>
 </div>
 
 <section class="hero" style="border-top:none;">
   <div class="wrap">
-    <div class="eyebrow">Contest Halloween in Villa</div>
-    <h1>Vesti il tuo <em>miglior costume</em>, vinci il titolo</h1>
-    <p class="hero-sub">Tre categorie — singolo, coppia e gruppo. Iscriviti con una foto del tuo costume, poi la sera della festa si vota dal vivo scansionando il QR: il pubblico decide i vincitori.</p>
+    <div class="eyebrow">Halloween in Villa · contest concluso</div>
+    <h1>Il pubblico ha scelto</h1>
+    <p class="hero-sub">Tre categorie — singolo, coppia e gruppo. Le votazioni si sono chiuse la notte della festa: qui trovi tutti i costumi in gara con i voti finali. Grazie a chi si è travestito con noi.</p>
     <div class="hero-cta">
-      <a href="#iscrizione" class="btn primary">Iscrivi il tuo costume</a>
-      <a href="#vota" class="btn">Vota i costumi</a>
+      <a href="concorso-costumi-vincitori.html" class="btn primary">Guarda la premiazione</a>
+      <a href="#vota" class="btn">Tutti i costumi</a>
     </div>
   </div>
 </section>
 
-<section id="iscrizione">
+<section id="iscrizione" hidden>
   <div class="wrap">
     <span class="section-label">Partecipa</span>
     <h2>Iscrivi il tuo costume</h2>
@@ -210,9 +232,9 @@ footer a{ color:var(--gold); text-decoration:none; }
 
 <section id="vota" style="border-bottom:none;">
   <div class="wrap">
-    <span class="section-label">31 ottobre, si vota dal vivo</span>
-    <h2>Vota i costumi</h2>
-    <p class="section-sub">Un voto per costume da questo dispositivo — puoi votare quanti costumi vuoi, anche più di uno nella stessa categoria.</p>
+    <span class="section-label">Classifica finale</span>
+    <h2>Tutti i costumi in gara</h2>
+    <p class="section-sub">Voti finali del 31 ottobre, dal più votato. Filtra per categoria per vedere il podio.</p>
 
     <div class="filters" id="filters">
       <button class="filter-pill is-active" data-cat="tutti">Tutti</button>
@@ -227,7 +249,7 @@ footer a{ color:var(--gold); text-decoration:none; }
 </section>
 
 <footer>
-  <p>Magaparty · Halloween in Villa — i voti si aggiornano in automatico · <a href="halloween.html">torna alla pagina dell'evento</a></p>
+  <p>Magaparty · Halloween in Villa — votazioni chiuse · <a href="concorso-costumi-vincitori.html">la premiazione</a> · <a href="halloween.html">torna alla pagina dell'evento</a></p>
 </footer>
 
 <script>
@@ -240,6 +262,8 @@ footer a{ color:var(--gold); text-decoration:none; }
     : null;
 
   var BUCKET = 'contest-costumi';
+  // Contest finito (Halloween 31/10): niente iscrizioni né voti, solo la classifica finale.
+  var CHIUSO = true;
 
   /* ===================== DEVICE TOKEN ===================== */
   function getDeviceToken(){
@@ -415,12 +439,26 @@ footer a{ color:var(--gold); text-decoration:none; }
     }
     stateEl.style.display = 'none';
     items.sort(function(a, b){ return (b.voti || 0) - (a.voti || 0); });
+    // posizione dentro la propria categoria (pari voti = stessa posizione)
+    var pos = {};
+    ['singolo','coppia','gruppo'].forEach(function(cat){
+      var lista = currentData.filter(function(c){ return c.categoria === cat; })
+        .sort(function(a, b){ return (b.voti || 0) - (a.voti || 0); });
+      lista.forEach(function(c, i){
+        pos[c.id] = (i > 0 && (lista[i-1].voti || 0) === (c.voti || 0)) ? pos[lista[i-1].id] : i + 1;
+      });
+    });
     grid.innerHTML = items.map(function(c){
       var isVoted = voted.indexOf(c.id) !== -1;
-      var igHtml = c.instagram ? '<a class="ig" href="https://instagram.com/' + String(c.instagram).replace('@','') + '" target="_blank" rel="noopener">@' + String(c.instagram).replace('@','') + '</a>' : '';
+      var ig = c.instagram ? String(c.instagram).replace(/^@+/, '').trim() : '';
+      var igHtml = ig ? '<a class="ig" href="https://instagram.com/' + encodeURIComponent(ig) + '" target="_blank" rel="noopener">@' + escapeHtml(ig) + '</a>' : '';
+      var p = pos[c.id];
+      var azione = CHIUSO
+        ? '<span class="rank' + (p <= 3 ? ' r' + p : '') + '">' + p + '° ' + CAT_LABEL[c.categoria] + '</span>'
+        : '<button class="vote-btn' + (isVoted ? ' voted' : '') + '" data-id="' + c.id + '"' + (isVoted ? ' disabled' : '') + '>' + (isVoted ? 'Votato ✓' : 'Vota') + '</button>';
       var descrHtml = c.descrizione ? '<p class="descr">' + escapeHtml(c.descrizione) + '</p>' : '';
       return '' +
-        '<div class="costume-card" data-id="' + c.id + '">' +
+        '<div class="costume-card' + (CHIUSO && p === 1 ? ' podio' : '') + '" data-id="' + escapeHtml(c.id) + '">' +
           '<div class="costume-photo">' +
             '<span class="costume-cat-badge">' + CAT_LABEL[c.categoria] + '</span>' +
             '<img src="' + fotoUrl(c.foto_path) + '" alt="Costume di ' + escapeHtml(c.nome_partecipante) + '" loading="lazy">' +
@@ -431,7 +469,7 @@ footer a{ color:var(--gold); text-decoration:none; }
             igHtml +
             '<div class="costume-foot">' +
               '<span class="vote-count"><b>' + (c.voti || 0) + '</b> voti</span>' +
-              '<button class="vote-btn' + (isVoted ? ' voted' : '') + '" data-id="' + c.id + '"' + (isVoted ? ' disabled' : '') + '>' + (isVoted ? 'Votato ✓' : 'Vota') + '</button>' +
+              azione +
             '</div>' +
           '</div>' +
         '</div>';
@@ -471,7 +509,7 @@ footer a{ color:var(--gold); text-decoration:none; }
   if (grid){
     grid.addEventListener('click', function(ev){
       var btn = ev.target.closest('.vote-btn');
-      if (!btn || btn.disabled) return;
+      if (!btn || btn.disabled || CHIUSO) return;
       var id = btn.dataset.id;
       if (!sb) return;
       btn.disabled = true;
@@ -495,7 +533,7 @@ footer a{ color:var(--gold); text-decoration:none; }
   }
 
   caricaRisultati();
-  setInterval(caricaRisultati, 15000);
+  if (!CHIUSO) setInterval(caricaRisultati, 15000);
 
   if (window.location.hash === '#vota'){
     setTimeout(function(){

@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Siamo · Storia e Contatti | Magaparty</title>
+<link rel="canonical" href="https://www.magaverse.it/magaparty/chi-siamo.html">
+<meta property="og:url" content="https://www.magaverse.it/magaparty/chi-siamo.html">
     <meta name="description" content="La storia di Magaparty: dai pool party del 2024 a Halloween in Villa, Capodanno, Carnevale e i Beach Party a Magazzeno, Salerno. Scopri chi siamo e contattaci.">
     <meta property="og:title" content="Chi Siamo · Magaparty">
     <meta property="og:description" content="La storia di Magaparty, dai pool party del 2024 ai beach party di oggi. Scopri chi siamo e contattaci.">
-    <meta property="og:image" content="assets/img/logo-teal.png">
+    <meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/logo-teal.png">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="it_IT">
     <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/assets/fa/fa.css">
+    <link rel="preload" href="/assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="../assets/storymap.css">
     <script src="../assets/storymap.js" defer></script>
@@ -40,7 +41,7 @@
         .section-anchor { padding-top: 24px; scroll-margin-top: 80px; }
         .section-divider { margin: 56px 0 32px; height: 1px; background: linear-gradient(90deg, transparent, rgba(198,232,107,0.25), transparent); }
         .section-label {
-            display: inline-block; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+            display: inline-block; font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
             color: var(--sunset-gold); opacity: 0.7; margin-bottom: 12px;
         }
 
@@ -63,7 +64,7 @@
             background: var(--night-surface); border: 1px solid var(--night-border);
         }
         .timeline-flag {
-            position: absolute; top: -9px; right: -6px; font-size: 8px; font-weight: 800; letter-spacing: 0.1em;
+            position: absolute; top: -9px; right: -6px; font-size: 12px; font-weight: 800; letter-spacing: 0.1em;
             text-transform: uppercase; padding: 2px 6px; border-radius: 999px; color: #17110C;
             background: var(--sunset-gold);
         }
@@ -79,12 +80,23 @@
         .maga-field:focus { outline: none; border-color: var(--sunset-orange); }
         textarea.maga-field { resize: vertical; min-height: 100px; }
         .maga-field-label {
-            display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em;
+            display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em;
             color: #9ca3af; margin-bottom: 6px;
         }
     </style>
+    <link rel="stylesheet" href="assets/tailwind.css">
+    <link rel="stylesheet" href="assets/leggibilita.css">
+    <link rel="stylesheet" href="/assets/maga-base.css">
+    <link rel="stylesheet" href="/assets/motion.css">
+    <link rel="stylesheet" href="assets/evento-motion.css">
+    <link rel="stylesheet" href="assets/pagine.css">
+    <script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<link rel="stylesheet" href="/assets/transizioni.css">
+    <link rel="stylesheet" href="/assets/racconto.css">
+<script src="/assets/consenso.js" defer></script>
 </head>
 <body data-page="chi-siamo">
+<svg class="luci mp-luci-pagina" data-luci data-luci-subito aria-hidden="true" focusable="false"></svg>
 <style>
     body { max-width: none !important; border: none !important; padding-bottom: 40px !important; }
     .s-wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
@@ -94,9 +106,9 @@
 <div class="s-top">
     <a href="index.html" class="maga-back-link"><i class="fa-solid fa-arrow-left" style="margin-right:2px"></i> Magaparty</a>
     <div style="display:flex;gap:14px">
-        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
+        <a href="https://www.instagram.com/_magaparty" target="_blank" rel="noopener" aria-label="Instagram" style="font-size:16px;color:var(--sunset-coral)"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://tiktok.com/@_magaparty" target="_blank" rel="noopener" aria-label="TikTok" style="font-size:16px;color:var(--sunset-gold)"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://t.me/MAGAPART" target="_blank" rel="noopener" aria-label="Telegram" style="font-size:16px;color:var(--sunset-orange)"><i class="fa-brands fa-telegram"></i></a>
     </div>
 </div>
 
@@ -105,7 +117,7 @@
 <!-- ═══════════════════════ INTRO ═══════════════════════ -->
 <section class="section-anchor animate-fade-in reveal text-center" data-testid="page-chi-siamo">
     <span class="section-label">Magaparty · Dal 2024</span>
-    <h1 class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">Chi siamo</h1>
+    <h1 data-rise class="brutalist text-3xl md:text-4xl tracking-tighter uppercase sunset-title mb-3">Chi siamo</h1>
     <p class="text-[12px] text-gray-400 leading-relaxed" style="max-width:520px;margin:0 auto">
         Una storia nata in piscina, cresciuta in villa e portata in spiaggia: ecco com'è diventata Magaparty.
     </p>
@@ -117,7 +129,7 @@
 <section id="storia" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">La nostra storia</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Come siamo arrivati fin qui</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Come siamo arrivati fin qui</h2>
     </div>
 
     <div class="timeline">
@@ -152,7 +164,7 @@
         <div class="timeline-item">
             <div class="timeline-dot" style="border-color:rgba(154,216,47,0.35)"><i class="fa-solid fa-umbrella-beach" style="color:var(--sunset-orange)"></i></div>
             <div class="glass-card timeline-card neon-border-orange">
-                <img src="assets/img/storia/beach-party-2025.jpg" alt="Corsari Night, Beach Party Magaparty 2025" class="timeline-poster" loading="lazy">
+                <img src="assets/img/storia/beach-party-2025.webp" alt="Corsari Night, Beach Party Magaparty 2025" class="timeline-poster" loading="lazy">
                 <span class="section-label" style="margin-bottom:4px">Estate 2025</span>
                 <h3 class="brutalist text-base text-white mb-1">Il salto in spiaggia: i Beach Party</h3>
                 <p class="text-[11px] text-gray-400 leading-relaxed">Magaparty si espande e porta la festa in riva al mare, a Magazzeno: nascono i Beach Party, tra Corsari Night, Fluo Night e Y2K Party.</p>
@@ -162,7 +174,7 @@
         <div class="timeline-item">
             <div class="timeline-dot" style="border-color:rgba(255,71,87,0.35)"><i class="fa-solid fa-ghost" style="color:var(--sunset-coral)"></i></div>
             <div class="glass-card timeline-card neon-border-coral">
-                <img src="assets/img/storia/halloween-2025.jpg" alt="American Halloween Night, Magaparty 2025" class="timeline-poster" loading="lazy">
+                <img src="assets/img/storia/halloween-2025.webp" alt="American Halloween Night, Magaparty 2025" class="timeline-poster" loading="lazy">
                 <span class="timeline-flag">Evento di punta</span>
                 <span class="section-label" style="margin-bottom:4px">Ottobre 2025</span>
                 <h3 class="brutalist text-base text-white mb-1">Halloween in Villa, di nuovo</h3>
@@ -173,7 +185,7 @@
         <div class="timeline-item">
             <div class="timeline-dot" style="border-color:rgba(198,232,107,0.35)"><i class="fa-solid fa-champagne-glasses" style="color:var(--sunset-gold)"></i></div>
             <div class="glass-card timeline-card neon-border-gold">
-                <img src="assets/img/storia/capodanno-2025.jpg" alt="Maga Gala, Capodanno in Villa Magaparty" class="timeline-poster" loading="lazy">
+                <img src="assets/img/storia/capodanno-2025.webp" alt="Maga Gala, Capodanno in Villa Magaparty" class="timeline-poster" loading="lazy">
                 <span class="section-label" style="margin-bottom:4px">31 Dicembre 2025</span>
                 <h3 class="brutalist text-base text-white mb-1">Maga Gala</h3>
                 <p class="text-[11px] text-gray-400 leading-relaxed">Il Capodanno in Villa firmato Magaparty, ormai un classico di fine anno.</p>
@@ -201,7 +213,7 @@
         <div class="timeline-item">
             <div class="timeline-dot" style="border-color:rgba(154,216,47,0.35)"><i class="fa-solid fa-sun" style="color:var(--sunset-orange)"></i></div>
             <div class="glass-card timeline-card neon-border-orange">
-                <img src="assets/img/tardeo-locandina.jpg" alt="Tardeo, Magaparty" class="timeline-poster" loading="lazy">
+                <img src="assets/img/tardeo-locandina.webp" alt="Tardeo, Magaparty" class="timeline-poster" loading="lazy">
                 <span class="section-label" style="margin-bottom:4px">27 Giugno 2026</span>
                 <h3 class="brutalist text-base text-white mb-1">Tardeo</h3>
                 <p class="text-[11px] text-gray-400 leading-relaxed">Debutta il Tardeo: la festa del tardo pomeriggio che si prolunga fino a sera, format spagnolo portato a Magazzeno.</p>
@@ -221,10 +233,9 @@
         <div class="timeline-item">
             <div class="timeline-dot" style="border-color:rgba(198,232,107,0.5); box-shadow:0 0 16px rgba(198,232,107,0.3)"><i class="fa-solid fa-mask" style="color:var(--sunset-gold)"></i></div>
             <div class="glass-card timeline-card neon-border-gold" style="background:rgba(198,232,107,0.05)">
-                <span class="timeline-flag">Prossimamente</span>
-                <span class="section-label" style="margin-bottom:4px">Halloween 2026</span>
-                <h3 class="brutalist text-base text-white mb-1">Midnight Rouge</h3>
-                <p class="text-[11px] text-gray-400 leading-relaxed">Il prossimo Halloween Magaparty, a Magahouse: in fase di progettazione.</p>
+                <span class="section-label" style="margin-bottom:4px">31 Dicembre</span>
+                <h3 class="brutalist text-base text-white mb-1">Maga Gala</h3>
+                <p class="text-[11px] text-gray-400 leading-relaxed">La notte del 31.12. Luogo e biglietti sono ancora segreti. <a href="magagala.html" style="text-decoration:underline">Sbircia dietro il sipario</a>.</p>
             </div>
         </div>
     </div>
@@ -236,7 +247,7 @@
 <section id="chi-siamo-section" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Chi siamo</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il collettivo dietro Magaparty</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Il collettivo dietro Magaparty</h2>
     </div>
     <div class="glass-card p-6 neon-border-orange reveal" style="max-width:640px;margin:0 auto">
         <p class="text-[12px] text-gray-300 leading-relaxed mb-4">
@@ -262,7 +273,7 @@
 <section id="differenza" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Cosa rende diverso Magaparty</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Non un evento, un calendario</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Non un evento, un calendario</h2>
     </div>
     <div class="glass-card p-6 neon-border-coral reveal" style="max-width:640px;margin:0 auto">
         <p class="text-[12px] text-gray-300 leading-relaxed mb-4">
@@ -295,10 +306,19 @@
 <div class="section-divider"></div>
 
 <!-- ═══════════════════════ CONTATTI ═══════════════════════ -->
+<!-- RACCONTO:INIZIO -->
+<section class="racconto" style="--c:#FF7A3D;margin:30px auto 10px" aria-labelledby="racconto-t">
+    <div class="racconto-testa">
+        <div><p>Estate 2026, dalle prime notti a Halloween</p><h2 id="racconto-t">La stagione in foto.</h2></div>
+        <a class="racconto-tutte" href="galleria.html">Tutte le foto →</a>
+    </div>
+    <div class="racconto-striscia"><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-00-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-00-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-00-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-00-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-03-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-03-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-03-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-03-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-06-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-06-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-06-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-06-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-09-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-09-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-09-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-09-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-12-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-12-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-12-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-12-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-15-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-15-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-15-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-15-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-18-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-18-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-18-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-18-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=giugno"><img src="assets/img/galleria/giugno-21-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=ultimaonda"><img src="assets/img/galleria/ultimaonda-21-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=tardeo"><img src="assets/img/galleria/tardeo-21-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a><a href="galleria.html?serata=halloween"><img src="assets/img/galleria/halloween-21-p.webp" alt="Una foto delle serate Magaparty" loading="lazy" decoding="async"></a></div>
+</section>
+<!-- RACCONTO:FINE -->
 <section id="contatti" class="section-anchor animate-fade-in">
     <div class="text-center mb-8 reveal">
         <span class="section-label">Contatti</span>
-        <h2 class="brutalist text-2xl tracking-tighter uppercase sunset-title">Parliamone</h2>
+        <h2 data-rise class="brutalist text-2xl tracking-tighter uppercase sunset-title">Parliamone</h2>
     </div>
 
     <div class="desktop-2col" style="max-width:760px;margin:0 auto">
@@ -353,6 +373,7 @@
 </section>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
 <script type="module">
 // ===================== CONFIGURAZIONE SUPABASE =====================
 // Stesso progetto già usato per MagaCard (Project Settings > API)
@@ -360,7 +381,7 @@ const SUPABASE_URL = "https://dkzzmxsreaegjagqbdnh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_1FjHMhqLPVCC50fguLVmyw_XNfbv_9Q";
 // =====================================================================
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const { createClient } = window.supabase;
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const form = document.getElementById('contattiForm');
@@ -417,5 +438,6 @@ form.addEventListener('submit', async (e) => {
     }
 });
 </script>
+<script src="/assets/motion.js" defer></script>
 </body>
 </html>

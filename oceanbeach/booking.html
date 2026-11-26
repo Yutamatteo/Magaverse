@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#8B5A2B" />
     <title>Prenota · Nello Ocean Beach</title>
-    <meta name="description" content="Prenota su WhatsApp in 30 secondi. Compila il modulo e ricevi conferma immediata." />
+<link rel="canonical" href="https://www.magaverse.it/oceanbeach/booking.html">
+<meta property="og:url" content="https://www.magaverse.it/oceanbeach/booking.html">
+    <meta name="description" content="Scrivici su WhatsApp: compila il modulo e ti rispondiamo. Il lido riapre la prossima estate." />
     <meta property="og:title" content="Prenota · Nello Ocean Beach" />
-    <meta property="og:image" content="/assets/img/nello-sunset.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:image" content="https://www.magaverse.it/assets/img/nello-sunset.jpg" />
+        <link rel="preload" href="/oceanbeach/assets/fonts/outfit-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/oceanbeach/assets/fonts/outfit-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/oceanbeach/assets/fonts/playfair-display-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/oceanbeach/assets/fonts.css" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
     <link rel="stylesheet" href="../assets/storymap.css" />
     <script src="../assets/storymap.js" defer></script>
@@ -30,8 +34,13 @@
             --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
         }
     </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
+<script src="/assets/consenso.js" defer></script>
 </head>
-<body data-page="booking">
+<body data-page="booking" class="con-testata">
 
 <header class="nav">
     <div class="nav-inner">
@@ -52,7 +61,7 @@
             <a href="/oceanbeach/contact.html"   data-nav="contact">Contatti</a>
         </nav>
         <div class="nav-right">
-            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
         </div>
         <button class="menu-toggle" aria-label="Menu">&#9776;</button>
     </div>
@@ -66,19 +75,27 @@
             <a href="/oceanbeach/booking.html"  data-nav="booking">Prenota</a>
             <a href="/oceanbeach/contact.html"  data-nav="contact">Contatti</a>
             <div class="mobile-menu-foot">
-                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
             </div>
         </div>
     </div>
 </header>
 
-<section class="with-nav reveal">
+<section class="with-nav ob-testata" style="--foto:url('/assets/img/nello lido.webp');--pos:50% 62%">
     <div class="container">
         <span class="kicker">Prenotazione</span>
-        <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Prenota in 30 secondi. Riceverai conferma su WhatsApp.</h1>
+        <h1 class="h2" data-rise>Scrivici: ti rispondiamo su WhatsApp.</h1>
         <p class="lead">Compila il modulo: il messaggio viene precompilato e inviato al nostro WhatsApp Business. Niente attese, niente email perse.</p>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
+
+<aside class="ob-stagione" aria-label="Lido chiuso per la stagione">
+    <div class="container">
+        <p><b>Il lido riapre la prossima estate.</b> Siamo aperti da giugno a settembre: la stagione 2026 è finita. Per informazioni sulla prossima, scrivici su WhatsApp.</p>
+        <a href="#" data-wa-quick target="_blank" rel="noopener">Scrivici su WhatsApp</a>
+    </div>
+</aside>
 
 <section class="reveal" style="padding-top:8px;">
     <div class="container">
@@ -87,11 +104,11 @@
                 <div class="field-row">
                     <div class="field">
                         <label for="name">Nome e cognome</label>
-                        <input type="text" id="name" name="name" required placeholder="Mario Rossi" />
+                        <input type="text" id="name" name="name" autocomplete="name" required placeholder="Mario Rossi" />
                     </div>
                     <div class="field">
                         <label for="phone">Telefono</label>
-                        <input type="tel" id="phone" name="phone" required placeholder="+39 ..." />
+                        <input type="tel" id="phone" name="phone" autocomplete="tel" required placeholder="+39 ..." />
                     </div>
                 </div>
                 <div class="field-row">
@@ -153,7 +170,7 @@
                     <li><a href="/oceanbeach/services.html">Servizi</a></li>
                     <li><a href="/oceanbeach/pricing.html">Listino</a></li>
                     <li><a href="/oceanbeach/booking.html">Prenota</a></li>
-                    <li><a href="/" style="opacity:.7;">&#8599; Magaverse</a></li>
+                    <li><a href="/" style="opacity:.92;">&#8599; Magaverse</a></li>
                 </ul>
             </div>
             <div>
@@ -166,12 +183,12 @@
         </div>
         <div class="footer-bottom">
             <span>&copy; <span id="year">2026</span> Nello Ocean Beach &middot; <span>Tutti i diritti riservati.</span></span>
-            <span style="opacity:.75;">Sito realizzato con cura da Matteo Finizio.</span>
+            <span style="opacity:.92;">Sito realizzato con cura da Matteo Finizio.</span>
         </div>
     </div>
 </footer>
 
-<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">&#128172; <span>Prenota WhatsApp</span></a>
+<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">&#128172; <span>Scrivici su WhatsApp</span></a>
 
 <script src="/oceanbeach/assets/app.js"></script>
 </body>

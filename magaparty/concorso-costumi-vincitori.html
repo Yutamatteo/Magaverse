@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Premiazione Vincitori · Concorso Costumi · Halloween in Villa</title>
+<meta name="description" content="I vincitori del contest costumi di Halloween in Villa: singolo, coppia e gruppo, scelti dal pubblico con i voti della festa.">
+<meta property="og:title" content="I vincitori del contest costumi · Halloween in Villa">
+<meta property="og:image" content="https://www.magaverse.it/magaparty/assets/img/halloween-locandina.jpg">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="assets/img/logo-teal.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
 <style>
 :root{
   --ink:#0E0A14; --surface:#17101F; --surface-2:#1F1730; --line:rgba(255,255,255,0.12);
@@ -40,7 +44,7 @@ p{margin:0;}
   background:
     radial-gradient(ellipse 70% 55% at 50% 8%, rgba(255,122,51,0.16), transparent 60%),
     linear-gradient(180deg, rgba(10,7,14,0.72) 0%, rgba(8,6,11,0.88) 55%, #050309 100%),
-    url('assets/img/halloween-locandina.jpg');
+    url('assets/img/halloween-locandina.webp');
   background-size: cover, cover, cover;
   background-position: center, center, center 30%;
 }
@@ -133,6 +137,8 @@ p{margin:0;}
   .reveal-photo.is-winner-photo{ width:260px; height:320px; }
 }
 </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<script src="/assets/consenso.js" defer></script>
 </head>
 <body>
 

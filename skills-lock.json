@@ -1,0 +1,131 @@
+{
+  "version": 2,
+  "skills": {
+    "accessibility": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/accessibility/SKILL.md",
+      "computedHash": "c668809f5df57feb87cc06f1bc37fb340d1d92e26bacb6edbeab9258d22e76a5"
+    },
+    "agent-email-inbox": {
+      "source": "resend/resend-skills",
+      "commit": "f3e86d84960887bfc6e76e504c642ab6bc748f0c",
+      "sourceType": "github",
+      "skillPath": "skills/agent-email-inbox/SKILL.md",
+      "computedHash": "9c871e0fc05e31cf6fa04cfca08ae8a334dbb01d23235fd44e960a5f5293f5b7"
+    },
+    "best-practices": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/best-practices/SKILL.md",
+      "computedHash": "071ad7608cf92ad980330a6b1646f6bc568f5651d615e4c4a9fde225ceb9360c"
+    },
+    "core-web-vitals": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/core-web-vitals/SKILL.md",
+      "computedHash": "de50c203aa9dafa8dee9dd8c06782e3fc610704b83c1c408e4c5ee2337c4cd2a"
+    },
+    "email-best-practices": {
+      "source": "resend/resend-skills",
+      "commit": "f3e86d84960887bfc6e76e504c642ab6bc748f0c",
+      "sourceType": "github",
+      "skillPath": "skills/email-best-practices/SKILL.md",
+      "computedHash": "9618340453f52b03987949227de251a953af1d47bf505975fce1f55032fb3451"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "83485963700bcf11d5bf78118facb301676b69d918fee2e45a95e7f1a2840f6c"
+    },
+    "gdpr-data-handling": {
+      "source": "wshobson/agents",
+      "commit": "9c61ab243def98f72da12abd41cfcf5bcd91af9d",
+      "sourceType": "github",
+      "skillPath": "plugins/hr-legal-compliance/skills/gdpr-data-handling/SKILL.md",
+      "computedHash": "fc291b72266f14e4c721080a237cbb1a6ea518fb4148ea846c73a6a2e715685d"
+    },
+    "owasp-security": {
+      "source": "agamm/claude-code-owasp",
+      "commit": "1ae29cb22518560e3625d77f2ae64f61647d9201",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/owasp-security/SKILL.md",
+      "computedHash": "462278e17593469e65c60a860f724b7d1de94a8e8aed4f2326cffdad5f011ae8"
+    },
+    "performance": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/performance/SKILL.md",
+      "computedHash": "06902ebc4a8b91bfb8d1a99a03f186f0535b03d1a776ef751206104ef9b86c4c"
+    },
+    "pwa-development": {
+      "source": "jwynia/agent-skills",
+      "commit": "e02ec7e226a6e4f8419fd3b88a1d8e472d421b32",
+      "sourceType": "github",
+      "skillPath": "skills/tech/frontend/pwa/pwa-development/SKILL.md",
+      "computedHash": "00fd756ec8fe003b34e5ae813b5710ff3a533cad1b8fd2543d396f728e4da418"
+    },
+    "react-email": {
+      "source": "resend/resend-skills",
+      "commit": "f3e86d84960887bfc6e76e504c642ab6bc748f0c",
+      "sourceType": "github",
+      "skillPath": "skills/react-email/SKILL.md",
+      "computedHash": "51cb2479b8c98641bfd1e69e2260f53f5fad251ed2d8e7a0c3138e8899b3d4b3"
+    },
+    "resend": {
+      "source": "resend/resend-skills",
+      "commit": "f3e86d84960887bfc6e76e504c642ab6bc748f0c",
+      "sourceType": "github",
+      "skillPath": "skills/resend/SKILL.md",
+      "computedHash": "903c2a23cb6935c80deb2f62439ac99f673badecdf89d4151ebb422a09dc0015"
+    },
+    "resend-cli": {
+      "source": "resend/resend-skills",
+      "commit": "f3e86d84960887bfc6e76e504c642ab6bc748f0c",
+      "sourceType": "github",
+      "skillPath": "skills/resend-cli/SKILL.md",
+      "computedHash": "afd9e0ede1b81507c64eaf2250cf0dd417e49237512aba42b892d9121864b9e1"
+    },
+    "seo": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/seo/SKILL.md",
+      "computedHash": "fa30e94756c5c40663f4527e8220a985393abbe3a6256e43d02589948027467e"
+    },
+    "supabase": {
+      "source": "supabase/agent-skills",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "sourceType": "github",
+      "skillPath": "skills/supabase/SKILL.md",
+      "computedHash": "2fbff32fd63b7d31585cacf0ed43e5bf8d05dd20d6c0c751d256cb967a00eec1"
+    },
+    "supabase-postgres-best-practices": {
+      "source": "supabase/agent-skills",
+      "commit": "c9be0e931b7930f7d02126d04774d904c381e7d7",
+      "sourceType": "github",
+      "skillPath": "skills/supabase-postgres-best-practices/SKILL.md",
+      "computedHash": "3eb972c2d7c818e544e35cc33ea8d7147d4d78ae08142ef40037b0fbac7a2505"
+    },
+    "web-quality-audit": {
+      "source": "addyosmani/web-quality-skills",
+      "commit": "afa8da942115f2961fdbfa80807ea0b232ff6c00",
+      "sourceType": "github",
+      "skillPath": "skills/web-quality-audit/SKILL.md",
+      "computedHash": "fed16ecc3591b557381b15f4c1659b5536f064cecea851799c2dad4668b325b4"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+      "sourceType": "github",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "computedHash": "48cd9a742a59250edec6db89cf081ef5465f365e2133f6d6c5e29c380b754b7d"
+    }
+  }
+}

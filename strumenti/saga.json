@@ -1,0 +1,163 @@
+[
+ {
+  "id": "lido",
+  "voce": "Il lido",
+  "tipo": "foto",
+  "tinta": "#2FD8F0",
+  "nome_sfondo": "Ocean Beach",
+  "foto": [
+   "/assets/img/nello lido 3.webp"
+  ],
+  "quando": "Di giorno · Magazzeno",
+  "titolo": "Il lido, <em>sotto il sole.</em>",
+  "frase": "Ombrelloni sulla riva, il bar, le canoe e il tramonto sul golfo. Ogni serata dell'estate è cominciata qui, a piedi nudi.",
+  "link": [
+   [
+    "Scopri il lido",
+    "/oceanbeach/index.html"
+   ],
+   [
+    "Il listino",
+    "/oceanbeach/pricing.html"
+   ]
+  ],
+  "parete": "lido"
+ },
+ {
+  "id": "giugno",
+  "voce": "Giugno",
+  "tipo": "foto",
+  "tinta": "#FF4D6D",
+  "nome_sfondo": "Estate 26",
+  "foto": [
+   "/assets/img/stagione/giugno-1.webp"
+  ],
+  "quando": "Fine giugno · si accende l'estate",
+  "titolo": "Le prime <em>notti.</em>",
+  "frase": "La sabbia ancora fresca, la console sotto la rete e il golfo tutto per noi: così è partita l'estate al Nello.",
+  "link": [
+   [
+    "Tutte le foto",
+    "/magaparty/galleria.html"
+   ]
+  ],
+  "parete": "giugno"
+ },
+ {
+  "id": "format",
+  "voce": "Marea · Battigia",
+  "tipo": "locandine",
+  "tinta": "#FF7A3D",
+  "locandine": [
+   "/assets/img/stagione/loc-marea-01.webp",
+   "/assets/img/stagione/loc-battigia-01.webp",
+   "/assets/img/stagione/loc-jungle-01.webp",
+   "/assets/img/stagione/loc-marea-03.webp",
+   "/assets/img/stagione/loc-battigia-02.webp",
+   "/assets/img/stagione/loc-jungle-02.webp",
+   "/assets/img/stagione/loc-marea-02.webp",
+   "/assets/img/stagione/loc-jungle-03.webp",
+   "/assets/img/stagione/loc-marea-04.webp",
+   "/assets/img/stagione/loc-battigia-03.webp",
+   "/assets/img/stagione/loc-jungle-04.webp",
+   "/assets/img/stagione/loc-marea-05.webp",
+   "/assets/img/stagione/loc-marea-06.webp",
+   "/assets/img/stagione/loc-jungle-05.webp"
+  ],
+  "quando": "Ogni settimana, tutta l'estate",
+  "titolo": "Marea <em>e Battigia.</em>",
+  "frase": "La domenica l'happy hour fino a mezzanotte, il mercoledì piedi nella sabbia dalle 20. In mezzo, a luglio, una Jungle Night.",
+  "link": [
+   [
+    "Marea",
+    "/magaparty/marea.html"
+   ],
+   [
+    "Battigia",
+    "/magaparty/battigia.html"
+   ]
+  ],
+  "parete": "format"
+ },
+ {
+  "id": "ultima-onda",
+  "voce": "Ultima Onda",
+  "tipo": "foto",
+  "tinta": "#B07CFF",
+  "nome_sfondo": "Ultima Onda",
+  "foto": [
+   "/assets/img/stagione/ultimaonda-4.webp"
+  ],
+  "quando": "Domenica 13 settembre",
+  "titolo": "Ultima <em>Onda.</em>",
+  "frase": "SUP School al tramonto, lo showcase di Indieficio e Adolfo Citro in console: l'ultimo format dell'estate.",
+  "link": [
+   [
+    "Com'è andata",
+    "/magaparty/ultima-onda.html"
+   ]
+  ],
+  "parete": "ultimaonda"
+ },
+ {
+  "id": "tardeo",
+  "voce": "Tardeo",
+  "tipo": "foto",
+  "tinta": "#FF3A2E",
+  "nome_sfondo": "Tardeo",
+  "foto": [
+   "/assets/img/stagione/tardeo-1.webp"
+  ],
+  "quando": "Giovedì 24 settembre",
+  "titolo": "Tardeo<em>.</em>",
+  "frase": "DJ Kiki, Adolfo Citro, H8daprep e Omen: la stagione in spiaggia chiusa a tutto volume.",
+  "link": [
+   [
+    "Rivedi Tardeo",
+    "/magaparty/tardeo.html"
+   ]
+  ],
+  "parete": "tardeo"
+ },
+ {
+  "id": "halloween",
+  "voce": "Halloween",
+  "tipo": "halloween",
+  "tinta": "#FF9A3C",
+  "quando": "Appena passato · sabato 31 ottobre",
+  "titolo": "Halloween <em>in Villa.</em>",
+  "frase": "L'Atto 3 della stagione: dal beach club alla villa. Grazie a chi c'era, a chi si è travestito e a chi ha votato.",
+  "extra": "\n                        <dl class=\"cap-numeri\"><div><dt>costumi in gara</dt><dd data-conta>14</dd></div><div><dt>voti del pubblico</dt><dd data-conta>460</dd></div><div><dt>categorie</dt><dd data-conta>3</dd></div></dl>",
+  "link": [
+   [
+    "I vincitori del concorso",
+    "/magaparty/concorso-costumi-vincitori.html"
+   ],
+   [
+    "Foto su Telegram",
+    "https://t.me/MAGAPART"
+   ]
+  ],
+  "parete": "halloween"
+ },
+ {
+  "id": "gala",
+  "voce": "Maga Gala",
+  "tipo": "gala",
+  "tinta": "#E9C77B",
+  "quando": "Coming soon · Capodanno",
+  "titolo": "<b>Maga</b><i>Gala</i>",
+  "frase": "Dietro il sipario si prepara il prossimo Capodanno: la notte del 31.12. Luogo e biglietti: ancora segreti.",
+  "link": [
+   [
+    "Sbircia dietro il sipario",
+    "/magaparty/magagala.html"
+   ],
+   [
+    "Avvisami su Instagram",
+    "https://www.instagram.com/_magaparty"
+   ]
+  ],
+  "extra": "\n                        <p class=\"gala-conto\" data-conto=\"2027-01-01T00:00:00+01:00\" aria-live=\"off\"><b data-u=\"g\">--</b> giorni <b data-u=\"h\">--</b> ore <b data-u=\"m\">--</b> minuti a mezzanotte</p>"
+ }
+]

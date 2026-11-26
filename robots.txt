@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /anteprima/
+Disallow: /test/
+Disallow: /magacard/staff/
+Disallow: /magacard/card/
+Disallow: /magaparty/marea/staff/
+
+Sitemap: https://www.magaverse.it/sitemap.xml

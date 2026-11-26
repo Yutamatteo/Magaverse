@@ -22,7 +22,7 @@
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -6% 0px' });
     els.forEach(function(el, i){
       el.style.setProperty('--sm-i', i % 8);
       io.observe(el);
@@ -86,6 +86,7 @@
     }
 
     stage.querySelectorAll('.story-pin').forEach(function(btn){
+      if (!btn.getAttribute('aria-label') && btn.dataset.name) btn.setAttribute('aria-label', btn.dataset.name);
       btn.addEventListener('click', function(){
         if (openPinId === btn.id) closeCard(); else openCard(btn);
       });

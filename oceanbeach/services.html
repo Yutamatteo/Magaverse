@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+<style>@view-transition{navigation:auto}</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#8B5A2B" />
     <title>Servizi · Nello Ocean Beach</title>
+<link rel="canonical" href="https://www.magaverse.it/oceanbeach/services.html">
+<meta property="og:url" content="https://www.magaverse.it/oceanbeach/services.html">
     <meta name="description" content="Servizi del Nello Ocean Beach: ombrelloni, lettini, noleggio canoe, beach bar, docce, cabine, Wi-Fi." />
     <meta property="og:title" content="Servizi · Nello Ocean Beach" />
-    <meta property="og:image" content="/assets/img/nello-sunset.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <meta property="og:image" content="https://www.magaverse.it/assets/img/nello-sunset.jpg" />
+    <link rel="stylesheet" href="/oceanbeach/assets/fonts.css" />
     <link rel="stylesheet" href="/oceanbeach/assets/styles.css" />
     <link rel="stylesheet" href="../assets/storymap.css" />
     <script src="../assets/storymap.js" defer></script>
@@ -30,8 +31,13 @@
             --sm-font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
         }
     </style>
+<link rel="stylesheet" href="/assets/transizioni.css">
+<link rel="stylesheet" href="/assets/motion.css">
+<script>document.documentElement.classList.add('mv-js');setTimeout(function(){if(!window.__mvOk)document.documentElement.classList.add('mv-fallback')},2500)</script>
+<script src="/assets/motion.js" defer></script>
+<script src="/assets/consenso.js" defer></script>
 </head>
-<body data-page="services">
+<body data-page="services" class="con-testata">
 
 <header class="nav">
     <div class="nav-inner">
@@ -52,7 +58,7 @@
             <a href="/oceanbeach/contact.html"   data-nav="contact">Contatti</a>
         </nav>
         <div class="nav-right">
-            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
         </div>
         <button class="menu-toggle" aria-label="Menu">&#9776;</button>
     </div>
@@ -66,32 +72,47 @@
             <a href="/oceanbeach/booking.html"  data-nav="booking">Prenota</a>
             <a href="/oceanbeach/contact.html"  data-nav="contact">Contatti</a>
             <div class="mobile-menu-foot">
-                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Prenota su WhatsApp</a>
+                <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
             </div>
         </div>
     </div>
 </header>
 
-<section class="with-nav reveal">
+<section class="with-nav ob-testata" style="--foto:url('/assets/img/nello lido 2.webp');--pos:50% 55%">
     <div class="container">
         <span class="kicker">Servizi</span>
-        <h1 class="h2" style="font-size: clamp(36px, 6vw, 64px);">Comfort e mare, in perfetto equilibrio.</h1>
+        <h1 class="h2" data-rise>Comfort e mare, in perfetto equilibrio.</h1>
         <p class="lead">Ogni dettaglio del Nello Ocean Beach è pensato per farti sentire a casa. Ecco cosa trovi quando arrivi da noi.</p>
     </div>
+    <div class="ob-onde" aria-hidden="true"></div>
 </section>
 
-<section class="reveal">
+<aside class="ob-stagione" aria-label="Lido chiuso per la stagione">
     <div class="container">
-        <div class="grid-3">
-            <div class="svc-card"><div class="svc-icon">&#127753;</div><h3 class="svc-title">Noleggio Canoe</h3><p class="svc-desc">Canoe singole e doppie disponibili a ore. Ideali per esplorare la costa, prendere il largo e tornare con qualche fotografia in più. Briefing di sicurezza incluso.</p></div>
-            <div class="svc-card"><div class="svc-icon">&#9749;</div><h3 class="svc-title">Beach Bar</h3><p class="svc-desc">Aperitivi, caffetteria, granite, panini, frutta fresca. Servizio al tavolo direttamente sotto l'ombrellone — chiedi al nostro staff.</p></div>
-            <div class="svc-card"><div class="svc-icon">&#128703;</div><h3 class="svc-title">Docce Calde e Fredde</h3><p class="svc-desc">Docce esterne calde e fredde a disposizione di tutti gli ospiti. Pulizia frequente durante la giornata.</p></div>
-            <div class="svc-card"><div class="svc-icon">&#128682;</div><h3 class="svc-title">Bagni & Cabine</h3><p class="svc-desc">Servizi igienici curati e cabine private dove cambiarsi senza fretta. Manutenzione costante.</p></div>
-            <div class="svc-card"><div class="svc-icon">&#128246;</div><h3 class="svc-title">Wi-Fi su Richiesta</h3><p class="svc-desc">Connessione disponibile su richiesta presso il bancone bar — pensata per chi serve davvero.</p></div>
-            <div class="svc-card"><div class="svc-icon">&#129309;</div><h3 class="svc-title">Personale Cordiale</h3><p class="svc-desc">Il nostro team è qui per accoglierti, consigliarti e rendere la tua giornata di mare più semplice.</p></div>
+        <p><b>Il lido riapre la prossima estate.</b> Siamo aperti da giugno a settembre: la stagione 2026 è finita. Per informazioni sulla prossima, scrivici su WhatsApp.</p>
+        <a href="#" data-wa-quick target="_blank" rel="noopener">Scrivici su WhatsApp</a>
+    </div>
+</aside>
+
+<section class="reveal ob-servizi">
+    <div class="container">
+        <div class="ob-servizi-grid">
+            <figure class="ob-servizi-foto" aria-hidden="true">
+                <img src="/assets/img/nello%20lido%203.webp" alt="" loading="lazy" decoding="async" width="800" height="600">
+                <img src="/assets/img/nello%20lido%204.webp" alt="" loading="lazy" decoding="async" width="800" height="600">
+            </figure>
+            <dl class="ob-cartello">
+                <div><dt>Noleggio canoe</dt><dd>Canoe singole e doppie a ore, per esplorare la costa e prendere il largo. Briefing di sicurezza incluso.</dd></div>
+                <div><dt>Beach bar</dt><dd>Aperitivi, caffetteria, granite, panini e frutta fresca. Servizio al tavolo sotto l'ombrellone: chiedi allo staff.</dd></div>
+                <div><dt>Docce calde e fredde</dt><dd>Docce esterne a disposizione di tutti gli ospiti, pulite più volte durante la giornata.</dd></div>
+                <div><dt>Bagni e cabine</dt><dd>Servizi igienici curati e cabine private per cambiarsi senza fretta.</dd></div>
+                <div><dt>Wi-Fi</dt><dd>Su richiesta al bancone del bar, per chi ne ha davvero bisogno.</dd></div>
+                <div><dt>Il personale</dt><dd>Ti accogliamo, ti consigliamo e ti rendiamo la giornata di mare più semplice.</dd></div>
+            </dl>
         </div>
-        <div class="center mt-10">
-            <a href="/oceanbeach/booking.html" class="btn btn-primary">Prenota ora →</a>
+        <div class="ob-servizi-cta">
+            <a href="/oceanbeach/pricing.html" class="btn btn-outline">Vedi il listino 2026</a>
+            <a href="#" data-wa-quick class="btn btn-primary" target="_blank" rel="noopener">Scrivici su WhatsApp</a>
         </div>
     </div>
 </section>
@@ -114,7 +135,7 @@
                     <li><a href="/oceanbeach/services.html">Servizi</a></li>
                     <li><a href="/oceanbeach/pricing.html">Listino</a></li>
                     <li><a href="/oceanbeach/booking.html">Prenota</a></li>
-                    <li><a href="/" style="opacity:.7;">&#8599; Magaverse</a></li>
+                    <li><a href="/" style="opacity:.92;">&#8599; Magaverse</a></li>
                 </ul>
             </div>
             <div>
@@ -127,12 +148,12 @@
         </div>
         <div class="footer-bottom">
             <span>&copy; <span id="year">2026</span> Nello Ocean Beach &middot; <span>Tutti i diritti riservati.</span></span>
-            <span style="opacity:.75;">Sito realizzato con cura da Matteo Finizio.</span>
+            <span style="opacity:.92;">Sito realizzato con cura da Matteo Finizio.</span>
         </div>
     </div>
 </footer>
 
-<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">&#128172; <span>Prenota WhatsApp</span></a>
+<a href="#" data-wa-quick class="sticky-wa" target="_blank" rel="noopener">&#128172; <span>Scrivici su WhatsApp</span></a>
 
 <script src="/oceanbeach/assets/app.js"></script>
 </body>

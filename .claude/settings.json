@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(py:*)",
+      "Bash(py -m http.server:*)",
+      "Bash(py -m playwright:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git -c user.name=Claude -c user.email=noreply@anthropic.com commit:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(git fetch:*)",
+      "Bash(git push origin redesign-grafica)",
+      "Bash(bash strumenti/pubblica.sh:*)",
+      "Bash(curl -s:*)",
+      "Bash(curl -sI:*)",
+      "Bash(curl -o /dev/null:*)"
+    ],
+    "deny": [
+      "Bash(rm:*)",
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git push origin +*)",
+      "Bash(git push origin main:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(git branch -D:*)",
+      "Bash(curl -X POST:*)",
+      "Bash(curl -X PUT:*)",
+      "Bash(curl -X PATCH:*)",
+      "Bash(curl -X DELETE:*)",
+      "Bash(curl -d:*)",
+      "Bash(curl --data:*)",
+      "PowerShell(Remove-Item:*)"
+    ]
+  }
+}

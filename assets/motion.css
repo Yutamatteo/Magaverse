@@ -1,0 +1,184 @@
+/* =========================================================
+   MAGAVERSE · MOVIMENTO
+   Componenti animati condivisi. Tutto è "in più": senza
+   JavaScript, o con "movimento ridotto" attivo, i contenuti
+   restano visibili e fermi.
+   Gli stati di partenza nascosti valgono solo con html.mv-js
+   (messa da uno script in <head>) e spariscono con
+   html.mv-fallback se motion.js non parte entro 2,5 secondi.
+   ========================================================= */
+
+/* ── Parole che salgono (titoli) ── */
+.mv-p { display: inline-block; overflow: hidden; vertical-align: top; padding: .14em .04em .2em; margin: -.14em -.04em -.2em; }
+.mv-pi { display: inline-block; will-change: transform; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mv-js:not(.mv-fallback) [data-rise] { visibility: hidden; }
+  .mv-js:not(.mv-fallback) [data-rise].mv-spezzato { visibility: visible; }
+  .mv-js:not(.mv-fallback) .mv-pi {
+    transform: translateY(118%) rotate(4deg);
+    transform-origin: 0 100%;
+    transition: transform .55s cubic-bezier(.19, 1, .22, 1);
+    transition-delay: calc(var(--i, 0) * 35ms + var(--rit, 0ms));
+  }
+  .mv-js:not(.mv-fallback) .mv-vista .mv-pi { transform: none; }
+
+  /* ── Comparsa allo scroll ── */
+  .mv-js:not(.mv-fallback) [data-reveal] {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity .4s ease, transform .5s cubic-bezier(.19, 1, .22, 1);
+    transition-delay: calc(var(--i, 0) * 45ms + var(--rit, 0ms));
+  }
+  .mv-js:not(.mv-fallback) [data-reveal].mv-vista { opacity: 1; transform: none; }
+
+  /* foto che si scopre dal basso, come un telo che sale.
+     Il ritaglio sta sull'immagine, non sul contenitore osservato:
+     un elemento ritagliato del tutto non verrebbe mai "visto". */
+  .mv-js:not(.mv-fallback) [data-reveal="foto"] { opacity: 1; transform: none; }
+  .mv-js:not(.mv-fallback) [data-reveal="foto"] > img {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path .65s cubic-bezier(.19, 1, .22, 1);
+    transition-delay: calc(var(--i, 0) * 45ms + var(--rit, 0ms));
+  }
+  .mv-js:not(.mv-fallback) [data-reveal="foto"].mv-vista > img { clip-path: inset(0 0 0 0); }
+
+  /* carte distribuite sul tavolo */
+  .mv-js:not(.mv-fallback) [data-reveal="carta"] {
+    opacity: 0; transform: translateY(70px) rotate(calc(var(--verso, 1) * 5deg)) scale(.94);
+    transition: opacity .35s ease, transform .55s cubic-bezier(.19, 1, .22, 1);
+    transition-delay: calc(var(--i, 0) * 55ms);
+  }
+  .mv-js:not(.mv-fallback) [data-reveal="carta"].mv-vista { opacity: 1; transform: none; }
+}
+
+/* ── Luci a filo ── */
+.luci {
+  position: absolute; left: 0; top: 0; width: 100%; height: clamp(130px, 25vh, 230px);
+  pointer-events: none; overflow: visible; z-index: 2;
+}
+.luci .filo { fill: none; stroke: rgba(8, 10, 22, .78); stroke-width: 1.4; }
+.luci .lampa line { stroke: rgba(8, 10, 22, .85); stroke-width: 2.4; stroke-linecap: round; }
+.luci .vetro { fill: #232a4d; transition: fill .2s linear; }
+.luci .alone { opacity: 0; transition: opacity .6s ease; }
+.luci-accese .luci .vetro,
+.luci.accese .vetro { fill: var(--c); transition-delay: calc(var(--i) * 55ms); }
+.luci-accese .luci .alone,
+.luci.accese .alone { opacity: .5; transition-delay: calc(var(--i) * 55ms + 60ms); }
+@media (prefers-reduced-motion: no-preference) {
+  .luci .gruppo { transform-box: view-box; transform-origin: 50% -40%; animation: luci-dondola 6.5s ease-in-out infinite alternate; }
+  .luci .gruppo:nth-of-type(2) { animation-duration: 8s; animation-delay: -3s; }
+  .luci-accese .luci .lampa, .luci.accese .lampa { animation: luci-accendi .5s steps(2, jump-none) both; animation-delay: calc(var(--i) * 55ms); }
+  @keyframes luci-dondola { from { transform: rotate(-.45deg); } to { transform: rotate(.45deg); } }
+  @keyframes luci-accendi { 0% { opacity: .35; } 40% { opacity: 1; } 60% { opacity: .5; } 100% { opacity: 1; } }
+}
+
+/* ── Tessera 3D ── */
+.tessera3d { perspective: 900px; width: min(100%, 420px); margin: 0 auto; container-type: inline-size; }
+.tessera3d-corpo {
+  position: relative; aspect-ratio: 1.586; border-radius: 22px; overflow: hidden;
+  padding: clamp(18px, 5%, 26px);
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff; text-align: left;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 194, 61, .5), transparent 55%),
+    radial-gradient(90% 80% at 0% 100%, rgba(31, 181, 166, .35), transparent 60%),
+    linear-gradient(135deg, #FF4FA3, #8B4DFF 85%);
+  box-shadow: 0 30px 60px -22px rgba(139, 77, 255, .55), 0 2px 0 rgba(255, 255, 255, .25) inset;
+  transform: rotateX(calc(var(--rx, 0) * 1deg)) rotateY(calc(var(--ry, 0) * 1deg));
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.19, 1, .22, 1);
+}
+.tessera3d.mv-in-mano .tessera3d-corpo { transition-duration: .08s; }
+.tessera3d-riflesso {
+  position: absolute; inset: -40%; pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .5) 47%, rgba(255, 226, 150, .35) 50%, rgba(120, 255, 240, .3) 53%, transparent 62%);
+  transform: translate(calc((var(--mx, .5) - .5) * 70%), calc((var(--my, .5) - .5) * 40%));
+  mix-blend-mode: soft-light;
+  transition: transform .5s cubic-bezier(.19, 1, .22, 1);
+}
+.tessera3d.mv-in-mano .tessera3d-riflesso { transition-duration: .08s; }
+.tessera3d-marca { font-weight: 850; font-stretch: 68%; font-size: 36px; font-size: clamp(30px, 11cqw, 50px); line-height: .9; letter-spacing: -.01em; }
+.tessera3d-marca small { display: block; font-size: .36em; font-weight: 600; font-stretch: 100%; letter-spacing: 0; opacity: .85; margin-top: .5em; }
+.tessera3d-timbri { display: flex; gap: clamp(6px, 2.4%, 12px); align-items: center; }
+.tessera3d-timbri i {
+  position: relative; flex: none; width: clamp(30px, 11%, 44px); aspect-ratio: 1; border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, .65);
+}
+.tessera3d-timbri i::after {
+  content: ""; position: absolute; inset: -2px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, #FF4FA3 0 22%, transparent 23%),
+    linear-gradient(transparent 60%, #8B4DFF 60% 70%, transparent 70%),
+    #fff;
+  transform: rotate(-10deg);
+}
+.tessera3d-timbri i:nth-child(n+4)::after { display: none; }
+.tessera3d-timbri span { margin-left: auto; font-size: 13px; font-weight: 600; opacity: .9; }
+@media (prefers-reduced-motion: no-preference) {
+  .mv-js:not(.mv-fallback) .tessera3d-timbri i::after { opacity: 0; transform: scale(2.4) rotate(-32deg); }
+  .mv-js:not(.mv-fallback) .tessera3d.mv-vista .tessera3d-timbri i::after {
+    opacity: 1; transform: rotate(-10deg);
+    transition: transform .34s cubic-bezier(.3, 1.7, .5, 1), opacity .12s linear;
+    transition-delay: calc(.5s + var(--n) * .34s);
+  }
+  .mv-js:not(.mv-fallback) .tessera3d.mv-vista .tessera3d-corpo { animation: tessera-colpo .34s ease-out .5s 3; }
+  @keyframes tessera-colpo { 0%, 100% { translate: 0 0; } 30% { translate: 0 5px; } }
+  /* onda d'inchiostro: quando il timbro tocca la tessera parte un anello che si allarga e svanisce */
+  .mv-js:not(.mv-fallback) .tessera3d.mv-vista .tessera3d-timbri i:nth-child(-n+3)::before {
+    content: ""; position: absolute; inset: -2px; border-radius: 50%; pointer-events: none;
+    border: 3px solid rgba(255, 255, 255, .9); opacity: 0;
+    animation: timbro-onda .6s ease-out both; animation-delay: calc(.56s + var(--n) * .34s);
+  }
+  @keyframes timbro-onda { 0% { opacity: 0; transform: scale(.9); } 12% { opacity: .9; } 100% { opacity: 0; transform: scale(1.9); } }
+}
+.tessera3d-timbri i:nth-child(1) { --n: 0; }
+.tessera3d-timbri i:nth-child(2) { --n: 1; }
+.tessera3d-timbri i:nth-child(3) { --n: 2; }
+
+[data-parallax] { will-change: transform; transition-property: clip-path !important; }
+
+/* ── Riflesso che segue il puntatore sulle card ── */
+[data-tilt] { --rx: 0; --ry: 0; --mx: .5; --my: .5; }
+
+/* ── Onde ── */
+.onde { position: relative; height: 54px; overflow: hidden; pointer-events: none; }
+.onde::before, .onde::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 200%; height: 100%;
+  background: repeat-x 0 100% / 600px 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 54' preserveAspectRatio='none'%3E%3Cpath fill='%231FB5A6' d='M0 30c50-22 100-22 150 0s100 22 150 0 100-22 150 0 100 22 150 0v24H0z'/%3E%3C/svg%3E");
+  opacity: .16;
+}
+.onde::after {
+  background-size: 420px 76%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 54' preserveAspectRatio='none'%3E%3Cpath fill='%23FFC23D' d='M0 30c50-22 100-22 150 0s100 22 150 0 100-22 150 0 100 22 150 0v24H0z'/%3E%3C/svg%3E");
+  opacity: .1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .onde::before { animation: onde-scorri 16s linear infinite; }
+  .onde::after { animation: onde-scorri-2 11s linear infinite reverse; }
+  @keyframes onde-scorri { to { transform: translateX(-600px); } }
+  @keyframes onde-scorri-2 { to { transform: translateX(-420px); } }
+}
+
+/* ── Nastro che scorre ── */
+.nastro { overflow: hidden; white-space: nowrap; user-select: none; }
+.nastro-giro { display: inline-flex; align-items: center; gap: .55em; padding-right: .55em; will-change: transform; }
+@media (prefers-reduced-motion: no-preference) {
+  .nastro-giro { animation: nastro-scorri var(--durata, 38s) linear infinite; }
+  @keyframes nastro-scorri { to { transform: translateX(-50%); } }
+}
+
+/* parallasse delle foto calcolato dal browser (vedi motion.js) */
+@supports (animation-timeline: view()) {
+  .mv-parallasse-css [data-parallax] { animation: mv-parallasse linear both; animation-timeline: view(); }
+  @keyframes mv-parallasse { from { transform: translate3d(0, -7%, 0) scale(1.14); } to { transform: translate3d(0, 7%, 0) scale(1.14); } }
+}
+
+/* ── Telefono: la cornice del Maga Gala si inclina mentre scorri, in CSS sul compositore
+   (prima lo faceva motion.js a ogni fotogramma) ── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (not ((hover: hover) and (pointer: fine))) {
+    .ultimo-cornice { animation: mv-inclina-lieve linear both; animation-timeline: view(); transition: none; }
+  }
+}
+@keyframes mv-inclina-lieve { from { transform: rotateX(7deg) rotateY(-5deg); } 50% { transform: none; } to { transform: rotateX(-7deg) rotateY(5deg); } }

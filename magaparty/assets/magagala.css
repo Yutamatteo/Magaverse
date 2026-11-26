@@ -1,0 +1,249 @@
+/* =========================================================
+   MAGA GALA · COMING SOON
+   Il linguaggio della locandina del Gala: nero, velluto rosso,
+   serif da teatro (Bodoni Moda) e corsivo rosso (Pinyon Script).
+   Il sipario è chiuso all'arrivo, si socchiude e, scorrendo,
+   si apre del tutto. --apri (0 chiuso → 1 aperto) lo scrive
+   magagala.js; senza JavaScript il sipario resta socchiuso.
+   ========================================================= */
+@font-face { font-family: 'Bodoni Moda'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/bodoni-moda-latin-500-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Bodoni Moda'; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/bodoni-moda-latin-600-normal.woff2') format('woff2'); }
+@font-face { font-family: 'Bodoni Moda'; font-style: italic; font-weight: 400; font-display: swap; src: url('fonts/bodoni-moda-latin-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Pinyon Script'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/pinyon-script-latin-400-normal.woff2') format('woff2'); }
+
+*, *::before, *::after { box-sizing: border-box; }
+body.gala {
+  --nero: #070405;
+  --velluto: #8E0B16;
+  --velluto-scuro: #3A0309;
+  --rosso: #E0182B;
+  --oro: #E9C77B;
+  --avorio: #F6EFE4;
+  --serif: 'Bodoni Moda', 'Didot', 'Times New Roman', serif;
+  --corsivo: 'Pinyon Script', 'Snell Roundhand', cursive;
+  margin: 0; background: var(--nero); color: var(--avorio);
+  font-family: var(--mv-font); font-size: 17px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+.gala a { color: inherit; }
+.gala img { display: block; max-width: 100%; height: auto; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 60; background: var(--oro); color: var(--nero); padding: 10px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; }
+.skip:focus { top: 12px; }
+
+/* ── Barra ── */
+.gala-bar {
+  position: fixed; inset: 0 0 auto 0; z-index: 30;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  padding: 14px clamp(18px, 4vw, 48px);
+  font-size: 15px; font-weight: 600;
+  transition: background-color .35s, box-shadow .35s;
+}
+.gala-bar.e-piena { background: rgba(7,4,5,.86); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 1px 0 rgba(233,199,123,.18); }
+.gala-back { text-decoration: none; color: rgba(246,239,228,.85); }
+.gala-back::before { content: "‹ "; }
+.gala-bar-centro { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: .04em; color: var(--oro); }
+.gala-bar-ig { justify-self: end; text-decoration: none; color: rgba(246,239,228,.85); }
+.gala-back:hover, .gala-bar-ig:hover { color: var(--oro); }
+
+/* ── Il sipario ── */
+.sipario { position: relative; --apri: .22; }
+.mv-js .sipario { height: 250vh; height: 250lvh; }
+.sipario-fermo {
+  position: relative; min-height: 100vh; min-height: 100svh;
+  overflow: hidden; isolation: isolate;
+  display: grid; place-items: center;
+  background: radial-gradient(60% 55% at 50% 52%, #2A1206 0%, #120705 45%, var(--nero) 80%);
+}
+.mv-js .sipario-fermo { position: sticky; top: 0; height: 100vh; height: 100lvh; min-height: 0; }
+
+.sipario-luce {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(34% 30% at 50% 50%, rgba(233,199,123,.30), transparent 70%),
+    radial-gradient(70% 50% at 50% 100%, rgba(224,24,43,.18), transparent 70%);
+  opacity: calc(.45 + var(--apri) * .55);
+}
+.polvere { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.gala-titolo-box {
+  position: relative; z-index: 2; text-align: center; padding: 0 20px;
+  transform: scale(calc(.9 + var(--apri) * .12));
+}
+.gala-sopra {
+  margin: 0 0 6px; font-family: var(--serif); font-style: italic; font-size: clamp(16px, 2.2vw, 22px);
+  color: var(--oro); letter-spacing: .02em;
+}
+.gala-titolo { margin: 0; line-height: .82; position: relative; }
+.gala-maga {
+  display: block; font-family: var(--serif); font-weight: 500;
+  font-size: clamp(72px, 19vw, 230px); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--avorio);
+  text-shadow: 0 0 40px rgba(246,239,228,.25);
+}
+.gala-gala {
+  display: block; font-family: var(--corsivo); font-weight: 400;
+  font-size: clamp(96px, 26vw, 300px); line-height: .7;
+  color: var(--rosso); margin-top: -.18em; margin-left: .4em;
+  text-shadow: 0 0 34px rgba(224,24,43,.55), 0 0 2px rgba(255,120,120,.6);
+}
+.gala-sotto {
+  margin: 26px 0 0; font-family: var(--serif); font-weight: 500; text-transform: uppercase;
+  letter-spacing: .32em; font-size: clamp(12px, 1.6vw, 15px); color: rgba(246,239,228,.85);
+}
+
+/* i due teli */
+.telo {
+  position: absolute; top: 0; bottom: 0; width: 51%; z-index: 4;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 70%, rgba(0,0,0,.55) 100%),
+    repeating-linear-gradient(90deg,
+      var(--velluto-scuro) 0px, var(--velluto) 22px, #C0172A 34px, var(--velluto) 46px, var(--velluto-scuro) 68px);
+  box-shadow: inset 0 0 120px rgba(0,0,0,.6);
+  will-change: transform;
+}
+.telo::after { /* l'orlo dorato in basso */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7px;
+  background: linear-gradient(90deg, #8a6a2f, var(--oro), #8a6a2f);
+  opacity: .8;
+}
+.telo-sx { left: 0; transform-origin: left center; transform: scaleX(calc(1 - var(--apri) * .86)); border-radius: 0 0 46% 0 / 0 0 7% 0; }
+.telo-dx { right: 0; transform-origin: right center; transform: scaleX(calc(1 - var(--apri) * .86)); border-radius: 0 0 0 46% / 0 0 0 7%; }
+
+.mantovana {
+  position: absolute; left: -2%; right: -2%; top: 0; height: clamp(70px, 12vh, 120px); z-index: 5;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,0) 60%),
+    repeating-linear-gradient(90deg, var(--velluto-scuro) 0 18px, #A5101F 30px, var(--velluto-scuro) 48px);
+  -webkit-mask: radial-gradient(28px 18px at 50% 100%, transparent 98%, #000) 0 0 / 56px 100%;
+          mask: radial-gradient(28px 18px at 50% 100%, transparent 98%, #000) 0 0 / 56px 100%;
+  box-shadow: 0 10px 30px rgba(0,0,0,.5);
+}
+
+/* La data sopra i teli: si capisce cosa e quando anche a sipario chiuso.
+   Targhetta scura sotto la mantovana per il contrasto sul velluto; sparisce aprendo. */
+.sipario-data {
+  position: absolute; z-index: 6; left: 50%; top: calc(clamp(70px, 12vh, 120px) + 18px); margin: 0;
+  width: max-content; max-width: calc(100% - 32px); padding: 7px 14px; border-radius: 999px;
+  translate: -50% 0; text-align: center;
+  font-family: var(--serif); font-weight: 500; text-transform: uppercase; white-space: nowrap;
+  letter-spacing: .16em; font-size: clamp(11px, 3.1vw, 15px); line-height: 1.3; color: var(--oro);
+  background: rgba(7,4,5,.82); box-shadow: 0 0 0 1px rgba(233,199,123,.35);
+  opacity: calc(1 - (var(--apri) - .22) * 4);
+}
+.sipario-indizio {
+  position: absolute; z-index: 6; bottom: 28px; left: 0; right: 0; margin: 0; text-align: center;
+  font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--oro);
+  opacity: calc(1 - var(--apri) * 3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sipario-indizio { animation: gala-indizio 2.4s ease-in-out infinite; }
+  @keyframes gala-indizio { 50% { transform: translateY(6px); } }
+  .mv-js:not(.mv-fallback) .gala-titolo-box { animation: gala-entra 1.6s cubic-bezier(.19,1,.22,1) .4s both; }
+  @keyframes gala-entra { from { opacity: 0; filter: blur(8px); } to { opacity: 1; filter: none; } }
+  .gala-gala { animation: gala-luce 3.5s ease-in-out infinite alternate; }
+  @keyframes gala-luce { to { text-shadow: 0 0 52px rgba(224,24,43,.8), 0 0 3px rgba(255,140,140,.8); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mv-js .sipario { height: auto; }
+  .mv-js .sipario-fermo { position: relative; height: auto; min-height: 100svh; }
+  .sipario { --apri: .55; }
+  .sipario-indizio { display: none; }
+  .sipario-data { opacity: 1; }
+}
+
+/* ── Conto alla rovescia ── */
+.mezzanotte { padding: 96px clamp(18px, 4vw, 48px) 40px; text-align: center; }
+.gala-h2 {
+  margin: 0 0 22px; font-family: var(--serif) !important; font-weight: 500 !important; font-stretch: 100% !important;
+  font-size: clamp(30px, 5vw, 54px) !important; letter-spacing: .01em !important; line-height: 1.05;
+}
+.conto { display: flex; justify-content: center; gap: clamp(12px, 4vw, 48px); flex-wrap: wrap; }
+.conto > div { min-width: 70px; }
+.conto span {
+  display: block; font-family: var(--serif); font-weight: 500; font-variant-numeric: lining-nums tabular-nums;
+  font-size: clamp(54px, 11vw, 120px); line-height: 1; color: var(--oro);
+  text-shadow: 0 0 30px rgba(233,199,123,.25);
+}
+.conto small { display: block; margin-top: 8px; font-size: 14px; letter-spacing: .2em; text-transform: uppercase; color: rgba(246,239,228,.7); }
+
+/* frasi sotto il conto: impilate nella stessa cella, così l'altezza è quella della più lunga e il layout non salta */
+.sussurri {
+  display: grid; max-width: 34ch; margin: 34px auto 0;
+  font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(19px, 2.4vw, 25px); line-height: 1.35;
+  color: rgba(246,239,228,.86); text-wrap: balance;
+}
+.sussurri > span { grid-area: 1 / 1; opacity: 0; transform: translateY(8px); transition: opacity .9s ease, transform .9s ease; }
+.sussurri > span.su { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .sussurri > span { transition: none; transform: none; } }
+
+/* ── Cosa sappiamo ── */
+.cosa {
+  max-width: 1100px; margin: 0 auto; padding: 70px clamp(18px, 4vw, 48px) 90px;
+  display: grid; gap: 44px; align-items: center;
+}
+.cosa-testo p { margin: 0 0 16px; max-width: 46ch; font-size: 18px; color: rgba(246,239,228,.86); }
+.cosa-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+.gala-btn {
+  display: inline-block; text-decoration: none; padding: 13px 22px; border-radius: 999px;
+  font-weight: 700; font-size: 15px; background: var(--rosso); color: #fff;
+  box-shadow: 0 10px 30px -10px rgba(224,24,43,.7);
+  transition: transform .3s cubic-bezier(.19,1,.22,1), background-color .2s;
+}
+.gala-btn:hover { transform: translateY(-2px); background: #F2283B; }
+.gala-btn-vuoto { background: transparent; color: var(--avorio); box-shadow: inset 0 0 0 1px rgba(233,199,123,.6); }
+.gala-btn-vuoto:hover { background: rgba(233,199,123,.12); }
+
+.ultimo { margin: 0; justify-self: center; width: min(100%, 380px); perspective: 900px; }
+.ultimo-cornice {
+  padding: 10px; border-radius: 6px;
+  background: linear-gradient(135deg, #7a5a22, var(--oro) 30%, #8a6a2f 55%, var(--oro) 80%, #6b4e1c);
+  box-shadow: 0 30px 70px -20px rgba(224,24,43,.45);
+  transform: rotateX(calc(var(--rx, 0) * 1deg)) rotateY(calc(var(--ry, 0) * 1deg));
+  transition: transform .5s cubic-bezier(.19,1,.22,1);
+}
+.ultimo-cornice.mv-in-mano { transition-duration: .08s; }
+.ultimo-cornice img { border-radius: 2px; }
+.ultimo figcaption { margin-top: 14px; text-align: center; font-family: var(--serif); font-style: italic; color: rgba(246,239,228,.75); }
+@media (min-width: 860px) { .cosa { grid-template-columns: 1.1fr .9fr; } }
+
+.gala-footer {
+  border-top: 1px solid rgba(233,199,123,.18);
+  padding: 26px clamp(18px, 4vw, 48px) 44px;
+  display: flex; flex-wrap: wrap; gap: 12px 26px; justify-content: center;
+  font-size: 15px;
+}
+.gala-footer a { color: rgba(246,239,228,.75); text-decoration: none; }
+.gala-footer a:hover { color: var(--oro); }
+
+/* sul telefono la scritta sotto il titolo resta tra le tende */
+@media (max-width: 520px) { .gala-sotto { letter-spacing: .18em; padding-inline: 64px; text-wrap: balance; } }
+
+/* cifre che ruotano nel conto alla rovescia */
+.cf-cella { display: inline-block; position: relative; overflow: hidden; vertical-align: bottom; }
+.cf-cella .cf { display: inline-block; }
+.cf-cella .cf.entra { animation: cf-entra .55s cubic-bezier(.2,.9,.25,1) both; }
+.cf-cella .cf.esce { position: absolute; left: 0; top: 0; width: 100%; animation: cf-esce .45s cubic-bezier(.5,0,.75,0) both; }
+@keyframes cf-entra { from { transform: translateY(-90%) scaleY(.6); opacity: 0; } }
+@keyframes cf-esce { to { transform: translateY(80%) scaleY(.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cf-cella .cf.entra, .cf-cella .cf.esce { animation: none; } .cf-cella .cf.esce { display: none; } }
+.conto span.cf-cella { display: inline-block; font-size: inherit; text-shadow: none; }
+.conto span.cf { font-size: inherit; text-shadow: inherit; }
+
+/* ── Trama "31.12" visibile solo dentro la luce che segue il mouse (solo mouse vero) ── */
+.sipario-faro { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .sipario-faro {
+    display: block; position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none;
+    width: 520px; height: 520px; margin: -260px 0 0 -260px; border-radius: 50%; overflow: hidden;
+    background: radial-gradient(closest-side, rgba(233,199,123,.16), transparent);
+    -webkit-mask: radial-gradient(closest-side, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+            mask: radial-gradient(closest-side, #000 0%, rgba(0,0,0,.55) 55%, transparent 100%);
+    opacity: 0; transition: opacity .5s ease; will-change: transform;
+  }
+  .sipario-faro.acceso { opacity: 1; }
+  .sipario-faro-trama {
+    position: absolute; left: 260px; top: 260px; width: 100vw; height: 100vh; height: 100lvh;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='140'%3E%3Cg fill='none' stroke='%23E9C77B' stroke-width='1' font-family='Bodoni Moda,Didot,Georgia,serif' font-size='46' letter-spacing='2'%3E%3Ctext x='8' y='54'%3E31.12%3C/text%3E%3Ctext x='128' y='124'%3E31.12%3C/text%3E%3C/g%3E%3C/svg%3E") 0 0 / 240px 140px; opacity: .6; will-change: transform;
+  }
+}
